@@ -13,6 +13,9 @@ public class RoomSpawnerManager : MonoBehaviour
 
     [SerializeField] bool MinionsAlive, SpawnersSpent, StopThisManager;
 
+    // Evento que se invoca cuando termina el combate
+    public event System.Action OnCombatEnded;
+
     private void Start()
     {
         if(Spawners.Length <= 0)
@@ -40,7 +43,9 @@ public class RoomSpawnerManager : MonoBehaviour
         SpawnersSpent = Spawners.All(x => x.IsSpent);
         if(!MinionsAlive && !SpawnersSpent)
         {
-            foreach(var Item in Spawners)
+
+
+            foreach (var Item in Spawners)
             {
                 Item.SetPlayerIndex(playerContext);
                 Item.SpawnEnemy();
@@ -54,7 +59,7 @@ public class RoomSpawnerManager : MonoBehaviour
 
         if(!MinionsAlive && SpawnersSpent)
         {
-            
+
             foreach (var item in roomTriggers)
             {
                 item.SetSolidState(false);
@@ -62,6 +67,9 @@ public class RoomSpawnerManager : MonoBehaviour
             StopThisManager = true;
             audioSource.Play();
             DialogueManager.instance.StartDialogue(_finishCombatDialogue);
+
+            // Emitir evento
+            OnCombatEnded?.Invoke();
         }
 
 

@@ -65,7 +65,7 @@ public class Health_Component : Visceral_Component
         OnDamaged?.Invoke();
 
         // tengo un kccmotor con rigidbody?
-        if(KnockbarDir.HasValue && _Context.KCCMotor?.AttachedRigidbody != null)
+        if(KnockbarDir.HasValue && _Context?.KCCMotor?.AttachedRigidbody != null)
         {
             _Context.KCCMotor.AttachedRigidbody.AddForce(KnockbarDir.Value * force,ForceMode.Impulse);
         }

@@ -22,7 +22,7 @@ public class Visceral_WeaponBase : Visceral_Script
     public virtual void AddWeaponCollider(HitBox HTBox) { if (!_WeaponColliders.Contains(HTBox))
                                                                _WeaponColliders.Add(HTBox); }
 
-    public virtual void NotifyHit(Collider other) { }
+    public virtual void NotifyHit(Collider other,Health_Component HPComp = null) { }
 
 
 }

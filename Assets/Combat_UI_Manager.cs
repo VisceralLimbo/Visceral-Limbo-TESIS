@@ -32,6 +32,37 @@ public class Combat_UI_Manager : MonoBehaviour
     [SerializeField] float _maximunEntries, _timeToClearEntry;
 
 
+    [Space]
+    [Header("SkillUIElements")]
+    [SerializeField] Slider[] _CooldownSliders; 
+
+
+    public void UpdateCooldownImages(float CooldownValue,float MaxCooldownValue, string SkillID)
+    {
+        float currentCooldown = CooldownValue / MaxCooldownValue;
+
+        switch(SkillID)
+        {
+            case "Skill1":
+                _CooldownSliders[0].value = currentCooldown;
+                break;
+            case "Skill2":
+                _CooldownSliders[1].value = currentCooldown;
+                break;
+            case "Ultimate":
+                _CooldownSliders[2].value = currentCooldown;
+                break;
+            case "UtilSkill":
+                _CooldownSliders[3].value = currentCooldown;
+                break;
+            default: break;
+
+        }
+
+    }
+
+
+
     public void UpdatePlayerHealthBar(float CurrentHP,float MaxHP)
     {
         if(_PlayerHealthSlider != null)
@@ -86,5 +117,8 @@ public class Combat_UI_Manager : MonoBehaviour
 
         }
     }
+
+
+
 
 }

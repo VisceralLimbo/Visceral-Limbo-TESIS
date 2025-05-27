@@ -64,6 +64,9 @@ public class Visceral_SkillManager : Visceral_Script
         foreach(var key in CooldownDicc.Where(KVP => KVP.Value > 0f).Select(KVP => KVP.Key).ToList())
         {
                 CooldownDicc[key] -= Time.deltaTime;
+                Combat_UI_Manager._Instance.UpdateCooldownImages(CooldownDicc[key]
+                                                            , AbilityDicc[key].cooldown
+                                                            , key);
         }
     }
 

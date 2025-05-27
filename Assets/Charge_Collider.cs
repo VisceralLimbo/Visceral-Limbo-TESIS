@@ -75,6 +75,7 @@ public class Charge_Collider : Visceral_Script
 
     private void DealDamage(GameObject Target,float Damage)
     {
+        if(Target == null) return;
         //realizar daño
         if (Target.TryGetComponent(out Health_Component HPComp))
         {
