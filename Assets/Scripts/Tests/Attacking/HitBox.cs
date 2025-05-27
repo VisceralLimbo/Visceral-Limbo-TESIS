@@ -34,8 +34,8 @@ public class HitBox : Visceral_Script
         {
             if(other.TryGetComponent(out Health_Component HPComp))
             {
-                print(other.name);
-                _WeaponOwner.NotifyHit(other);
+
+                _WeaponOwner.NotifyHit(other,HPComp);
             }
         }
     }
