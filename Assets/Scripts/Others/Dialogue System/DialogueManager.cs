@@ -17,6 +17,12 @@ public class DialogueManager : Visceral_Script
     public GameObject OptionButtonPrefab;
     public GameObject HandMesh;
 
+    [Header("UI Elements to Hide During Dialogue")]
+    public List<GameObject> UIElementsToHide; 
+    public GameObject PlayerSword;
+
+    [Header("Player Control")]
+    public Player_Movement PlayerMovement;
 
     [Header("Settings")]
     [SerializeField] private float _TextSpeed;
@@ -54,6 +60,15 @@ public class DialogueManager : Visceral_Script
         _CurrentNodeIndex = 0;
         DialoguePanel.SetActive(true);
         HandMesh.SetActive(true);
+
+        foreach (var uiElement in UIElementsToHide)
+            uiElement.SetActive(false);
+
+        if (PlayerSword != null)
+            PlayerSword.SetActive(false);
+
+        if (PlayerMovement != null)
+            PlayerMovement.IsMovementBlocked = true;
 
         if (DialogueEffectMaterial != null)
             DialogueEffectMaterial.SetFloat("_ShowEffect", 1f);
@@ -158,6 +173,15 @@ public class DialogueManager : Visceral_Script
         DialoguePanel.SetActive(false);
         OptionsPanel.SetActive(false);
         HandMesh.SetActive(false);
+
+        foreach (var uiElement in UIElementsToHide)
+            uiElement.SetActive(true);
+
+        if (PlayerSword != null)
+            PlayerSword.SetActive(true);
+
+        if (PlayerMovement != null)
+            PlayerMovement.IsMovementBlocked = false;
 
         if (DialogueEffectMaterial != null)
             DialogueEffectMaterial.SetFloat("_ShowEffect", 0f);

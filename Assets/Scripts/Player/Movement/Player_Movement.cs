@@ -180,6 +180,10 @@ public class Player_Movement : Visceral_Script, ICharacterController
     private float _RequestedTimeSinceUngrounded;
     private float _RequestedTimeSinceJumpRequest;
     private bool _RequestedCoyoteTime; //este booleano evita que el jugador active el coyote time tras salta de manera normal
+
+    public bool IsMovementBlocked { get; set; } = false;
+
+
     public override void VS_Initialize()
     {
         _KCCMotor.CharacterController = this;
@@ -196,6 +200,14 @@ public class Player_Movement : Visceral_Script, ICharacterController
     /// <param name="Inputs"> los Inputs que recibe el Player Movement</param>
     public void UpdateInput(InputMovement Inputs)
     {
+        if (IsMovementBlocked) // BLOQUEO ACTIVADO
+        {
+            _RequestedMovement = Vector3.zero;
+            _RequestedJump = false;
+            _RequestedSustainJump = false;
+            _RequestedCrouch = false;
+            return;
+        }
         //setear requestedrotation, esto es el raw input a procesar
         _RequestedRotation = Inputs.rotation;
 
