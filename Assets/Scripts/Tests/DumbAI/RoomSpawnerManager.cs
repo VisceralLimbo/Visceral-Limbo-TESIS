@@ -13,7 +13,7 @@ public class RoomSpawnerManager : MonoBehaviour
 
     [SerializeField] bool MinionsAlive, SpawnersSpent, StopThisManager;
 
-    // Evento que se invoca cuando termina el combate
+   
     public event System.Action OnCombatEnded;
 
     private void Start()
@@ -68,7 +68,6 @@ public class RoomSpawnerManager : MonoBehaviour
             audioSource.Play();
             DialogueManager.instance.StartDialogue(_finishCombatDialogue);
 
-            // Emitir evento
             OnCombatEnded?.Invoke();
         }
 
