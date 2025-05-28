@@ -16,7 +16,7 @@ public class DialogueTriggerZone : MonoBehaviour
     {
         if (hasTriggered) return;
 
-        if (other.CompareTag("Player")) // Asegúrate que el jugador tiene el tag "Player"
+        if (other.CompareTag("Player")) 
         {
             if (DialogueManager.instance != null && dialogueToTrigger != null)
             {
@@ -25,7 +25,7 @@ public class DialogueTriggerZone : MonoBehaviour
 
                 if (destroyAfterTriggered)
                 {
-                    Destroy(gameObject); // destruye el objeto con el collider
+                    Destroy(gameObject); 
                 }
             }
         }
