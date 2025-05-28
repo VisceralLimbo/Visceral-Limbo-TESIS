@@ -189,7 +189,7 @@ public class DialogueManager : Visceral_Script
         if (BloodEffectMaterial != null)
             BloodEffectMaterial.SetFloat("_SetActive", 0f);
 
-        Debug.Log("FinishDialoge");
+        Debug.Log("FinishDialogue");
     }
 
 }
