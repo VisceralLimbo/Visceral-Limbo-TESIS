@@ -54,8 +54,10 @@ public class PixelationBlitFeature : ScriptableRendererFeature
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        if (pixelationMaterial != null)
+        if (pixelationMaterial != null && renderingData.cameraData.camera.name == "RootCamera")
+        {
             renderer.EnqueuePass(pass);
+        }
     }
 }
 
