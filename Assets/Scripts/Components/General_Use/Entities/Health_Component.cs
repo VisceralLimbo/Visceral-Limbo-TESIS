@@ -74,7 +74,7 @@ public class Health_Component : Visceral_Component
             _RB.AddForce(KnockbarDir.Value * force, ForceMode.Impulse);
         }
 
-        if(CurrentHealth <= 0f && _Context != null)
+        if(CurrentHealth <= 0f && _Context != null && Score.Attacker != null)
         {
             Died = true;
             DamageScore FinalScore = Score != null
@@ -83,13 +83,23 @@ public class Health_Component : Visceral_Component
             ScoreManager.Instance.ProcessKill(FinalScore);
             OnDeath?.Invoke();
             if(DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
-            if(DestroyOnDeath) Destroy(Context.PlayerGameObject);
+            if(DestroyOnDeath) Destroy(_Context.PlayerGameObject);
 
         }
         else if(CurrentHealth <= 0f)
         {
-            if (DesactivateOnDeath) this.gameObject.SetActive(false);
-            if (DestroyOnDeath) Destroy(this.gameObject);
+            OnDeath?.Invoke();
+            Died = true;
+            if(_Context == null)
+            {
+                if (DesactivateOnDeath) this.gameObject.SetActive(false);
+                if (DestroyOnDeath) Destroy(this.gameObject);
+            }
+            else
+            {
+                if (DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
+                if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);
+            }
         }
     } 
 

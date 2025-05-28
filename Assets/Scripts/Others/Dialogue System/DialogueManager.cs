@@ -192,15 +192,6 @@ public class DialogueManager : Visceral_Script
         Debug.Log("FinishDialoge");
     }
 
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            StartDialogue(CurrentDialogue);
-        }
-    }
-
 }
 
 //codigo hecho por patricio malvasio
