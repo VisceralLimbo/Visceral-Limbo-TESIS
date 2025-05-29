@@ -93,7 +93,10 @@ public class Combat_UI_Manager : MonoBehaviour
                 var _Prefab = Instantiate(_ScorePrefab, _LayoutGroupPosition);
 
                 var PrefabText = _Prefab.GetComponentInChildren<TextMeshProUGUI>();
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
                 PrefabText.text = IndividualScore;
                 if (!_ScoreQueue.Contains(_Prefab)) _ScoreQueue.Enqueue(_Prefab);
             }
