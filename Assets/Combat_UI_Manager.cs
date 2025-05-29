@@ -117,8 +117,4 @@ public class Combat_UI_Manager : MonoBehaviour
 
         }
     }
-
-
-
-
 }
