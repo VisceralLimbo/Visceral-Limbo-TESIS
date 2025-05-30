@@ -5,6 +5,8 @@ using System;
 
 public class Health_Component : Visceral_Component
 {
+    [SerializeField] SoundData soundData;
+
     public float CurrentHealth, MaxHealth;
     public Rigidbody _RB;
     public bool DestroyOnDeath,DesactivateOnDeath,Died;
@@ -64,6 +66,11 @@ public class Health_Component : Visceral_Component
         CurrentHealth -= damage;
         OnDamaged?.Invoke();
 
+        if(soundData != null)
+        {
+            PlaySounds(); // feedback de sonidos
+        }
+
         // tengo un kccmotor con rigidbody?
         if(KnockbarDir.HasValue && _Context?.KCCMotor?.AttachedRigidbody != null)
         {
@@ -102,6 +109,17 @@ public class Health_Component : Visceral_Component
             }
         }
     } 
+
+    void PlaySounds()
+    {
+        if (soundData == null || Context == null) return;
+        var SoundCLip = SoundManager.Instance.CreateSound();
+        SoundCLip.WithSoundData(soundData);
+        SoundCLip.WithRandomPitch(true);
+        SoundCLip.WithPosition(Context.transform.position);
+        SoundCLip.WithSpatialBlend(1);
+        SoundCLip.play();
+    }
 
     private void updateHealthBar()
     {

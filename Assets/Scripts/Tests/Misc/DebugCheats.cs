@@ -8,6 +8,7 @@ public class DebugCheats : MonoBehaviour
 {
     
     [SerializeField]List<DumbEnemy> m_EnemyList;
+    [SerializeField] SoundData TestSound;
 
     // Update is called once per frame
     void Update()
@@ -35,6 +36,14 @@ public class DebugCheats : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.L))
         {
             SceneManager.LoadScene(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SoundManager.Instance.CreateSound()
+                                 .WithSoundData(TestSound)
+                                 .WithRandomPitch(default)
+                                 .play();
         }
     }
 }

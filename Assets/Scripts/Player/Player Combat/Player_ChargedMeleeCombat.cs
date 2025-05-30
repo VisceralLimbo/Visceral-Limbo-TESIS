@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class Player_ChargedMeleeCombat : Visceral_Script
 {
+    [Header("Sounds")]
+    [SerializeField] SoundData[] soundData;
+    [Space]
+
     public SwordTestSO[] SwordAttacks;
     [SerializeField] float _ChargeAmount,_MaximumCharge,_MinimunToAttack;
     int _ComboCounter;
@@ -89,6 +93,17 @@ public class Player_ChargedMeleeCombat : Visceral_Script
         {
             _ComboCounter = 0;
         }
+
+
+        //ejemplo de funcionamiento del Sound manager
+        SoundManager.Instance.CreateSound() //creamos sonido
+                    .WithSoundData(soundData[0]) //con data de audio (variable setteada)
+                    .WithPosition(this.transform.position) //con posicion en custom (si no es 0,0,0)
+                    .WithSpatialBlend(soundData[0].SpatialBlend) // con blendeo espacial
+                    .WithRandomPitch(true) // con pitch de sonido (default -0.05 a 0.05)
+                    .play(); // tocamos el sonido
+
+                    
 
     }
 
