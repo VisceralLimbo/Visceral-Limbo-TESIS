@@ -51,13 +51,15 @@ public class Player_ChargedMeleeCombat : Visceral_Script
             if(_ChargeAmount> _MaximumCharge)
             {
                 _ChargeAmount= _MaximumCharge;
-                //poner aca la animacion de carga.
             }
+            _Anim.SetTrigger("ChargeUp");
+            _Anim.ResetTrigger("Skill1Trigger");
         }
         else
         {
             _ChargeAmount -= Time.deltaTime;
             if(_ChargeAmount <= 0) _ChargeAmount = 0;
+            _Anim.ResetTrigger("ChargeUp");_Anim.ResetTrigger("ChargeRelease");_Anim.ResetTrigger("AttackTrigger");
         }
 
         if(_ChargeAmount > _MinimunToAttack && PlayerInputs.ReleasedLeftMouseClick)
@@ -76,6 +78,8 @@ public class Player_ChargedMeleeCombat : Visceral_Script
         
         _Anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
         _Anim.speed = AttackSpeedMod;
+        _Anim.SetTrigger("ChargeRelease");
+        _Anim.ResetTrigger("ChargeUp");
         _Anim.Play("Attack", 0, 0);
         _Weapon.Damage = SwordAttacks[_ComboCounter].Damage;
         _Weapon.KnockBack = SwordAttacks[_ComboCounter].KnockBack;
@@ -94,6 +98,7 @@ public class Player_ChargedMeleeCombat : Visceral_Script
         {
             _Weapon.StopAttacking();
             _Anim.SetTrigger("AttackTrigger");
+            _Anim.ResetTrigger("ChargeRelease");
             Debug.Log("finishing attack");
         }
     }
@@ -101,6 +106,9 @@ public class Player_ChargedMeleeCombat : Visceral_Script
     private void ResetAnimation()
     {
         _ComboCounter= 0;
+        _Anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
+        _Anim.ResetTrigger("AttackTrigger"); _Anim.ResetTrigger("ChargeRelease"); _Anim.ResetTrigger("ChargeUp");
+        _Anim.Play("Idle", 0, 0);
     }
 
     private void UpdateUI()

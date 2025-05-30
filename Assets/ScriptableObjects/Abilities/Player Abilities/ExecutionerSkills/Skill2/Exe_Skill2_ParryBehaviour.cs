@@ -40,8 +40,8 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
 
         _Anim.speed = SkillSpeedMod;
         _Anim.runtimeAnimatorController = _ANCO;
-        _Anim.CrossFade("Exe_Skill1", 0.01f, 0);
-        _Anim.ResetTrigger("Skill1Trigger");
+        _Anim.CrossFade("Exe_Skill2", 0.01f, 0);
+        //_Anim.ResetTrigger("Skill2Trigger");
 
         StartCoroutine(LockSkill());
     }
@@ -50,7 +50,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
    {
 
         //catch! la animacion actual NO es la del Parry
-        while (!_Anim.GetNextAnimatorStateInfo(0).IsName("Exe_Skill1"))
+        while (!_Anim.GetNextAnimatorStateInfo(0).IsName("Exe_Skill2"))
         {
             yield return null;
         }
@@ -80,10 +80,12 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
          //Catch! no terminamos la animacion del ataque
         while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
         {
-            print(_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
+            print(_Anim.GetCurrentAnimatorStateInfo(0).fullPathHash);
+            
             yield return null;
         }
-        _Anim.SetTrigger("Skill1Trigger");
+        print("Resseting trigger");
+        _Anim.SetTrigger("Skill2Trigger");
         _Anim.speed = 1.0f;
    }
 
