@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.654
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0832654, g: 0.087732375, b: 0.07918535, a: 0.654}
+  m_IndirectSpecularColor: {r: 0.08326541, g: 0.08773236, b: 0.07918536, a: 0.654}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -371,6 +371,16 @@ PrefabInstance:
       propertyPath: _ChargeSlider
       value: 
       objectReference: {fileID: 2005359256}
+    - target: {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: soundData.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: soundData.Array.data[0].Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: a2d450b1fbc9f754ab5d23e07a22fce6, type: 3}
     - target: {fileID: 8851722917661485829, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: m_IsActive
@@ -106112,6 +106122,56 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba61f3fba59177c47b7ee8daaaa8deb7, type: 3}
+--- !u!1 &2102374853
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2102374855}
+  - component: {fileID: 2102374854}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2102374854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102374853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c23fb7277001dca48b5a5c99bb0afa1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _SoundEmitterPrefab: {fileID: 4549706429663520681, guid: 5c401c30706460244859e2a7d1436557,
+    type: 3}
+  CollectionCheck: 1
+  DefaultPoolCapacity: 30
+  MaxPoolCapacity: 100
+  MaxSoundInstances: 10
+--- !u!4 &2102374855
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102374853}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 885.8787, y: 663.8293, z: -1529.7653}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2103176932
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -110273,3 +110333,4 @@ SceneRoots:
   - {fileID: 1218519524}
   - {fileID: 1154753245}
   - {fileID: 518335626}
+  - {fileID: 2102374855}
