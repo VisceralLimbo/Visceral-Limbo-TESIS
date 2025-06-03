@@ -22,6 +22,7 @@ public class DamageCollisionTrigger : MonoBehaviour
             if (DealKnockback)
             {
                 HPComp.SimpleDamage(Damage);
+                
             }
             else
             {

@@ -18,6 +18,8 @@ public class ExplosiveBarrel : MonoBehaviour
 
     [SerializeField] private GameObject[] explosionParticles; // Partículas de explosión
 
+    [SerializeField] private AudioClip explosionSound;
+
     private void Start()
     {
         healthComponent = GetComponent<Health_Component>();
@@ -31,6 +33,8 @@ public class ExplosiveBarrel : MonoBehaviour
     {
         yield return new WaitForSeconds(1f); // Hecho por Lucas - Time-slicing
         Kaboom();
+
+        CameraShake.instance.ShakeCamera(1f, 1f); // shake de la camara
     }
 
     private void Kaboom()
@@ -44,6 +48,11 @@ public class ExplosiveBarrel : MonoBehaviour
             {
                 psInChildren.Play();
             }
+        }
+
+        if (explosionSound != null)
+        {
+            AudioSource.PlayClipAtPoint(explosionSound, transform.position);
         }
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, targetLayer);
