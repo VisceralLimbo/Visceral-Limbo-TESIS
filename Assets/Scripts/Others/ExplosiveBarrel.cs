@@ -16,7 +16,7 @@ public class ExplosiveBarrel : MonoBehaviour
 
     private Health_Component healthComponent;
 
-    [SerializeField] private GameObject[] explosionParticles; // Generator de partículas
+    [SerializeField] private GameObject[] explosionParticles; // Partículas de explosión
 
     private void Start()
     {
@@ -35,19 +35,18 @@ public class ExplosiveBarrel : MonoBehaviour
 
     private void Kaboom()
     {
-        GameObject selectedEffect = GenerateRandomEffect(); // Hecho por Lucas - Generator
-        if (selectedEffect != null)
+        // Usa siempre el primer efecto si existe
+        if (explosionParticles != null && explosionParticles.Length > 0 && explosionParticles[0] != null)
         {
-            GameObject effectInstance = Instantiate(selectedEffect, transform.position, Quaternion.identity);
-
-              var psInChildren = effectInstance.GetComponentInChildren<ParticleSystem>();
-              if (psInChildren != null)
-              {
-                 psInChildren.Play();
-              }
+            GameObject effectInstance = Instantiate(explosionParticles[0], transform.position, Quaternion.identity);
+            var psInChildren = effectInstance.GetComponentInChildren<ParticleSystem>();
+            if (psInChildren != null)
+            {
+                psInChildren.Play();
+            }
         }
 
-        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, targetLayer); //para detectar enemigos en el radio de la explosion
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, targetLayer);
         List<Health_Component> healthTargets = new List<Health_Component>();
 
         foreach (var col in colliders)
@@ -59,17 +58,21 @@ public class ExplosiveBarrel : MonoBehaviour
             }
         }
 
-        var orderedTargets = healthTargets //Hecho por Lucas - OrderBy y ToList
+        var orderedTargets = healthTargets
             .OrderBy(x => Vector3.Distance(transform.position, x.transform.position))
             .ToList();
 
-        var filteredTargets = orderedTargets //Hecho por Lucas - Where
+        var filteredTargets = orderedTargets
             .Where(x => Vector3.Distance(transform.position, x.transform.position) < explosionRadius * 0.75f)
             .ToList();
 
-        if (filteredTargets.Count <= 0) { Destroy(this.gameObject); return; }
+        if (filteredTargets.Count <= 0)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
 
-        foreach (var enemy in filteredTargets) //Hecho por Lucas - Tupla
+        foreach (var enemy in filteredTargets)
         {
             Vector3 dir = (enemy.transform.position - transform.position).normalized;
             var damageTuple = new Tuple<Vector3, float, float>(dir, damage, knockbackForce);
@@ -80,27 +83,18 @@ public class ExplosiveBarrel : MonoBehaviour
             DamageDT.ElementalDamage = ElementType.Fire;
             DamageDT.FactionID = _Context.faction;
 
-            enemy.TakeDamageWithKnockback(damageTuple.Item1,damageTuple.Item3,DamageDT);
+            enemy.TakeDamageWithKnockback(damageTuple.Item1, damageTuple.Item3, DamageDT);
         }
+
         print(filteredTargets.Count);
 
-        if(filteredTargets.Count > 0)
+        if (filteredTargets.Count > 0)
         {
             _BarrelLaughs.transform.SetParent(null);
             _BarrelLaughs.Play();
         }
-        
 
         Destroy(this.gameObject);
-    }
-
-    private GameObject GenerateRandomEffect()
-    {
-        if (explosionParticles == null || explosionParticles.Length == 0)
-            return null;
-
-        var index = new { Index = UnityEngine.Random.Range(0, explosionParticles.Length) }; //Hecho por Lucas - Tipo Anonimo
-        return explosionParticles[index.Index];
     }
 }
 
