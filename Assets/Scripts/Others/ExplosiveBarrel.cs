@@ -43,11 +43,16 @@ public class ExplosiveBarrel : MonoBehaviour
         if (explosionParticles != null && explosionParticles.Length > 0 && explosionParticles[0] != null)
         {
             GameObject effectInstance = Instantiate(explosionParticles[0], transform.position, Quaternion.identity);
-            var psInChildren = effectInstance.GetComponentInChildren<ParticleSystem>();
-            if (psInChildren != null)
+
+            
+            var allParticles = effectInstance.GetComponentsInChildren<ParticleSystem>(true); 
+
+            foreach (var ps in allParticles)
             {
-                psInChildren.Play();
+                ps.gameObject.SetActive(true); 
+                ps.Play(true); 
             }
+
         }
 
         if (explosionSound != null)
