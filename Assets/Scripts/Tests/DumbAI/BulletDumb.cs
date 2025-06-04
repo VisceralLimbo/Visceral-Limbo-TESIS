@@ -12,6 +12,8 @@ public class BulletDumb : MonoBehaviour, IParriable
     [SerializeField] private GameObject _OwnerGameObject;
     [SerializeField] private PlayerContext _OwnerContext;
 
+    [SerializeField] bool Parried;
+
 
     private void Start()
     {
@@ -71,6 +73,7 @@ public class BulletDumb : MonoBehaviour, IParriable
             DamageDT.Victim = other.GetComponent<PlayerContext>();
             DamageDT.ElementalDamage = ElementType.Physical;
             DamageDT.FactionID = FactionID.LimboMonster1;
+            if(Parried)DamageDT.AddTag(ScoreFlags.Parried);
            
             if(HPComp.Context == null) { HPComp.SimpleDamage(damage);return; }
             HPComp.TakeDamageWithKnockback(dir.normalized, 5, DamageDT);
@@ -82,7 +85,6 @@ public class BulletDumb : MonoBehaviour, IParriable
 
     public void parried(DamageScore DMScore,Vector3 Direction = default)
     {
-       
         if(Direction == Vector3.zero)
         {
             Debug.LogError("<Color=blue> Visceral Error: No direction for parry</Color>");
@@ -96,6 +98,8 @@ public class BulletDumb : MonoBehaviour, IParriable
         damage = damage * 2;
 
         SetOwner(DMScore.Attacker.PlayerGameObject, DMScore.Attacker);
+        Parried = true;
+
     }
 }
 

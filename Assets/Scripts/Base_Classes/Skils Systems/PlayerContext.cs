@@ -26,10 +26,14 @@ public class PlayerContext : Visceral_Script
     /// </summary>
     public KinematicCharacterMotor KCCMotor;
 
+    public IKnockback knockback;
+
     public override void VS_Initialize()
     {
         //PlayerGameObject = gameObject;
         //PlayerTransform= GetComponent<Transform>();
+
+        knockback = this.transform.root.GetComponentInChildren<IKnockback>();
     }
 
     /// <summary>

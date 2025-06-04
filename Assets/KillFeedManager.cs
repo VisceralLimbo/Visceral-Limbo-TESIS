@@ -38,8 +38,12 @@ public static class KillFeedManager
             ScoreFlags.Overkill => "+OVERKILL!",
             ScoreFlags.Airkill => "+ASCENDED!",
             ScoreFlags.TrapKill => "+TRAPPED!",
-            ScoreFlags.Friendlyfire => "FRIENDLY FIRE!",
+            ScoreFlags.Friendlyfire => "+FRIENDLY FIRE!",
+            ScoreFlags.Skill1Kill => "+SKILLED ON!",
+            ScoreFlags.Skill2Kill => "+2 SKILLED 4 U!",
+            ScoreFlags.Parried =>"+PARRY THIS NOVICE!",
             ScoreFlags.None => "+KILL!",
+            
             _ => "shit, not implemented, developers are lazy - limbo",
         };
     }
@@ -50,8 +54,8 @@ public static class KillFeedManager
     /// </summary>
     private static Dictionary<ScoreFlags, string> ComboDictionary = new()
     {
-        {ScoreFlags.Friendlyfire | ScoreFlags.Overkill, "<Color=blue> NOT SO BLUE NOW!</Color>" },
-        {ScoreFlags.Airkill | ScoreFlags.TrapKill, "<Color=red> FLY SWATTER! </Color>" },
+        {ScoreFlags.Friendlyfire | ScoreFlags.Overkill, "NOT SO BLUE NOW!" },
+        {ScoreFlags.Airkill | ScoreFlags.TrapKill, "FLY SWATTER!" },
 
     };
 

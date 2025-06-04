@@ -10,7 +10,9 @@ public enum ScoreFlags
    Overkill = 1 << 1,
    Friendlyfire = 1 << 2,
    TrapKill = 1 << 3,
-
+   Skill1Kill = 1 << 4,
+   Skill2Kill = 1 << 5,
+   Parried = 1 << 6,
 
 
 }

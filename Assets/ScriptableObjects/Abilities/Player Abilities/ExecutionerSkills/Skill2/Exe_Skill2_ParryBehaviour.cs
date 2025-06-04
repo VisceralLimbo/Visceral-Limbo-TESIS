@@ -73,6 +73,8 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
             {
                     Debug.Log("Parry encontrado" + hit.gameObject.name);
                     var DMScore = new DamageScore { Attacker = _UserContext };
+                    DMScore.AddTag(ScoreFlags.Skill2Kill);
+                    DMScore.AddTag(ScoreFlags.Parried);
                     parriable.parried(DMScore, PlayerDirector);
             }
          }

@@ -144,5 +144,4 @@ public class Player_Base : Visceral_Script
         _PlayerHealth.OnDeath -= DeathEventFlag; 
     }
 
-
 }

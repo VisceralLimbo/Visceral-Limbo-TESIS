@@ -101,7 +101,7 @@ public struct InputMovement
 //  recibira valores mediante un STRUCT INPUT MOVEMENT
 //  y los usara para realizar las diversas acciones del juego
 
-public class Player_Movement : Visceral_Script, ICharacterController
+public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 {
     [Header("References")]
     [SerializeField] private KinematicCharacterMotor _KCCMotor; //controlador kinematico
@@ -171,6 +171,7 @@ public class Player_Movement : Visceral_Script, ICharacterController
     private Quaternion _RequestedRotation;
     private Vector3 _RequestedMovement;
     private Vector3 _RequestedAdditiveVelocity; // esta velocidad sera añadida por encima de la velocidad actual del jugador
+    private Vector3 _RequestedAdditiveForce;
     private bool _RequestedJump;
     private bool _RequestedSustainJump;
     private bool _RequestedCrouch;
@@ -323,6 +324,20 @@ public class Player_Movement : Visceral_Script, ICharacterController
 
         
     }
+
+    public void AddExternalForce(Vector3 Force,bool Unground =false)
+    {
+        if (!Unground)
+        {
+            _RequestedAdditiveForce += Force;
+        }
+        else
+        {
+            _KCCMotor.ForceUnground();
+            _RequestedAdditiveVelocity += Force;
+        }
+    }
+
  
     ///
     ///
@@ -577,7 +592,21 @@ public class Player_Movement : Visceral_Script, ICharacterController
             _RequestedAdditiveVelocity = Vector3.zero;
         }
 
+        if(_RequestedAdditiveForce.sqrMagnitude > 0f)
+        {
+            currentVelocity += _RequestedAdditiveForce;
+        }
+
     }
+
+    public void ApplyKnockBack(Vector3 KnockbackDir, float Force)
+    {
+        print("ApplyKnockback!");
+        AddExternalForce(KnockbackDir * Force, true);
+    }
+
+
+
 
     //este evento corre despues de la logica de movimiento
     public void AfterCharacterUpdate(float deltaTime)
@@ -602,6 +631,17 @@ public class Player_Movement : Visceral_Script, ICharacterController
                 _CurrentState.CharStance = Stance.Standing;
             }
         }
+
+        if (_RequestedAdditiveForce.sqrMagnitude != 0 )
+        {
+            _RequestedAdditiveForce = Vector3.Lerp(_RequestedAdditiveForce, Vector3.zero, Time.deltaTime);
+
+            if(_RequestedAdditiveForce.sqrMagnitude < 0.1)
+            {
+                _RequestedAdditiveForce = Vector3.zero;
+            }
+        }
+
 
         //actualizar el estado del CHT para reflejar lo que ocurrio en este frame y el pasado
         _CurrentState.Grounded = _KCCMotor.GroundingStatus.IsStableOnGround;

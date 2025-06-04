@@ -65,6 +65,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
             DamageDT.Victim = other.GetComponent<PlayerContext>();
             DamageDT.ElementalDamage = ElementType.Physical;
             DamageDT.FactionID = FactionID.LimboMonster1;
+            DamageDT.AddTag(ScoreFlags.Skill1Kill);
 
             if (HPComp.Context == null) { HPComp.SimpleDamage(Damage); return; }
             HPComp.TakeDamageWithKnockback(dir.normalized, 5, DamageDT);

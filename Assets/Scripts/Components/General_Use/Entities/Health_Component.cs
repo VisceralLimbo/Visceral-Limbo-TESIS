@@ -73,12 +73,18 @@ public class Health_Component : Visceral_Component
         }
 
         // tengo un kccmotor con rigidbody?
-        if(KnockbarDir.HasValue && _Context?.KCCMotor?.AttachedRigidbody != null)
+        if(KnockbarDir.HasValue &&_Context?.knockback != null)
         {
+            _Context.knockback.ApplyKnockBack(KnockbarDir.Value, force);
+        }
+        else if(KnockbarDir.HasValue && _Context?.KCCMotor?.AttachedRigidbody != null)
+        {
+            print(_Context.PlayerGameObject + "recieving knockback");
             _Context.KCCMotor.AttachedRigidbody.AddForce(KnockbarDir.Value * force,ForceMode.Impulse);
         }
         else if( KnockbarDir.HasValue && _RB != null)
         {
+            print( " rigidbody recieving knockback");
             _RB.AddForce(KnockbarDir.Value * force, ForceMode.Impulse);
         }
 

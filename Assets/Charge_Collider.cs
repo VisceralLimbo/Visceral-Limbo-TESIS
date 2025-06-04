@@ -88,7 +88,7 @@ public class Charge_Collider : Visceral_Script
             DamageDT.FactionID = FactionID.LimboMonster1;
 
             if (HPComp.Context == null) { HPComp.SimpleDamage(Damage);return; }
-            HPComp.TakeDamageWithKnockback(dir.normalized, 5, DamageDT);
+            HPComp.TakeDamageWithKnockback(dir.normalized, 30, DamageDT);
 
         }
     }

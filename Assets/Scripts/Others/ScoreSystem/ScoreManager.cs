@@ -14,6 +14,9 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] float AirKillExtra;
     [SerializeField] float FriendlyFireExtra;
     [SerializeField] float PlayerScore;
+    [SerializeField] float Skill1ScoreBonus;
+    [SerializeField] float Skill2ScoreBonus;
+    [SerializeField] float ParryBonus;
     [SerializeField] TextMeshProUGUI ScoreText;
 
 
@@ -30,31 +33,45 @@ public class ScoreManager : MonoBehaviour
 
         if (DamageData.Victim == null || DamageData.Attacker == null) return;
 
-        float FinalScore = 0;
+        float FinalScore = DamageData.EnemyScoreBase;
 
         if (DamageData.IsTagged(ScoreFlags.Airkill))
         {
             FinalScore += AirKillExtra;
-            print("Airkill");
         }
 
         if (DamageData.IsTagged(ScoreFlags.Overkill))
         {
             FinalScore += DamageData.Overkill;
-            print("Overkill");
         }
 
         if (DamageData.IsTagged(ScoreFlags.TrapKill))
         {
             FinalScore += FriendlyFireExtra * 1.25f;
-            print("Trapped!");
+        }
+
+        if (DamageData.IsTagged(ScoreFlags.Skill1Kill))
+        {
+            FinalScore += Skill1ScoreBonus;
+
+        }
+
+        if(DamageData.IsTagged(ScoreFlags.Skill2Kill))
+        {
+            FinalScore += Skill2ScoreBonus;
+        }
+
+        if (DamageData.IsTagged(ScoreFlags.Parried))
+        {
+            FinalScore += ParryBonus;
         }
 
         if (VerifyFriendlyFire(DamageData))
         {
             FinalScore += FriendlyFireExtra;
-            print("FriendlyFire!");
         }
+
+
         PlayerScore += FinalScore;
         ScoreText.text = PlayerScore.ToString();
 
