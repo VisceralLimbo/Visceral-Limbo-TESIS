@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1552730138487289673}
   - component: {fileID: 4355000249796483526}
   - component: {fileID: 218267449140197869}
+  - component: {fileID: 749883395890764691}
   - component: {fileID: 22277911995848639}
   m_Layer: 0
   m_Name: Caja1
@@ -134,6 +135,22 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
+--- !u!114 &749883395890764691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7000318029030494775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f86b2657d05ec1f478ff1c56335e444d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fracturedBoxPrefab: {fileID: 6708802009788720955, guid: 48a67962dd8c60f4cac95a6b70ad8320,
+    type: 3}
+  destroyFragmentsAfter: 5
+  explosionForce: 4
 --- !u!54 &22277911995848639
 Rigidbody:
   m_ObjectHideFlags: 0
