@@ -93,6 +93,11 @@ public struct InputMovement
     /// booleano que indica que el jugador presiono la Ultimate
     /// </summary>
     public bool Ultimate;
+
+    /// <summary>
+    /// booleano que indica que el jugador presiono el kick
+    /// </summary>
+    public bool Kick;
 }
 
 //  patricio malvasio maddalena

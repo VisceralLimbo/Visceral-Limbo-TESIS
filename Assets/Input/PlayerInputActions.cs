@@ -107,6 +107,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Kick"",
+                    ""type"": ""Button"",
+                    ""id"": ""109fee98-fbc9-4734-9c50-cbbdbdd9e5cb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -340,6 +349,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Ultimate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83777763-da1e-43cd-a36e-01ff52d1fec6"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Kick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -357,6 +377,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Gameplay_Ability_1 = m_Gameplay.FindAction("Ability_1", throwIfNotFound: true);
         m_Gameplay_Ability_2 = m_Gameplay.FindAction("Ability_2", throwIfNotFound: true);
         m_Gameplay_Ultimate = m_Gameplay.FindAction("Ultimate", throwIfNotFound: true);
+        m_Gameplay_Kick = m_Gameplay.FindAction("Kick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -427,6 +448,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Ability_1;
     private readonly InputAction m_Gameplay_Ability_2;
     private readonly InputAction m_Gameplay_Ultimate;
+    private readonly InputAction m_Gameplay_Kick;
     public struct GameplayActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -440,6 +462,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Ability_1 => m_Wrapper.m_Gameplay_Ability_1;
         public InputAction @Ability_2 => m_Wrapper.m_Gameplay_Ability_2;
         public InputAction @Ultimate => m_Wrapper.m_Gameplay_Ultimate;
+        public InputAction @Kick => m_Wrapper.m_Gameplay_Kick;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -476,6 +499,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Ultimate.started += instance.OnUltimate;
             @Ultimate.performed += instance.OnUltimate;
             @Ultimate.canceled += instance.OnUltimate;
+            @Kick.started += instance.OnKick;
+            @Kick.performed += instance.OnKick;
+            @Kick.canceled += instance.OnKick;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -507,6 +533,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Ultimate.started -= instance.OnUltimate;
             @Ultimate.performed -= instance.OnUltimate;
             @Ultimate.canceled -= instance.OnUltimate;
+            @Kick.started -= instance.OnKick;
+            @Kick.performed -= instance.OnKick;
+            @Kick.canceled -= instance.OnKick;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -535,5 +564,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnAbility_1(InputAction.CallbackContext context);
         void OnAbility_2(InputAction.CallbackContext context);
         void OnUltimate(InputAction.CallbackContext context);
+        void OnKick(InputAction.CallbackContext context);
     }
 }

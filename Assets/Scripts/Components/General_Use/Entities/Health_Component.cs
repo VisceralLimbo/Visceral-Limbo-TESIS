@@ -84,7 +84,7 @@ public class Health_Component : Visceral_Component
         }
         else if( KnockbarDir.HasValue && _RB != null)
         {
-            print( " rigidbody recieving knockback");
+            print("rigidbody recieving knockback");
             _RB.AddForce(KnockbarDir.Value * force, ForceMode.Impulse);
         }
 

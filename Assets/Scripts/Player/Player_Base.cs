@@ -98,10 +98,12 @@ public class Player_Base : Visceral_Script
             Ability_1 = Input.Ability_1.WasPressedThisFrame(),
             Ability_2= Input.Ability_2.WasPressedThisFrame(),
             Ultimate = Input.Ultimate.WasPressedThisFrame(),
+            Kick = Input.Kick.WasPressedThisFrame(),
+           
         };
         _Player_Movement.UpdateBodyPositions(Time.deltaTime);
         _Player_Movement.UpdateInput(movementInput);
-        _DashTest.PerformDash(movementInput);
+        //_DashTest.PerformDash(movementInput);
         _Player_CameraController.UpdatePosition(_Player_Movement.GetCameraTarget());
 
         //_MeleeAttack.RunData(movementInput);
@@ -127,6 +129,11 @@ public class Player_Base : Visceral_Script
         if (Inputs.Ultimate)
         {
             _SkillManager.TryUseSkill("Ult");
+            OnPlayerSkillUse?.Invoke();
+        }
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            _SkillManager.TryUseSkill("Kick");
             OnPlayerSkillUse?.Invoke();
         }
 

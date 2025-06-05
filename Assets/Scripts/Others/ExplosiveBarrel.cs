@@ -25,7 +25,7 @@ public class ExplosiveBarrel : MonoBehaviour
         healthComponent = GetComponent<Health_Component>();
         if (healthComponent != null)
         {
-            healthComponent.OnDamaged += () => StartCoroutine(DelayedExplosion());
+            healthComponent.OnDeath += () => StartCoroutine(DelayedExplosion());
         }
     }
 
