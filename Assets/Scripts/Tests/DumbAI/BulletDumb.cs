@@ -99,7 +99,7 @@ public class BulletDumb : MonoBehaviour, IParriable
 
         SetOwner(DMScore.Attacker.PlayerGameObject, DMScore.Attacker);
         Parried = true;
-
+        
     }
 }
 

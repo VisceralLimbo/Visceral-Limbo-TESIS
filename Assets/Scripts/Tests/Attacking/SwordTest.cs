@@ -64,7 +64,7 @@ public class SwordTest : Visceral_WeaponBase
         Dir.y = 0;
         
         HPComp.TakeDamageWithKnockback(Dir,KnockBack,damageScore);
-
+        HitStop.Stop(0.05f);
 
         
     }

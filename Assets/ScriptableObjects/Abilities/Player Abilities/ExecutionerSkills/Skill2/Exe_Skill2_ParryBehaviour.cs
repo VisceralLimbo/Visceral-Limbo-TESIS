@@ -21,6 +21,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
     [Header("Miscellaneous")]
     [SerializeField] bool DrawGizmos;
 
+
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
     {
         base.Initialize(data, Skmanager, UserContext);
@@ -41,14 +42,12 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
         _Anim.speed = SkillSpeedMod;
         _Anim.runtimeAnimatorController = _ANCO;
         _Anim.CrossFade("Exe_Skill2", 0.01f, 0);
-        //_Anim.ResetTrigger("Skill2Trigger");
-
+        _Anim.ResetTrigger("Skill2Trigger");
         StartCoroutine(LockSkill());
     }
 
    IEnumerator LockSkill()
    {
-
         //catch! la animacion actual NO es la del Parry
         while (!_Anim.GetNextAnimatorStateInfo(0).IsName("Exe_Skill2"))
         {
@@ -57,7 +56,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
 
          //direccion de la camara
          Vector3 ParryDirection = _camContext.transform.forward;
-         Vector3 ParryOrigin = _UserContext.PlayerTransform.position + ParryDirection * ParryRange;
+         Vector3 ParryOrigin = _UserContext.PlayerTransform.position + ParryDirection * ParryRange + new Vector3(0,0.5f,0);
 
          //almacenamos la direccion global para proyectiles
          PlayerDirector = ParryDirection.normalized;
@@ -76,6 +75,8 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
                     DMScore.AddTag(ScoreFlags.Skill2Kill);
                     DMScore.AddTag(ScoreFlags.Parried);
                     parriable.parried(DMScore, PlayerDirector);
+
+                    HitStop.Stop(0.1f);
             }
          }
 
@@ -98,7 +99,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
 
         Gizmos.color = Color.blue;
 
-        Vector3 ParryOrigin = _UserContext.PlayerTransform.position + _UserContext.PlayerTransform.forward * ParryRange;
+        Vector3 ParryOrigin = _UserContext.PlayerTransform.position + _UserContext.PlayerTransform.forward * ParryRange +new Vector3(0, 0.5f, 0);
 
         Gizmos.DrawSphere(ParryOrigin, ParryRadius);
     }
