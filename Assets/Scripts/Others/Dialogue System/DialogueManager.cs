@@ -40,15 +40,18 @@ public class DialogueManager : Visceral_Script
     [Header("Shader Effect")]
     public Material DialogueEffectMaterial;
 
+    [SerializeField] private string damageFlashProperty = "_VignetteIntensity";
+
     public Material BloodEffectMaterial;
 
+    [SerializeField] private float shaderTransitionDuration = 0.5f;
+
+    private Coroutine dialogueShaderCoroutine;
+    private Coroutine bloodShaderCoroutine;
 
     public void Start()
     {
         if (instance == null && instance != this) instance = this;
-
-        if (DialogueEffectMaterial != null)
-            DialogueEffectMaterial.SetFloat("_ShowEffect", 0f);
 
         if (BloodEffectMaterial != null)
             BloodEffectMaterial.SetFloat("_SetActive", 0f);
@@ -71,10 +74,17 @@ public class DialogueManager : Visceral_Script
             PlayerMovement.IsMovementBlocked = true;
 
         if (DialogueEffectMaterial != null)
-            DialogueEffectMaterial.SetFloat("_ShowEffect", 1f);
+        {
+            if (dialogueShaderCoroutine != null) StopCoroutine(dialogueShaderCoroutine);
+            dialogueShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(DialogueEffectMaterial, "_VignetteIntensity", 1f));
+        }
 
         if (BloodEffectMaterial != null)
-            BloodEffectMaterial.SetFloat("_SetActive", 1f);
+        {
+            if (bloodShaderCoroutine != null) StopCoroutine(bloodShaderCoroutine);
+            bloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_SetActive", 1f));
+        }
+
         NextNode();
     }
 
@@ -87,7 +97,7 @@ public class DialogueManager : Visceral_Script
         }
         if( _CurrentNodeIndex < 0 || _CurrentNodeIndex >= CurrentDialogue.DialogueNodes.Count)
         {
-            EndDialoge();
+            EndDialogue();
             return;
         }
 
@@ -160,14 +170,14 @@ public class DialogueManager : Visceral_Script
     private IEnumerator AutoAdvanceDialogue(float Duration)
     {
 
-        //esperar la cantidad deseada
+      
         yield return new WaitForSeconds(Duration);
 
         _CurrentNodeIndex = CurrentDialogue.DialogueNodes[_CurrentNodeIndex].NextDialogeOption;
         NextNode();
     }
 
-    private void EndDialoge()
+    private void EndDialogue()
     {
         DialogueText.text = "";
         DialoguePanel.SetActive(false);
@@ -184,12 +194,38 @@ public class DialogueManager : Visceral_Script
             PlayerMovement.IsMovementBlocked = false;
 
         if (DialogueEffectMaterial != null)
-            DialogueEffectMaterial.SetFloat("_ShowEffect", 0f);
+        {
+            if (dialogueShaderCoroutine != null) StopCoroutine(dialogueShaderCoroutine);
+            dialogueShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(DialogueEffectMaterial, "_VignetteIntensity", 0f));
+        }
 
         if (BloodEffectMaterial != null)
-            BloodEffectMaterial.SetFloat("_SetActive", 0f);
+        {
+            if (bloodShaderCoroutine != null) StopCoroutine(bloodShaderCoroutine);
+            bloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_SetActive", 0f));
+        }
 
         Debug.Log("FinishDialogue");
+    }
+
+    private IEnumerator SetShaderFloatOverTime(Material mat, string property, float targetValue)
+    {
+        DialogueEffectMaterial.SetFloat(damageFlashProperty, 1f);
+
+
+        yield return new WaitForSeconds(0.5f);
+
+
+        float fadeDuration = 0.5f;
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float newValue = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            DialogueEffectMaterial.SetFloat(damageFlashProperty, newValue);
+            yield return null;
+        }
+        DialogueEffectMaterial.SetFloat(damageFlashProperty, 0f);
     }
 
 }

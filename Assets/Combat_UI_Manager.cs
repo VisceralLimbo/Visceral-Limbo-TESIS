@@ -8,7 +8,7 @@ public class Combat_UI_Manager : MonoBehaviour
 {
     private void Start()
     {
-        if(_Instance == null && _Instance != this)
+        if (_Instance == null && _Instance != this)
         {
             _Instance = this;
         }
@@ -16,6 +16,8 @@ public class Combat_UI_Manager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        
     }
 
     public static Combat_UI_Manager _Instance;
@@ -34,7 +36,11 @@ public class Combat_UI_Manager : MonoBehaviour
 
     [Space]
     [Header("SkillUIElements")]
-    [SerializeField] Slider[] _CooldownSliders; 
+    [SerializeField] Slider[] _CooldownSliders;
+
+    [Header("Shader")]
+    [SerializeField] private Material shaderMaterial;
+    [SerializeField] private string damageFlashProperty = "_VignetteIntensity";
 
 
     public void UpdateCooldownImages(float CooldownValue,float MaxCooldownValue, string SkillID)
@@ -69,6 +75,36 @@ public class Combat_UI_Manager : MonoBehaviour
         {
             _PlayerHealthSlider.value = CurrentHP / MaxHP;
         }
+
+        if(shaderMaterial != null)
+        {
+            StopCoroutine(nameof(FlashDamageEffect));
+            StartCoroutine(FlashDamageEffect());
+        }
+    }
+
+    IEnumerator FlashDamageEffect()
+    {
+
+
+        shaderMaterial.SetFloat(damageFlashProperty, 1f);
+
+
+        yield return new WaitForSeconds(0.5f);
+
+
+        float fadeDuration = 0.5f;
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float newValue = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            shaderMaterial.SetFloat(damageFlashProperty, newValue);
+            yield return null;
+        }
+        shaderMaterial.SetFloat(damageFlashProperty, 0f);
+
+
     }
 
     public void DisplayWin(bool visible)
