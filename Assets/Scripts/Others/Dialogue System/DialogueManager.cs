@@ -18,7 +18,7 @@ public class DialogueManager : Visceral_Script
     public GameObject HandMesh;
 
     [Header("UI Elements to Hide During Dialogue")]
-    public List<GameObject> UIElementsToHide; 
+    public List<GameObject> UIElementsToHide;
     public GameObject PlayerSword;
 
     [Header("Player Control")]
@@ -29,7 +29,7 @@ public class DialogueManager : Visceral_Script
     [SerializeField] private int _CurrentNodeIndex = 0;
     [SerializeField] private bool _IsTyping = false;
 
-    [SerializeField]private List<GameObject> CurrentOptionsList = new List<GameObject>();
+    [SerializeField] private List<GameObject> CurrentOptionsList = new List<GameObject>();
 
 
     private Coroutine TypingCoroutine;
@@ -49,6 +49,8 @@ public class DialogueManager : Visceral_Script
     private Coroutine dialogueShaderCoroutine;
     private Coroutine bloodShaderCoroutine;
 
+    private bool _dialogueActive = false;
+
     public void Start()
     {
         if (instance == null && instance != this) instance = this;
@@ -56,9 +58,20 @@ public class DialogueManager : Visceral_Script
         if (BloodEffectMaterial != null)
             BloodEffectMaterial.SetFloat("_SetActive", 0f);
     }
+    private void Update()
+    {
+        if (!_dialogueActive) return;
 
+        if (OptionsPanel.activeSelf) return;
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            EndDialogue();
+        }
+    }
     public void StartDialogue(DialogueData DialogeDT)
     {
+        _dialogueActive = true;
         CurrentDialogue = DialogeDT;
         _CurrentNodeIndex = 0;
         DialoguePanel.SetActive(true);
@@ -91,11 +104,11 @@ public class DialogueManager : Visceral_Script
 
     private void NextNode()
     {
-        if(CurrentDialogue == null)
+        if (CurrentDialogue == null)
         {
             Debug.LogError("<Color=blue> Visceral Error: Dialoge not found, are you sure you passed a dialoge?</Color>");
         }
-        if( _CurrentNodeIndex < 0 || _CurrentNodeIndex >= CurrentDialogue.DialogueNodes.Count)
+        if (_CurrentNodeIndex < 0 || _CurrentNodeIndex >= CurrentDialogue.DialogueNodes.Count)
         {
             EndDialogue();
             return;
@@ -110,9 +123,9 @@ public class DialogueManager : Visceral_Script
     {
         _IsTyping = true;
         DialogueText.text = "";
-        
 
-        foreach(char Letter in NodeDT.TextData.ToCharArray())  
+
+        foreach (char Letter in NodeDT.TextData.ToCharArray())
         {
             DialogueText.text += Letter;
             yield return new WaitForSeconds(_TextSpeed);
@@ -120,7 +133,7 @@ public class DialogueManager : Visceral_Script
 
         _IsTyping = false;
 
-        if(NodeDT.Options != null && NodeDT.Options.Count > 0)
+        if (NodeDT.Options != null && NodeDT.Options.Count > 0)
         {
             ShowOptions(NodeDT.Options);
         }
@@ -160,7 +173,7 @@ public class DialogueManager : Visceral_Script
     }
     private void ClearOptions()
     {
-        foreach(var Button in CurrentOptionsList)
+        foreach (var Button in CurrentOptionsList)
         {
             Destroy(Button);
         }
@@ -170,7 +183,7 @@ public class DialogueManager : Visceral_Script
     private IEnumerator AutoAdvanceDialogue(float Duration)
     {
 
-      
+
         yield return new WaitForSeconds(Duration);
 
         _CurrentNodeIndex = CurrentDialogue.DialogueNodes[_CurrentNodeIndex].NextDialogeOption;
@@ -179,6 +192,8 @@ public class DialogueManager : Visceral_Script
 
     private void EndDialogue()
     {
+        _dialogueActive = false;
+
         DialogueText.text = "";
         DialoguePanel.SetActive(false);
         OptionsPanel.SetActive(false);
