@@ -9,6 +9,7 @@ public class DoorAnimation : MonoBehaviour
 
     public static event Action<DoorAnimation> OnAnyPlayerEnter;
     public static event Action<DoorAnimation> OnAnyPlayerExit;
+    [SerializeField]  RoomEnterTrigger roomEnterTrigger;
 
     private bool doorOpen = false;
 
@@ -16,12 +17,16 @@ public class DoorAnimation : MonoBehaviour
     {
         _anim.SetBool("Abrir", true);
         doorOpen = true;
+        if (roomEnterTrigger != null)
+            roomEnterTrigger.SetSolidState(false);
     }
 
     private void CloseDoor()
     {
         _anim.SetBool("Abrir", false);
         doorOpen = false;
+        if (roomEnterTrigger != null)
+            roomEnterTrigger.SetSolidState(true);
     }
 
     public void TryOpenDoor()
@@ -45,7 +50,7 @@ public class DoorAnimation : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             OnAnyPlayerExit?.Invoke(this);
-            CloseDoor(); // opcional
+            CloseDoor();
         }
     }
 }

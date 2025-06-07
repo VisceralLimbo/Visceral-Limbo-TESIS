@@ -7,13 +7,11 @@ public class RoomEnterTrigger : MonoBehaviour
 
     [SerializeField]GameObject SolidCollider;
     [SerializeField]RoomSpawnerManager roomSpawnerManager;
-    [SerializeField] bool IsSolid;
 
 
     void Start()
     {
         roomSpawnerManager= transform.root.GetComponentInChildren<RoomSpawnerManager>();
-        SolidCollider.SetActive(false);
 
     }
 
@@ -29,10 +27,8 @@ public class RoomEnterTrigger : MonoBehaviour
         }
 
     }
-
     public void SetSolidState(bool isSolid)
     {
         SolidCollider.SetActive(isSolid);
     }
-
 }
