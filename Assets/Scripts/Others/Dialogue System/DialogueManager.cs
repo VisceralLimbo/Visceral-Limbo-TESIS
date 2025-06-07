@@ -50,6 +50,7 @@ public class DialogueManager : Visceral_Script
     private Coroutine bloodShaderCoroutine;
 
     private bool _dialogueActive = false;
+    private DialogueNode currentNodeData;
 
     public void Start()
     {
@@ -62,11 +63,28 @@ public class DialogueManager : Visceral_Script
     {
         if (!_dialogueActive) return;
 
-        if (OptionsPanel.activeSelf) return;
-
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            EndDialogue();
+            if (_IsTyping)
+            {
+                StopAllCoroutines();
+                DialogueText.text = currentNodeData.TextData;
+                _IsTyping = false;
+
+                if (currentNodeData.Options != null && currentNodeData.Options.Count > 0)
+                {
+                    ShowOptions(currentNodeData.Options);
+                }
+                else if (currentNodeData.AutoAdvance)
+                {
+                    AutoAdvanceTextCoroutine = StartCoroutine(AutoAdvanceDialogue(currentNodeData.TimeToAdvance));
+                }
+            }
+            else if (!OptionsPanel.activeSelf)
+            {
+                _CurrentNodeIndex = currentNodeData.NextDialogeOption;
+                NextNode();
+            }
         }
     }
     public void StartDialogue(DialogueData DialogeDT)
@@ -123,11 +141,16 @@ public class DialogueManager : Visceral_Script
     {
         _IsTyping = true;
         DialogueText.text = "";
-
+        currentNodeData = NodeDT;
 
         foreach (char Letter in NodeDT.TextData.ToCharArray())
         {
             DialogueText.text += Letter;
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                DialogueText.text = NodeDT.TextData; // Mostrar todo el texto
+                break;
+            }
             yield return new WaitForSeconds(_TextSpeed);
         }
 
@@ -137,12 +160,9 @@ public class DialogueManager : Visceral_Script
         {
             ShowOptions(NodeDT.Options);
         }
-        else
+        else if (NodeDT.AutoAdvance)
         {
-            if (NodeDT.AutoAdvance)
-            {
-                AutoAdvanceTextCoroutine = StartCoroutine(AutoAdvanceDialogue(NodeDT.TimeToAdvance));
-            }
+            AutoAdvanceTextCoroutine = StartCoroutine(AutoAdvanceDialogue(NodeDT.TimeToAdvance));
         }
     }
 
@@ -182,8 +202,6 @@ public class DialogueManager : Visceral_Script
 
     private IEnumerator AutoAdvanceDialogue(float Duration)
     {
-
-
         yield return new WaitForSeconds(Duration);
 
         _CurrentNodeIndex = CurrentDialogue.DialogueNodes[_CurrentNodeIndex].NextDialogeOption;
