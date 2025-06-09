@@ -39,20 +39,23 @@ public class ExplosiveBarrel : MonoBehaviour
 
     private void Kaboom()
     {
-        // Usa siempre el primer efecto si existe
-        if (explosionParticles != null && explosionParticles.Length > 0 && explosionParticles[0] != null)
+        // Instanciar y reproducir todas las partículas del array
+        if (explosionParticles != null && explosionParticles.Length > 0)
         {
-            GameObject effectInstance = Instantiate(explosionParticles[0], transform.position, Quaternion.identity);
-
-            
-            var allParticles = effectInstance.GetComponentsInChildren<ParticleSystem>(true); 
-
-            foreach (var ps in allParticles)
+            foreach (GameObject particlePrefab in explosionParticles)
             {
-                ps.gameObject.SetActive(true); 
-                ps.Play(true); 
-            }
+                if (particlePrefab == null) continue;
 
+                GameObject effectInstance = Instantiate(particlePrefab, transform.position, Quaternion.identity);
+
+                var allParticles = effectInstance.GetComponentsInChildren<ParticleSystem>(true);
+
+                foreach (var ps in allParticles)
+                {
+                    ps.gameObject.SetActive(true);
+                    ps.Play(true);
+                }
+            }
         }
 
         if (explosionSound != null)
@@ -110,6 +113,7 @@ public class ExplosiveBarrel : MonoBehaviour
 
         Destroy(this.gameObject);
     }
+
 }
 
 
