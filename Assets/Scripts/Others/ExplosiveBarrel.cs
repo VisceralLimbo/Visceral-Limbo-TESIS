@@ -39,14 +39,18 @@ public class ExplosiveBarrel : MonoBehaviour
 
     private void Kaboom()
     {
-        // Instanciar y reproducir todas las partículas del array
+        
         if (explosionParticles != null && explosionParticles.Length > 0)
         {
             foreach (GameObject particlePrefab in explosionParticles)
             {
                 if (particlePrefab == null) continue;
 
-                GameObject effectInstance = Instantiate(particlePrefab, transform.position, Quaternion.identity);
+                GameObject effectInstance = Instantiate(particlePrefab);
+                effectInstance.transform.position = transform.position;
+                effectInstance.transform.rotation = particlePrefab.transform.rotation; 
+
+
 
                 var allParticles = effectInstance.GetComponentsInChildren<ParticleSystem>(true);
 
@@ -113,6 +117,15 @@ public class ExplosiveBarrel : MonoBehaviour
 
         Destroy(this.gameObject);
     }
+
+   /* private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f); 
+        Gizmos.DrawSphere(transform.position, explosionRadius);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius * 0.75f); 
+    } */
 
 }
 
