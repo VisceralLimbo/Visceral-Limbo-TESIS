@@ -45,5 +45,7 @@ public class DebugCheats : MonoBehaviour
                                  .WithRandomPitch(default)
                                  .play();
         }
+
+        
     }
 }
