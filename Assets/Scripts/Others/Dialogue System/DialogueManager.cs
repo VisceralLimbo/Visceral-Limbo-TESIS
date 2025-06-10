@@ -110,10 +110,9 @@ public class DialogueManager : Visceral_Script
             dialogueShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(DialogueEffectMaterial, "_VignetteIntensity", 1f));
         }
 
-        if (BloodEffectMaterial != null)
+        if(BloodEffectMaterial != null)
         {
-            if (bloodShaderCoroutine != null) StopCoroutine(bloodShaderCoroutine);
-            bloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_SetActive", 1f));
+            BloodEffectMaterial.SetFloat("_SetActive", 1f);
         }
 
         NextNode();
@@ -234,8 +233,7 @@ public class DialogueManager : Visceral_Script
 
         if (BloodEffectMaterial != null)
         {
-            if (bloodShaderCoroutine != null) StopCoroutine(bloodShaderCoroutine);
-            bloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_SetActive", 0f));
+            BloodEffectMaterial.SetFloat("_SetActive", 0f);
         }
 
         Debug.Log("FinishDialogue");
