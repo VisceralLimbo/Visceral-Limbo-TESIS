@@ -41,37 +41,43 @@ public class RoomSpawnerManager : MonoBehaviour
 
         MinionsAlive = Spawners.Any(x => x.HasMinion);
         SpawnersSpent = Spawners.All(x => x.IsSpent);
-        if(!MinionsAlive && !SpawnersSpent)
+
+        
+        if (!MinionsAlive && !SpawnersSpent)
         {
+            
+            MusicManager.Instance?.PlayCombatMusic();
 
-
-            foreach (var Item in Spawners)
+            foreach (var item in Spawners)
             {
-                Item.SetPlayerIndex(playerContext);
-                Item.SpawnEnemy();
+                item.SetPlayerIndex(playerContext);
+                item.SpawnEnemy();
             }
-            foreach(var item in roomTriggers)
-            {
-                if (item == null) continue;
-                item?.SetSolidState(true);
-            }
-        }
-
-        if(!MinionsAlive && SpawnersSpent)
-        {
 
             foreach (var item in roomTriggers)
             {
-                item.SetSolidState(false);
+                if (item == null) continue;
+                item.SetSolidState(true); 
             }
+        }
+
+        
+        if (!MinionsAlive && SpawnersSpent)
+        {
+            foreach (var item in roomTriggers)
+            {
+                item.SetSolidState(false); 
+            }
+
             StopThisManager = true;
             audioSource.Play();
             DialogueManager.instance.StartDialogue(_finishCombatDialogue);
 
+            
+            MusicManager.Instance?.PlayExplorationMusic();
+
             OnCombatEnded?.Invoke();
         }
-
-
     }
 
     //script hecho por Patricio Malvasio Maddalena
