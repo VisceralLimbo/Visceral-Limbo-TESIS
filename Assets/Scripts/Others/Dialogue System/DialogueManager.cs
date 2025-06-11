@@ -202,9 +202,20 @@ public class DialogueManager : Visceral_Script
     private IEnumerator AutoAdvanceDialogue(float Duration)
     {
         yield return new WaitForSeconds(Duration);
-
-        _CurrentNodeIndex = CurrentDialogue.DialogueNodes[_CurrentNodeIndex].NextDialogeOption;
-        NextNode();
+        if(_CurrentNodeIndex >= CurrentDialogue.DialogueNodes.Count)
+        {
+            _CurrentNodeIndex = 0;
+            EndDialogue();
+            yield break;
+        }
+        else
+        {
+            if (_CurrentNodeIndex >= 0)
+            {
+                _CurrentNodeIndex = CurrentDialogue.DialogueNodes[_CurrentNodeIndex].NextDialogeOption;
+                NextNode();
+            }         
+        } 
     }
 
     private void EndDialogue()

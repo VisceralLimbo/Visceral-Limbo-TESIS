@@ -15,6 +15,18 @@ public class RoomEnterTrigger : MonoBehaviour
 
     }
 
+    public void StartCombat(Collider other)
+    {
+        var Contex = other.GetComponentInParent<PlayerContext>();
+
+        if (Contex.faction == FactionID.Player && roomSpawnerManager != null)
+        {
+            roomSpawnerManager.AssignPlayerContext(Contex);
+            roomSpawnerManager.NotifyMinionDeath();
+
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         var Contex = other.GetComponentInParent<PlayerContext>();

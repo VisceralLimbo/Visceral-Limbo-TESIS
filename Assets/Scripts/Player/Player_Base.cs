@@ -131,7 +131,7 @@ public class Player_Base : Visceral_Script
             _SkillManager.TryUseSkill("Ult");
             OnPlayerSkillUse?.Invoke();
         }
-        if(Input.GetKeyDown(KeyCode.G))
+        if(Inputs.Kick)
         {
             _SkillManager.TryUseSkill("Kick");
             OnPlayerSkillUse?.Invoke();

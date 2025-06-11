@@ -56,6 +56,8 @@ public class Player_ChargedMeleeCombat : Visceral_Script
             {
                 _ChargeAmount= _MaximumCharge;
             }
+
+            
             _Anim.SetTrigger("ChargeUp");
             _Anim.ResetTrigger("Skill1Trigger");
         }
