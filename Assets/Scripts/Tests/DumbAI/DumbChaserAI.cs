@@ -16,6 +16,7 @@ public class DumbChaserAI : DumbEnemy, ICharacterController
     [SerializeField] Rigidbody _rb;
     [SerializeField] Transform target;
     [SerializeField] Charge_Collider _Collider;
+    [SerializeField] AnimatorHandler _AnimatorHandler;
     [Space]
 
 
@@ -56,6 +57,12 @@ public class DumbChaserAI : DumbEnemy, ICharacterController
 
         if(_Collider == null) _Collider = GetComponentInChildren<Charge_Collider>();
         _Collider.VS_InitializeWithParameters(context, this.gameObject);
+
+        if(_AnimatorHandler == null) _AnimatorHandler = GetComponentInChildren<AnimatorHandler>();
+
+        context.KCCMotor = this._KKC;
+        context.PlayerGameObject = this.gameObject;
+        context.PlayerTransform = _KKC.Capsule.transform;
     }
 
 
@@ -74,6 +81,7 @@ public class DumbChaserAI : DumbEnemy, ICharacterController
 
         targetdirection = target.transform.position - _KKC.Capsule.transform.position;
         distanceToTarget = Vector3.Distance(_KKC.Capsule.transform.position, target.transform.position);
+        _AnimatorHandler.SetParameter("WretchAnim", "IsMoving", AnimatorControllerParameterType.Bool, true); // animator system
 
         if (distanceToTarget < 10)
         {
@@ -182,21 +190,21 @@ public class DumbChaserAI : DumbEnemy, ICharacterController
 
     public void AfterCharacterUpdate(float deltaTime)
     {
-        context.KCCMotor = this._KKC;
-        context.PlayerGameObject = this.gameObject;
-        context.PlayerTransform = _KKC.Capsule.transform;
+       
 
         if(_KKC.AttachedRigidbody.velocity.sqrMagnitude > 0 )
         {
             var Dir = Vector3.Distance(target.transform.position, _KKC.Capsule.transform.position);
             _Collider.ToggleAttack(true);
-            if(Dir > 10 )
+            _AnimatorHandler.SetParameter("WretchAnim", "IsCharging", AnimatorControllerParameterType.Bool, true); // animator system
+            if (Dir > 10 )
             {
                 _KKC.AttachedRigidbody.velocity = Vector3.Slerp(_KKC.AttachedRigidbodyVelocity, Vector3.zero, 0.1f + Time.deltaTime);
                 if (_KKC.AttachedRigidbodyVelocity.sqrMagnitude <= 0.1f)
                 {
                     _KKC.AttachedRigidbody.velocity = Vector3.zero;
                     _Collider.ToggleAttack(false);
+                    _AnimatorHandler.SetParameter("WretchAnim", "IsCharging", AnimatorControllerParameterType.Bool, false); // animator system
                 }
 
             }

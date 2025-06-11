@@ -21,12 +21,15 @@ public class DoorAnimation : MonoBehaviour
             roomEnterTrigger.SetSolidState(false);
     }
 
-    private void CloseDoor()
+    private void CloseDoor(Collider other)
     {
         _anim.SetBool("Abrir", false);
         doorOpen = false;
         if (roomEnterTrigger != null)
+        {
             roomEnterTrigger.SetSolidState(true);
+            roomEnterTrigger.StartCombat(other);
+        } 
     }
 
     public void TryOpenDoor()
@@ -50,7 +53,7 @@ public class DoorAnimation : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             OnAnyPlayerExit?.Invoke(this);
-            CloseDoor();
+            CloseDoor(other);
         }
     }
 }
