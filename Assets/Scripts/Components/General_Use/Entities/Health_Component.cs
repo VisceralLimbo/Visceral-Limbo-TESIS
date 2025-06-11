@@ -64,7 +64,7 @@ public class Health_Component : Visceral_Component
         if (Died) return;
 
         CurrentHealth -= damage;
-        CameraShake.instance.ShakeCamera(0.2f, 1f); // shake de la camara
+        CameraShake.instance.ShakeCamera(0.1f, 0.5f); // shake de la camara
         OnDamaged?.Invoke();
 
         if(soundData != null)

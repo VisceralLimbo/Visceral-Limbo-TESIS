@@ -118,7 +118,7 @@ public class ExplosiveBarrel : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-   /* private void OnDrawGizmosSelected()
+    /* private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f); 
         Gizmos.DrawSphere(transform.position, explosionRadius);
