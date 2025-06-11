@@ -29,6 +29,10 @@ public class Player_Base : Visceral_Script
 
     public Action OnPlayerSkillUse;
 
+    public AudioSource abilityOne;
+
+    public AudioSource abilityTwo;
+
     void Start()
     {
         _PlayerContext = GetComponent<PlayerContext>();
@@ -119,11 +123,13 @@ public class Player_Base : Visceral_Script
         if (Inputs.Ability_1)
         {
             _SkillManager.TryUseSkill("Skill1");
+            abilityOne.Play();
             OnPlayerSkillUse?.Invoke();
         }
         if (Inputs.Ability_2)
         {
             _SkillManager.TryUseSkill("Skill2");
+            abilityTwo.Play();
             OnPlayerSkillUse?.Invoke();
         }
         if (Inputs.Ultimate)
