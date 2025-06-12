@@ -23,6 +23,8 @@ public class Visceral_SkillManager : Visceral_Script
 
     [SerializeField] private VisceralSkillLoadout Loadout;
 
+
+
     //Refact.
     public override void VS_Initialize()
     {

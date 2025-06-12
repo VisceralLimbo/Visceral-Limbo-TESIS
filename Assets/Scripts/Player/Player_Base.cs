@@ -29,6 +29,8 @@ public class Player_Base : Visceral_Script
 
     public Action OnPlayerSkillUse;
 
+
+
     void Start()
     {
         _PlayerContext = GetComponent<PlayerContext>();
@@ -109,6 +111,8 @@ public class Player_Base : Visceral_Script
         //_MeleeAttack.RunData(movementInput);
         _ChargedMeleeCombat.VS_Runlogic(movementInput);
         ActivateSkills(movementInput);
+
+
 
     }
 

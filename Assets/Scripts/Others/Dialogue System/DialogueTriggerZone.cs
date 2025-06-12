@@ -12,6 +12,8 @@ public class DialogueTriggerZone : MonoBehaviour
 
     private bool hasTriggered = false;
 
+    private MonoBehaviour playerAttackScript;
+
     private void OnTriggerEnter(Collider other)
     {
         if (hasTriggered) return;
