@@ -25,6 +25,11 @@ public abstract class Visceral_SkillLogic : MonoBehaviour
     /// </summary>
     [SerializeField] protected Visceral_SkillManager _SkillManager;
 
+    /// <summary>
+    /// data para sonidos
+    /// </summary>
+    [SerializeField] protected SoundData[] _SoundDataList; 
+
     public float cooldown => _AbilitySO.Cooldown;
     /// <summary>
     /// inicializacion del skilllogic, dejar default si no es necesario tocar nada

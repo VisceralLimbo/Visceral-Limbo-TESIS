@@ -44,6 +44,13 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
         _Anim.CrossFade("Exe_Skill2", 0.01f, 0);
         _Anim.ResetTrigger("Skill2Trigger");
         StartCoroutine(LockSkill());
+
+
+        SoundManager.Instance.CreateSound()
+            .WithSoundData(_SoundDataList[0])
+            .WithRandomPitch(true)
+            .WithPosition(_UserContext.PlayerTransform.position)
+            .play();
     }
 
    IEnumerator LockSkill()

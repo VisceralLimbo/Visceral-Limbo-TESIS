@@ -13,6 +13,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
     [SerializeField] float SkillDuration;
     [SerializeField] float Damage;
 
+    [SerializeField] SoundEmitter _SoundEmit;
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
     {
         base.Initialize(data, Skmanager, UserContext);
@@ -28,7 +29,19 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         _Anim.runtimeAnimatorController= _ANCO;
         _Anim.Play("Exe_Skill1", 0,0);
 
+
         StartCoroutine(LockSkill());
+
+
+
+        //sonidos
+        SoundManager.Instance.CreateSound()
+        .WithSoundData(_SoundDataList[0])
+        .WithRandomPitch(true)
+        .WithPosition(_UserContext.PlayerTransform.position)
+        .play(out SoundEmitter emitter);
+
+        _SoundEmit = emitter;
     }
 
     IEnumerator LockSkill()
@@ -45,7 +58,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         _Anim.SetTrigger("Skill1Trigger");
         _Anim.speed = 1.0f;
         Weapon.StopAttacking();
-      
+        SoundManager.Instance.ReturnToPool(_SoundEmit);
     }
 
 

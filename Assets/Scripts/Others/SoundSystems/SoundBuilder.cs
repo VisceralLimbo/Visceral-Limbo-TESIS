@@ -14,6 +14,7 @@ public class SoundBuilder
 
     float SpatialBlend;
 
+
     public SoundBuilder(SoundManager soundManager)
     {
         this.soundManager = soundManager;
@@ -67,6 +68,32 @@ public class SoundBuilder
 
     }
 
+    public void play(out SoundEmitter emitter)
+    {
+        emitter = null;
+        if (!soundManager.CanPlaySound(data)) return;
 
+        SoundEmitter Emitter = soundManager.Get();
+
+        Emitter.Initialize(data);
+        Emitter.transform.position = position;
+        Emitter.transform.SetParent(SoundManager.Instance.transform, true);
+        Emitter.OnSpatialBlended(SpatialBlend);
+
+        if (randomPitch)
+        {
+            Emitter.RandomizePitch();
+        }
+
+        if (data.IsFrequent)
+        {
+            soundManager.FrequentSoundEmitters.Enqueue(Emitter);
+        }
+
+        Emitter.Play();
+
+        emitter = Emitter;
+
+    }
 
 }
