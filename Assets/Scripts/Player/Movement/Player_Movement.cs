@@ -198,6 +198,10 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         _UncrouchOverlapColliders= new Collider[8];
         _Rb = GetComponent<Rigidbody>();
         _KCCMotor.AttachedRigidbodyOverride= _Rb;
+
+        //llamadas
+        DialogueManager.instance.OnDialogueStart += LockMovement;
+        DialogueManager.instance.OnDialogueEnd += UnlockMovement;
     }
 
     /// <summary>
@@ -343,7 +347,18 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         }
     }
 
- 
+    private void LockMovement()
+    {
+        IsMovementBlocked= true;
+    }
+
+    private void UnlockMovement()
+    {
+        IsMovementBlocked = false;
+    }
+
+
+
     ///
     ///
     ///--------- Kinematic Character Controller Functions

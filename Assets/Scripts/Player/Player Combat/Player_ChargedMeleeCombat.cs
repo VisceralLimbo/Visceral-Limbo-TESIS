@@ -31,11 +31,16 @@ public class Player_ChargedMeleeCombat : Visceral_Script
 
     public override void VS_Initialize()
     {
-        _Weapon.EndAttack += FinishAttack;
+      
 
-        var PlBS=GetComponent<Player_Base>();
+        //var PlBS=GetComponent<Player_Base>();
 
-        PlBS.OnPlayerSkillUse += ResetAnimation;
+        //PlBS.OnPlayerSkillUse += ResetAnimation;
+
+        DialogueManager.instance.OnDialogueStart += sheateWeapon;
+        DialogueManager.instance.OnDialogueEnd += UnsheateWeapon;
+
+
     }
 
     public override void VS_Runlogic(params object[] a)
@@ -57,15 +62,20 @@ public class Player_ChargedMeleeCombat : Visceral_Script
                 _ChargeAmount= _MaximumCharge;
             }
 
-            
+            _Anim.SetFloat("ChargeMod", 1);
             _Anim.SetTrigger("ChargeUp");
             _Anim.ResetTrigger("Skill1Trigger");
         }
         else
         {
             _ChargeAmount -= Time.deltaTime;
-            if(_ChargeAmount <= 0) _ChargeAmount = 0;
-            _Anim.ResetTrigger("ChargeUp");_Anim.ResetTrigger("ChargeRelease");_Anim.ResetTrigger("AttackTrigger");
+            _Anim.SetFloat("ChargeMod", -1);
+            if (_ChargeAmount <= 0) 
+            {
+                _ChargeAmount = 0;
+                _Anim.SetTrigger("CancelAttack");
+                _Anim.ResetTrigger("ChargeUp"); _Anim.ResetTrigger("ChargeRelease"); _Anim.ResetTrigger("AttackTrigger");
+            } 
         }
 
         if(_ChargeAmount > _MinimunToAttack && PlayerInputs.ReleasedLeftMouseClick)
@@ -138,4 +148,16 @@ public class Player_ChargedMeleeCombat : Visceral_Script
         }
     }
 
+
+    void sheateWeapon()
+    {
+        _Weapon.gameObject.SetActive(false);
+        print("sheating weapon");
+    }
+
+    void UnsheateWeapon()
+    {
+        _Weapon.gameObject.SetActive(true);
+        print("unsheating weapon");
+    }
 }

@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System;
 
 public class DialogueManager : Visceral_Script
 {
@@ -15,14 +16,13 @@ public class DialogueManager : Visceral_Script
     public GameObject DialoguePanel;
     public GameObject OptionsPanel;
     public GameObject OptionButtonPrefab;
-    public GameObject HandMesh;
 
     [Header("UI Elements to Hide During Dialogue")]
     public List<GameObject> UIElementsToHide;
-    public GameObject PlayerSword;
+    //public GameObject PlayerSword;
 
-    [Header("Player Control")]
-    public Player_Movement PlayerMovement;
+    //[Header("Player Control")]
+    //public Player_Movement PlayerMovement;
 
     [Header("Settings")]
     [SerializeField] private float _TextSpeed;
@@ -52,7 +52,10 @@ public class DialogueManager : Visceral_Script
     private bool _dialogueActive = false;
     private DialogueNode currentNodeData;
 
-    public void Start()
+
+    public Action OnDialogueStart, OnDialogueEnd;
+
+    public void Awake()
     {
         if (instance == null && instance != this) instance = this;
 
@@ -93,16 +96,11 @@ public class DialogueManager : Visceral_Script
         CurrentDialogue = DialogeDT;
         _CurrentNodeIndex = 0;
         DialoguePanel.SetActive(true);
-        HandMesh.SetActive(true);
 
         foreach (var uiElement in UIElementsToHide)
             uiElement.SetActive(false);
 
-        if (PlayerSword != null)
-            PlayerSword.SetActive(false);
-
-        if (PlayerMovement != null)
-            PlayerMovement.IsMovementBlocked = true;
+       
 
         if (DialogueEffectMaterial != null)
         {
@@ -116,6 +114,8 @@ public class DialogueManager : Visceral_Script
         }
 
         NextNode();
+
+        OnDialogueStart?.Invoke();
     }
 
 
@@ -225,17 +225,12 @@ public class DialogueManager : Visceral_Script
         DialogueText.text = "";
         DialoguePanel.SetActive(false);
         OptionsPanel.SetActive(false);
-        HandMesh.SetActive(false);
+
 
         foreach (var uiElement in UIElementsToHide)
             uiElement.SetActive(true);
 
-        if (PlayerSword != null)
-            PlayerSword.SetActive(true);
-
-        if (PlayerMovement != null)
-            PlayerMovement.IsMovementBlocked = false;
-
+       
         if (DialogueEffectMaterial != null)
         {
             if (dialogueShaderCoroutine != null) StopCoroutine(dialogueShaderCoroutine);
@@ -248,6 +243,8 @@ public class DialogueManager : Visceral_Script
         }
 
         Debug.Log("FinishDialogue");
+
+        OnDialogueEnd?.Invoke();
     }
 
     private IEnumerator SetShaderFloatOverTime(Material mat, string property, float targetValue)

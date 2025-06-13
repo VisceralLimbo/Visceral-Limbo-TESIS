@@ -20,7 +20,7 @@ public class Player_Base : Visceral_Script
     [SerializeField] private Player_MeleeAttack _MeleeAttack;
     [SerializeField] private Player_ChargedMeleeCombat _ChargedMeleeCombat;
     [SerializeField] private Visceral_SkillManager _SkillManager;
-    [SerializeField] private bool IsAlive = true;
+    [SerializeField] private bool IsAlive = true, OnDialogue;
     public PlayerContext _PlayerContext;
     public Health_Component _PlayerHealth { get; private set; }
     //PlayerInputActions es el mappeo de las acciones de Input del jugador
@@ -39,9 +39,11 @@ public class Player_Base : Visceral_Script
         _Player_Movement.VS_Initialize();
         _Player_CameraController.VS_InitializeWithParameters(_Player_Movement.GetCameraTarget());
         //_DashTest.VS_InitializeWithParameters(_Player_Movement);
-        _MeleeAttack = GetComponent<Player_MeleeAttack>();
+
         _SkillManager = GetComponent<Visceral_SkillManager>();
-        _MeleeAttack.VS_Initialize();
+        _ChargedMeleeCombat.VS_Initialize();
+
+
         _SkillManager.VS_Initialize();
         IsAlive = true;
         _PlayerHealth = GetComponentInChildren<Health_Component>();
@@ -108,12 +110,12 @@ public class Player_Base : Visceral_Script
         //_DashTest.PerformDash(movementInput);
         _Player_CameraController.UpdatePosition(_Player_Movement.GetCameraTarget());
 
-        //_MeleeAttack.RunData(movementInput);
-        _ChargedMeleeCombat.VS_Runlogic(movementInput);
-        ActivateSkills(movementInput);
-
-
-
+        if (!OnDialogue)
+        {
+            //_MeleeAttack.RunData(movementInput);
+            _ChargedMeleeCombat.VS_Runlogic(movementInput);
+            ActivateSkills(movementInput);
+        }
     }
 
 
@@ -153,6 +155,17 @@ public class Player_Base : Visceral_Script
     {
         IsAlive = false;
         _PlayerHealth.OnDeath -= DeathEventFlag; 
+    }
+
+
+    private void DialogueStart()
+    {
+        OnDialogue = true;
+    }
+
+    private void DialogueEnd()
+    {
+        OnDialogue = false;
     }
 
 }
