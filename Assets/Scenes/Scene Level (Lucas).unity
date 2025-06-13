@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.654
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0832654, g: 0.087732375, b: 0.07918535, a: 0.654}
+  m_IndirectSpecularColor: {r: 0.08326541, g: 0.08773236, b: 0.07918536, a: 0.654}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -354,7 +354,7 @@ PrefabInstance:
     - target: {fileID: 4050267560074687294, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4050267560074687294, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
@@ -453,6 +453,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
+      propertyPath: _Anim
+      value: 
+      objectReference: {fileID: 1984838010}
+    - target: {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _Weapon
+      value: 
+      objectReference: {fileID: 1085878477}
+    - target: {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
       propertyPath: _ChargeSlider
       value: 
       objectReference: {fileID: 2005359256}
@@ -461,6 +471,23 @@ PrefabInstance:
       propertyPath: soundData.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: SwordAttacks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: SwordAttacks.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373,
+        type: 2}
+    - target: {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: SwordAttacks.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373,
+        type: 2}
     - target: {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: soundData.Array.data[0].Clip
@@ -32425,7 +32452,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -58584,6 +58611,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1000648151}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1085878477 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5237066775471523164, guid: cebdca4ffead60c4baa37160e9676ba3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4510413204241781750}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724efd21e229ae541893758ae65d7f20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1087280943
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105574,6 +105613,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1984260321}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1984838010 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4157692567877294437, guid: cebdca4ffead60c4baa37160e9676ba3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4510413204241781750}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1985739717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -114549,6 +114594,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Antebrazo
       objectReference: {fileID: 0}
+    - target: {fileID: 7703354665308787282, guid: cebdca4ffead60c4baa37160e9676ba3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7719103373868989068, guid: cebdca4ffead60c4baa37160e9676ba3,
         type: 3}
       propertyPath: m_IsActive
@@ -114559,7 +114609,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7703354665308787282, guid: cebdca4ffead60c4baa37160e9676ba3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7400596621217713740, guid: cebdca4ffead60c4baa37160e9676ba3,
