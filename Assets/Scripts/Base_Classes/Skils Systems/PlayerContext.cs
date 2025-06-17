@@ -8,10 +8,10 @@ using KinematicCharacterController;
 /// </summary>
 public class PlayerContext : Visceral_Script
 {
-  /// <summary>
-  /// La salud del usuario
-  /// </summary>
-    public float Health;
+
+    public StatsManager Stats;
+    public InventoryManager Inventory;
+
     /// <summary>
     /// El GameObject general del usuario
     /// </summary>

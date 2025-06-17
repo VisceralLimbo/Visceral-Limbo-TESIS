@@ -19,6 +19,12 @@ public class Health_Component : Visceral_Component
 
     private void Start()
     {
+        if(_Context?.faction == FactionID.Player)
+        {
+            MaxHealth = _Context.Stats.GetFloatStatValue("MaxHealth");
+            _Context.Stats.OnStatChanged += UpdateStatValues;
+        }
+
         CurrentHealth = MaxHealth;
         _RB= GetComponent<Rigidbody>();
         _Context= GetComponentInParent<PlayerContext>();
@@ -137,6 +143,14 @@ public class Health_Component : Visceral_Component
             {
                 Combat_UI_Manager._Instance.DisplayLose(true);
             }
+        }
+    }
+
+    private void UpdateStatValues(string statID,float values)
+    {
+        if(statID == "MaxHealth")
+        {
+            MaxHealth = values;
         }
     }
 
