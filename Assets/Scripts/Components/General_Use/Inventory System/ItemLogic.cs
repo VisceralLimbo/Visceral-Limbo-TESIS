@@ -5,14 +5,17 @@ using UnityEngine;
 public abstract class ItemLogic : MonoBehaviour
 {
     [SerializeField] protected InventoryManager Inventory;
-    [SerializeField] protected ItemDefinitionSO ItemDefinition;
+    [SerializeField] protected ItemDefinitionSO _ItemDefinition;
+    public ItemDefinitionSO ItemDefinitionSO { get { return _ItemDefinition; } }
     [SerializeField] protected PlayerContext _Context;
 
-    private void Start()
-    {
-        ItemDefinition = GetComponentInParent<ItemDefinitionSO>();
-    }
+    
+    [SerializeField] protected int ItemStacks;
 
+    public void Initialize(ItemDefinitionSO Definition)
+    {
+        _ItemDefinition = Definition;
+    }
 
     /// <summary>
     /// funcion de pick up de items
@@ -30,7 +33,7 @@ public abstract class ItemLogic : MonoBehaviour
     /// cualquier subscripcion de eventos tiene que ser integrada a esta funcion
     /// </summary>
     /// <param name="inventory"></param>
-    public virtual void Register(InventoryManager inventory,PlayerContext context,ItemDefinitionSO definitionSO = null)
+    public virtual void Register(InventoryManager inventory,PlayerContext context)
     {
         Inventory = inventory;
         _Context = context;
@@ -51,12 +54,36 @@ public abstract class ItemLogic : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        print(other.tag);
         if (other.CompareTag("Player"))
         {
-            if(other.TryGetComponent<InventoryManager>(out Inventory))
+            if(other.TryGetComponent(out Inventory))
             {
-                Inventory.AddItemStack(ItemDefinition);
+                Inventory.AddItemStack(this);
+               
             }
+            print("found player");
+        }
+    }
+
+    public virtual void AddStack()
+    {
+        ItemStacks++;
+        ItemDefinitionSO.ItemStack++;
+    }
+
+    /// <summary>
+    /// remover un stack de item.
+    /// RECORDATORIO: esta funcion tambien remueve el item final si el
+    /// stack es menor o igual a 0
+    /// </summary>
+    public virtual void RemoveStack()
+    {
+        ItemStacks--;
+        ItemDefinitionSO.ItemStack--;
+        if (ItemStacks <= 0)
+        {
+            Unregister();
         }
     }
 

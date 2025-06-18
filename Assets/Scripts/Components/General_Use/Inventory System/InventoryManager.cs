@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public List<ItemDefinitionSO> Inventory { get => _Inventory; }
+    public List<ItemLogic> Inventory { get => _Inventory; }
 
-    [SerializeField] private List<ItemDefinitionSO> _Inventory;
+    [SerializeField] private List<ItemLogic> _Inventory;
 
     [SerializeField] StatsManager _StatsManager;
 
@@ -18,19 +18,19 @@ public class InventoryManager : MonoBehaviour
     /// como sumar stacks de items
     /// </summary>
     /// <param name="item"> la referencia del item a sumar</param>
-    public void AddItemStack(ItemDefinitionSO item)
+    public void AddItemStack(ItemLogic item)
     {
         if (_Inventory.Contains(item))
         {
-            _Inventory.Find(x => x.ItemID == item.ItemID).AddStack();
+           var Item =  _Inventory.Find(x => x == item);
+            
         }
         else
         {
             _Inventory.Add(item);
+            item.Register(this, _Context);
         }
-
-        item.Logic.Register(this,_Context, item);
-        item.Logic.OnPickUp();
+        item.OnPickUp();
     }
 
     /// <summary>
@@ -39,16 +39,16 @@ public class InventoryManager : MonoBehaviour
     /// INCLUSO REMOVER, NO USAR REMOVEITEM A MENOS QUE ESTES SEGURO
     /// </summary>
     /// <param name="item">Item a restar un stack</param>
-    public void LoseItemStack(ItemDefinitionSO item)
+    public void LoseItemStack(ItemLogic item)
     {
         if (!_Inventory.Contains(item))
         {
             Debug.LogError("[Visceral Error] Inventory manager: item removido"
-                 + "no existe en el inventario: " + item.name + " ID: " + item.ItemID);
+                 + "no existe en el inventario: " + item.ItemDefinitionSO.ItemName + " ID: " + item.ItemDefinitionSO.ItemID);
             return;
         }
-         _Inventory.Find(x=>x.ItemID == item.ItemID).RemoveStack();
-        item.Logic.OnDrop();
+         _Inventory.Find(x=>x== item).RemoveStack();
+        item.OnDrop();
     }
 
     /// <summary>
@@ -58,12 +58,12 @@ public class InventoryManager : MonoBehaviour
     /// USAR CON DELICADEZA
     /// </summary>
     /// <param name="item">item a remover del inventario</param>
-    public void RemoveItem(ItemDefinitionSO item)
+    public void RemoveItem(ItemLogic item)
     {
         if (!_Inventory.Contains(item))
         {
             Debug.LogError("[Visceral Error] Inventory manager: item removido"
-            + "no existe en el inventario: " + item.name + " ID: " + item.ItemID);
+            + "no existe en el inventario: " + item.name + " ID: " + item.ItemDefinitionSO.ItemID);
             return;
         }
         _Inventory.Remove(item);

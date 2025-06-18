@@ -15,7 +15,8 @@ public abstract class StatModifiers
 {
     [SerializeField]public abstract object ModifierValue { get; set; }
     [SerializeField]public ModifierType ModType;
-    //[SerializeField]public ItemDefinitionSO Source;
+    [SerializeField]public ItemLogic Source;
+    [SerializeField] public string EffectName;
 }
 
 [Serializable]

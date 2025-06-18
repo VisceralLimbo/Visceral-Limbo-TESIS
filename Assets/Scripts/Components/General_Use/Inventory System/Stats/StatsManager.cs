@@ -68,8 +68,9 @@ public class StatsManager : MonoBehaviour
         {
             if (value is FloatStat floatvalue)
             {
-                floatvalue.AddModifiers(_Mod);
+                floatvalue.AddModifiers(_Mod,_Mod.EffectName);
                 OnStatChanged?.Invoke(StatID,floatvalue.FinalValueFloat);
+                print("Updating value" + StatID);
             }
             else
             {

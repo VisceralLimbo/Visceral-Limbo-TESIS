@@ -9,34 +9,26 @@ public class ItemDefinitionSO : ScriptableObject
 {
     [SerializeField] public string ItemID;
     [SerializeField] public string ItemName;
-    [SerializeField] public float ItemStacks;
+    [SerializeField] protected int _InitialItemStack;
+    public int ItemStack;
 
     [SerializeField] public Sprite ItemSprite;
 
-    [SerializeField] public GameObject ItemPrefab;
-
-    [SerializeField] public ItemLogic Logic; 
+    [SerializeField] public GameObject ItemDataPrefab;
 
     /// <summary>
     /// añadimos un stack de item, RECORDATORIO:
     /// esta funcion tambien añade item si no estan en el inventario
     /// </summary>
-    public void AddStack()
+
+    public void Awake()
     {
-        ItemStacks++;
+        ItemStack = 0;
     }
 
-    /// <summary>
-    /// remover un stack de item.
-    /// RECORDATORIO: esta funcion tambien remueve el item final si el
-    /// stack es menor o igual a 0
-    /// </summary>
-    public void RemoveStack()
+    private void OnEnable()
     {
-        ItemStacks--;
-        if(ItemStacks <= 0)
-        {
-            Logic.Unregister();
-        }
+        ItemStack = _InitialItemStack;
     }
+
 }
