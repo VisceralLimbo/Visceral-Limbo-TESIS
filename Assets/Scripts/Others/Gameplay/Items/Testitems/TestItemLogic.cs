@@ -16,12 +16,13 @@ public class TestItemLogic : ItemLogic
 
     public override void OnPickUp()
     {
-        AddStack();
-     
+        Inventory.AddItemStack(_ItemDefinition);
+        Destroy(this.gameObject);
+
     }
     public override void AddStack()
     {
-        if (ItemDefinitionSO.ItemStack == 0)
+        if (ItemStacks == 0)
         {
             var StatManager = _Context.Stats;
             StatModifierFloat StatMod = new StatModifierFloat();
@@ -30,14 +31,14 @@ public class TestItemLogic : ItemLogic
             StatMod.EffectName = "TestItemLogicHealthUP";
             StatMod.Source = this;
             StatManager.UpdateFloatStatValue("MaxHealth", StatMod);
-            ItemDefinitionSO.ItemStack++;
+            ItemStacks++;
         }
-        else if(ItemDefinitionSO.ItemStack >= 1)
+        else if(ItemStacks >= 1)
         {
-            ItemDefinitionSO.ItemStack++;
+            ItemStacks++;
             var StatManager = _Context.Stats;
             StatModifierFloat StatMod = new StatModifierFloat();
-            StatMod.ModifierValueFloat = 25 * ItemDefinitionSO.ItemStack;
+            StatMod.ModifierValueFloat = 25 * ItemStacks;
             StatMod.ModType = ModifierType.flat;
             StatMod.EffectName = "TestItemLogicHealthUP";
             StatMod.Source = this;
@@ -62,6 +63,8 @@ public class TestItemLogic : ItemLogic
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (IsInventoryMaster) return;
+
         print(other);
         if (other.CompareTag("Player"))
         {
@@ -69,7 +72,7 @@ public class TestItemLogic : ItemLogic
             {
                 _Context = context;
                 Inventory = context.Inventory;
-                Inventory.AddItemStack(this);
+                OnPickUp();
             }
             else
             {

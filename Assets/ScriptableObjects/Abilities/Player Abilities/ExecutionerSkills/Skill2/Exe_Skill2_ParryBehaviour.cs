@@ -9,6 +9,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
     [Header("References")]
     [SerializeField] Player_CameraController _camContext;
     [SerializeField] AnimatorOverrideController _ANCO;
+    [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Animator _Anim;
 
     [Space]
@@ -25,8 +26,9 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
     {
         base.Initialize(data, Skmanager, UserContext);
-        _Anim = _UserContext.PlayerGameObject.transform.root.GetComponentInChildren<Animator>();
-
+        _AnimHandler = _UserContext.gameObject.GetComponent<AnimatorHandler>();
+        _AnimHandler.TryGetAnimator("PlayerWeapon",out Animator value);
+        _Anim = value;
     }
 
     public override void ActivateSkill()
@@ -41,8 +43,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
 
         _Anim.speed = SkillSpeedMod;
         _Anim.runtimeAnimatorController = _ANCO;
-        _Anim.CrossFade("Exe_Skill2", 0.01f, 0);
-        _Anim.ResetTrigger("Skill2Trigger");
+        _AnimHandler.SetParameter("PlayerWeapon", "StartSkill2", AnimatorControllerParameterType.Trigger);   
         StartCoroutine(LockSkill());
 
 
@@ -90,13 +91,13 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
          //Catch! no terminamos la animacion del ataque
         while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
         {
-            print(_Anim.GetCurrentAnimatorStateInfo(0).fullPathHash);
-            
             yield return null;
         }
+
         print("Resseting trigger");
-        _Anim.SetTrigger("Skill2Trigger");
+        _AnimHandler.SetParameter("PlayerWeapon", "Skill2Trigger", AnimatorControllerParameterType.Trigger);
         _Anim.speed = 1.0f;
+        _AnimHandler.ResetAllTriggers("PlayerWeapon");
    }
 
 

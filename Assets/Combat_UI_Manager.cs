@@ -83,6 +83,20 @@ public class Combat_UI_Manager : MonoBehaviour
         }
     }
 
+    public void UpdatePlayerHealthBar(float CurrentHP, float MaxHP,bool TookDamage)
+    {
+        if (_PlayerHealthSlider != null)
+        {
+            _PlayerHealthSlider.value = CurrentHP / MaxHP;
+        }
+
+        if (shaderMaterial != null && TookDamage)
+        {
+            StopCoroutine(nameof(FlashDamageEffect));
+            StartCoroutine(FlashDamageEffect());
+        }
+    }
+
     IEnumerator FlashDamageEffect()
     {
 

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public List<ItemLogic> Inventory { get => _Inventory; }
+    public List<ItemLogic> Inventory = new List<ItemLogic>();
 
-    [SerializeField] private List<ItemLogic> _Inventory;
+    [SerializeField] private Dictionary<ItemDefinitionSO,ItemLogic> _Inventory = new Dictionary<ItemDefinitionSO, ItemLogic>();
 
     [SerializeField] StatsManager _StatsManager;
 
@@ -18,8 +18,10 @@ public class InventoryManager : MonoBehaviour
     /// como sumar stacks de items
     /// </summary>
     /// <param name="item"> la referencia del item a sumar</param>
-    public void AddItemStack(ItemLogic item)
+    public void AddItemStack(ItemDefinitionSO item)
     {
+
+        /*
         if (_Inventory.Contains(item))
         {
            var Item =  _Inventory.Find(x => x == item);
@@ -31,6 +33,32 @@ public class InventoryManager : MonoBehaviour
             item.Register(this, _Context);
         }
         item.OnPickUp();
+        */
+
+        //nuevo item
+        if (!_Inventory.ContainsKey(item))
+        {
+            //instanciado de items
+            var newItem = Instantiate(item.ItemDataPrefab,this.transform.position,Quaternion.identity,this.transform);
+            var NewComponentItem=  newItem.GetComponent<ItemLogic>();
+            NewComponentItem.Register(this, _Context);
+
+            //seteo de variables
+            NewComponentItem.SetInventoryMaster(true);
+            NewComponentItem.AddStack();
+            
+            _Inventory[item] = NewComponentItem;
+            print("nuevo item adquirido, seteando variables!");
+
+        }
+        else
+        {
+            _Inventory[item].AddStack();
+            print("Stack obtenido!");
+        }
+
+
+
     }
 
     /// <summary>
@@ -39,9 +67,9 @@ public class InventoryManager : MonoBehaviour
     /// INCLUSO REMOVER, NO USAR REMOVEITEM A MENOS QUE ESTES SEGURO
     /// </summary>
     /// <param name="item">Item a restar un stack</param>
-    public void LoseItemStack(ItemLogic item)
+    public void LoseItemStack(ItemDefinitionSO item)
     {
-        if (!_Inventory.Contains(item))
+        /*if (!_Inventory.Contains(item))
         {
             Debug.LogError("[Visceral Error] Inventory manager: item removido"
                  + "no existe en el inventario: " + item.ItemDefinitionSO.ItemName + " ID: " + item.ItemDefinitionSO.ItemID);
@@ -49,6 +77,7 @@ public class InventoryManager : MonoBehaviour
         }
          _Inventory.Find(x=>x== item).RemoveStack();
         item.OnDrop();
+        */
     }
 
     /// <summary>
@@ -58,14 +87,16 @@ public class InventoryManager : MonoBehaviour
     /// USAR CON DELICADEZA
     /// </summary>
     /// <param name="item">item a remover del inventario</param>
-    public void RemoveItem(ItemLogic item)
+    public void RemoveItem(ItemDefinitionSO item)
     {
-        if (!_Inventory.Contains(item))
+        /*if (!_Inventory.Contains(item))
         {
             Debug.LogError("[Visceral Error] Inventory manager: item removido"
             + "no existe en el inventario: " + item.name + " ID: " + item.ItemDefinitionSO.ItemID);
             return;
         }
         _Inventory.Remove(item);
+
+        */
     }
 }

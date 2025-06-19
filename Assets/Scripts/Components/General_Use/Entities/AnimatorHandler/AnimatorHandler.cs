@@ -87,14 +87,26 @@ public class AnimatorHandler : MonoBehaviour
         {
             case AnimatorControllerParameterType.Float:
                if((value is float || value is int)) ANIM.SetFloat(parameterName, (float)value);
-
+                else
+                {
+                    Debug.LogError("[Visceral Error]: the specified parameter:" + parameterName +
+                          " Isnt of type Float");
+                }
                 break;
             case AnimatorControllerParameterType.Bool: 
                 if(value is bool) ANIM.SetBool(parameterName,(bool)value);
-                
+                else
+                {
+                    Debug.LogError("[Visceral Error]: the specified parameter:" + parameterName +
+                          " Isnt of type Bool");
+                }
                 break;
             case AnimatorControllerParameterType.Int:
                 if(value is int) ANIM.SetInteger(parameterName,(int)value);
+                else
+                {
+                    Debug.LogError("[Visceral Error]: the specified parameter:" + parameterName + " Isnt of type Int");
+                }
 
                 break;
             case AnimatorControllerParameterType.Trigger:

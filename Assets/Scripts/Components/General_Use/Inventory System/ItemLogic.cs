@@ -12,6 +12,8 @@ public abstract class ItemLogic : MonoBehaviour
     
     [SerializeField] protected int ItemStacks;
 
+    [SerializeField] protected bool IsInventoryMaster;
+
     public void Initialize(ItemDefinitionSO Definition)
     {
         _ItemDefinition = Definition;
@@ -59,8 +61,8 @@ public abstract class ItemLogic : MonoBehaviour
         {
             if(other.TryGetComponent(out Inventory))
             {
-                Inventory.AddItemStack(this);
-               
+                Inventory.AddItemStack(ItemDefinitionSO);
+                Destroy(this.gameObject);
             }
             print("found player");
         }
@@ -69,7 +71,6 @@ public abstract class ItemLogic : MonoBehaviour
     public virtual void AddStack()
     {
         ItemStacks++;
-        ItemDefinitionSO.ItemStack++;
     }
 
     /// <summary>
@@ -87,4 +88,8 @@ public abstract class ItemLogic : MonoBehaviour
         }
     }
 
+    public virtual void SetInventoryMaster(bool isMaster)
+    {
+        IsInventoryMaster = isMaster;
+    }
 }

@@ -151,6 +151,7 @@ public class Health_Component : Visceral_Component
         if(statID == "MaxHealth")
         {
             MaxHealth = values;
+            Combat_UI_Manager._Instance.UpdatePlayerHealthBar(CurrentHealth,MaxHealth,false);
         }
     }
 

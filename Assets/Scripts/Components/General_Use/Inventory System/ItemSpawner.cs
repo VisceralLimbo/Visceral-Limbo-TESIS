@@ -13,8 +13,8 @@ public class ItemSpawner : MonoBehaviour
         var ItemGO = Instantiate(_ItemSpawn.ItemDataPrefab, this.transform.position, Quaternion.identity);
         var Logic = ItemGO.GetComponent<ItemLogic>();
         Logic.Initialize(_ItemSpawn);
-
-     
+        
+        
 
     }
 
