@@ -89,15 +89,16 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
          }
 
          //Catch! no terminamos la animacion del ataque
-        while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
+        while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.3f)
         {
+            print("animation not finished: " +_Anim.GetCurrentAnimatorStateInfo(0).ToString() + _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
             yield return null;
         }
 
         print("Resseting trigger");
         _AnimHandler.SetParameter("PlayerWeapon", "Skill2Trigger", AnimatorControllerParameterType.Trigger);
         _Anim.speed = 1.0f;
-        _AnimHandler.ResetAllTriggers("PlayerWeapon");
+        //_AnimHandler.ResetAllTriggers("PlayerWeapon");
    }
 
 
