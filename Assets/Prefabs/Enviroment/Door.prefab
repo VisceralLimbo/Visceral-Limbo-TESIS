@@ -754,9 +754,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.015102582, y: 0.023382552, z: 0.0023059433}
   m_Center: {x: -0.0001639675, y: 0.015407745, z: -0.000195218}
@@ -772,7 +772,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27d071dc3a3b43d4194c773feeca4576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SolidCollider: {fileID: 7419976696880205096}
+  SolidCollider: {fileID: 6092154440335592350}
+  DoorTrigger: {fileID: 3920308450227724778}
   roomSpawnerManager: {fileID: 0}
 --- !u!1 &7039945317092705359
 GameObject:
@@ -867,10 +868,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6366194371307231067}
   - component: {fileID: 3920308450227724778}
+  - component: {fileID: 6783383726311923437}
   m_Layer: 0
-  m_Name: SolidCollider
+  m_Name: DoorCollider
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -883,8 +885,8 @@ Transform:
   m_GameObject: {fileID: 7419976696880205096}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.01897, z: 0}
-  m_LocalScale: {x: 0.0024962365, y: 0.00204125, z: 0.0019582896}
+  m_LocalPosition: {x: 0, y: 0.01897, z: -0.0148}
+  m_LocalScale: {x: 0.007559852, y: 0.00204125, z: 0.015587513}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4248208643348297016}
@@ -904,12 +906,43 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 6.0637813, y: 11.322755, z: 1}
   m_Center: {x: -0.059989613, y: -2.0989382, z: 0}
+--- !u!114 &6783383726311923437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7419976696880205096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8f6f85a1d6f964dba185fa3eb03047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerEventList:
+  - TargetTag: Player
+    TriggerEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7551223920915768607}
+          m_TargetAssemblyTypeName: RoomEnterTrigger, Assembly-CSharp
+          m_MethodName: PlayerEnteredRoom
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    _IsTriggered: 0
+  _Reusable: 0
 --- !u!1 &8216953180676674358
 GameObject:
   m_ObjectHideFlags: 0
