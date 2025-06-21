@@ -29,6 +29,13 @@ public class Player_ChargedMeleeCombat : Visceral_Script
 
     InputMovement PlayerInputs;
 
+    [Header("Shader Settings")]
+    [SerializeField] private Renderer _SwordRenderer;
+    [SerializeField] private string shaderFloatName = "_FresnelGradientBlend";
+    [SerializeField] private float chargeThreshold = 1.5f;
+    [SerializeField] private float blendSpeed = 10f;
+
+
     public override void VS_Initialize()
     {
       
@@ -82,12 +89,29 @@ public class Player_ChargedMeleeCombat : Visceral_Script
         {
             Attack();
             _ChargeAmount = 0;
+            
+
         }
 
         Invoke(nameof(FinishAttack), 0);
 
         UpdateUI();
+
+        UpdateShaderBlend();
     }
+
+    private void UpdateShaderBlend()
+    {
+        if (_SwordRenderer == null) return;
+
+        float currentValue = _SwordRenderer.material.GetFloat(shaderFloatName);
+        float targetValue = (_ChargeAmount >= chargeThreshold) ? 1f : 0f;
+        float newValue = Mathf.Lerp(currentValue, targetValue, Time.deltaTime * blendSpeed);
+
+        _SwordRenderer.material.SetFloat(shaderFloatName, newValue);
+    }
+
+
 
     private void Attack()
     {
