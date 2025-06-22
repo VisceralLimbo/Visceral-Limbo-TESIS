@@ -7,7 +7,6 @@ public class HitBox : Visceral_Script
     [SerializeField] private Visceral_WeaponBase _WeaponOwner;
     [SerializeField] private Collider _collider;
 
-
     private void Start()
     {
         _WeaponOwner = GetComponentInParent<Visceral_WeaponBase>();
@@ -30,12 +29,11 @@ public class HitBox : Visceral_Script
     private Collider[] othercolliders;
     private void OnTriggerEnter(Collider other)
     {
-        if(_WeaponOwner != null)
+        if (_WeaponOwner != null)
         {
-            if(other.TryGetComponent(out Health_Component HPComp))
+            if (other.TryGetComponent(out Health_Component HPComp))
             {
-
-                _WeaponOwner.NotifyHit(other,HPComp);
+                _WeaponOwner.NotifyHit(other, HPComp);
             }
         }
     }
