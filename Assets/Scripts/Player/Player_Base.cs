@@ -54,6 +54,8 @@ public class Player_Base : Visceral_Script
         _Player_InputActions.Enable();
 
         Cursor.lockState = CursorLockMode.Locked;
+        DialogueManager.instance.OnDialogueStart += DialogueStart;
+        DialogueManager.instance.OnDialogueEnd += DialogueEnd;
     }
 
     private void Update()
