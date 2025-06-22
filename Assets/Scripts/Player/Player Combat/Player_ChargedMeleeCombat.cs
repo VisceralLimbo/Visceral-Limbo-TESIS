@@ -48,7 +48,6 @@ public class Player_ChargedMeleeCombat : Visceral_Script
         DialogueManager.instance.OnDialogueStart += sheateWeapon;
         DialogueManager.instance.OnDialogueEnd += UnsheateWeapon;
 
-
     }
 
     public override void VS_Runlogic(params object[] a)
@@ -73,6 +72,10 @@ public class Player_ChargedMeleeCombat : Visceral_Script
             _Anim.SetFloat("ChargeMod", 1);
             _Anim.SetTrigger("ChargeUp");
             _Anim.ResetTrigger("Skill1Trigger");
+
+            var shakestrenght= _ChargeAmount / _MaximumCharge * 2 ;
+
+            CameraShake.instance.ShakeCamera(0.05f, shakestrenght);
         }
         else
         {
