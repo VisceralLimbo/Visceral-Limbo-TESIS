@@ -11,6 +11,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
     [SerializeField] AnimatorOverrideController _ANCO;
     [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Animator _Anim;
+    [SerializeField] List<ParticleSystem> _effectParry;
 
     [Space]
     [Header("Variables")]
@@ -72,6 +73,15 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
          //buscar proyectiles parriables
          Collider[] hits = Physics.OverlapSphere(ParryOrigin, ParryRadius, ProyectileLayerMask);
 
+        if(hits.Length > 0)
+        {
+            foreach(ParticleSystem ps in _effectParry)
+            {
+                ps.transform.position = ParryOrigin + ParryDirection + transform.up;
+                ps.Play();
+            }
+        }
+
          //vemos cuantos hits podemos parriar
          foreach (var hit in hits)
          {
@@ -83,7 +93,6 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
                     DMScore.AddTag(ScoreFlags.Skill2Kill);
                     DMScore.AddTag(ScoreFlags.Parried);
                     parriable.parried(DMScore, PlayerDirector);
-
                     HitStop.Stop(0.1f);
             }
          }

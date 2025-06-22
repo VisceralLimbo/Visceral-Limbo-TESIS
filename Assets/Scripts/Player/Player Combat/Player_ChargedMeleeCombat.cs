@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class Player_ChargedMeleeCombat : Visceral_Script
 {
@@ -16,7 +17,7 @@ public class Player_ChargedMeleeCombat : Visceral_Script
     [SerializeField] Animator _Anim;
     [SerializeField] Visceral_WeaponBase _Weapon;
     [SerializeField] Slider _ChargeSlider;
-
+    [SerializeField] VisualEffect _vfxSwordAttack;
     /// <summary>
     /// valor que cambia la velocidad de animacion de ataque, valor 1 = normal
     /// </summary>
@@ -115,7 +116,7 @@ public class Player_ChargedMeleeCombat : Visceral_Script
 
     private void Attack()
     {
-        
+        _vfxSwordAttack.Play();
         _Anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
         _Anim.speed = AttackSpeedMod;
         _Anim.SetTrigger("ChargeRelease");
