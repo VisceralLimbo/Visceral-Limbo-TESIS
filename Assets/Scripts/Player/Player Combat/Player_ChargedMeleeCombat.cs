@@ -75,7 +75,7 @@ public class Player_ChargedMeleeCombat : Visceral_Script
             _Anim.SetTrigger("ChargeUp");
             _Anim.ResetTrigger("Skill1Trigger");
 
-            var shakestrenght= _ChargeAmount / _MaximumCharge * 2 ;
+            var shakestrenght= _ChargeAmount / _MaximumCharge * 0.15f ;
 
             CameraShake.instance.ShakeCamera(0.05f, shakestrenght);
         }
@@ -155,11 +155,11 @@ public class Player_ChargedMeleeCombat : Visceral_Script
             _Weapon.StopAttacking();
             _Anim.SetTrigger("AttackTrigger");
             _Anim.ResetTrigger("ChargeRelease");
+            if (swordTrail != null) swordTrail.emitting = false;
+            if (swordTrail != null) swordTrail2.emitting = false;
             Debug.Log("finishing attack");
         }
 
-        if (swordTrail != null) swordTrail.emitting = false;
-        if (swordTrail != null) swordTrail2.emitting = false;
     }
 
     private void ResetAnimation()
