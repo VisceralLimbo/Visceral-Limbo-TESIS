@@ -36,6 +36,8 @@ public class Player_ChargedMeleeCombat : Visceral_Script
     [SerializeField] private float chargeThreshold = 1.5f;
     [SerializeField] private float blendSpeed = 10f;
 
+    [SerializeField] private TrailRenderer swordTrail;
+    [SerializeField] private TrailRenderer swordTrail2;
 
     public override void VS_Initialize()
     {
@@ -119,6 +121,8 @@ public class Player_ChargedMeleeCombat : Visceral_Script
 
     private void Attack()
     {
+        if (swordTrail != null) swordTrail.emitting = true;
+        if (swordTrail != null) swordTrail2.emitting = true;
         _vfxSwordAttack.Play();
         _Anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
         _Anim.speed = AttackSpeedMod;
@@ -153,6 +157,9 @@ public class Player_ChargedMeleeCombat : Visceral_Script
             _Anim.ResetTrigger("ChargeRelease");
             Debug.Log("finishing attack");
         }
+
+        if (swordTrail != null) swordTrail.emitting = false;
+        if (swordTrail != null) swordTrail2.emitting = false;
     }
 
     private void ResetAnimation()
