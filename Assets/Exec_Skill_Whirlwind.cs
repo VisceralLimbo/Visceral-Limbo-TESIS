@@ -13,7 +13,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
     [SerializeField] float SkillDuration;
     [SerializeField] float Damage;
-    [SerializeField]  VisualEffect _effectHability;
+    [SerializeField]  GameObject _effectHability;
 
     [SerializeField] SoundEmitter _SoundEmit;
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
@@ -31,7 +31,8 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         _Anim.runtimeAnimatorController = _ANCO;
         _Anim.Play("Exe_Skill1", 0, 0);
 
-        _effectHability.Play();
+        Vector3 offsetPos = _UserContext.PlayerGameObject.transform.position + Vector3.up * 0.1f; // cambiá el 1.0f según lo alto que lo quieras
+        GameObject vfx = Instantiate(_effectHability, offsetPos, Quaternion.identity);
 
         StartCoroutine(LockSkill());
 
