@@ -9,7 +9,7 @@ public class DoorAnimation : MonoBehaviour
 
     public static event Action<DoorAnimation> OnAnyPlayerEnter;
     public static event Action<DoorAnimation> OnAnyPlayerExit;
-    [SerializeField]  RoomEnterTrigger roomEnterTrigger;
+    [SerializeField] RoomEnterTrigger roomEnterTrigger;
 
     private bool doorOpen = false;
 
@@ -27,11 +27,14 @@ public class DoorAnimation : MonoBehaviour
         doorOpen = false;
         if (roomEnterTrigger != null)
         {
-            roomEnterTrigger.SetSolidState(false);
-            //roomEnterTrigger.StartCombat(other);
-        } 
+            StartCoroutine(DelayCollider());
+        }
     }
-
+    private IEnumerator DelayCollider()
+    {
+        yield return new WaitForSeconds(1f);
+        roomEnterTrigger.SetSolidState(false);
+    }
     public void TryOpenDoor()
     {
         if (!doorOpen)
