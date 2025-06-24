@@ -22,7 +22,7 @@ public class Ui_Interactive : MonoBehaviour
 
     private void Update()
     {
-        if (currentDoor != null && Input.GetKeyDown(KeyCode.I))
+        if (currentDoor != null && Input.GetKeyDown(KeyCode.G))
         {
             currentDoor.TryOpenDoor();
             pressEText.SetActive(false);
