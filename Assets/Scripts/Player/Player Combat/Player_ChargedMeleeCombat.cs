@@ -52,6 +52,12 @@ public class Player_ChargedMeleeCombat : Visceral_Script
 
     }
 
+    private void Start()
+    {
+        if (swordTrail != null) swordTrail.emitting = false;
+        if (swordTrail != null) swordTrail2.emitting = false;
+    }
+
     public override void VS_Runlogic(params object[] a)
     {
         if (a == null || a.Length == 0)
