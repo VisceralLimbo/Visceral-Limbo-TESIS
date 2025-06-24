@@ -31,6 +31,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         _Anim.runtimeAnimatorController = _ANCO;
         _Anim.Play("Exe_Skill1", 0, 0);
 
+        _effectHability.Play();
 
         StartCoroutine(LockSkill());
 
@@ -52,7 +53,6 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         Weapon.Damage = Damage;
         Weapon.Attacking();
 
-        _effectHability.Play();
 
         yield return new WaitForSeconds(SkillDuration);
         while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
