@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 {
@@ -12,6 +13,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
     [SerializeField] float SkillDuration;
     [SerializeField] float Damage;
+    [SerializeField]  VisualEffect _effectHability;
 
     [SerializeField] SoundEmitter _SoundEmit;
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
@@ -26,8 +28,8 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
     public override void ActivateSkill()
     {
         _Anim.speed = SkillSpeedMod;
-        _Anim.runtimeAnimatorController= _ANCO;
-        _Anim.Play("Exe_Skill1", 0,0);
+        _Anim.runtimeAnimatorController = _ANCO;
+        _Anim.Play("Exe_Skill1", 0, 0);
 
 
         StartCoroutine(LockSkill());
@@ -50,8 +52,10 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         Weapon.Damage = Damage;
         Weapon.Attacking();
 
+        _effectHability.Play();
+
         yield return new WaitForSeconds(SkillDuration);
-        while(_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
+        while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
         {
             yield return null;
         }
