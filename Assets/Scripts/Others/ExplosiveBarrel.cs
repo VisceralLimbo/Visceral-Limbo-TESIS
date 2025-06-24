@@ -20,6 +20,10 @@ public class ExplosiveBarrel : MonoBehaviour
 
     [SerializeField] private AudioClip explosionSound;
 
+    [SerializeField] private Renderer barrelRenderer;
+
+    private Material barrelMaterial;
+
     private void Start()
     {
         healthComponent = GetComponent<Health_Component>();
@@ -27,11 +31,38 @@ public class ExplosiveBarrel : MonoBehaviour
         {
             healthComponent.OnDeath += () => StartCoroutine(DelayedExplosion());
         }
+
+        if (barrelRenderer != null)
+        {
+            barrelMaterial = barrelRenderer.material;
+        }
     }
 
     private IEnumerator DelayedExplosion()
     {
-        yield return new WaitForSeconds(1f); // Hecho por Lucas - Time-slicing
+        float explosionDelay = 1f;
+        float elapsed = 0f;
+
+        while (elapsed < explosionDelay)
+        {
+            elapsed += Time.deltaTime;
+            float normalizedTime = elapsed / explosionDelay; 
+
+            
+            if (barrelMaterial != null)
+            {
+                barrelMaterial.SetFloat("_ExplosionTime", normalizedTime);
+            }
+
+            yield return null; 
+        }
+
+        
+        if (barrelMaterial != null)
+        {
+            barrelMaterial.SetFloat("_ExplosionTime", 1f);
+        }
+
         Kaboom();
 
         CameraShake.instance.ShakeCamera(1f, 1f); // shake de la camara
