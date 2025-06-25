@@ -32,10 +32,9 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         _Anim.Play("Exe_Skill1", 0, 0);
 
         Vector3 offsetPos = _UserContext.PlayerGameObject.transform.position + Vector3.up * 0.1f; // cambiá el 1.0f según lo alto que lo quieras
-        GameObject vfx = Instantiate(_effectHability, offsetPos, Quaternion.identity);
+        GameObject vfx = Instantiate(_effectHability, offsetPos, Quaternion.identity, _UserContext.PlayerGameObject.transform);
 
         StartCoroutine(LockSkill());
-
 
 
         //sonidos
