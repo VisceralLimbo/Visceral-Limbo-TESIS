@@ -10,6 +10,8 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private List<RoomEnterTrigger> roomTriggers;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private DialogueData _finishCombatDialogue;
+    [SerializeField] GameObject _reward;
+    [SerializeField] Transform _spawnPointReward;
 
     [SerializeField] bool MinionsAlive, SpawnersSpent, StopThisManager;
 
@@ -71,6 +73,10 @@ public class RoomSpawnerManager : MonoBehaviour
 
             StopThisManager = true;
             audioSource.Play();
+            if(_reward != null)
+            {
+                Instantiate(_reward, _spawnPointReward.transform.position, Quaternion.identity);
+            }
             DialogueManager.instance.StartDialogue(_finishCombatDialogue);
 
             
