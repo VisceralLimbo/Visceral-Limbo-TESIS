@@ -17,7 +17,6 @@ public class Player_ChargedMeleeCombat : Visceral_Script
     [SerializeField] Animator _Anim;
     [SerializeField] Visceral_WeaponBase _Weapon;
     [SerializeField] Slider _ChargeSlider;
-    [SerializeField] VisualEffect _vfxSwordAttack;
     /// <summary>
     /// valor que cambia la velocidad de animacion de ataque, valor 1 = normal
     /// </summary>
@@ -127,17 +126,39 @@ public class Player_ChargedMeleeCombat : Visceral_Script
 
     private void Attack()
     {
+        
         if (swordTrail != null) swordTrail.emitting = true;
-        if (swordTrail != null) swordTrail2.emitting = true;
-        _vfxSwordAttack.Play();
+        if (swordTrail2 != null) swordTrail2.emitting = true;
+
+
+        
         _Anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
         _Anim.speed = AttackSpeedMod;
         _Anim.SetTrigger("ChargeRelease");
         _Anim.ResetTrigger("ChargeUp");
         _Anim.Play("Attack", 0, 0);
+
+        
+        float animationLength = 0f;
+        foreach (var clip in _Anim.runtimeAnimatorController.animationClips)
+        {
+            if (clip.name == "Attack")
+            {
+                animationLength = clip.length / AttackSpeedMod; 
+                break;
+            }
+        }
+
+        
+        float trailDeactivateTime = Mathf.Max(animationLength - 1f, 0.45f); //cuando se desactiva el trail antes del final de la animacion
+        Invoke(nameof(StopTrails), trailDeactivateTime);
+
+        
         _Weapon.Damage = SwordAttacks[_ComboCounter].Damage;
         _Weapon.KnockBack = SwordAttacks[_ComboCounter].KnockBack;
         _Weapon.Attacking();
+
+        
         _ComboCounter++;
         if (_ComboCounter + 1 > SwordAttacks.Length)
         {
@@ -153,6 +174,13 @@ public class Player_ChargedMeleeCombat : Visceral_Script
                     .WithRandomPitch(true) // con pitch de sonido (default -0.05 a 0.05)
                     .play(); // tocamos el sonido
     }
+
+    private void StopTrails()
+    {
+        if (swordTrail != null) swordTrail.emitting = false;
+        if (swordTrail2 != null) swordTrail2.emitting = false;
+    }
+
 
     public void FinishAttack()
     {
