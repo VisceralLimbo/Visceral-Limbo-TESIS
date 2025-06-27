@@ -19,6 +19,8 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] float ParryBonus;
     [SerializeField] TextMeshProUGUI ScoreText;
 
+    public float GetPlayerScore { get { return PlayerScore; } }
+
 
     private void Awake()
     {

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class RoomEnterTrigger : MonoBehaviour
 {
-
+    [Header("References")]
     [SerializeField] Collider SolidCollider;
     [SerializeField] Collider DoorTrigger;
-    [SerializeField]RoomSpawnerManager roomSpawnerManager;
+    [SerializeField] RoomSpawnerManager roomSpawnerManager;
 
 
     void Start()
@@ -23,7 +23,6 @@ public class RoomEnterTrigger : MonoBehaviour
         if (Contex.faction == FactionID.Player && roomSpawnerManager != null)
         {
             PlayerEnteredRoom();
-
         }
     }
 

@@ -5,7 +5,8 @@ using System.Linq;
 
 public class RoomSpawnerManager : MonoBehaviour
 {
-   public PlayerContext playerContext { get; private set; }
+    public PlayerContext playerContext { get; private set; }
+    [Header("References")]
     [SerializeField] private Spawner[] Spawners;
     [SerializeField] private List<RoomEnterTrigger> roomTriggers;
     [SerializeField] private AudioSource audioSource;
@@ -13,9 +14,16 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] GameObject _reward;
     [SerializeField] Transform _spawnPointReward;
 
-    [SerializeField] bool MinionsAlive, SpawnersSpent, StopThisManager;
 
-   
+    [Space]
+    [Header("Variables")]
+
+    [SerializeField] bool MinionsAlive, SpawnersSpent, StopThisManager;
+    [Space]
+    [SerializeField] private float _StartingCombatScore;
+    [SerializeField] private float _AddExtraRequiredScore;
+
+
     public event System.Action OnCombatEnded;
 
     private void Start()
@@ -30,6 +38,7 @@ public class RoomSpawnerManager : MonoBehaviour
     public void AssignPlayerContext(PlayerContext playerCont)
     {
         playerContext = playerCont;
+        _StartingCombatScore = ScoreManager.Instance.GetPlayerScore;
     }
 
     public void AssignRoomEnters(RoomEnterTrigger trigger)
@@ -37,17 +46,18 @@ public class RoomSpawnerManager : MonoBehaviour
         roomTriggers.Add(trigger);
     }
 
+    //evento de que murio un minion
     public void NotifyMinionDeath()
     {
-        if (StopThisManager) return;
+        if (StopThisManager) return; // manager apagado
 
-        MinionsAlive = Spawners.Any(x => x.HasMinion);
+        MinionsAlive = Spawners.Any(x => x.HasMinion); //chequeamos si los spawners tienen minions vivos
         SpawnersSpent = Spawners.All(x => x.IsSpent);
 
-        
         if (!MinionsAlive && !SpawnersSpent)
         {
-            
+            //no hay minions vivos pero tampoco hay spawners vacios =
+            //spawnear otra oleada
             MusicManager.Instance?.PlayCombatMusic();
 
             foreach (var item in Spawners)
@@ -63,7 +73,8 @@ public class RoomSpawnerManager : MonoBehaviour
             }
         }
 
-        
+        // no hay minions activos y los spawners estan vacios
+        // finalizar combate
         if (!MinionsAlive && SpawnersSpent)
         {
             foreach (var item in roomTriggers)
@@ -73,7 +84,10 @@ public class RoomSpawnerManager : MonoBehaviour
 
             StopThisManager = true;
             audioSource.Play();
-            if(_reward != null)
+
+            // la sala tiene reward y la puntuacion final del jugador
+            // es mayor a la requerida X sala
+            if(_reward != null && ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
             {
                 Instantiate(_reward, _spawnPointReward.transform.position, Quaternion.identity);
             }

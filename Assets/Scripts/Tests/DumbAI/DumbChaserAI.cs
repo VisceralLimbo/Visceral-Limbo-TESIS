@@ -17,6 +17,7 @@ public class DumbChaserAI : DumbEnemy, ICharacterController
     [SerializeField] Transform target;
     [SerializeField] Charge_Collider _Collider;
     [SerializeField] AnimatorHandler _AnimatorHandler;
+    [SerializeField] GameObject _RagDollObject;
     [Space]
 
 
@@ -63,6 +64,9 @@ public class DumbChaserAI : DumbEnemy, ICharacterController
         context.KCCMotor = this._KKC;
         context.PlayerGameObject = this.gameObject;
         context.PlayerTransform = _KKC.Capsule.transform;
+
+        var HPComp = GetComponent<Health_Component>();
+        HPComp.OnDeath += DeathSub;
     }
 
 
@@ -121,6 +125,15 @@ public class DumbChaserAI : DumbEnemy, ICharacterController
         _KKC.ForceUnground(0.1f);
         RequestedForceVelocity = ForceVelocity;
     }
+
+    private void DeathSub()
+    {
+        var Rag = Instantiate(_RagDollObject);
+        Rag.transform.position = context.PlayerTransform.position;
+        var RagRB = Rag.GetComponentInChildren<Rigidbody>();
+        RagRB.velocity = _KKC.AttachedRigidbodyVelocity;
+    }
+
 
     public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
     {
