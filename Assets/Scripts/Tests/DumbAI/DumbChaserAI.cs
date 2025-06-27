@@ -130,8 +130,8 @@ public class DumbChaserAI : DumbEnemy, ICharacterController
     {
         var Rag = Instantiate(_RagDollObject);
         Rag.transform.position = context.PlayerTransform.position;
-        var RagRB = Rag.GetComponentInChildren<Rigidbody>();
-        RagRB.velocity = _KKC.AttachedRigidbodyVelocity;
+        var RagRB = Rag.GetComponent<RagDollTimer>().RootRigid;
+        RagRB.AddForce(_KKC.AttachedRigidbodyVelocity + _KKC.Velocity, ForceMode.Impulse);
     }
 
 

@@ -13,13 +13,16 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private DialogueData _finishCombatDialogue;
     [SerializeField] GameObject _reward;
     [SerializeField] Transform _spawnPointReward;
+    [SerializeField] SoundData _spawnSound,_rewardSound;
 
 
     [Space]
     [Header("Variables")]
-
-    [SerializeField] bool MinionsAlive, SpawnersSpent, StopThisManager;
-    [Space]
+    [SerializeField] bool MinionsAlive;
+    [SerializeField] bool SpawnersSpent;
+    [SerializeField] bool StopThisManager;
+    [SerializeField] bool _ShouldOffsetSpawnTime;
+    [SerializeField] float _OffsetSpawnTime;
     [SerializeField] private float _StartingCombatScore;
     [SerializeField] private float _AddExtraRequiredScore;
 
@@ -60,11 +63,15 @@ public class RoomSpawnerManager : MonoBehaviour
             //spawnear otra oleada
             MusicManager.Instance?.PlayCombatMusic();
 
-            foreach (var item in Spawners)
-            {
+            /* foreach (var item in Spawners)
+             {
                 item.SetPlayerIndex(playerContext);
+
                 item.SpawnEnemy();
-            }
+             }*/
+
+            //comenzar la coroutina de spawneo
+            StartCoroutine(SpawnCoroutine());
 
             foreach (var item in roomTriggers)
             {
@@ -90,6 +97,12 @@ public class RoomSpawnerManager : MonoBehaviour
             if(_reward != null && ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
             {
                 Instantiate(_reward, _spawnPointReward.transform.position, Quaternion.identity);
+
+                SoundManager.Instance.CreateSound().
+                    WithSoundData(_rewardSound).
+                    WithRandomPitch(true).
+                    WithPosition(_spawnPointReward.position).
+                    WithSpatialBlend(1).play();
             }
             DialogueManager.instance.StartDialogue(_finishCombatDialogue);
 
@@ -103,4 +116,29 @@ public class RoomSpawnerManager : MonoBehaviour
     //script hecho por Patricio Malvasio Maddalena
     // uso de Any / all (Grupo 3)
 
+
+    //coroutina de spawn
+    IEnumerator SpawnCoroutine()
+    {
+        foreach(var item in Spawners) 
+        {
+            item.SetPlayerIndex(playerContext);
+
+            item.SpawnEnemy();
+
+            SoundManager.Instance.CreateSound().
+                WithSoundData(_spawnSound).
+                WithPosition(item.transform.position).
+                WithRandomPitch(true).
+                WithSpatialBlend(1)
+               .play();
+               
+
+            if (_ShouldOffsetSpawnTime)
+            {
+                yield return new WaitForSeconds(_OffsetSpawnTime);
+            }
+
+        }
+    }
 }
