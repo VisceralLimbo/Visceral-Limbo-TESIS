@@ -11,6 +11,7 @@ public abstract class ItemLogic : MonoBehaviour
 
     
     [SerializeField] protected int ItemStacks;
+    public int Stacks { get { return ItemStacks; } }
 
     [SerializeField] protected bool IsInventoryMaster;
 

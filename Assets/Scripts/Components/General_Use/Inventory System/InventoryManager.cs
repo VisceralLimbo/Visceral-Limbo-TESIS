@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] StatsManager _StatsManager;
 
     [SerializeField] PlayerContext _Context;
+
+    public UnityAction<ItemDefinitionSO> ItemPickUp;
 
     /// <summary>
     /// funcion para añadir un item / un stack
@@ -57,9 +60,21 @@ public class InventoryManager : MonoBehaviour
             print("Stack obtenido!");
         }
 
-
+        ItemPickUp?.Invoke(item);
 
     }
+    public int GetItemStack(ItemDefinitionSO Definition)
+    {
+        if (_Inventory.ContainsKey(Definition))
+        {
+            return _Inventory[Definition].Stacks;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
 
     /// <summary>
     /// funcion para restar un stack de un item del inventario
