@@ -23,9 +23,10 @@ public class RoomEnterTrigger : MonoBehaviour
         if (Contex.faction == FactionID.Player && roomSpawnerManager != null)
         {
             PlayerEnteredRoom();
+            
         }
     }
-
+    
 
     PlayerContext Pcontext;
     private void OnTriggerEnter(Collider other)
@@ -48,6 +49,7 @@ public class RoomEnterTrigger : MonoBehaviour
     public void PlayerEnteredRoom()
     {
         roomSpawnerManager.AssignPlayerContext(Pcontext);
+        roomSpawnerManager.StartRoomCombat();
         roomSpawnerManager.NotifyMinionDeath();
         SetSolidState(true);
     }

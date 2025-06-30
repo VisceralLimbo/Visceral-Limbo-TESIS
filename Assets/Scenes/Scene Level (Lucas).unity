@@ -19220,7 +19220,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -28, y: -452}
+  m_AnchoredPosition: {x: -28, y: -637}
   m_SizeDelta: {x: -960, y: -944.03687}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &399239622
@@ -34525,6 +34525,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7551223920915768607, guid: 78828a363e42ee7419ac5e72041ea7b2,
+        type: 3}
+      propertyPath: roomSpawnerManager
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8896676834736013020, guid: 78828a363e42ee7419ac5e72041ea7b2,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -34541,18 +34546,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 710725137}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &710725139 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7551223920915768607, guid: 78828a363e42ee7419ac5e72041ea7b2,
-    type: 3}
-  m_PrefabInstance: {fileID: 710725137}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27d071dc3a3b43d4194c773feeca4576, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &713318933
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42407,7 +42400,7 @@ MonoBehaviour:
   - {fileID: 219970961}
   roomTriggers:
   - {fileID: 1225143313}
-  - {fileID: 710725139}
+  - {fileID: 0}
   audioSource: {fileID: 852603609}
   _finishCombatDialogue: {fileID: 11400000, guid: 39db01f020d4f884f9fdd2d0b79c0567,
     type: 2}
@@ -61818,6 +61811,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7551223920915768607, guid: 78828a363e42ee7419ac5e72041ea7b2,
+        type: 3}
+      propertyPath: roomSpawnerManager
+      value: 
+      objectReference: {fileID: 852603608}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -79168,6 +79166,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7551223920915768607, guid: 78828a363e42ee7419ac5e72041ea7b2,
+        type: 3}
+      propertyPath: roomSpawnerManager
+      value: 
+      objectReference: {fileID: 1866535722}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -83442,6 +83445,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door 4
       objectReference: {fileID: 0}
+    - target: {fileID: 7551223920915768607, guid: 78828a363e42ee7419ac5e72041ea7b2,
+        type: 3}
+      propertyPath: roomSpawnerManager
+      value: 
+      objectReference: {fileID: 1713126034}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -110826,22 +110834,22 @@ PrefabInstance:
     - target: {fileID: 4248208643348297016, guid: 78828a363e42ee7419ac5e72041ea7b2,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4248208643348297016, guid: 78828a363e42ee7419ac5e72041ea7b2,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4248208643348297016, guid: 78828a363e42ee7419ac5e72041ea7b2,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0.0000029504295
       objectReference: {fileID: 0}
     - target: {fileID: 4248208643348297016, guid: 78828a363e42ee7419ac5e72041ea7b2,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4248208643348297016, guid: 78828a363e42ee7419ac5e72041ea7b2,
         type: 3}
@@ -110851,7 +110859,7 @@ PrefabInstance:
     - target: {fileID: 4248208643348297016, guid: 78828a363e42ee7419ac5e72041ea7b2,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 4248208643348297016, guid: 78828a363e42ee7419ac5e72041ea7b2,
         type: 3}
@@ -110863,6 +110871,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door
       objectReference: {fileID: 0}
+    - target: {fileID: 7551223920915768607, guid: 78828a363e42ee7419ac5e72041ea7b2,
+        type: 3}
+      propertyPath: roomSpawnerManager
+      value: 
+      objectReference: {fileID: 1732943720}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

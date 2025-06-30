@@ -50,14 +50,11 @@ public class RoomSpawnerManager : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    public void StartRoomCombat()
     {
-        if (other.CompareTag("Player"))
-        {
-            
-            _animatorObjective.SetTrigger("StartCombat");
-        }
-    } 
+        _animatorObjective.SetTrigger("StartCombat");
+    }
+
     //evento de que murio un minion
     public void NotifyMinionDeath()
     {
