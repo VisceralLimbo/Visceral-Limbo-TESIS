@@ -9,6 +9,8 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] GameObject[] EnemySpawns; // listado de spawns
     [SerializeField] int Index = 0;
+    [SerializeField] bool RandomizedTime;
+    [SerializeField] float RandomTimeSeed;
     private IEnumerator<GameObject> EnemyGenerator;
 
     public bool IsSpent,HasMinion;
@@ -43,7 +45,8 @@ public class Spawner : MonoBehaviour
     //spawn de enemigo
     public void SpawnEnemy()
     {
-        if(EnemySpawns == null) 
+        RandomizedTime = false;
+        if (EnemySpawns == null) 
         {
             Debug.LogError("<Color = blue> Visceral Error: Spawner has no assigned Enemies </color>");
             return;
