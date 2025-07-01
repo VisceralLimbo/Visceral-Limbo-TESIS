@@ -7,7 +7,8 @@ public class FireballTrap : MonoBehaviour
     [SerializeField] private float fireRate = 2f; 
     [SerializeField] private float fireballSpeed = 10f; 
     [SerializeField] private float fireballDamage = 10f; 
-    [SerializeField] private float fireballLifetime = 5f; 
+    [SerializeField] private float fireballLifetime = 5f;
+    [SerializeField] private ParticleSystem fireballParticle;
 
     private float fireTimer = 0f; 
 
@@ -29,7 +30,7 @@ public class FireballTrap : MonoBehaviour
         
         if (fireballPrefab == null || firePoint == null)
         {
-            Debug.LogWarning("Fireball prefab or fire point not assigned in Turret script!");
+            Debug.LogWarning("Fireball prefab or fire point not assigned in Turret script");
             return;
         }
 
@@ -43,9 +44,18 @@ public class FireballTrap : MonoBehaviour
             rb.velocity = firePoint.forward * fireballSpeed;
         }
 
-        
         Fireball fireballScript = fireball.AddComponent<Fireball>();
         fireballScript.damage = fireballDamage;
+
+        if (fireballParticle != null)
+        {
+            ParticleSystem particleInstance = Instantiate(fireballParticle, fireball.transform.position, fireball.transform.rotation, fireball.transform);
+            particleInstance.Play();
+
+           
+            Destroy(particleInstance.gameObject, fireballLifetime);
+        }
+
 
         
         Destroy(fireball, fireballLifetime);
