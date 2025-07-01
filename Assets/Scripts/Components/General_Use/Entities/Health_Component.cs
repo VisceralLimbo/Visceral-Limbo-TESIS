@@ -64,8 +64,8 @@ public class Health_Component : Visceral_Component
 
     }
 
-   
-    private void InternalDamage(float damage,Vector3? KnockbarDir, float force, DamageScore Score = null)
+
+    private void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
     {
         if (Died) return;
 
@@ -73,47 +73,47 @@ public class Health_Component : Visceral_Component
         CameraShake.instance.ShakeCamera(0.1f, 0.5f); // shake de la camara
         OnDamaged?.Invoke();
 
-        if(soundData != null)
+        if (soundData != null)
         {
             PlaySounds(); // feedback de sonidos
         }
 
-        // tengo un kccmotor con rigidbody?
-        if(KnockbarDir.HasValue &&_Context?.knockback != null)
+        // Knockback logic remains unchanged
+        if (KnockbarDir.HasValue && _Context?.knockback != null)
         {
             _Context.knockback.ApplyKnockBack(KnockbarDir.Value, force);
         }
-        else if(KnockbarDir.HasValue && _Context?.KCCMotor?.AttachedRigidbody != null)
+        else if (KnockbarDir.HasValue && _Context?.KCCMotor?.AttachedRigidbody != null)
         {
             print(_Context.PlayerGameObject + "recieving knockback");
-            _Context.KCCMotor.AttachedRigidbody.AddForce(KnockbarDir.Value * force,ForceMode.Impulse);
+            _Context.KCCMotor.AttachedRigidbody.AddForce(KnockbarDir.Value * force, ForceMode.Impulse);
         }
-        else if( KnockbarDir.HasValue && _RB != null)
+        else if (KnockbarDir.HasValue && _RB != null)
         {
             print("rigidbody recieving knockback");
             _RB.AddForce(KnockbarDir.Value * force, ForceMode.Impulse);
         }
 
-        if(CurrentHealth <= 0f && _Context != null && Score.Attacker != null)
+        if (CurrentHealth <= 0f && _Context != null && Score != null && Score.Attacker != null)
         {
             Died = true;
             DamageScore FinalScore = Score != null
-            ? DamageScoreBuilder.Complete(Score, _Context,CurrentHealth,MaxHealth) : null;
+                ? DamageScoreBuilder.Complete(Score, _Context, CurrentHealth, MaxHealth) : null;
 
-            ScoreManager.Instance.ProcessKill(FinalScore);
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.ProcessKill(FinalScore);
             OnDeath?.Invoke();
-            if(DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
-            if(DestroyOnDeath) Destroy(_Context.PlayerGameObject);
-
+            if (DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
+            if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);
         }
-        else if(CurrentHealth <= 0f)
+        else if (CurrentHealth <= 0f)
         {
             OnDeath?.Invoke();
             Died = true;
-            if(_Context == null)
+            if (_Context == null)
             {
-                if (DesactivateOnDeath) this.gameObject.SetActive(false);
-                if (DestroyOnDeath) Destroy(this.gameObject);
+                if (DesactivateOnDeath) gameObject.SetActive(false);
+                if (DestroyOnDeath) Destroy(gameObject);
             }
             else
             {
@@ -121,7 +121,7 @@ public class Health_Component : Visceral_Component
                 if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);
             }
         }
-    } 
+    }
 
     void PlaySounds()
     {
