@@ -14,7 +14,7 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] GameObject _reward;
     [SerializeField] Transform _spawnPointReward;
     [SerializeField] SoundData _spawnSound,_rewardSound;
-
+    [SerializeField] private Animator _animatorObjective;
 
     [Space]
     [Header("Variables")]
@@ -47,6 +47,12 @@ public class RoomSpawnerManager : MonoBehaviour
     public void AssignRoomEnters(RoomEnterTrigger trigger)
     {
         roomTriggers.Add(trigger);
+    }
+
+
+    public void StartRoomCombat()
+    {
+        _animatorObjective.SetTrigger("StartCombat");
     }
 
     //evento de que murio un minion
@@ -92,9 +98,11 @@ public class RoomSpawnerManager : MonoBehaviour
             StopThisManager = true;
             audioSource.Play();
 
+            _animatorObjective.SetTrigger("EndCombat");
+
             // la sala tiene reward y la puntuacion final del jugador
             // es mayor a la requerida X sala
-            if(_reward != null && ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
+            if (_reward != null && ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
             {
                 Instantiate(_reward, _spawnPointReward.transform.position, Quaternion.identity);
 

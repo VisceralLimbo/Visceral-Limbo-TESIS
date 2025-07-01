@@ -29,7 +29,11 @@ public class Player_Base : Visceral_Script
 
     public Action OnPlayerSkillUse;
 
-
+    [SerializeField] private RectTransform _uiElementToMove;
+    [SerializeField] private float moveAmount; 
+    [SerializeField] private float moveSpeed = 5f; 
+    private Vector2 _originalUIPosition;
+    private bool _isTabPressed;
 
     void Start()
     {
@@ -56,15 +60,19 @@ public class Player_Base : Visceral_Script
         Cursor.lockState = CursorLockMode.Locked;
         DialogueManager.instance.OnDialogueStart += DialogueStart;
         DialogueManager.instance.OnDialogueEnd += DialogueEnd;
+
+        _originalUIPosition = _uiElementToMove.anchoredPosition;
+
     }
 
     private void Update()
     {
         if (!IsAlive) return;
 
-
-        //inputs del jugador
         var Input = _Player_InputActions.Gameplay;
+
+        _isTabPressed = Input.Inventory.IsPressed(); 
+
 
         //logica de camara
         //
@@ -118,6 +126,20 @@ public class Player_Base : Visceral_Script
             _ChargedMeleeCombat.VS_Runlogic(movementInput);
             ActivateSkills(movementInput);
         }
+
+        if (_uiElementToMove != null)
+        {
+            Vector2 targetPosition = _isTabPressed
+                ? _originalUIPosition + Vector2.up * moveAmount
+                : _originalUIPosition;
+
+            _uiElementToMove.anchoredPosition = Vector2.Lerp(
+                _uiElementToMove.anchoredPosition,
+                targetPosition,
+                Time.deltaTime * moveSpeed
+            );
+        }
+
     }
 
 
