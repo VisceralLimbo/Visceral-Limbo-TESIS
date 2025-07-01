@@ -52,7 +52,7 @@ public class DumbRanger : DumbEnemy, ICharacterController
         targetdirection = target.transform.position - _KKC.Capsule.transform.position;
         distanceToTarget = Vector3.Distance(_KKC.Capsule.transform.position, target.transform.position);
 
-        SpawnPoint.position = _KKC.Capsule.transform.position+_KKC.Capsule.transform.forward + transform.up * 2;
+        SpawnPoint.transform.position = _KKC.Capsule.transform.position + _KKC.Capsule.transform.forward/2;
 
         if (distanceToTarget < distanceToAttack && distanceToTarget > SafeSpace)
         {
@@ -102,7 +102,7 @@ public class DumbRanger : DumbEnemy, ICharacterController
     {
         if (SuccessfullAttack)
         {
-            //_KKC.AttachedRigidbody.velocity = Vector3.zero;
+            _KKC.AttachedRigidbody.velocity = Vector3.zero;
             currentVelocity = Vector3.zero;
             return;
         }
