@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.654
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0832654, g: 0.087732375, b: 0.07918535, a: 0.654}
+  m_IndirectSpecularColor: {r: 0.0832654, g: 0.08773238, b: 0.07918536, a: 0.654}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -27650,7 +27650,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6007aa6ad1e8abe41bf20433637f63a1, type: 2}
+      objectReference: {fileID: 2100000, guid: 5a700cdd0f3d8bd4a9dac358f73748d1, type: 2}
     - target: {fileID: 4456157213557677437, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27659,7 +27659,7 @@ PrefabInstance:
     - target: {fileID: 4456157213557677437, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 666.055
+      value: 666.83
       objectReference: {fileID: 0}
     - target: {fileID: 4456157213557677437, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
         type: 3}
@@ -27709,7 +27709,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6356117999051576394, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1448014514}
   m_SourcePrefab: {fileID: 100100000, guid: 5244e3d3ebae0cf4db60fcccad9caa5a, type: 3}
 --- !u!1001 &556666632
 PrefabInstance:
@@ -74010,6 +74014,20 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 555817011}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1448014514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448014510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f3bd510274d4bc418843668e95ade07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _amplitude: 0.5
+  _speed: 1
 --- !u!1001 &1450123002
 PrefabInstance:
   m_ObjectHideFlags: 0
