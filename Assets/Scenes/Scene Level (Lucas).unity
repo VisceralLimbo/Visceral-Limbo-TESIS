@@ -161,6 +161,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1119403574797053077, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1140947338524127861, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: m_Layer
@@ -1047,7 +1052,8 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1119403574797053077, guid: c9b37eb471cfbfe4b8e7d2c83992eee4, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9b37eb471cfbfe4b8e7d2c83992eee4, type: 3}
@@ -27646,11 +27652,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1108221157602489243, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
+    - target: {fileID: 1383367825326962641, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 5a700cdd0f3d8bd4a9dac358f73748d1, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1.7866
+      objectReference: {fileID: 0}
+    - target: {fileID: 1383367825326962641, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.7866
+      objectReference: {fileID: 0}
+    - target: {fileID: 1383367825326962641, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.7866
+      objectReference: {fileID: 0}
+    - target: {fileID: 1383367825326962641, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.982
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866721376747610872, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.0754717
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866721376747610872, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.0754717
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866721376747610872, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.0754717
+      objectReference: {fileID: 0}
     - target: {fileID: 4456157213557677437, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27701,6 +27737,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6285225499673938940, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
+        type: 3}
+      propertyPath: m_Name
+      value: Shadow
+      objectReference: {fileID: 0}
     - target: {fileID: 6356117999051576394, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
         type: 3}
       propertyPath: m_Name
@@ -27709,11 +27750,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6356117999051576394, guid: 5244e3d3ebae0cf4db60fcccad9caa5a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1448014514}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5244e3d3ebae0cf4db60fcccad9caa5a, type: 3}
 --- !u!1001 &556666632
 PrefabInstance:
@@ -74014,20 +74051,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 555817011}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1448014514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1448014510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f3bd510274d4bc418843668e95ade07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _amplitude: 0.5
-  _speed: 1
 --- !u!1001 &1450123002
 PrefabInstance:
   m_ObjectHideFlags: 0
