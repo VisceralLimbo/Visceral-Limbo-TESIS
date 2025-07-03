@@ -6,12 +6,14 @@ public class EffectPotion : MonoBehaviour
 {
     [SerializeField] float _amplitude = 0.25f;
     [SerializeField] float _speed = 1f;
+    [SerializeField] ParticleSystem _effect;
 
     Vector3 _startpos;
 
     private void Start()
     {
         _startpos = transform.position;
+        _effect.Play();
     }
 
     private void Update()
