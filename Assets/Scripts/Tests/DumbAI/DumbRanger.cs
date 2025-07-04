@@ -74,7 +74,7 @@ public class DumbRanger : DumbEnemy, ICharacterController
     {
         while(SuccessfullAttack)
         {
-            _AnimHandler.SetParameter("DecayedAnim", "Idle", AnimatorControllerParameterType.Trigger);
+            _AnimHandler.SetParameter("DecayedAnim", "Attack", AnimatorControllerParameterType.Trigger);
             yield return new WaitForSeconds(AttackSpeed);
 
             var bullet = Instantiate(_BulletPrefab);
