@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 124961555037291704}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.01141, z: 0.00746}
-  m_LocalScale: {x: 0.012794235, y: 0.012794235, z: 0.013203534}
+  m_LocalPosition: {x: -0.0013, y: 0.01141, z: 0.00746}
+  m_LocalScale: {x: 0.005257791, y: 0.012794235, z: 0.013203534}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4248208643348297016}
@@ -327,7 +327,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2225898331698073186}
   - component: {fileID: 4461283058797158858}
-  - component: {fileID: 9060755131381900075}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -375,28 +374,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!64 &9060755131381900075
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1854438723497202554}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &1956117117926610879
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,6 +385,7 @@ GameObject:
   - component: {fileID: 5854953340665011737}
   - component: {fileID: 7633794173038195636}
   - component: {fileID: 197393792533835011}
+  - component: {fileID: 8596888606511669270}
   m_Layer: 0
   m_Name: pCube4
   m_TagString: Untagged
@@ -480,6 +458,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8596888606511669270
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956117117926610879}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3861478300804232965, guid: 4d6e10aa3aac8d643831e7ba0d1f2763, type: 3}
 --- !u!1 &2899826392295241949
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,6 +798,7 @@ MonoBehaviour:
   SolidCollider: {fileID: 6092154440335592350}
   DoorTrigger: {fileID: 3920308450227724778}
   roomSpawnerManager: {fileID: 0}
+  IsInCombat: 0
 --- !u!1 &7039945317092705359
 GameObject:
   m_ObjectHideFlags: 0

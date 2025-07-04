@@ -37,7 +37,7 @@ public class DoorAnimation : MonoBehaviour
     }
     public void TryOpenDoor()
     {
-        if (!doorOpen)
+        if (!doorOpen && !roomEnterTrigger.IsInCombat)
         {
             OpenDoor();
         }
@@ -57,6 +57,7 @@ public class DoorAnimation : MonoBehaviour
         {
             OnAnyPlayerExit?.Invoke(this);
             CloseDoor(other);
+            
         }
     }
 }
