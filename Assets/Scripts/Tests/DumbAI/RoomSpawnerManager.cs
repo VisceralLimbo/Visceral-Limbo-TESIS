@@ -42,6 +42,8 @@ public class RoomSpawnerManager : MonoBehaviour
     {
         playerContext = playerCont;
         _StartingCombatScore = ScoreManager.Instance.GetPlayerScore;
+
+        ScoreManager.Instance.RegisterMilestone(_StartingCombatScore + _AddExtraRequiredScore);
     }
 
     public void AssignRoomEnters(RoomEnterTrigger trigger)

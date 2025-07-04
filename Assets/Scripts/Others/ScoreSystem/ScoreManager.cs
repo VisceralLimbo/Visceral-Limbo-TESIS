@@ -20,6 +20,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI ScoreText;
 
     [Header("Desiere points")]
+    private List<float> milestoneThresholds = new List<float>();
     [SerializeField] AudioClip milestoneClip;
     private AudioSource audioSource;
     private bool milestoneReached = false;
@@ -35,6 +36,14 @@ public class ScoreManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
+    }
+
+    public void RegisterMilestone(float threshold)
+    {
+        if (!milestoneThresholds.Contains(threshold))
+        {
+            milestoneThresholds.Add(threshold);
+        }
     }
 
 
@@ -86,11 +95,15 @@ public class ScoreManager : MonoBehaviour
         PlayerScore += FinalScore;
         ScoreText.text = PlayerScore.ToString();
 
-        if (!milestoneReached && PlayerScore >= 1000f)
+        for (int i = milestoneThresholds.Count - 1; i >= 0; i--)
         {
-            milestoneReached = true;
-            if (milestoneClip != null)
-                audioSource.PlayOneShot(milestoneClip);
+            if (PlayerScore >= milestoneThresholds[i])
+            {
+                if (milestoneClip != null)
+                    audioSource.PlayOneShot(milestoneClip);
+
+                milestoneThresholds.RemoveAt(i); 
+            }
         }
 
         Combat_UI_Manager._Instance.AddNewScoreEntry(DamageData);
