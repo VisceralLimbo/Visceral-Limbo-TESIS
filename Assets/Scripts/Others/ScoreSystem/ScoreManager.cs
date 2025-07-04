@@ -19,6 +19,11 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] float ParryBonus;
     [SerializeField] TextMeshProUGUI ScoreText;
 
+    [Header("Desiere points")]
+    [SerializeField] AudioClip milestoneClip;
+    private AudioSource audioSource;
+    private bool milestoneReached = false;
+
     public float GetPlayerScore { get { return PlayerScore; } }
 
 
@@ -26,6 +31,10 @@ public class ScoreManager : MonoBehaviour
     {
         if (Instance == null && Instance != this) Instance = this;
         else Destroy(this.gameObject);
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
 
@@ -76,6 +85,13 @@ public class ScoreManager : MonoBehaviour
 
         PlayerScore += FinalScore;
         ScoreText.text = PlayerScore.ToString();
+
+        if (!milestoneReached && PlayerScore >= 1000f)
+        {
+            milestoneReached = true;
+            if (milestoneClip != null)
+                audioSource.PlayOneShot(milestoneClip);
+        }
 
         Combat_UI_Manager._Instance.AddNewScoreEntry(DamageData);
 
