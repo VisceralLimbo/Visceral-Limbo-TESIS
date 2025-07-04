@@ -8,6 +8,7 @@ public class DumbRanger : DumbEnemy, ICharacterController
     [SerializeField] KinematicCharacterMotor _KKC;
     [SerializeField] KinematicCharacterMotorState _State;
     [SerializeField] Rigidbody _RB;
+    [SerializeField] AnimatorHandler _AnimHandler;
     public PlayerContext Context;
     [SerializeField] Material _mat;
     [SerializeField] Transform target,SpawnPoint;
@@ -73,6 +74,7 @@ public class DumbRanger : DumbEnemy, ICharacterController
     {
         while(SuccessfullAttack)
         {
+            _AnimHandler.SetParameter("DecayedAnim", "Idle", AnimatorControllerParameterType.Trigger);
             yield return new WaitForSeconds(AttackSpeed);
 
             var bullet = Instantiate(_BulletPrefab);
@@ -158,7 +160,6 @@ public class DumbRanger : DumbEnemy, ICharacterController
 
         if (RequestedAdditiveVelocity.sqrMagnitude > 0)
         {
-
             currentVelocity += RequestedAdditiveVelocity;
             RequestedAdditiveVelocity = Vector3.zero;
         }
@@ -172,6 +173,11 @@ public class DumbRanger : DumbEnemy, ICharacterController
         if (_KKC.AttachedRigidbody.velocity.sqrMagnitude > 0)
         {
             _KKC.AttachedRigidbody.velocity = Vector3.Slerp(_KKC.AttachedRigidbodyVelocity, Vector3.zero, 0.1f + Time.deltaTime);
+        }
+
+        if(currentVelocity.sqrMagnitude > 0)
+        {
+            _AnimHandler.SetParameter("DecayedAnim", "Walking", AnimatorControllerParameterType.Trigger);
         }
     }
 
