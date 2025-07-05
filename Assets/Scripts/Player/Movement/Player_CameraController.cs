@@ -12,8 +12,8 @@ public class Player_CameraController : Visceral_Script
 {
     private Vector3 _EulerAngles;
 
-    [Range(0f, 1f)]
-    public float sensitivity = 0.4f;
+    [Range(0f, 10f)]
+    public float sensitivity = 4f;
 
     [SerializeField] private Transform _CameraAnchor;
 
@@ -50,7 +50,7 @@ public class Player_CameraController : Visceral_Script
     /// <param name="inputData"></param>
     public void UpdateRotation(InputStruct inputData)
     {
-        _EulerAngles += new Vector3(-inputData.LookDelta.y, inputData.LookDelta.x) * sensitivity;
+        _EulerAngles += new Vector3(-inputData.LookDelta.y, inputData.LookDelta.x) * sensitivity * Time.unscaledDeltaTime;
         _EulerAngles.x = Mathf.Clamp(_EulerAngles.x, -80, 80);
         transform.eulerAngles = _EulerAngles;
     }

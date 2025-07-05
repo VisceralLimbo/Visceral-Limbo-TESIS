@@ -26,7 +26,7 @@ public class DamageCollisionTrigger : MonoBehaviour
             }
             else
             {
-                print("dealing damage!");
+                print("dealing damage! to" + other.name);
                 HPComp.SimpleDamage(Damage);
             }
 
