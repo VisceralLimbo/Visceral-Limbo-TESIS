@@ -124,7 +124,8 @@ public class Player_Base : Visceral_Script
         if (!OnDialogue)
         {
             //_MeleeAttack.RunData(movementInput);
-            _ChargedMeleeCombat.VS_Runlogic(movementInput);
+            //_ChargedMeleeCombat.VS_Runlogic(movementInput);
+            _MeleeAttack.VS_Runlogic(movementInput);
             ActivateSkills(movementInput);
         }
 
