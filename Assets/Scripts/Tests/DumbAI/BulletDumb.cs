@@ -93,12 +93,17 @@ public class BulletDumb : MonoBehaviour, IParriable
         print("rotate" + Direction);
         this.transform.forward = Direction;
         //transform.Rotate(finalDir);
-        _Health = 10;
-        BulletSpeed = BulletSpeed * 2;
-        damage = damage * 2;
+        if (!Parried)
+        {
+            _Health = 10;
+            BulletSpeed = BulletSpeed * 2;
+            damage = damage * 2;
 
-        SetOwner(DMScore.Attacker.PlayerGameObject, DMScore.Attacker);
-        Parried = true;
+            SetOwner(DMScore.Attacker.PlayerGameObject, DMScore.Attacker);
+            Parried = true;
+        }
+       
+       
         
     }
 }

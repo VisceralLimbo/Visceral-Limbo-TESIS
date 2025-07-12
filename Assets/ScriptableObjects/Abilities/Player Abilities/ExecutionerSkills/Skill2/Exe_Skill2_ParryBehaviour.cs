@@ -18,10 +18,12 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
     [SerializeField] float ParryRange,ParryRadius;
     [SerializeField] Vector3 PlayerDirector;
     [SerializeField] LayerMask ProyectileLayerMask;
+    private Coroutine _ParryCoroutine;
 
     [Space]
     [Header("Miscellaneous")]
     [SerializeField] bool DrawGizmos;
+    [SerializeField] MonoBehaviour currentparry;
 
 
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
@@ -65,7 +67,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
 
          //direccion de la camara
          Vector3 ParryDirection = _camContext.transform.forward;
-         Vector3 ParryOrigin = _UserContext.PlayerTransform.position + ParryDirection * ParryRange + new Vector3(0,0.5f,0);
+         Vector3 ParryOrigin = _UserContext.PlayerTransform.position + ParryDirection * ParryRange + new Vector3(0,1,0);
 
          //almacenamos la direccion global para proyectiles
          PlayerDirector = ParryDirection.normalized;
@@ -85,22 +87,35 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
          //vemos cuantos hits podemos parriar
          foreach (var hit in hits)
          {
-                
+            if(hit == null)
+            {
+                continue;
+            }
+
+            print("hit");
             if (hit.TryGetComponent<IParriable>(out var parriable))
             {
                     Debug.Log("Parry encontrado" + hit.gameObject.name);
                     var DMScore = new DamageScore { Attacker = _UserContext };
                     DMScore.AddTag(ScoreFlags.Skill2Kill);
-                    DMScore.AddTag(ScoreFlags.Parried);
-                    parriable.parried(DMScore, PlayerDirector);
-                    HitStop.Stop(0.1f);
+                    DMScore.AddTag(ScoreFlags.Parried);       
+                    HitStop.Stop(0.3f);
+
+                if(_ParryCoroutine != null)
+                {
+                    StopCoroutine(_ParryCoroutine);
+                }
+
+                MonoBehaviour parriableMB = hit.GetComponent<MonoBehaviour>();
+                currentparry = parriableMB;
+                _ParryCoroutine = StartCoroutine(ParryCoroutine(parriable,parriableMB, DMScore));
             }
          }
 
          //Catch! no terminamos la animacion del ataque
         while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.3f)
         {
-            print("animation not finished: " +_Anim.GetCurrentAnimatorStateInfo(0).ToString() + _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
+            //print("animation not finished: " +_Anim.GetCurrentAnimatorStateInfo(0).ToString() + _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
             yield return null;
         }
 
@@ -109,6 +124,46 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
         _Anim.speed = 1.0f;
         //_AnimHandler.ResetAllTriggers("PlayerWeapon");
    }
+
+    IEnumerator ParryCoroutine(IParriable parriable,MonoBehaviour MBRef,DamageScore DMS)
+    {
+        if(MBRef == null)
+        {
+            yield break;
+        }
+
+        if(parriable == null)
+        {
+            yield break;
+        }
+        int watchdog = 50;
+        while (Time.deltaTime != 1 && watchdog > 0)
+        {
+            Vector3 ParryDirection = _camContext.transform.forward;
+            Vector3 ParryOrigin = _UserContext.PlayerTransform.position + ParryDirection * ParryRange + new Vector3(0, 1, 0);
+
+            //almacenamos la direccion global para proyectiles
+            PlayerDirector = ParryDirection.normalized;
+
+            if (parriable == null)
+            {
+                yield break;
+            }
+
+
+            if (MBRef == null)
+            {
+                yield break;
+            }
+
+            parriable.parried(DMS, PlayerDirector);
+            watchdog--;
+            print(watchdog);
+            yield return null;
+        }
+
+    }
+
 
 
     private void OnDrawGizmos()

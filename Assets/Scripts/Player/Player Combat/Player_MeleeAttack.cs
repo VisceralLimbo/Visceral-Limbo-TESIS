@@ -1,72 +1,231 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class Player_MeleeAttack : Visceral_Script
 {
-    public SwordTestSO[] SwordCombo;
-    [SerializeField]float _LastClickedTime;
-    [SerializeField] float _LastComboEnd;
-    [SerializeField] int _ComboCounter;
-    [SerializeField] float _TimeBetweenCombos,_TimebetweenAttacks;
-
-    [SerializeField]Animator _Anim;
+    [Header("References")]
+    [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Visceral_WeaponBase _Weapon;
+    [SerializeField] Slider _ChargeSlider;
+    private Animator _Anim;
+    [Space]
 
+    [Header("Sounds")]
+    [SerializeField] SoundData[] soundData;
+
+    [Space]
+    [Header("Attack Animations")]
+    public SwordTestSO[] Left_SwordAttacks; // las animaciones que queremos que corran cuando nos movemos a la izquierda
+    public SwordTestSO[] Right_SwordAttacks;// las animaciones que queremos que corran cuando nos movemos a la derecha
+    public SwordTestSO[] UP_SwordAttacks; // las animaciones que queremos que corran cuando nos movemos hacia adelante
+    public SwordTestSO[] Down_SwordAttacks;// las animaciones que queremos que corran cuando nos movemos hacia atras
+
+    //diccionario de posibles animaciones
+    Dictionary<string, SwordTestSO[]> AttackDictionary = new Dictionary<string, SwordTestSO[]>();
+    SwordTestSO[] CurrentCombo; // la serie de animaciones que tenemos que ejecutar
+
+    [Space]
+    [Header("Variables")]
+    [SerializeField]int _ComboCounter; // el combo actual, para cyclear entre animaciones
+    [SerializeField] bool _HasFinishedAttack = true; // lock | unlock de ataque, para que el evento de atacar solo se ejecute cuando se termina la animacion
+    
+    /// <summary>
+    /// valor que cambia la velocidad de animacion de ataque, valor 1 = normal
+    /// </summary>
+    public float AttackSpeedMod = 1f;
+
+
+    InputMovement _PlayerInputs;
+
+    [Header("Shader Settings")]
+    [SerializeField] private Renderer _SwordRenderer;
+    [SerializeField] private string shaderFloatName = "_FresnelGradientBlend";
+    [SerializeField] private float chargeThreshold = 1.5f;
+    [SerializeField] private float blendSpeed = 10f;
+
+    [SerializeField] private TrailRenderer swordTrail;
+    [SerializeField] private TrailRenderer swordTrail2;
 
     public override void VS_Initialize()
     {
-        _Anim ??= GetComponent<Animator>();
+
+        DialogueManager.instance.OnDialogueStart += sheateWeapon;
+        DialogueManager.instance.OnDialogueEnd += UnsheateWeapon;
+    }
+
+
+
+    private void Start()
+    {
+        //armado de diccionario
+        AttackDictionary["Left"] = Left_SwordAttacks;
+        AttackDictionary["Right"] = Right_SwordAttacks;
+        AttackDictionary["Up"] = UP_SwordAttacks;
+        AttackDictionary["Down"] = Down_SwordAttacks;
+
+        if (swordTrail != null) swordTrail.emitting = false;
+        if (swordTrail != null) swordTrail2.emitting = false;
+    }
+
+
+    public override void VS_Runlogic(params object[] a)
+    {
+
+        if (a == null || a.Length == 0)
+        {
+            Debug.LogError("PlayerAttackScript recieving null parameters");
+            return;
+        }
+        RunData((InputMovement)a[0]);
     }
 
     public void RunData(InputMovement PlayerInputs)
     {
-        if (PlayerInputs.LeftMouseClick)
+        _PlayerInputs = PlayerInputs;
+        if (PlayerInputs.SustainedLeftMouseClick && _HasFinishedAttack)
         {
-            Attack();
+            print("running data");
+            AnimatorSelector(); // selector de animaciones
+            AttackHandle(); //ataque
+        }
+        if(_Anim != null && !_HasFinishedAttack)
+        {
+            FinishAttack();
         }
     }
 
-    private void Attack()
+    private void AnimatorSelector()
     {
-        CancelInvoke(nameof(EndCombo));
-        if (Time.time - _LastComboEnd > _TimeBetweenCombos && _ComboCounter <= SwordCombo.Length)
+        Vector2 value= _PlayerInputs.Movement;
+        if(value == Vector2.left)
         {
+            CurrentCombo = AttackDictionary["Left"];
+            print("left attack");
+        }
+        else if(value == Vector2.right)
+        {
+            CurrentCombo = AttackDictionary["Right"];
+            print("right attack");
+        }
+        else if(value == Vector2.up)
+        {
+            CurrentCombo = AttackDictionary["Up"];
+            print("up attack");
+        }
+        else if(value == Vector2.down)
+        {
+            CurrentCombo = AttackDictionary["Down"];
+            print("down attack");
+        }
+        else
+        {
+            CurrentCombo = AttackDictionary["Left"];
+            print("default attack");
+        }
+    } // funcion de seleccion de animaciones de ataque
 
-            if(Time.time - _LastClickedTime >= _TimebetweenAttacks)
+    private void AttackHandle()
+    {
+        if (swordTrail != null) swordTrail.emitting = true;
+        if (swordTrail2 != null) swordTrail2.emitting = true;
+
+
+        if(_ComboCounter >= CurrentCombo.Length) // nos excedimos de combo
+        { 
+            _ComboCounter = 0;
+        }
+
+        _AnimHandler.TryGetAnimator("Weapon", out Animator WeaponAnim); // obtener el animator
+        WeaponAnim.runtimeAnimatorController = CurrentCombo[_ComboCounter]._AnimatorOV; //override de animaciones
+        WeaponAnim.speed = AttackSpeedMod; // velocidad de ataque
+        _Anim = WeaponAnim;
+
+        //set de trigger
+        _Anim.SetTrigger("StartAttack");
+        _AnimHandler.SetParameter("Weapon", "StartAttack", AnimatorControllerParameterType.Trigger);
+        //_AnimHandler.ResetAllTriggers("Weapon");
+        print("attack trigger!");
+
+        float animationLength = 0f;
+        foreach (var clip in WeaponAnim.runtimeAnimatorController.animationClips)
+        {
+            if (clip.name == "Attack")
             {
-
-                _Anim.runtimeAnimatorController = SwordCombo[_ComboCounter]._AnimatorOV;
-                _Anim.Play("Attack", 0, 0);
-                _Weapon.Damage = SwordCombo[_ComboCounter].Damage;
-                _Weapon.KnockBack = SwordCombo[_ComboCounter].KnockBack;
-                _ComboCounter++;
-                _LastClickedTime = Time.time;
-
-                if(_ComboCounter + 1 > SwordCombo.Length)
-                {
-                    _ComboCounter = 0;
-                }
-
-                Debug.Log("Attacking!");
+                animationLength = clip.length / AttackSpeedMod;
+                break;
             }
-
         }
+
+        // trails
+        float trailDeactivateTime = Mathf.Max(animationLength - 1f, 0.45f); //cuando se desactiva el trail antes del final de la animacion
+        Invoke(nameof(StopTrails), trailDeactivateTime);
+
+
+        // daño y knockbar
+        _Weapon.Damage = CurrentCombo[_ComboCounter].Damage;
+        _Weapon.KnockBack = CurrentCombo[_ComboCounter].KnockBack;
+        _Weapon.Attacking();
+
+        // nos desplazamos una animacion
+        _ComboCounter++;
+
+        //lock de ejecucion de evento
+        _HasFinishedAttack = false;
+
+        //ejemplo de funcionamiento del Sound manager
+        SoundManager.Instance.CreateSound() //creamos sonido
+                    .WithSoundData(soundData[0]) //con data de audio (variable setteada)
+                    .WithPosition(this.transform.position) //con posicion en custom (si no es 0,0,0)
+                    .WithSpatialBlend(soundData[0].SpatialBlend) // con blendeo espacial
+                    .WithRandomPitch(true) // con pitch de sonido (default -0.05 a 0.05)
+                    .play(); // tocamos el sonido
     }
 
-    private void ExitAttack()
+
+    public void FinishAttack()
     {
-        if(_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && _Anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack") && _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)
         {
-            Invoke(nameof(EndCombo), 1);
+            _Weapon.StopAttacking();
+            //_Anim.SetTrigger("AttackTrigger");
+            //_Anim.ResetTrigger("ChargeRelease");
+            _AnimHandler.SetParameter("Weapon", "AttackTrigger", AnimatorControllerParameterType.Trigger);
+
+            if (swordTrail != null) swordTrail.emitting = false;
+            if (swordTrail != null) swordTrail2.emitting = false;
+
+            //unlock de funcion
+            _HasFinishedAttack= true;
+            print("player has finished attacking");
         }
+
     }
 
-    private void EndCombo()
+
+    #region Misc
+    void sheateWeapon()
     {
-        _ComboCounter = 0;
-        _LastComboEnd = Time.time;
-        Debug.Log("EndingCombo");
+        _Weapon.gameObject.SetActive(false);
+        print("sheating weapon");
     }
 
+    void UnsheateWeapon()
+    {
+        _Weapon.gameObject.SetActive(true);
+        print("unsheating weapon");
+    }
+
+
+    private void StopTrails()
+    {
+        if (swordTrail != null) swordTrail.emitting = false;
+        if (swordTrail2 != null) swordTrail2.emitting = false;
+    }
+
+
+    #endregion
 }

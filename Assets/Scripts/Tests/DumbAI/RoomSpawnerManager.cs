@@ -42,6 +42,8 @@ public class RoomSpawnerManager : MonoBehaviour
     {
         playerContext = playerCont;
         _StartingCombatScore = ScoreManager.Instance.GetPlayerScore;
+
+        ScoreManager.Instance.RegisterMilestone(_StartingCombatScore + _AddExtraRequiredScore);
     }
 
     public void AssignRoomEnters(RoomEnterTrigger trigger)
@@ -82,7 +84,8 @@ public class RoomSpawnerManager : MonoBehaviour
             foreach (var item in roomTriggers)
             {
                 if (item == null) continue;
-                item.SetSolidState(true); 
+                item.SetSolidState(false);
+                item.SetCombatState(true);
             }
         }
 
@@ -92,7 +95,8 @@ public class RoomSpawnerManager : MonoBehaviour
         {
             foreach (var item in roomTriggers)
             {
-                item.SetSolidState(false); 
+                item.SetSolidState(true);
+                item.SetCombatState(false);
             }
 
             StopThisManager = true;

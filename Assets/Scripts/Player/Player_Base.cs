@@ -13,7 +13,7 @@ using System;
 
 public class Player_Base : Visceral_Script
 {
-
+    [SerializeField] private InputStruct _MovementInput, _CameraInput;
     [SerializeField] private Player_Movement _Player_Movement;
     [SerializeField] private Player_CameraController _Player_CameraController;
     [SerializeField] private Player_DashTest _DashTest;
@@ -84,6 +84,7 @@ public class Player_Base : Visceral_Script
             LookDelta = Input.Look.ReadValue<Vector2>()
 
         };
+        _Player_CameraController.UpdatePosition(_Player_Movement.GetCameraTarget());
         _Player_CameraController.UpdateRotation(cameraInput);
 
         //logica de movimiento
@@ -118,12 +119,13 @@ public class Player_Base : Visceral_Script
         _Player_Movement.UpdateBodyPositions(Time.deltaTime);
         _Player_Movement.UpdateInput(movementInput);
         //_DashTest.PerformDash(movementInput);
-        _Player_CameraController.UpdatePosition(_Player_Movement.GetCameraTarget());
+     
 
         if (!OnDialogue)
         {
             //_MeleeAttack.RunData(movementInput);
-            _ChargedMeleeCombat.VS_Runlogic(movementInput);
+            //_ChargedMeleeCombat.VS_Runlogic(movementInput);
+            _MeleeAttack.VS_Runlogic(movementInput);
             ActivateSkills(movementInput);
         }
 

@@ -148,7 +148,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     [Space]
 
     [Header("Stance Variables")]
-    [SerializeField] private float _StandHeight = 1f;
+    [SerializeField] private float _StandHeight = 2.3f;
     [SerializeField] private float _CrouchHeight = 0.5f;
     
 

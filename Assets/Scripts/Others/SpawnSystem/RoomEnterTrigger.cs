@@ -9,6 +9,7 @@ public class RoomEnterTrigger : MonoBehaviour
     [SerializeField] Collider DoorTrigger;
     [SerializeField] RoomSpawnerManager roomSpawnerManager;
 
+    public bool IsInCombat;
 
     void Start()
     {
@@ -23,6 +24,7 @@ public class RoomEnterTrigger : MonoBehaviour
         if (Contex.faction == FactionID.Player && roomSpawnerManager != null)
         {
             PlayerEnteredRoom();
+            IsInCombat = true;
             
         }
     }
@@ -32,11 +34,14 @@ public class RoomEnterTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         var Contex = other.GetComponentInParent<PlayerContext>();
+        if(Contex == null)
+        {
+            return;
+        }
 
         if (Contex.faction == FactionID.Player && roomSpawnerManager != null)
         {
-            Pcontext = Contex;
-                
+            Pcontext = Contex;     
         }
 
     }
@@ -51,6 +56,11 @@ public class RoomEnterTrigger : MonoBehaviour
         roomSpawnerManager.AssignPlayerContext(Pcontext);
         roomSpawnerManager.StartRoomCombat();
         roomSpawnerManager.NotifyMinionDeath();
-        SetSolidState(true);
+        SetSolidState(false);
+    }
+
+    public void SetCombatState(bool state)
+    {
+        IsInCombat= state;
     }
 }
