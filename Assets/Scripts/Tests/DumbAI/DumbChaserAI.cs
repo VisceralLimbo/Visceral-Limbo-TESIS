@@ -191,7 +191,9 @@ public class DumbChaserAI : DumbEnemy, ICharacterController
 
             );
 
-        currentRotation = Quaternion.LookRotation(forward, _KKC.CharacterUp);
+        var TargetRotation = Quaternion.LookRotation(forward, _KKC.CharacterUp);
+
+        currentRotation = TargetRotation;
     }
 
     private Transform PlayerTransform()

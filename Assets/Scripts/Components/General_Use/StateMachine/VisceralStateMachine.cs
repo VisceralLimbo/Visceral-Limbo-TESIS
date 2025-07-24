@@ -32,9 +32,6 @@ public class VisceralStateMachine : MonoBehaviour
     /// </summary>
     Dictionary<string,bool> _GlobalConditions = new Dictionary<string,bool>();
 
-
-
-
     private void Awake()
     {
         foreach(var condition in Conditions)
