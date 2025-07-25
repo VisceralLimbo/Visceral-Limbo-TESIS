@@ -14,7 +14,9 @@ public class Transition
     /// <summary>
     /// El nombre de las condiciones que queremos ver evaluar
     /// </summary>
-    [SerializeField] string[] ConditionNames;
+    [SerializeField] Condition[] conditions;
+
+
     [Space]
 
     [Header("Transiciones")]
@@ -57,12 +59,14 @@ public class Transition
             return true;
         }
 
-        foreach(var Condition in ConditionNames)
+        foreach(var Condition in conditions)
         {
-            if(GlobalParams.TryGetValue(Condition,out bool Value)) // revisamos si tenemos un valor
+            if(GlobalParams.TryGetValue(Condition.ConditionName,out bool Value)) 
+                // revisamos si tenemos un valor
             {
-                if(!Value)
+                if(Value != Condition.Value)
                 {
+                    //salimos porque una o mas condiciones fracasaron
                     TO = null;
                     return false;
                 }
@@ -73,5 +77,5 @@ public class Transition
         return true;
 
     }
-}
 
+}

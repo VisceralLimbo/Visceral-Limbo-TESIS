@@ -11,6 +11,8 @@ public class BaseState : MonoBehaviour
 
     [SerializeField] public Transition[] Mytransitions;
 
+    [SerializeField] protected float _MinStateLifetime;
+
     /// <summary>
     /// Funcion de inicializacion, usar para cargar transiciones
     /// </summary>

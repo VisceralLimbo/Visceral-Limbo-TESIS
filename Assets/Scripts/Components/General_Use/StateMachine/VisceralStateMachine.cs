@@ -32,6 +32,9 @@ public class VisceralStateMachine : MonoBehaviour
     /// </summary>
     Dictionary<string,bool> _GlobalConditions = new Dictionary<string,bool>();
 
+
+
+
     private void Awake()
     {
         foreach(var condition in Conditions)
@@ -129,17 +132,32 @@ public class VisceralStateMachine : MonoBehaviour
 
     private void SwitchToNewState(BaseState FROM, BaseState TO)
     {
+        //reset de condisiones reseteables
+        foreach (var condition in Conditions)
+        {
+            if (condition.IsResetAfterSwitch) // la condicion analizada es reseteable
+            {
+                if (_GlobalConditions.ContainsKey(condition.ConditionName))
+                {
+                    _GlobalConditions[condition.ConditionName] = condition.Value;
+                }
+            } 
+        }
         FROM.OnExit(this);
         _CurrentState = TO;
         _CurrentState.OnEnter(this);
+
+ 
     }
 }
 
 
 
 [System.Serializable]
-internal class Condition
+public class Condition
 {
     [SerializeField] public string ConditionName;
     [SerializeField] public bool Value;
+    [Tooltip("Este booleano indica si la condicion tiene que ser reseteada al valor original indicado en inspector, EL VALOR NO NECESARIAMENTE SEA FALSE!")]
+    [SerializeField] public bool IsResetAfterSwitch;
 }

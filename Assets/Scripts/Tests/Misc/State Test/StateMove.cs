@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
 
-public class StateMove : BaseState, ICharacterController
+public class StateMove : BaseState
 {
     [Header("References")]
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] Transform _Target;
-    [SerializeField] IMovementStrategy _MovementStrategy;
+    IMovementStrategy _MovementStrategy;
 
     [Space]
 
@@ -16,6 +16,7 @@ public class StateMove : BaseState, ICharacterController
     [SerializeField] float _Speed;
     [SerializeField] float _MovementAccel;
     [SerializeField] float _MaxRotationSpeed;
+    [SerializeField] float _MinDistance;
     [SerializeField] float _MaxDistance;
 
     Vector3 targetdirection;
@@ -30,132 +31,92 @@ public class StateMove : BaseState, ICharacterController
                 _KCC = CTX.GetComponentInChildren<KinematicCharacterMotor>();
             }
             _Target = FindObjectOfType<Player_Movement>().transform;
-            _KCC.CharacterController = this;
         }
+
+        if(_MovementStrategy == null)
+        {
+            if(CTX.gameObject.TryGetComponent<IMovementStrategy>(out IMovementStrategy _Movement))
+            {
+                _MovementStrategy = _Movement;
+                print("Found movement strategy!");
+            }
+            else
+            {
+                _MovementStrategy = CTX.GetComponentInChildren<IMovementStrategy>();
+                print("Found movement strategy in children!");
+            }
+        }
+
+        _MovementStrategy.Initialize(_KCC, CTX.gameObject);
     }
 
     public override void OnEnter(VisceralStateMachine CTX)
     {
-        this.enabled= true;
-
+        _MovementStrategy.SetActiveState(true);
     }
 
     public override void OnExit(VisceralStateMachine CTX)
     {
-        this.enabled = false;
-        _KCC.CharacterController = null;
+        stateMachine.SetGlobalCondition("Moving", false);
+        _MovementStrategy.KillAllMovement();
     }
 
 
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
-        
-    }
+        Vector3 TargetDirection = _Target.transform.position - _KCC.Capsule.transform.position;
+        Quaternion LookRotation = _KCC.Capsule.transform.rotation;
 
-
-    public void UpdateRotation(ref Quaternion currentRotation, float deltaTime)
-    {
-        //sentido adelante
-        var forward = Vector3.ProjectOnPlane(
-                vector: targetdirection,
-                _KCC.CharacterUp
-
-
-            );
-        if (forward.sqrMagnitude > 0.01f)  //evitar que rote por milesimas
-        {
-            //rotacion deseada
-            var TargetRotation = Quaternion.LookRotation(forward, _KCC.CharacterUp);
-
-            currentRotation = Quaternion.RotateTowards(
-                currentRotation,
-                TargetRotation,
-                _MaxRotationSpeed * Time.deltaTime
-                );
-        }
+        _MovementStrategy.UpdateVelocity(TargetDirection);
+        _MovementStrategy.UpdateRotation(LookRotation);
 
     }
 
-    public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
-    {
-        if (_KCC.GroundingStatus.IsStableOnGround)
-        {
-            targetdirection = _Target.position - _KCC.Capsule.transform.position;
-            print(_KCC.GroundingStatus.GroundCollider);
-
-
-            var groundedMovement = _KCC.GetDirectionTangentToSurface(
-                direction: targetdirection,
-                surfaceNormal: _KCC.GroundingStatus.GroundNormal
-
-                );
-
-
-            var TargetVelocity = _Speed * groundedMovement;
-            currentVelocity = Vector3.Slerp
-                 (
-                     a: currentVelocity,
-                     b: TargetVelocity,
-                     t: 1f - Mathf.Exp(-_MovementAccel * deltaTime)
-
-                 );
-        }
-        else
-        {
-            currentVelocity = new Vector3(Physics.gravity.x, Physics.gravity.y, Physics.gravity.z);
-            print("im free falling");
-        }
-
-    }
-
-
-
+    float pulseLifeTime;
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
-        return base.EvaluateTransitions(GlobalParams, out TO);
+        
+        if(pulseLifeTime < _MinStateLifetime) //stopgap to avoid the state from switching to fast
+        {
+            pulseLifeTime += Time.unscaledDeltaTime;
+            TO = null;
+            return false;
+        }
+
+        //CALCULO DE SITUACION
+        var Distance = Vector3.Distance(_KCC.Capsule.transform.position, _Target.transform.position);
+        if (Distance <= _MinDistance)
+        {
+            print("Move state: melee");
+            stateMachine.SetGlobalCondition("Melee", true);
+            
+        }
+        if(Distance > _MaxDistance)
+        {
+            stateMachine.SetGlobalCondition("Moving", false);
+        }
+
+
+        if (GlobalParams != null)
+        {
+            if(Mytransitions.Length> 0)
+            {
+                foreach(var transition in Mytransitions) 
+                {
+                    if(transition.ShouldTransition(GlobalParams, out BaseState _TO))
+                    {
+                        print("Should transition to " + _TO.name);
+                        TO = _TO;
+
+                        pulseLifeTime = 0;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        //NO SE PUDO TRANSICIONAR
+        TO = null;
+        return false;
     }
-
-
-
-    public void AfterCharacterUpdate(float deltaTime)
-    {
-     
-    }
-
-    public void BeforeCharacterUpdate(float deltaTime)
-    {
-
-    }
-
-    public bool IsColliderValidForCollisions(Collider coll)
-    {
-        return true;
-    }
-
-    public void OnDiscreteCollisionDetected(Collider hitCollider)
-    {
-
-    }
-
-
-    public void OnGroundHit(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, ref HitStabilityReport hitStabilityReport)
-    {
-        print("groundcheck!");
-    }
-
-    public void OnMovementHit(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, ref HitStabilityReport hitStabilityReport)
-    {
-       
-    }
-
-    public void PostGroundingUpdate(float deltaTime)
-    {
-       
-    }
-
-    public void ProcessHitStabilityReport(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, Vector3 atCharacterPosition, Quaternion atCharacterRotation, ref HitStabilityReport hitStabilityReport)
-    {
-
-    }
-
 }

@@ -10,6 +10,10 @@ public interface IMovementStrategy
     public void UpdateVelocity(Vector3 Target);
     public void UpdateRotation(Quaternion Target);
 
+    public void SetActiveState(bool setActive);
+
+    public void KillAllMovement();
+
     public void ApplyExternalForce(Vector3 targetDirection,float Force);
     public void ApplyExternalRotation(Quaternion RotationDirection, float Force);
 

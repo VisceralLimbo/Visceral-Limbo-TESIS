@@ -3483,6 +3483,7 @@ GameObject:
   - component: {fileID: 955462772}
   - component: {fileID: 955462771}
   - component: {fileID: 955462770}
+  - component: {fileID: 955462774}
   m_Layer: 0
   m_Name: Enemy Model
   m_TagString: Untagged
@@ -3521,14 +3522,14 @@ MonoBehaviour:
   Capsule: {fileID: 955462771}
   CapsuleRadius: 0.5
   CapsuleHeight: 2
-  CapsuleYOffset: 0
+  CapsuleYOffset: 0.1
   CapsulePhysicsMaterial: {fileID: 0}
-  GroundDetectionExtraDistance: 0
+  GroundDetectionExtraDistance: 0.1
   MaxStableSlopeAngle: 60
   StableGroundLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
-  DiscreteCollisionEvents: 0
+    m_Bits: 1503
+  DiscreteCollisionEvents: 1
   StepHandling: 1
   MaxStepHeight: 0.5
   AllowSteppingWithoutStableGrounding: 0
@@ -3570,7 +3571,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!23 &955462772
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3621,6 +3622,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 955462768}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &955462774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955462768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95024e7e1e8496c47bfeda3ac8dd0aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _KCC: {fileID: 0}
+  _Model: {fileID: 955462768}
+  _TargetVelocity: {x: 0, y: 0, z: 0}
+  _TargetRotation: {x: 0, y: 0, z: 0, w: 0}
+  _IsActive: 1
+  _KillAllMovement: 0
+  _MovementSpeed: 10
+  _MovementAccel: 10
+  _MaxRotationSpeed: 120
 --- !u!1 &960030998
 GameObject:
   m_ObjectHideFlags: 0
@@ -3632,7 +3654,6 @@ GameObject:
   - component: {fileID: 960030999}
   - component: {fileID: 960031002}
   - component: {fileID: 960031001}
-  - component: {fileID: 960031000}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -3649,33 +3670,12 @@ Transform:
   m_GameObject: {fileID: 960030998}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.325, y: 0.533, z: 0}
+  m_LocalPosition: {x: 0, y: 0.533, z: 0.266}
   m_LocalScale: {x: 0.55626, y: 0.23285, z: 0.66017}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 955462769}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &960031000
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 960030998}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &960031001
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5910,7 +5910,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateMachine: {fileID: 0}
-  Mytransitions: []
+  Mytransitions:
+  - conditions:
+    - ConditionName: Moving
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 1400652796}
+    _ToGO: {fileID: 2060039337}
+    _ShouldTransitionWithNoConditions: 0
+  _MinStateLifetime: 0.15
+  _DistanceToChase: 5
+  _target: {fileID: 1665243321}
+  _User: {fileID: 955462769}
 --- !u!1 &1442463893
 GameObject:
   m_ObjectHideFlags: 0
@@ -6302,11 +6313,15 @@ MonoBehaviour:
   _States:
   - {fileID: 2060039339}
   - {fileID: 1400652798}
-  _StartingState: {fileID: 2060039339}
+  _StartingState: {fileID: 1400652798}
   _CurrentState: {fileID: 0}
   Conditions:
   - ConditionName: Moving
     Value: 0
+    IsResetAfterSwitch: 1
+  - ConditionName: Melee
+    Value: 0
+    IsResetAfterSwitch: 1
 --- !u!4 &1532154243
 Transform:
   m_ObjectHideFlags: 0
@@ -6316,7 +6331,7 @@ Transform:
   m_GameObject: {fileID: 1532154241}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 375.624, y: 50.74, z: 269.605}
+  m_LocalPosition: {x: 389.39, y: 50.74, z: 206.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7530,14 +7545,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60b28599540709f449404735a400ca44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateMachine: {fileID: 0}
-  Mytransitions: []
+  stateMachine: {fileID: 1532154242}
+  Mytransitions:
+  - conditions:
+    - ConditionName: Moving
+      Value: 0
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 2060039337}
+    _ToGO: {fileID: 1400652796}
+    _ShouldTransitionWithNoConditions: 0
+  _MinStateLifetime: 0.15
   _KCC: {fileID: 0}
   _Target: {fileID: 0}
-  _Speed: 5
-  _MovementAccel: 10
-  _MaxRotationSpeed: 30
-  _MaxDistance: 5
+  _Speed: 0
+  _MovementAccel: 0
+  _MaxRotationSpeed: 120
+  _MinDistance: 3
+  _MaxDistance: 10
 --- !u!1 &2074755292
 GameObject:
   m_ObjectHideFlags: 0
