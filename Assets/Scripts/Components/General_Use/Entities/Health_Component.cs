@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 
 public class Health_Component : Visceral_Component
 {
@@ -14,7 +15,6 @@ public class Health_Component : Visceral_Component
     public PlayerContext Context { get { return _Context; } }
 
     public event Action OnDeath, OnDamaged;
-
     //public ParticleSystem bloodParticles;
 
     private void Start()
@@ -103,12 +103,15 @@ public class Health_Component : Visceral_Component
             if (ScoreManager.Instance != null)
                 ScoreManager.Instance.ProcessKill(FinalScore);
             OnDeath?.Invoke();
+
+
             if (DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
             if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);
         }
         else if (CurrentHealth <= 0f)
         {
             OnDeath?.Invoke();
+
             Died = true;
             if (_Context == null)
             {

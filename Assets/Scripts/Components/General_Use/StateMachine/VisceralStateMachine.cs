@@ -32,6 +32,7 @@ public class VisceralStateMachine : MonoBehaviour
     /// </summary>
     Dictionary<string,bool> _GlobalConditions = new Dictionary<string,bool>();
 
+    [SerializeField]Health_Component _HPComp;
 
 
 
@@ -70,14 +71,34 @@ public class VisceralStateMachine : MonoBehaviour
 
             Debug.LogError("<Color=blue> [Visceral Error] State Machine Start:" +
                 "Missing Starting coroutine, please check in inspector");
-           
         }
+
+        if(_HPComp == null)
+        {
+            if(gameObject.TryGetComponent(out Health_Component HPC))
+            {
+                _HPComp = HPC;
+                _HPComp.OnDeath += OnDisable;
+            }
+        }
+        else
+        {
+            _HPComp.OnDeath += OnDisable;
+        }
+
+
     }
+
 
 
     public void Update()
     {
-        if(_CurrentState == null)
+        if (!isActiveAndEnabled|| !gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
+        if (_CurrentState == null)
         {
             Debug.LogError("<Color=blue>[Visceral Error] StateMachine: no hay estado actual");
             return;
@@ -146,8 +167,33 @@ public class VisceralStateMachine : MonoBehaviour
         FROM.OnExit(this);
         _CurrentState = TO;
         _CurrentState.OnEnter(this);
+    }
 
- 
+    public void DeactivateMachine(bool ResetMachine)
+    {
+        this.enabled = false;
+
+        if (ResetMachine)
+        {
+            foreach(var Condition in Conditions)
+            {
+                if (_GlobalConditions.ContainsKey(Condition.ConditionName))
+                {
+                    _GlobalConditions[Condition.ConditionName] = Condition.Value;
+                }
+                else
+                {
+                    _GlobalConditions[Condition.ConditionName] = false;
+                }
+            }
+            _CurrentState = null;
+        }
+    }
+
+
+    private void OnDisable()
+    {
+        DeactivateMachine(true);
     }
 }
 

@@ -5,8 +5,10 @@ using KinematicCharacterController;
 
 public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacterController
 {
+    [Header("References")]
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] GameObject _Model;
+    [SerializeField] Rigidbody _RB;
 
     [Header("Variables")]
     [SerializeField] Vector3 _TargetVelocity;
@@ -16,7 +18,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [SerializeField] float _MovementAccel;
     [SerializeField] float _MaxRotationSpeed;
 
-
+    Vector3 _AddExternalVelocity;
 
 
     public void Initialize(KinematicCharacterMotor _kcc, GameObject Model)
@@ -24,6 +26,23 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         _KCC= _kcc;
         _Model= Model;
         _KCC.CharacterController = this;
+        if(_RB == null)
+        {
+            if(Model.TryGetComponent<Rigidbody>(out Rigidbody Comp))
+            {
+                _RB = Comp;
+                _KCC.AttachedRigidbodyOverride = _RB;
+            }
+            else
+            {
+                Comp = Model.GetComponentInChildren<Rigidbody>();
+                if (Comp)
+                {
+                    _RB = Comp;
+                    _KCC.AttachedRigidbodyOverride = _RB;
+                }
+            }
+        }
     }
 
     public void UpdateVelocity(Vector3 Target)
@@ -47,7 +66,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     public void ApplyExternalForce(Vector3 targetDirection, float Force)
     {
-        
+        _AddExternalVelocity = targetDirection * Force;
     }
 
     public void ApplyExternalRotation(Quaternion RotationDirection, float Force)
@@ -106,6 +125,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
             _KCC.BaseVelocity = Vector3.zero;
             currentVelocity -= currentVelocity;
         }
+
+        if(_AddExternalVelocity.sqrMagnitude > 0.1f)
+        {
+            currentVelocity += _AddExternalVelocity;
+        }
+
     }
 
 
@@ -119,7 +144,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
 
             );
-        if (forward.sqrMagnitude > 0.01f)  //evitar que rote por milesimas
+        /*if (forward.sqrMagnitude > 0.01f)  //evitar que rote por milesimas
         {
             //rotacion deseada
             var TargetRotation = Quaternion.LookRotation(forward, _KCC.CharacterUp);
@@ -129,13 +154,18 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
                 TargetRotation,
                 _MaxRotationSpeed * Time.deltaTime
                 );
-        }
+        }*/
+
+        var TargetRotation = Quaternion.LookRotation(forward,_KCC.CharacterUp);
+
+        currentRotation = TargetRotation;
     }
 
 
     void ICharacterController.AfterCharacterUpdate(float deltaTime)
     {
-        
+        _AddExternalVelocity = Vector3.zero;
+
     }
 
     void ICharacterController.BeforeCharacterUpdate(float deltaTime)
@@ -145,6 +175,11 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     bool ICharacterController.IsColliderValidForCollisions(Collider coll)
     {
+        if(coll.gameObject.layer == 10)
+        {
+            return false;
+        }
+
         return true;
     }
 

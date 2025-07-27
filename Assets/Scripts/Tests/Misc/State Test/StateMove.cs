@@ -7,6 +7,7 @@ public class StateMove : BaseState
 {
     [Header("References")]
     [SerializeField] KinematicCharacterMotor _KCC;
+    [SerializeField] AnimatorHandler _AnimatorHandler;
     [SerializeField] Transform _Target;
     IMovementStrategy _MovementStrategy;
 
@@ -38,12 +39,22 @@ public class StateMove : BaseState
             if(CTX.gameObject.TryGetComponent<IMovementStrategy>(out IMovementStrategy _Movement))
             {
                 _MovementStrategy = _Movement;
-                print("Found movement strategy!");
             }
             else
             {
                 _MovementStrategy = CTX.GetComponentInChildren<IMovementStrategy>();
-                print("Found movement strategy in children!");
+            }
+        }
+
+        if(_AnimatorHandler == null)
+        {
+            if(CTX.gameObject.TryGetComponent(out AnimatorHandler Handler))
+            {
+                _AnimatorHandler = Handler;
+            }
+            else
+            {
+                _AnimatorHandler = CTX.gameObject.GetComponentInChildren<AnimatorHandler>();
             }
         }
 
@@ -64,11 +75,41 @@ public class StateMove : BaseState
 
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
+        if (!isActiveAndEnabled || !CTX.gameObject.activeSelf)
+        {
+            return;
+        }
+
         Vector3 TargetDirection = _Target.transform.position - _KCC.Capsule.transform.position;
         Quaternion LookRotation = _KCC.Capsule.transform.rotation;
 
         _MovementStrategy.UpdateVelocity(TargetDirection);
         _MovementStrategy.UpdateRotation(LookRotation);
+
+
+        if(_AnimatorHandler != null)
+        {
+            _AnimatorHandler.SetParameter("Wretched", "IsMoving"
+                , AnimatorControllerParameterType.Trigger);
+        }
+
+
+
+        //CALCULO DE SITUACION
+        var Distance = Vector3.Distance(_KCC.Capsule.transform.position, _Target.transform.position);
+        if (Distance <= _MinDistance)
+        {      
+            stateMachine.SetGlobalCondition("Melee", true);
+
+        }
+        if (Distance > _MaxDistance)
+        {
+            stateMachine.SetGlobalCondition("Moving", false);
+        }
+        else
+        {
+            stateMachine.SetGlobalCondition("Moving", true);
+        }
 
     }
 
@@ -82,20 +123,6 @@ public class StateMove : BaseState
             TO = null;
             return false;
         }
-
-        //CALCULO DE SITUACION
-        var Distance = Vector3.Distance(_KCC.Capsule.transform.position, _Target.transform.position);
-        if (Distance <= _MinDistance)
-        {
-            print("Move state: melee");
-            stateMachine.SetGlobalCondition("Melee", true);
-            
-        }
-        if(Distance > _MaxDistance)
-        {
-            stateMachine.SetGlobalCondition("Moving", false);
-        }
-
 
         if (GlobalParams != null)
         {

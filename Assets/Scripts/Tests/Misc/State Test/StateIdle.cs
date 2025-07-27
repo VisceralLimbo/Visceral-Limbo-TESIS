@@ -34,18 +34,13 @@ public class StateIdle : BaseState
         if (_DistanceToTarget < _DistanceToChase)
         {
             stateMachine.SetGlobalCondition("Moving", true);
-            print("Idle: Chasing that booty");
+          
         }
         else
         {
             stateMachine.SetGlobalCondition("Moving", false);
-            print("Idle: canT see booty");
+
         }
-
-        print("Shouldnt transition");
-
-
-
         // checkeo si podemos transicionar
         if (GlobalParams != null)
         {
