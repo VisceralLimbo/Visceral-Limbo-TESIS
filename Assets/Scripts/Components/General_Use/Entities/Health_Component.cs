@@ -74,7 +74,7 @@ public class Health_Component : Visceral_Component
         if (Died) return;
 
         CurrentHealth -= damage;
-        CameraShake.instance.ShakeCamera(0.1f, 0.5f); // shake de la camara
+        CameraShake.instance.ShakeCamera(0.1f, 0.2f); // shake de la camara
         OnDamaged?.Invoke();
 
         if (soundData != null)
@@ -107,6 +107,8 @@ public class Health_Component : Visceral_Component
                 ScoreManager.Instance.ProcessKill(FinalScore);
             OnDeath?.Invoke();
 
+            HitStop.Stop(1f, 0.35f); //el segundo valor cambia el pitch de la musica y sonidos
+            FindObjectOfType<HitStopEffectController>()?.ApplyEffect(1f, 0.8f); //intensidad es el primer numero, el otro es la duracion
 
             if (DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
             if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);

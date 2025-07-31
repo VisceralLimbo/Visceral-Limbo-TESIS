@@ -134,7 +134,7 @@ public class Player_MeleeAttack : Visceral_Script
         if (swordTrail2 != null) swordTrail2.emitting = true;
 
 
-        if(_ComboCounter >= CurrentCombo.Length) // nos excedimos de combo
+        if (_ComboCounter >= CurrentCombo.Length) // nos excedimos de combo
         { 
             _ComboCounter = 0;
         }
@@ -199,7 +199,7 @@ public class Player_MeleeAttack : Visceral_Script
             if (swordTrail != null) swordTrail2.emitting = false;
 
             //unlock de funcion
-            _HasFinishedAttack= true;
+            _HasFinishedAttack = true;
             print("player has finished attacking");
         }
 
