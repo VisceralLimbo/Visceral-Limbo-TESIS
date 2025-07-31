@@ -68,12 +68,12 @@ public class StateIdle : BaseState
     public override void OnEnter(VisceralStateMachine CTX)
     {
         base.OnEnter(CTX);
-        movementStrategy.KillAllMovement();
     }
 
     public override void OnExit(VisceralStateMachine CTX)
     {
         base.OnExit(CTX);
+        movementStrategy.SetActiveState(true);
     }
 
     public override void OnTick(VisceralStateMachine CTX, float TickRate)

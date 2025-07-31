@@ -19,6 +19,16 @@ public class VisceralStateMachine : MonoBehaviour
     /// El State actual
     /// </summary>
     [SerializeField] private BaseState _CurrentState;
+    public BaseState CurrentState
+    {
+        get { return _CurrentState; }
+    }
+
+    [SerializeField] private BaseState _LastState;
+    public BaseState LastState
+    {
+        get { return _LastState; }
+    }
 
 
     /// <summary>
@@ -83,6 +93,7 @@ public class VisceralStateMachine : MonoBehaviour
         }
         else
         {
+
             _HPComp.OnDeath += OnDisable;
         }
 
@@ -161,12 +172,16 @@ public class VisceralStateMachine : MonoBehaviour
                 if (_GlobalConditions.ContainsKey(condition.ConditionName))
                 {
                     _GlobalConditions[condition.ConditionName] = condition.Value;
+                    print("ResetCondition" + condition.ConditionName);
                 }
             } 
         }
+
         FROM.OnExit(this);
+        _LastState = FROM;
         _CurrentState = TO;
         _CurrentState.OnEnter(this);
+
     }
 
     public void DeactivateMachine(bool ResetMachine)

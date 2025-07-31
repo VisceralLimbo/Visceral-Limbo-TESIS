@@ -2595,6 +2595,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateMachine: {fileID: 0}
   Mytransitions:
+  - conditions:
+    - ConditionName: Hurt
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 472015003}
+    _ToGO: {fileID: 1865016700}
+    _ShouldTransitionWithNoConditions: 0
   - conditions: []
     _FromGO: {fileID: 472015003}
     _ToGO: {fileID: 2060039337}
@@ -4017,6 +4024,7 @@ Transform:
   - {fileID: 2060039338}
   - {fileID: 1400652797}
   - {fileID: 472015004}
+  - {fileID: 1865016701}
   m_Father: {fileID: 1532154243}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &949229763
@@ -6518,6 +6526,13 @@ MonoBehaviour:
     _FromGO: {fileID: 1400652796}
     _ToGO: {fileID: 2060039337}
     _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Hurt
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 1400652796}
+    _ToGO: {fileID: 1865016700}
+    _ShouldTransitionWithNoConditions: 0
   _MinStateLifetime: 0.15
   _DistanceToChase: 5
   _target: {fileID: 1665243321}
@@ -6915,13 +6930,18 @@ MonoBehaviour:
   - {fileID: 2060039339}
   - {fileID: 1400652798}
   - {fileID: 472015005}
+  - {fileID: 1865016702}
   _StartingState: {fileID: 1400652798}
   _CurrentState: {fileID: 0}
+  _LastState: {fileID: 0}
   Conditions:
   - ConditionName: Moving
     Value: 0
     IsResetAfterSwitch: 1
   - ConditionName: Melee
+    Value: 0
+    IsResetAfterSwitch: 1
+  - ConditionName: Hurt
     Value: 0
     IsResetAfterSwitch: 1
   _HPComp: {fileID: 955462776}
@@ -7631,6 +7651,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 104896532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1865016700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1865016701}
+  - component: {fileID: 1865016702}
+  m_Layer: 0
+  m_Name: State - Hurt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1865016701
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865016700}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 937077929}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1865016702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865016700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cd7194ec6ed3cf4db61d6c1990ae3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
+  Mytransitions:
+  - conditions: []
+    _FromGO: {fileID: 1865016700}
+    _ToGO: {fileID: 1400652796}
+    _ShouldTransitionWithNoConditions: 1
+  _MinStateLifetime: 1.5
+  _AnimHandler: {fileID: 0}
+  KnockBackResistance: 1
 --- !u!1 &1901718841
 GameObject:
   m_ObjectHideFlags: 0
@@ -8170,11 +8243,11 @@ MonoBehaviour:
   stateMachine: {fileID: 1532154242}
   Mytransitions:
   - conditions:
-    - ConditionName: Melee
+    - ConditionName: Hurt
       Value: 1
       IsResetAfterSwitch: 0
     _FromGO: {fileID: 2060039337}
-    _ToGO: {fileID: 472015003}
+    _ToGO: {fileID: 1865016700}
     _ShouldTransitionWithNoConditions: 0
   - conditions:
     - ConditionName: Moving

@@ -55,7 +55,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     }
     public void KillAllMovement()
     {
-        _KillAllMovement = true;
+        _KillAllMovement = true; 
     }
 
     public void SetActiveState(bool setActive)
@@ -79,19 +79,18 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     void ICharacterController.UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
     {
 
-        if (!_IsActive)
+        // bail! we are inactive or movement is kil
+        if (!_IsActive || _KillAllMovement)
         {
-            if (_KillAllMovement)
-            {
-                _KillAllMovement = false;
-                currentVelocity = Vector3.zero;
-                _KCC.BaseVelocity = Vector3.zero;
-                currentVelocity -= currentVelocity;
-            }
+            _KCC.ForceUnground(0.5f);
+            _KillAllMovement = false;
+            currentVelocity = Vector3.zero;
 
             return;
         }
 
+     
+        // we are on stable ground
         if (_KCC.GroundingStatus.IsStableOnGround)
         {
             
@@ -114,18 +113,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         }
         else
         {
+            // we are falling
             currentVelocity = new Vector3(Physics.gravity.x, Physics.gravity.y, Physics.gravity.z);
             print("im free falling");
         }
 
-        if (_KillAllMovement)
-        {
-            _KillAllMovement = false;
-            currentVelocity = Vector3.zero;
-            _KCC.BaseVelocity = Vector3.zero;
-            currentVelocity -= currentVelocity;
-        }
-
+        // we applied external velocity
         if(_AddExternalVelocity.sqrMagnitude > 0.1f)
         {
             currentVelocity += _AddExternalVelocity;
@@ -159,6 +152,8 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         var TargetRotation = Quaternion.LookRotation(forward,_KCC.CharacterUp);
 
         currentRotation = TargetRotation;
+
+
     }
 
 

@@ -15,7 +15,11 @@ public class Health_Component : Visceral_Component
     public PlayerContext Context { get { return _Context; } }
 
     public event Action OnDeath, OnDamaged;
+    public event Action<Vector3, float> OnKnockbackTaken;
+
     //public ParticleSystem bloodParticles;
+
+ 
 
     private void Start()
     {
@@ -78,21 +82,20 @@ public class Health_Component : Visceral_Component
             PlaySounds(); // feedback de sonidos
         }
 
-        // Knockback logic remains unchanged
-        if (KnockbarDir.HasValue && _Context?.knockback != null)
+        
+        // better implementation, why the F should the HPComp even know whats knockbackeable
+        // use a public Event, that way the HPComp doenst know who needs it
+        // seriously, why pato? - patoh
+        if( OnKnockbackTaken != null && KnockbarDir.HasValue)
         {
-            _Context.knockback.ApplyKnockBack(KnockbarDir.Value, force);
-        }
-        else if (KnockbarDir.HasValue && _Context?.KCCMotor?.AttachedRigidbody != null)
-        {
-            print(_Context.PlayerGameObject + "recieving knockback");
-            _Context.KCCMotor.AttachedRigidbody.AddForce(KnockbarDir.Value * force, ForceMode.Impulse);
+            OnKnockbackTaken.Invoke(KnockbarDir.Value, force);
         }
         else if (KnockbarDir.HasValue && _RB != null)
         {
             print("rigidbody recieving knockback");
             _RB.AddForce(KnockbarDir.Value * force, ForceMode.Impulse);
         }
+
 
         if (CurrentHealth <= 0f && _Context != null && Score != null && Score.Attacker != null)
         {

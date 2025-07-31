@@ -61,7 +61,7 @@ public class SwordTest : Visceral_WeaponBase
 
         Vector3 Dir = other.transform.position - this.transform.position;
         Dir = Dir.normalized;
-        Dir.y = 0;
+       
         
         HPComp.TakeDamageWithKnockback(Dir,KnockBack,damageScore);
         HitStop.Stop(0.05f);
