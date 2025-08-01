@@ -131,7 +131,7 @@ public class Player_ChargedMeleeCombat : Visceral_Script
         if (swordTrail2 != null) swordTrail2.emitting = true;
 
 
-        
+
         _Anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
         _Anim.speed = AttackSpeedMod;
         _Anim.SetTrigger("ChargeRelease");
@@ -150,7 +150,7 @@ public class Player_ChargedMeleeCombat : Visceral_Script
         }
 
         
-        float trailDeactivateTime = Mathf.Max(animationLength - 1f, 0.45f); //cuando se desactiva el trail antes del final de la animacion
+        float trailDeactivateTime = Mathf.Max(animationLength - 1f, 0.5f); //cuando se desactiva el trail antes del final de la animacion
         Invoke(nameof(StopTrails), trailDeactivateTime);
 
         

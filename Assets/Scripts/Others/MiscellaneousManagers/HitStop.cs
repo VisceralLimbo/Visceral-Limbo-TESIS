@@ -30,20 +30,46 @@ public static class HitStop
     }
 
 
-    public static void Stop(float duration)
+    public static void Stop(float duration, float slowdownFactor = 0.2f)
     {
         if (Waiting) return;
 
-        Time.timeScale = 0f;
+        slowdownFactor = Mathf.Clamp(slowdownFactor, 0.01f, 1f);
 
-        Runner.StartCoroutine(WaitCR(duration));
+        float originalFixedDeltaTime = Time.fixedDeltaTime;
+
+        Time.timeScale = slowdownFactor;
+        Time.fixedDeltaTime = originalFixedDeltaTime * slowdownFactor;
+
+        // Obtener todos los AudioSource activos
+        AudioSource[] audioSources = GameObject.FindObjectsOfType<AudioSource>();
+        float[] originalPitches = new float[audioSources.Length];
+
+        // Reducir pitch de todos los sonidos
+        for (int i = 0; i < audioSources.Length; i++)
+        {
+            originalPitches[i] = audioSources[i].pitch;
+            audioSources[i].pitch = originalPitches[i] * slowdownFactor;
+        }
+
+        Runner.StartCoroutine(WaitCR(duration, originalFixedDeltaTime, audioSources, originalPitches));
     }
 
-    static IEnumerator WaitCR(float duration)
+    static IEnumerator WaitCR(float duration, float originalFixedDeltaTime, AudioSource[] sources, float[] originalPitches)
     {
         Waiting = true;
         yield return new WaitForSecondsRealtime(duration);
-        Time.timeScale = 1;
+
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = originalFixedDeltaTime;
+
+        // Restaurar pitch original
+        for (int i = 0; i < sources.Length; i++)
+        {
+            if (sources[i] != null)
+                sources[i].pitch = originalPitches[i];
+        }
+
         Waiting = false;
     }
 }
