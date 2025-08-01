@@ -8,11 +8,13 @@ public class State_Wretch_Hurt : BaseState, IKnockback
     [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] IMovementStrategy movementStrategy; 
     Animator _Anim;
+    [SerializeField] RagDollTimer ragDollTimer;
 
     [Space]
     [Header("Variables")]
     private float ForceOfHit;
     [SerializeField] float KnockBackResistance;
+    [SerializeField] bool CanTransition;
 
     private Vector2 DirectionOfHit;
 
@@ -25,11 +27,12 @@ public class State_Wretch_Hurt : BaseState, IKnockback
 
         if(_AnimHandler != null)
         {
-            _AnimHandler.SetParameter("Wretched", "IsHurt", AnimatorControllerParameterType.Trigger);
             _AnimHandler.SetParameter("Wretched", "HurtDirectionX",
                                       AnimatorControllerParameterType.Float, DirectionOfHit.x);
             _AnimHandler.SetParameter("Wretched", "HurtDirectionY",
                               AnimatorControllerParameterType.Float, DirectionOfHit.y);
+            _AnimHandler.SetParameter("Wretched", "IsHurt", AnimatorControllerParameterType.Trigger);
+            
         }
     }
 
@@ -38,19 +41,12 @@ public class State_Wretch_Hurt : BaseState, IKnockback
     {
         if(pulse < _MinStateLifetime)
         {
-            print("Still hurting");
             pulse += Time.deltaTime;
             TO = null;
             return false;
         }
 
-        if(_Anim.GetCurrentAnimatorStateInfo(1).normalizedTime < 1)
-        {
-            print("havent finished my hurt animation");
-            TO = null;
-            return false;
-        }
-        print("no longer hurting");
+        _AnimHandler.SetParameter("Wretched", "IsHurtRecovered", AnimatorControllerParameterType.Trigger);
 
         // si podemos volver al estado anterior, regresamos al estado anterior
         if (stateMachine.LastState != null && stateMachine.LastState != this)
@@ -70,11 +66,14 @@ public class State_Wretch_Hurt : BaseState, IKnockback
     {
         pulse = 0;
         movementStrategy.KillAllMovement();
+        movementStrategy.SetActiveState(false);
+        CanTransition = false;
     }
 
     public override void OnExit(VisceralStateMachine CTX)
     {
         stateMachine.SetGlobalCondition("Hurt", false);
+        movementStrategy.SetActiveState(true);
         base.OnExit(CTX);
     }
 
@@ -100,7 +99,7 @@ public class State_Wretch_Hurt : BaseState, IKnockback
         {
             hpcomp.OnKnockbackTaken += ApplyKnockBack;
             hpcomp.OnDamaged += GotHurt;
-            hpcomp.OnDeath += Desubscribe;
+            hpcomp.OnDeath += Dead;
         }
         else 
         {
@@ -109,7 +108,7 @@ public class State_Wretch_Hurt : BaseState, IKnockback
             {
                 hp.OnKnockbackTaken += ApplyKnockBack;
                 hp.OnDamaged += GotHurt;
-                hp.OnDeath += Desubscribe;
+                hp.OnDeath += Dead;
             }
         }
 
@@ -125,18 +124,33 @@ public class State_Wretch_Hurt : BaseState, IKnockback
 
     }
 
+    private void Dead()
+    {
+        _Anim.enabled = false;
+
+        this.enabled = false;
+        movementStrategy.SetActiveState(false);
+        ragDollTimer.enabled = true;
+    }
+
     private void GotHurt()
     {
         stateMachine.SetGlobalCondition("Hurt", true);
     }
-    private void Desubscribe()
-    {
-        this.enabled= false;
-    }
-
-
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
-        base.OnTick(CTX, TickRate);
+
+        if (_Anim.GetCurrentAnimatorStateInfo(1).normalizedTime < 0.9f)
+        {
+            print("Havent finished");
+            CanTransition = false;
+            return;
+        }
+        else
+        {
+            CanTransition = true;
+        }
+
+
     }
 }

@@ -60,6 +60,7 @@ public class State_WretchAttack : BaseState
     {
         _FinishedAttack = false;
         pulse = 0;
+        _MovementStrategy.KillAllMovement();
     }
 
     public override void OnInitialize(VisceralStateMachine CTX)

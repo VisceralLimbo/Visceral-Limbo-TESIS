@@ -4116,7 +4116,7 @@ Transform:
   m_GameObject: {fileID: 955462768}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.024}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4294,11 +4294,11 @@ MonoBehaviour:
     PlayOnAwake: 0
     SpatialBlend: 1
     IsFrequent: 0
-  CurrentHealth: 20
-  MaxHealth: 20
+  CurrentHealth: 50
+  MaxHealth: 50
   _RB: {fileID: 0}
   DestroyOnDeath: 0
-  DesactivateOnDeath: 1
+  DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 1532154244}
 --- !u!54 &955462777
@@ -5476,6 +5476,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 167025165}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1248843688 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6670135137569344894, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
+    type: 3}
+  m_PrefabInstance: {fileID: 167025165}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cea55b9e6a3cec545a429fd6762105a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1278127996
 GameObject:
   m_ObjectHideFlags: 0
@@ -7701,9 +7713,11 @@ MonoBehaviour:
     _FromGO: {fileID: 1865016700}
     _ToGO: {fileID: 1400652796}
     _ShouldTransitionWithNoConditions: 1
-  _MinStateLifetime: 1.5
+  _MinStateLifetime: 0.3
   _AnimHandler: {fileID: 0}
+  ragDollTimer: {fileID: 1248843688}
   KnockBackResistance: 1
+  CanTransition: 0
 --- !u!1 &1901718841
 GameObject:
   m_ObjectHideFlags: 0
@@ -8250,6 +8264,13 @@ MonoBehaviour:
     _ToGO: {fileID: 1865016700}
     _ShouldTransitionWithNoConditions: 0
   - conditions:
+    - ConditionName: Melee
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 2060039337}
+    _ToGO: {fileID: 472015003}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
     - ConditionName: Moving
       Value: 0
       IsResetAfterSwitch: 0
@@ -8730,6 +8751,46 @@ PrefabInstance:
       propertyPath: _uiElementToMove
       value: 
       objectReference: {fileID: 417480762}
+    - target: {fileID: 1762061369327758656, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: Inventory.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037849703779783899, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: FloatStatList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037849703779783899, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: FloatStatList.Array.data[1].StatID
+      value: MaxDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037849703779783899, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: FloatStatList.Array.data[1].BaseValueFloat
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037849703779783899, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: FloatStatList.Array.data[0].ModifiersList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037849703779783899, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: FloatStatList.Array.data[1].ModifiersList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037849703779783899, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: FloatStatList.Array.data[0].ModifiersList.Array.data[0].ModType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037849703779783899, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: FloatStatList.Array.data[1].ModifiersList.Array.data[0].ModifierValueFloat
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4039303074304250013, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: m_Name

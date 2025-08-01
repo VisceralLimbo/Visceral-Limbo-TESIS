@@ -43,6 +43,30 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
                 }
             }
         }
+
+        if(Model.TryGetComponent(out Health_Component HP))
+        {
+
+            HP.OnDeath += OnDeath;
+            print("death subscription");
+        }
+        else
+        {
+           if(this.TryGetComponent(out Health_Component _HP))
+            {
+                _HP.OnDeath += OnDeath;
+                print("death subscription");
+            }
+        }
+    }
+
+    private void OnDeath()
+    {
+        print("walk death");
+        _KCC.CharacterController = null;
+        _KCC.Capsule.enabled = false;
+        _KCC.enabled = false;  
+        this.enabled = false;
     }
 
     public void UpdateVelocity(Vector3 Target)
@@ -79,17 +103,19 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     void ICharacterController.UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
     {
 
-        // bail! we are inactive or movement is kil
-        if (!_IsActive || _KillAllMovement)
+        // bail!
+        if (!_IsActive)
         {
-            _KCC.ForceUnground(0.5f);
-            _KillAllMovement = false;
             currentVelocity = Vector3.zero;
-
             return;
         }
 
-     
+        if (_KillAllMovement)
+        {
+            currentVelocity = Vector3.zero; // no movement
+            return;
+        }
+
         // we are on stable ground
         if (_KCC.GroundingStatus.IsStableOnGround)
         {
@@ -117,6 +143,9 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
             currentVelocity = new Vector3(Physics.gravity.x, Physics.gravity.y, Physics.gravity.z);
             print("im free falling");
         }
+
+
+
 
         // we applied external velocity
         if(_AddExternalVelocity.sqrMagnitude > 0.1f)
@@ -160,6 +189,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     void ICharacterController.AfterCharacterUpdate(float deltaTime)
     {
         _AddExternalVelocity = Vector3.zero;
+        _KillAllMovement = false;
 
     }
 

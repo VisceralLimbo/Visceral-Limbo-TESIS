@@ -88,7 +88,6 @@ public class Player_MeleeAttack : Visceral_Script
         _PlayerInputs = PlayerInputs;
         if (PlayerInputs.SustainedLeftMouseClick && _HasFinishedAttack)
         {
-            print("running data");
             AnimatorSelector(); // selector de animaciones
             AttackHandle(); //ataque
         }
@@ -104,27 +103,26 @@ public class Player_MeleeAttack : Visceral_Script
         if(value == Vector2.left)
         {
             CurrentCombo = AttackDictionary["Left"];
-            print("left attack");
+
         }
         else if(value == Vector2.right)
         {
             CurrentCombo = AttackDictionary["Right"];
-            print("right attack");
+         
         }
         else if(value == Vector2.up)
         {
             CurrentCombo = AttackDictionary["Up"];
-            print("up attack");
+
         }
         else if(value == Vector2.down)
         {
             CurrentCombo = AttackDictionary["Down"];
-            print("down attack");
+         
         }
         else
         {
             CurrentCombo = AttackDictionary["Left"];
-            print("default attack");
         }
     } // funcion de seleccion de animaciones de ataque
 
@@ -148,7 +146,7 @@ public class Player_MeleeAttack : Visceral_Script
         _Anim.SetTrigger("StartAttack");
         _AnimHandler.SetParameter("Weapon", "StartAttack", AnimatorControllerParameterType.Trigger);
         //_AnimHandler.ResetAllTriggers("Weapon");
-        print("attack trigger!");
+    
 
         float animationLength = 0f;
         foreach (var clip in WeaponAnim.runtimeAnimatorController.animationClips)
@@ -200,7 +198,7 @@ public class Player_MeleeAttack : Visceral_Script
 
             //unlock de funcion
             _HasFinishedAttack= true;
-            print("player has finished attacking");
+           
         }
 
     }
@@ -210,13 +208,13 @@ public class Player_MeleeAttack : Visceral_Script
     void sheateWeapon()
     {
         _Weapon.gameObject.SetActive(false);
-        print("sheating weapon");
+
     }
 
     void UnsheateWeapon()
     {
         _Weapon.gameObject.SetActive(true);
-        print("unsheating weapon");
+
     }
 
 
