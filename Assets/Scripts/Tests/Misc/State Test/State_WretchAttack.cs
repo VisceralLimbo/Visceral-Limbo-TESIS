@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
+using UnityEngine.Events;
 
 
 public class State_WretchAttack : BaseState
@@ -17,6 +18,8 @@ public class State_WretchAttack : BaseState
     [SerializeField] bool _FinishedAttack;
     [SerializeField] float _AttackMovementStrenght;
 
+    [Header("Events")]
+    public UnityEvent OnChargeAttackStart,OnChargeAttackEnd;
 
 
     float pulse = 0;
@@ -54,6 +57,7 @@ public class State_WretchAttack : BaseState
         Dir.Normalize();
         _MovementStrategy.KillAllMovement();
         _MovementStrategy.ApplyExternalForce(Dir, _AttackMovementStrenght);
+        OnChargeAttackStart?.Invoke();
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -61,6 +65,7 @@ public class State_WretchAttack : BaseState
         _FinishedAttack = false;
         pulse = 0;
         _MovementStrategy.KillAllMovement();
+        OnChargeAttackEnd?.Invoke();
     }
 
     public override void OnInitialize(VisceralStateMachine CTX)

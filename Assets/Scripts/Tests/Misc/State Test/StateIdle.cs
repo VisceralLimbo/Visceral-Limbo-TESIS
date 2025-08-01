@@ -15,6 +15,8 @@ public class StateIdle : BaseState
     {
         base.OnInitialize(CTX);
         movementStrategy = CTX.gameObject.GetComponentInChildren<IMovementStrategy>();
+        _target = FindObjectOfType<Player_Movement>().gameObject.transform;
+        _User = CTX.transform;
     }
 
 

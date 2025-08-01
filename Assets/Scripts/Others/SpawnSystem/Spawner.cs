@@ -69,12 +69,14 @@ public class Spawner : MonoBehaviour
             Index++;
             var NextEnemy = EnemyGenerator.Current;
 
-            var InstantiatedEnemy = Instantiate(NextEnemy);
-            var DumbEnemySC = InstantiatedEnemy.GetComponent<DumbEnemy>();
-
-            DumbEnemySC.SetPlayerReference(Player);
-            DumbEnemySC.SetTransformAndRotation(this.transform, this.transform.rotation);
-
+            var InstantiatedEnemy = Instantiate(NextEnemy,transform.position,transform.rotation);
+            //var DumbEnemySC = InstantiatedEnemy.GetComponent<DumbEnemy>();
+            if(InstantiatedEnemy.TryGetComponent(out DumbEnemy DumbEnemySC))
+            {
+                DumbEnemySC.SetPlayerReference(Player);
+                DumbEnemySC.SetTransformAndRotation(this.transform, this.transform.rotation);
+            }
+       
             EnemySpawnedHP = InstantiatedEnemy.GetComponent<Health_Component>();
             if (EnemySpawnedHP == null) EnemySpawnedHP = InstantiatedEnemy.GetComponentInChildren<Health_Component>();
             EnemySpawnedHP.OnDeath += MyMinionDied;
