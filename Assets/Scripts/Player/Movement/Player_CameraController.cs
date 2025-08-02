@@ -13,7 +13,7 @@ public class Player_CameraController : Visceral_Script
     private Vector3 _EulerAngles;
 
     [Range(0f, 10f)]
-    public float sensitivity = 4f;
+    public float sensitivity;
 
     [SerializeField] private Transform _CameraAnchor;
 

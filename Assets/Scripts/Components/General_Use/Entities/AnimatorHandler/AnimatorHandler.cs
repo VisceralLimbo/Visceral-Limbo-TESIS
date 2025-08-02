@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.EventSystems.EventTrigger;
+using System.Linq;
 
 public class AnimatorHandler : MonoBehaviour
 {
@@ -46,6 +47,12 @@ public class AnimatorHandler : MonoBehaviour
     /// <returns></returns>
     public bool TryGetAnimator(string Animatorkey, out Animator animator)
     {
+        if(!isActiveAndEnabled || !this.gameObject.activeInHierarchy)
+        {
+            animator = null;
+            return false;
+        }
+
         animator = null;
 
         if (AnimatorDictionary.TryGetValue(Animatorkey,out AnimatorEntry ANIM))
@@ -66,7 +73,12 @@ public class AnimatorHandler : MonoBehaviour
     /// <param name="value"> valor que se quiere settear</param>
     public void SetParameter(string Animatorkey,string parameterName,AnimatorControllerParameterType Type, object value = null)
     {
-        if(!AnimatorDictionary.ContainsKey(Animatorkey))
+        if (!isActiveAndEnabled || !this.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
+        if (!AnimatorDictionary.ContainsKey(Animatorkey))
         {
             Debug.LogError("<Color=Color.blue> Visceral Error: the specified key:" + Animatorkey +
                            " doesnt exist on " + this.name + " please check key</Color>");
@@ -123,7 +135,12 @@ public class AnimatorHandler : MonoBehaviour
     /// <param name="ParameterName">nombre del parametro trigger que se desea resetear</param>
     public void ResetTrigger(string AnimatorKey, string ParameterName)
     {
-        if(AnimatorDictionary.TryGetValue(AnimatorKey,out AnimatorEntry ANIMEntry))
+        if (!isActiveAndEnabled || !this.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
+        if (AnimatorDictionary.TryGetValue(AnimatorKey,out AnimatorEntry ANIMEntry))
         {
             var ANIM = ANIMEntry.AnimatorController;
 
@@ -142,7 +159,12 @@ public class AnimatorHandler : MonoBehaviour
 
     public void ResetAllTriggers(string AnimatorKey)
     {
-        if(AnimatorDictionary.TryGetValue(AnimatorKey, out AnimatorEntry ANIMEntry))
+        if (!isActiveAndEnabled || !this.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
+        if (AnimatorDictionary.TryGetValue(AnimatorKey, out AnimatorEntry ANIMEntry))
         {
             Animator ANIM = ANIMEntry.AnimatorController;
 
@@ -160,7 +182,12 @@ public class AnimatorHandler : MonoBehaviour
 
     private bool HasParameter(Animator ANIM, string ParamName, AnimatorControllerParameterType? type = null )
     {
-        foreach(var param in ANIM.parameters)
+        if (!isActiveAndEnabled || !this.gameObject.activeInHierarchy)
+        {
+            return false;
+        }
+
+        foreach (var param in ANIM.parameters)
         {
             if (param.name == ParamName&&(!type.HasValue ||param.type == type.Value) ) return true;     
         }

@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a8693eccfaff7d41bc2484dc46ce464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 0.4
+  sensitivity: 5
   _CameraAnchor: {fileID: 2131751515235602231}
   _Base: {fileID: 0}
 --- !u!1 &2740337010980209942
@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 2414886674968126972}
   - component: {fileID: 103244012193870917}
   - component: {fileID: 2681906435257575226}
+  - component: {fileID: 3192022336288905773}
   m_Layer: 6
   m_Name: PlayerModel
   m_TagString: Player
@@ -408,6 +409,21 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 388799400367065248}
+--- !u!114 &3192022336288905773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740337010980209942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d6368eca891fd04484d56f26aad3c62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimatorsData:
+  - AnimatorController: {fileID: 5187437129201242308}
+    ID: Weapon
 --- !u!1 &3383968953081563100
 GameObject:
   m_ObjectHideFlags: 0
@@ -5561,6 +5577,7 @@ GameObject:
   - component: {fileID: 1762061369327758656}
   - component: {fileID: 2037849703779783899}
   - component: {fileID: 822650225700030981}
+  - component: {fileID: 6323216962684899046}
   m_Layer: 6
   m_Name: PlayerObj
   m_TagString: Player
@@ -5621,19 +5638,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eda4e6aa45496b4996efb6257c439a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SwordCombo:
-  - {fileID: 11400000, guid: 35ed17a8e870f6441b646875a8fdbcc9, type: 2}
-  - {fileID: 11400000, guid: e5f7f3e3b8156df429ec6b8debedc017, type: 2}
-  - {fileID: 11400000, guid: 35ed17a8e870f6441b646875a8fdbcc9, type: 2}
-  - {fileID: 11400000, guid: e5f7f3e3b8156df429ec6b8debedc017, type: 2}
-  - {fileID: 11400000, guid: 35ed17a8e870f6441b646875a8fdbcc9, type: 2}
-  _LastClickedTime: 0
-  _LastComboEnd: 0
+  _AnimHandler: {fileID: 3192022336288905773}
+  _Weapon: {fileID: 3955182697425849597}
+  soundData:
+  - Clip: {fileID: 8300000, guid: a2d450b1fbc9f754ab5d23e07a22fce6, type: 3}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 0
+    IsFrequent: 0
+  Left_SwordAttacks:
+  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
+  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
+  Right_SwordAttacks:
+  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
+  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
+  UP_SwordAttacks:
+  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
+  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
+  Down_SwordAttacks:
+  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
+  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
   _ComboCounter: 0
-  _TimeBetweenCombos: 6
-  _TimebetweenAttacks: 1.25
-  _Anim: {fileID: 0}
-  _Weapon: {fileID: 0}
+  _HasFinishedAttack: 1
+  AttackSpeedMod: 1
+  _SwordRenderer: {fileID: 2067340445956617589}
+  shaderFloatName: _FresnelGradientBlend
+  chargeThreshold: 1.5
+  blendSpeed: 10
+  swordTrail: {fileID: 4379551313293247924}
+  swordTrail2: {fileID: 4865900512392978035}
 --- !u!114 &8523669415137956118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5669,7 +5703,7 @@ MonoBehaviour:
   chargeThreshold: 1
   blendSpeed: 10
   swordTrail: {fileID: 4379551313293247924}
-  swordTrail2: {fileID: 7369332838516201995}
+  swordTrail2: {fileID: 4865900512392978035}
 --- !u!114 &388799400367065248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5758,6 +5792,19 @@ MonoBehaviour:
   AnimatorsData:
   - AnimatorController: {fileID: 5187437129201242308}
     ID: PlayerWeapon
+--- !u!114 &6323216962684899046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039303074304250013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2599de03cc78cf744a1271b09065dcd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volume: {fileID: 0}
 --- !u!1 &4847287270814997606
 GameObject:
   m_ObjectHideFlags: 0
@@ -11991,6 +12038,12 @@ TrailRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 9101332607105092001}
   m_PrefabAsset: {fileID: 0}
+--- !u!96 &4865900512392978035 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 4452172673669060562, guid: cebdca4ffead60c4baa37160e9676ba3,
+    type: 3}
+  m_PrefabInstance: {fileID: 9101332607105092001}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &5187437129201242308 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 4157692567877294437, guid: cebdca4ffead60c4baa37160e9676ba3,
@@ -12000,12 +12053,6 @@ Animator:
 --- !u!4 &7053529714273726511 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2282557751187962254, guid: cebdca4ffead60c4baa37160e9676ba3,
-    type: 3}
-  m_PrefabInstance: {fileID: 9101332607105092001}
-  m_PrefabAsset: {fileID: 0}
---- !u!96 &7369332838516201995 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 1732563028392334250, guid: cebdca4ffead60c4baa37160e9676ba3,
     type: 3}
   m_PrefabInstance: {fileID: 9101332607105092001}
   m_PrefabAsset: {fileID: 0}

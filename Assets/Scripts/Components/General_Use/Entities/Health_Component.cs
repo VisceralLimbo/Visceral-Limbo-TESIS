@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 
 public class Health_Component : Visceral_Component
 {
@@ -14,8 +15,11 @@ public class Health_Component : Visceral_Component
     public PlayerContext Context { get { return _Context; } }
 
     public event Action OnDeath, OnDamaged;
+    public event Action<Vector3, float> OnKnockbackTaken;
 
     //public ParticleSystem bloodParticles;
+
+ 
 
     private void Start()
     {
@@ -70,7 +74,7 @@ public class Health_Component : Visceral_Component
         if (Died) return;
 
         CurrentHealth -= damage;
-        CameraShake.instance.ShakeCamera(0.1f, 0.5f); // shake de la camara
+        CameraShake.instance.ShakeCamera(0.1f, 0.2f); // shake de la camara
         OnDamaged?.Invoke();
 
         if (soundData != null)
@@ -78,21 +82,20 @@ public class Health_Component : Visceral_Component
             PlaySounds(); // feedback de sonidos
         }
 
-        // Knockback logic remains unchanged
-        if (KnockbarDir.HasValue && _Context?.knockback != null)
+        
+        // better implementation, why the F should the HPComp even know whats knockbackeable
+        // use a public Event, that way the HPComp doenst know who needs it
+        // seriously, why pato? - patoh
+        if( OnKnockbackTaken != null && KnockbarDir.HasValue)
         {
-            _Context.knockback.ApplyKnockBack(KnockbarDir.Value, force);
-        }
-        else if (KnockbarDir.HasValue && _Context?.KCCMotor?.AttachedRigidbody != null)
-        {
-            print(_Context.PlayerGameObject + "recieving knockback");
-            _Context.KCCMotor.AttachedRigidbody.AddForce(KnockbarDir.Value * force, ForceMode.Impulse);
+            OnKnockbackTaken.Invoke(KnockbarDir.Value, force);
         }
         else if (KnockbarDir.HasValue && _RB != null)
         {
             print("rigidbody recieving knockback");
             _RB.AddForce(KnockbarDir.Value * force, ForceMode.Impulse);
         }
+
 
         if (CurrentHealth <= 0f && _Context != null && Score != null && Score.Attacker != null)
         {
@@ -103,12 +106,17 @@ public class Health_Component : Visceral_Component
             if (ScoreManager.Instance != null)
                 ScoreManager.Instance.ProcessKill(FinalScore);
             OnDeath?.Invoke();
+
+            HitStop.Stop(1f, 0.35f); //el segundo valor cambia el pitch de la musica y sonidos
+            FindObjectOfType<HitStopEffectController>()?.ApplyEffect(1f, 0.8f); //intensidad es el primer numero, el otro es la duracion
+
             if (DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
             if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);
         }
         else if (CurrentHealth <= 0f)
         {
             OnDeath?.Invoke();
+
             Died = true;
             if (_Context == null)
             {
