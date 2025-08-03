@@ -10,14 +10,20 @@ public class HitStopEffectController : MonoBehaviour
 
     private void Awake()
     {
-        volume.profile.TryGet(out chromatic);
+        if(volume != null)
+        {
+            volume.profile.TryGet(out chromatic);
+        }
 
     }
 
     public void ApplyEffect(float chromaIntensity, float duration)
     {
-        StopAllCoroutines();
-        StartCoroutine(EffectRoutine(chromaIntensity, duration));
+        if(volume != null && chromatic != null)
+        {
+            StopAllCoroutines();
+            StartCoroutine(EffectRoutine(chromaIntensity, duration));
+        }
     }
 
     private System.Collections.IEnumerator EffectRoutine(float chromaIntensity, float duration)
