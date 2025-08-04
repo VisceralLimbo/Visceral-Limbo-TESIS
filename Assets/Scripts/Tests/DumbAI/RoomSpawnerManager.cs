@@ -26,6 +26,7 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private float _StartingCombatScore;
     [SerializeField] private float _AddExtraRequiredScore;
 
+    [SerializeField] private List<FireballTrap> trapsInThisRoom;
 
     public event System.Action OnCombatEnded;
 
@@ -34,6 +35,11 @@ public class RoomSpawnerManager : MonoBehaviour
         if(Spawners.Length <= 0)
         {
             Spawners = GetComponentsInChildren<Spawner>();
+        }
+
+        if (trapsInThisRoom.Count == 0)
+        {
+            trapsInThisRoom = GetComponentsInChildren<FireballTrap>().ToList();
         }
     }
 
@@ -55,6 +61,11 @@ public class RoomSpawnerManager : MonoBehaviour
     public void StartRoomCombat()
     {
         _animatorObjective.SetTrigger("StartCombat");
+
+        foreach (var trap in trapsInThisRoom)
+        {
+            trap.ActivateTrap();
+        }
     }
 
     //evento de que murio un minion
@@ -100,6 +111,10 @@ public class RoomSpawnerManager : MonoBehaviour
             }
 
             StopThisManager = true;
+            foreach (var trap in trapsInThisRoom)
+            {
+                trap.DeactivateTrap();
+            }
             audioSource.Play();
 
             _animatorObjective.SetTrigger("EndCombat");
