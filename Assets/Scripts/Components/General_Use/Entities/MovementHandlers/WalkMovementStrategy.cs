@@ -159,29 +159,18 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     void ICharacterController.UpdateRotation(ref Quaternion currentRotation, float deltaTime)
     {
-        //sentido adelante
-        var forward = Vector3.ProjectOnPlane(
-                vector: _TargetVelocity,
-                _KCC.CharacterUp
+
+            //sentido adelante
+            var forward = Vector3.ProjectOnPlane(
+                    vector: _TargetVelocity,
+                    _KCC.CharacterUp
 
 
-            );
-        /*if (forward.sqrMagnitude > 0.01f)  //evitar que rote por milesimas
-        {
-            //rotacion deseada
-            var TargetRotation = Quaternion.LookRotation(forward, _KCC.CharacterUp);
-
-            currentRotation = Quaternion.RotateTowards(
-                currentRotation,
-                TargetRotation,
-                _MaxRotationSpeed * Time.deltaTime
                 );
-        }*/
 
-        var TargetRotation = Quaternion.LookRotation(forward,_KCC.CharacterUp);
+            var CalculatedRotation = Quaternion.LookRotation(forward, _KCC.CharacterUp);
 
-        currentRotation = TargetRotation;
-
+            currentRotation = CalculatedRotation;
 
     }
 
@@ -190,6 +179,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     {
         _AddExternalVelocity = Vector3.zero;
         _KillAllMovement = false;
+        _TargetRotation = Quaternion.identity;
 
     }
 
