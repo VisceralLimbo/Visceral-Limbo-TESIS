@@ -7,17 +7,38 @@ public class RagDollTimer : MonoBehaviour
     [SerializeField] float _RagDollDuration;
     [SerializeField] Rigidbody _RootRigid;
     [SerializeField] RagdollBoneRetarget[] _ragdollBoneRetargeters;
+    [SerializeField] string AnimatorKey;
+
     public Rigidbody RootRigid { get { return _RootRigid; } }
 
 
     private void Start()
     {
         _ragdollBoneRetargeters = GetComponentsInChildren<RagdollBoneRetarget>(true);
+        Health_Component HPComp = GetComponentInParent<Health_Component>();
+        HPComp.OnDeath += StartRagdolling;
+    }
+
+    private void StartRagdolling()
+    {
+        AnimatorHandler animatorHandler = GetComponent<AnimatorHandler>();
+        if(animatorHandler == null)
+        {
+            animatorHandler= GetComponentInParent<AnimatorHandler>();
+            
+        }
+        if(animatorHandler.TryGetAnimator(AnimatorKey, out Animator anim))
+        {
+            anim.enabled = false;
+        }
+
+
+
         StartCoroutine(DestroySelf());
 
-        if(_ragdollBoneRetargeters.Length > 0)
+        if (_ragdollBoneRetargeters.Length > 0)
         {
-            foreach(var rag in _ragdollBoneRetargeters)
+            foreach (var rag in _ragdollBoneRetargeters)
             {
                 rag.ActivateRagDoll();
             }
