@@ -7,6 +7,7 @@ public class RagdollBoneRetarget : MonoBehaviour
     [SerializeField] Transform VisualBone;
     [SerializeField] Vector3 Offset;
     [SerializeField] Rigidbody _RB;
+    [SerializeField] bool change;
 
     private void Awake()
     {
@@ -29,15 +30,23 @@ public class RagdollBoneRetarget : MonoBehaviour
         this.enabled= true;
         _RB.isKinematic = false;
         Offset = VisualBone.position - this.transform.position;
+        this.gameObject.SetActive(true);
+        change = true;
     }
 
 
     private void LateUpdate()
     {
+        if (change)
+        {
+            VisualBone.transform.position = transform.position + Offset;
+            VisualBone.transform.rotation = transform.rotation;
 
-        VisualBone.transform.position = transform.position + Offset;
-        VisualBone.transform.rotation = transform.rotation;
-
+        }
+        else
+        {
+            this.enabled = false;
+        }
 
     }
 

@@ -69,9 +69,8 @@ public class Decayed_Attack : BaseState
 
         float targetDistance = Vector3.Distance(_Target.position, _KCC.Capsule.transform.position);
 
-        var rotation = Quaternion.LookRotation(TargetDirection, _KCC.CharacterUp);
+        _MovementStrategy.UpdateRotation(TargetDirection);
 
-        _MovementStrategy.UpdateRotation(rotation);
         //check! el enemigo esta muy cerca
         if(_SafeSpace > targetDistance)
         {

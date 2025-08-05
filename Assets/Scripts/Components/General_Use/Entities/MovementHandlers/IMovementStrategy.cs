@@ -8,7 +8,7 @@ public interface IMovementStrategy
     public void Initialize(KinematicCharacterMotor _kcc, GameObject Model);
 
     public void UpdateVelocity(Vector3 Target);
-    public void UpdateRotation(Quaternion Target);
+    public void UpdateRotation(Vector3 Target);
 
     public void SetActiveState(bool setActive);
 

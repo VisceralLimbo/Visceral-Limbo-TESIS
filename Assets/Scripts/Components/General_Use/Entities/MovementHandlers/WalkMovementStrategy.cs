@@ -12,7 +12,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     [Header("Variables")]
     [SerializeField] Vector3 _TargetVelocity;
-    [SerializeField] Quaternion _TargetRotation;
+    [SerializeField] Vector3? _TargetRotation;
     [SerializeField] bool _IsActive,_KillAllMovement;
     [SerializeField] float _MovementSpeed;
     [SerializeField] float _MovementAccel;
@@ -73,7 +73,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     {
        _TargetVelocity = Target;
     }
-    public void UpdateRotation(Quaternion Target)
+    public void UpdateRotation(Vector3 Target)
     {
         _TargetRotation = Target;
     }
@@ -159,6 +159,21 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     void ICharacterController.UpdateRotation(ref Quaternion currentRotation, float deltaTime)
     {
+        if (_TargetRotation.HasValue)
+        {
+            var Calculatedforward = Vector3.ProjectOnPlane(
+                   vector: _TargetRotation.Value,
+                   _KCC.CharacterUp
+
+
+               );
+
+            var Rotation = Quaternion.LookRotation(Calculatedforward, _KCC.CharacterUp);
+
+            currentRotation = Rotation;
+            return;
+        }
+
 
             //sentido adelante
             var forward = Vector3.ProjectOnPlane(
@@ -179,7 +194,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     {
         _AddExternalVelocity = Vector3.zero;
         _KillAllMovement = false;
-        _TargetRotation = Quaternion.identity;
+        _TargetRotation = null;
 
     }
 

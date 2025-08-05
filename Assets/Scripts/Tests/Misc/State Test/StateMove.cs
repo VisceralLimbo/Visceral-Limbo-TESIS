@@ -81,11 +81,8 @@ public class StateMove : BaseState
         }
 
         Vector3 TargetDirection = _Target.transform.position - _KCC.Capsule.transform.position;
-        Quaternion LookRotation = _KCC.Capsule.transform.rotation;
 
         _MovementStrategy.UpdateVelocity(TargetDirection);
-        _MovementStrategy.UpdateRotation(LookRotation);
-
 
         if(_AnimatorHandler != null)
         {
