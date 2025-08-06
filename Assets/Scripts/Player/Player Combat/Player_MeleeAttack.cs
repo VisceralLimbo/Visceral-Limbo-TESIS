@@ -86,13 +86,14 @@ public class Player_MeleeAttack : Visceral_Script
     public void RunData(InputMovement PlayerInputs)
     {
         _PlayerInputs = PlayerInputs;
+
         if (PlayerInputs.SustainedLeftMouseClick && _HasFinishedAttack)
         {
-            print("running data");
             AnimatorSelector(); // selector de animaciones
             AttackHandle(); //ataque
         }
-        if(_Anim != null && !_HasFinishedAttack)
+
+        if((_Anim != null && !_HasFinishedAttack))
         {
             FinishAttack();
         }
@@ -104,27 +105,26 @@ public class Player_MeleeAttack : Visceral_Script
         if(value == Vector2.left)
         {
             CurrentCombo = AttackDictionary["Left"];
-            print("left attack");
+
         }
         else if(value == Vector2.right)
         {
             CurrentCombo = AttackDictionary["Right"];
-            print("right attack");
+
         }
         else if(value == Vector2.up)
         {
             CurrentCombo = AttackDictionary["Up"];
-            print("up attack");
+
         }
         else if(value == Vector2.down)
         {
             CurrentCombo = AttackDictionary["Down"];
-            print("down attack");
+
         }
         else
         {
             CurrentCombo = AttackDictionary["Left"];
-            print("default attack");
         }
     } // funcion de seleccion de animaciones de ataque
 
@@ -145,7 +145,6 @@ public class Player_MeleeAttack : Visceral_Script
         _Anim = WeaponAnim;
 
         //set de trigger
-        _Anim.SetTrigger("StartAttack");
         _AnimHandler.SetParameter("Weapon", "StartAttack", AnimatorControllerParameterType.Trigger);
         //_AnimHandler.ResetAllTriggers("Weapon");
         print("attack trigger!");
@@ -188,7 +187,7 @@ public class Player_MeleeAttack : Visceral_Script
 
     public void FinishAttack()
     {
-        if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack") && _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)
+        if (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)
         {
             _Weapon.StopAttacking();
             //_Anim.SetTrigger("AttackTrigger");
@@ -200,7 +199,6 @@ public class Player_MeleeAttack : Visceral_Script
 
             //unlock de funcion
             _HasFinishedAttack = true;
-            print("player has finished attacking");
         }
 
     }

@@ -40,7 +40,9 @@ public class Decayed_Attack : BaseState
         _TargetIsTooClose = false;
         _TargetIsTooFar = false;
         stateMachine.SetGlobalCondition("Moving", false);
+        _AnimHandler.SetParameter("Decayed", "Idle", AnimatorControllerParameterType.Trigger);
         _MovementStrategy.KillAllMovement();
+        pulse = 0;
 
     }
 
@@ -58,7 +60,7 @@ public class Decayed_Attack : BaseState
         _MovementStrategy = stateMachine.GetComponentInChildren<IMovementStrategy>();
     }
 
-    float pulse;
+    float pulse = 0;
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
         // matar movimiento del personaje restante (entre updates)
@@ -74,6 +76,7 @@ public class Decayed_Attack : BaseState
         //check! el enemigo esta muy cerca
         if(_SafeSpace > targetDistance)
         {
+            print("Target too close");
             // salir del estado
             _TargetIsTooClose = true;
             return;
@@ -82,6 +85,7 @@ public class Decayed_Attack : BaseState
         // segundo check, el enemigo esta muy lejos
         else if(_FarAway < targetDistance)
         {
+            print("Target too Far");
             _TargetIsTooFar = true;
             return;
         }
@@ -108,13 +112,15 @@ public class Decayed_Attack : BaseState
             // chequeo si termino la animacion actual
             if(Anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)
             {
+                pulse = 0;
+                var correctTarget = _Target.transform.position + Vector3.up;
                 //apuntado al player
-                _BulletSpawnPoint.LookAt(_Target, _KCC.CharacterUp);
+                _BulletSpawnPoint.LookAt(correctTarget, _KCC.CharacterUp);
 
                 // instanciado de bala
                 var bullet =Instantiate(_BulletPrefab, _BulletSpawnPoint.position, _BulletSpawnPoint.rotation);
                 bullet.GetComponent<BulletDumb>().SetOwner(CTX.gameObject, CTX.GetComponent<PlayerContext>());
-                pulse = 0;
+           
             }
         }
     

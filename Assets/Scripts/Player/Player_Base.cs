@@ -126,7 +126,11 @@ public class Player_Base : Visceral_Script
             //_MeleeAttack.RunData(movementInput);
             //_ChargedMeleeCombat.VS_Runlogic(movementInput);
             _MeleeAttack.VS_Runlogic(movementInput);
-            ActivateSkills(movementInput);
+
+            if(!movementInput.SustainedLeftMouseClick && !movementInput.LeftMouseClick)
+            {
+                ActivateSkills(movementInput);
+            }
         }
 
         if (_uiElementToMove != null)

@@ -53,7 +53,6 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         Weapon.Damage = Damage;
         Weapon.Attacking();
 
-
         yield return new WaitForSeconds(SkillDuration);
         while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
         {
@@ -63,6 +62,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         _Anim.speed = 1.0f;
         Weapon.StopAttacking();
         SoundManager.Instance.ReturnToPool(_SoundEmit);
+        StopAllCoroutines();
     }
 
 
