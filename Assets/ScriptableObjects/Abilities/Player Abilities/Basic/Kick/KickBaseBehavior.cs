@@ -13,7 +13,7 @@ public class KickBaseBehavior : Visceral_SkillLogic
 
     [Space]
     [Header("Variables")]
-    [SerializeField] float KickRange, KickRadius,KickStrenght;
+    [SerializeField] float KickRange, KickRadius,KickStrenght,KickDamage;
     [SerializeField] Vector3 PlayerDirector;
 
     [Space]
@@ -74,7 +74,7 @@ public class KickBaseBehavior : Visceral_SkillLogic
             {
                 DamageScore DMG = new DamageScore()
                 {
-                    DamageAmount = 0,
+                    DamageAmount = KickDamage,
                     Attacker = _UserContext,
                     ElementalDamage = ElementType.Physical,
                     FactionID = _UserContext.faction,

@@ -142,7 +142,6 @@ public class State_Wretch_Hurt : BaseState, IKnockback
 
         if (_Anim.GetCurrentAnimatorStateInfo(1).normalizedTime < 0.9f)
         {
-            print("Havent finished");
             CanTransition = false;
             return;
         }
