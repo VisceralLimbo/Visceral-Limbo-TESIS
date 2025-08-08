@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3514927230207140960}
   - component: {fileID: 891115132177748603}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: State - Hurt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,7 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1637789011107365831}
   - component: {fileID: 7930172695561420689}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: State - Move
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 4091262336931204975}
   - component: {fileID: 4746130255494018027}
   - component: {fileID: 4654570009590822600}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 'Wretched '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2396486691347343484}
   - component: {fileID: 4563711927287464760}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: State - Idle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,7 +282,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3376497035797695434}
   - component: {fileID: 8712699911459687716}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: State - Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +375,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8493371771134585519}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: States
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -573,7 +573,6 @@ MonoBehaviour:
   _Model: {fileID: 8001548354247194868}
   _RB: {fileID: 3048824881661905011}
   _TargetVelocity: {x: 0, y: 0, z: 0}
-  _TargetRotation: {x: 0, y: 0, z: 0, w: 0}
   _IsActive: 1
   _KillAllMovement: 0
   _MovementSpeed: 10
@@ -723,6 +722,9 @@ MonoBehaviour:
   _knockback: 1
   _DelayBetweenAttacksInsideCollider: 3
   _Active: 0
+  _Masks:
+    serializedVersion: 2
+    m_Bits: 1408
 --- !u!1001 &5159153372301179167
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -834,7 +836,7 @@ PrefabInstance:
     - target: {fileID: 1264720366236456687, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
         type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1277822481266523855, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
         type: 3}
@@ -1184,7 +1186,7 @@ PrefabInstance:
     - target: {fileID: 7638000494025179098, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
         type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7688630700742019670, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
         type: 3}
@@ -1214,7 +1216,7 @@ PrefabInstance:
     - target: {fileID: 8201727600979335179, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
         type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8210991426986971193, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
         type: 3}

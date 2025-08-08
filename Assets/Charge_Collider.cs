@@ -14,6 +14,7 @@ public class Charge_Collider : Visceral_Script
     [SerializeField] float _ChargeDamage,_BiteDamage,_knockback;
     [SerializeField] float _DelayBetweenAttacksInsideCollider;
     [SerializeField] bool _Active;
+    public LayerMask _Masks;
 
 
 
@@ -40,12 +41,29 @@ public class Charge_Collider : Visceral_Script
             if (OtherContext.faction == _OwnerContext.faction) return;
             if (OtherContext.PlayerGameObject== _OwnerGameObject) return;
             if (OtherContext.name == _OwnerContext.name) return;
-        }
 
-        //guardo gameobject de mi target
-        _TargetGameObject = other.gameObject;
-        DealDamage(_TargetGameObject,_ChargeDamage);
-        StartCoroutine(PlayerInsideRadius());
+
+            //guardo gameobject de mi target
+            _TargetGameObject = other.gameObject;
+            DealDamage(_TargetGameObject, _ChargeDamage);
+            StartCoroutine(PlayerInsideRadius());
+        }
+        else
+        {
+            //chequeamos parents
+            var comp = other.GetComponentInParent<PlayerContext>();
+            if (comp == null) return;
+
+            if (comp.faction == _OwnerContext.faction) return;
+            if (comp.PlayerGameObject == _OwnerGameObject) return;
+            if (comp.name == _OwnerContext.name) return;
+
+
+            //guardo gameobject de mi target
+            _TargetGameObject = other.gameObject;
+            DealDamage(_TargetGameObject, _ChargeDamage);
+            StartCoroutine(PlayerInsideRadius());
+        } 
     }
 
     /// <summary>
