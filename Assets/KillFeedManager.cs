@@ -38,6 +38,7 @@ public static class KillFeedManager
             ScoreFlags.Overkill => "+OVERKILL!",
             ScoreFlags.Airkill => "+ASCENDED!",
             ScoreFlags.TrapKill => "+TRAPPED!",
+            ScoreFlags.Explosion => "+GIBBLETS!",
             ScoreFlags.Friendlyfire => "+FRIENDLY FIRE!",
             ScoreFlags.Skill1Kill => "+SKILLED ON!",
             ScoreFlags.Skill2Kill => "+2 SKILLED 4 U!",

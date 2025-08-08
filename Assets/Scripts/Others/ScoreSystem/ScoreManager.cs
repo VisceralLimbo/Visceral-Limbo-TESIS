@@ -65,9 +65,14 @@ public class ScoreManager : MonoBehaviour
             FinalScore += DamageData.Overkill;
         }
 
-        if (DamageData.IsTagged(ScoreFlags.TrapKill))
+        if (DamageData.IsTagged(ScoreFlags.TrapKill) && !DamageData.IsTagged(ScoreFlags.Explosion))
         {
-            FinalScore += FriendlyFireExtra * 1.25f;
+            FinalScore += FriendlyFireExtra * 0.8f;
+        }
+
+        if (DamageData.IsTagged(ScoreFlags.Explosion))
+        {
+            FinalScore += FriendlyFireExtra * 1.2f;
         }
 
         if (DamageData.IsTagged(ScoreFlags.Skill1Kill))

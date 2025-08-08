@@ -75,8 +75,8 @@ public class Fireball : MonoBehaviour, IParriable
             DamageDT.Attacker = OwnerContext;
             DamageDT.DamageAmount = damage;
             DamageDT.Victim = collision.gameObject.GetComponent<PlayerContext>();
-            DamageDT.ElementalDamage = ElementType.Physical;
-            DamageDT.FactionID = FactionID.LimboMonster1;
+            DamageDT.ElementalDamage = ElementType.Fire;
+            DamageDT.FactionID = OwnerContext.faction;
             if (_Parried) DamageDT.AddTag(ScoreFlags.Parried);
 
             if (HPComp.Context == null) { HPComp.SimpleDamage(damage); return; }

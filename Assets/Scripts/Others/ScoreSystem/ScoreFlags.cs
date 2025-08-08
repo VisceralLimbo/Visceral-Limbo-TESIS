@@ -13,6 +13,6 @@ public enum ScoreFlags
    Skill1Kill = 1 << 4,
    Skill2Kill = 1 << 5,
    Parried = 1 << 6,
-
+   Explosion = 1 << 7,
 
 }

@@ -134,8 +134,10 @@ public class ExplosiveBarrel : MonoBehaviour
             DamageDT.DamageAmount = damage;
             DamageDT.ElementalDamage = ElementType.Fire;
             DamageDT.FactionID = _Context.faction;
+            DamageDT.ScoreTags = ScoreFlags.Explosion;
 
             enemy.TakeDamageWithKnockback(damageTuple.Item1, damageTuple.Item3, DamageDT);
+
         }
 
         print(filteredTargets.Count);
