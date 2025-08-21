@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
     }
     public void PlayGame()
     {
-        SceneManager.LoadScene(1 );
+        Debug.Log("empezar juego");
+        SceneManager.LoadScene(1);
     }
     public void Options(GameObject option)
     {
