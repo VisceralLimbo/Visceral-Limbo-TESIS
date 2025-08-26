@@ -418,6 +418,7 @@ GameObject:
   - component: {fileID: 790518200079803162}
   - component: {fileID: 6444098374858578681}
   - component: {fileID: 3048824881661905011}
+  - component: {fileID: 217527386099731018}
   m_Layer: 7
   m_Name: Enemy Model
   m_TagString: Untagged
@@ -646,6 +647,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &217527386099731018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8001548354247194868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c0a2fd80011bb943ae00e137dfb420b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthDropPrefab: {fileID: 3817642482250439011, guid: 183145047360c7e4bb6186c3b68e528e,
+    type: 3}
+  dropChance: 1
+  dropOffset: {x: 0, y: 0.5, z: 0}
 --- !u!1 &8872006745843749271
 GameObject:
   m_ObjectHideFlags: 0
