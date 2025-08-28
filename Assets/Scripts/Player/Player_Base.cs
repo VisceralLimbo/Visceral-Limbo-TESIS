@@ -13,7 +13,8 @@ using System;
 
 public class Player_Base : Visceral_Script
 {
-    [SerializeField] private InputStruct _MovementInput, _CameraInput;
+    public InputStruct _MovementInput { get; private set; }
+    public InputStruct _CameraInput { get; private set; }
     [SerializeField] private Player_Movement _Player_Movement;
     [SerializeField] private Player_CameraController _Player_CameraController;
     [SerializeField] private Player_DashTest _DashTest;
@@ -23,9 +24,13 @@ public class Player_Base : Visceral_Script
     [SerializeField] private bool IsAlive = true, OnDialogue;
     public PlayerContext _PlayerContext;
     public Health_Component _PlayerHealth { get; private set; }
+
+
     //PlayerInputActions es el mappeo de las acciones de Input del jugador
     //similar al Unreal con su Input Map
-    private PlayerInputActions _Player_InputActions;
+
+    //WHAT A FUCKING HACK, HAY QUE REWORKEAR TODO ESTO!!!
+    public PlayerInputActions _Player_InputActions { get; private set; }
 
     public Action OnPlayerSkillUse;
 
@@ -170,6 +175,11 @@ public class Player_Base : Visceral_Script
         if(Inputs.Kick)
         {
             _SkillManager.TryUseSkill("Kick");
+            OnPlayerSkillUse?.Invoke();
+        }
+        if (Inputs.Ability_Support)
+        {
+            _SkillManager.TryUseSkill("Support");
             OnPlayerSkillUse?.Invoke();
         }
 

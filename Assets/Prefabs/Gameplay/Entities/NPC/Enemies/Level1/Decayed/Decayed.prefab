@@ -1329,6 +1329,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 654523660457676002}
+    - targetCorrespondingSourceObject: {fileID: 755006634252184373, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4931502303470382893}
   m_SourcePrefab: {fileID: 100100000, guid: 918355dba35195b43a4d585c3294065f, type: 3}
 --- !u!54 &803523319314982515 stripped
 Rigidbody:
@@ -1423,7 +1427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cea55b9e6a3cec545a429fd6762105a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _RagDollDuration: 1000
+  _RagDollDuration: 10
   _RootRigid: {fileID: 5575079529834396044}
   _ragdollBoneRetargeters: []
   AnimatorKey: 
@@ -1442,6 +1446,25 @@ MonoBehaviour:
   AnimatorsData:
   - AnimatorController: {fileID: 2065031101127850324}
     ID: Decayed
+--- !u!114 &4931502303470382893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5509629881334152842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49facc866bd71c743bd73bc01c92fa21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _AnimHandler: {fileID: 0}
+  _HPComp: {fileID: 0}
+  KnockBackResistance: 1
+  _AnimatorKey: Decayed
+  _HurtTriggerParam: Hurt
+  _HurtDirectionX: HurtDirectionX
+  _HurtDirectionY: HurtDirectionY
 --- !u!54 &5575079529834396044 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 815952992094268467, guid: 918355dba35195b43a4d585c3294065f,

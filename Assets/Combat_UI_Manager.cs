@@ -58,7 +58,7 @@ public class Combat_UI_Manager : MonoBehaviour
             case "Ultimate":
                 _CooldownSliders[2].value = currentCooldown;
                 break;
-            case "UtilSkill":
+            case "Support":
                 _CooldownSliders[3].value = currentCooldown;
                 break;
             default: break;

@@ -45,6 +45,10 @@ public static class DamageScoreBuilder
             Score.AddTag(ScoreFlags.Friendlyfire);
         }
 
+        if(Score.Attacker.faction == FactionID.LimboTrap)
+        {
+            Score.AddTag(ScoreFlags.TrapKill);
+        }
 
         //añadir aqui futuros tags
 

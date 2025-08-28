@@ -131,6 +131,35 @@ public class Health_Component : Visceral_Component
         }
     }
 
+
+    /// <summary>
+    /// Funcion para curar al Componente
+    /// </summary>
+    /// <param name="ExtraHP">valor de curacion</param>
+    /// <param name="OverHeal">Si esta curacion puede curar más que la vida maxima.
+    /// si esta en falso,la vida sera clampeada a la maxima salud posible</param>
+    public void HealHP(float ExtraHP,bool OverHeal = false)
+    {
+        if (OverHeal)
+        {
+            CurrentHealth += ExtraHP;
+        }
+        else
+        {
+            CurrentHealth += ExtraHP;
+            if(CurrentHealth > MaxHealth)
+            {
+                CurrentHealth = MaxHealth;
+            }
+        }
+
+
+        if(_Context.faction == FactionID.Player)
+        {
+            updateHealthBar();
+        }
+    }
+
     void PlaySounds()
     {
         if (soundData == null || Context == null) return;
