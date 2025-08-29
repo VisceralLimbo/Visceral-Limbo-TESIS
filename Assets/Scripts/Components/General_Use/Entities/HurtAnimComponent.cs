@@ -42,7 +42,6 @@ public class HurtAnimComponent : MonoBehaviour,IKnockback
     {
         print("kNOCKBACKED");
         DirectionOfHit = KnockbackDir;
-        DirectionOfHit.Normalize();
         ForceOfHit = Force;
         ForceOfHit = ForceOfHit / KnockBackResistance;
 

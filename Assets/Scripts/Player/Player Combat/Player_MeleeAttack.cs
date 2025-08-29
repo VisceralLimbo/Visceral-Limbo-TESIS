@@ -89,11 +89,13 @@ public class Player_MeleeAttack : Visceral_Script
 
         if (PlayerInputs.SustainedLeftMouseClick && _HasFinishedAttack)
         {
+            print("perform attack");
+            _HasFinishedAttack = false;
             AnimatorSelector(); // selector de animaciones
             AttackHandle(); //ataque
+            
         }
-
-        if((_Anim != null && !_HasFinishedAttack))
+        else if((_Anim != null && !_HasFinishedAttack))
         {
             FinishAttack();
         }
