@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 
-public static class HitStop
+public static class SlowMotion
 { 
 
     private class HitStopRunner: MonoBehaviour { }

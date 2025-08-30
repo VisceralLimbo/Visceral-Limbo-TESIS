@@ -65,7 +65,7 @@ public class ExplosiveBarrel : MonoBehaviour
 
         Kaboom();
 
-        CameraShake.instance.ShakeCamera(1f, 1f); // shake de la camara
+        CameraShake.instance.ShakeCamera(0.75f, 1f, ShakeType.AllDirections);
     }
 
     private void Kaboom()
