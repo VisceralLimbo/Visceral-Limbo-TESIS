@@ -46,6 +46,11 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    public void ResetScoreText()
+    {
+        ScoreText.text = "0";
+    }
+
 
     public void ProcessKill(DamageScore DamageData)
     {

@@ -11,7 +11,6 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private List<RoomEnterTrigger> roomTriggers;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private DialogueData _finishCombatDialogue;
-    [SerializeField] GameObject _reward;
     [SerializeField] Transform _spawnPointReward;
     [SerializeField] SoundData _spawnSound,_rewardSound;
     [SerializeField] private Animator _animatorObjective;
@@ -66,6 +65,10 @@ public class RoomSpawnerManager : MonoBehaviour
         {
             trap.ActivateTrap();
         }
+
+        //reseteamos el TEXTO de puntuacion, el valor de la misma sigue siendo igual
+        ScoreManager.Instance.ResetScoreText();
+
     }
 
     //evento de que murio un minion
@@ -85,12 +88,7 @@ public class RoomSpawnerManager : MonoBehaviour
             SlowMotion.Stop(1f, 0.35f); //el segundo valor cambia el pitch de la musica y sonidos
             FindObjectOfType<SlowMotionController>()?.ApplyEffect(1f, 0.6f); //intensidad es el primer numero, el otro es la duracion
 
-            /* foreach (var item in Spawners)
-             {
-                item.SetPlayerIndex(playerContext);
-
-                item.SpawnEnemy();
-             }*/
+          
 
             //comenzar la coroutina de spawneo
             StartCoroutine(SpawnCoroutine());
@@ -129,9 +127,12 @@ public class RoomSpawnerManager : MonoBehaviour
 
             // la sala tiene reward y la puntuacion final del jugador
             // es mayor a la requerida X sala
-            if (_reward != null && ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
+
+
+            if (ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
             {
-                Instantiate(_reward, _spawnPointReward.transform.position, Quaternion.identity);
+               
+
 
                 SoundManager.Instance.CreateSound().
                     WithSoundData(_rewardSound).
