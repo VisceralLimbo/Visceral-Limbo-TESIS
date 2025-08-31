@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum ShakeType
+{
+    AllDirections,
+    Vertical,
+    Horizontal
+}
 
 public class CameraShake : MonoBehaviour
 {
-    public Transform playerCam;
+    public Transform shakePivot;
 
     public static CameraShake instance;
 
@@ -15,39 +21,63 @@ public class CameraShake : MonoBehaviour
     }
 
 
-    public void ShakeCamera(float duration, float shakeSize)
+    public void ShakeCamera(float duration, float shakeSize, ShakeType shakeType = ShakeType.AllDirections)
     {
-        StartCoroutine(Shake(duration, shakeSize));
+        StartCoroutine(Shake(duration, shakeSize, shakeType));
     }
 
-    public IEnumerator Shake(float duration, float shakeSize)
+    public IEnumerator Shake(float duration, float shakeSize, ShakeType shakeType)
     {
-        float elapsedTime = 0f;
+        float elapsed = 0f;
+        Vector3 originalPosition = shakePivot.localPosition;
 
-        Vector3 originalPosition = playerCam.localPosition;
 
-        while(elapsedTime < duration)
+        Vector3 target = originalPosition;
+        float changeInterval = 0.05f; // cada 0.05s cambia el destino
+        float timer = 0f;
+
+
+
+        while (elapsed < duration)
         {
-            float x = Random.Range(-1f, 1f) * shakeSize;
-            float y = Random.Range(-1f, 1f) * shakeSize;
+            timer += Time.deltaTime;
 
-            Vector3 pos = new Vector3(x, y, originalPosition.z);
-            playerCam.localPosition = Vector3.Lerp(playerCam.localPosition, pos, Time.deltaTime * 5f);
+            if (timer >= changeInterval)
+            {
+                float x = 0f, y = 0f;
 
-            elapsedTime += Time.deltaTime;
+                switch (shakeType)
+                {
+                    case ShakeType.AllDirections:
+                        x = Random.Range(-1f, 1f) * shakeSize;
+                        y = Random.Range(-1f, 1f) * shakeSize;
+                        break;
+                    case ShakeType.Vertical:
+                        y = Random.Range(-1f, 1f) * shakeSize;
+                        break;
+                    case ShakeType.Horizontal:
+                        x = Random.Range(-1f, 1f) * shakeSize;
+                        break;
+                }
 
+                target = new Vector3(x, y, originalPosition.z);
+                timer = 0f;
+            }
+
+            // interpolación suave hacia el target
+            shakePivot.localPosition = Vector3.Lerp(shakePivot.localPosition, target, Time.deltaTime * 10f);
+
+            elapsed += Time.deltaTime;
             yield return null;
         }
 
-        while (Vector3.Distance(originalPosition, playerCam.localPosition) > 0.01f)
+
+        while (Vector3.Distance(originalPosition, shakePivot.localPosition) > 0.01f)
         {
-
-            playerCam.localPosition = Vector3.Lerp(playerCam.localPosition, originalPosition, Time.deltaTime * 2f);
-
+            shakePivot.localPosition = Vector3.Lerp(shakePivot.localPosition, originalPosition, Time.deltaTime * 5f);
             yield return null;
-
         }
 
-        playerCam.localPosition = originalPosition; 
+        shakePivot.localPosition = originalPosition;
     }
 }

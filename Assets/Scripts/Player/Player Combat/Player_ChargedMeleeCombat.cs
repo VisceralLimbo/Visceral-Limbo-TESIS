@@ -70,30 +70,29 @@ public class Player_ChargedMeleeCombat : Visceral_Script
 
         if (PlayerInputs.SustainedLeftMouseClick && !_Anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
         {
-            _ChargeAmount += Time.deltaTime; 
-            if(_ChargeAmount> _MaximumCharge)
+            _ChargeAmount += Time.deltaTime;
+            if (_ChargeAmount > _MaximumCharge)
             {
-                _ChargeAmount= _MaximumCharge;
+                _ChargeAmount = _MaximumCharge;
             }
 
             _Anim.SetFloat("ChargeMod", 1);
             _Anim.SetTrigger("ChargeUp");
             _Anim.ResetTrigger("Skill1Trigger");
 
-            var shakestrenght= _ChargeAmount / _MaximumCharge * 0.15f ;
+            
 
-            CameraShake.instance.ShakeCamera(0.05f, shakestrenght);
         }
         else
         {
             _ChargeAmount -= Time.deltaTime;
             _Anim.SetFloat("ChargeMod", -1);
-            if (_ChargeAmount <= 0) 
+            if (_ChargeAmount <= 0)
             {
                 _ChargeAmount = 0;
                 _Anim.SetTrigger("CancelAttack");
                 _Anim.ResetTrigger("ChargeUp"); _Anim.ResetTrigger("ChargeRelease"); _Anim.ResetTrigger("AttackTrigger");
-            } 
+            }
         }
 
         if(_ChargeAmount > _MinimunToAttack && PlayerInputs.ReleasedLeftMouseClick)

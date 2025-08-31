@@ -108,6 +108,7 @@ public class Player_MeleeAttack : Visceral_Script
         {
             CurrentCombo = AttackDictionary["Left"];
 
+
         }
         else if(value == Vector2.right)
         {
@@ -117,6 +118,8 @@ public class Player_MeleeAttack : Visceral_Script
         else if(value == Vector2.up)
         {
             CurrentCombo = AttackDictionary["Up"];
+
+            CameraShake.instance.ShakeCamera(0.5f, 0.5f, ShakeType.Vertical);
 
         }
         else if(value == Vector2.down)
