@@ -187,7 +187,7 @@ MonoBehaviour:
   - ConditionName: Attack
     Value: 0
     IsResetAfterSwitch: 1
-  _HPComp: {fileID: 6420154744659008690}
+  _HPComp: {fileID: 0}
 --- !u!114 &7768544437872115800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,9 +218,10 @@ GameObject:
   - component: {fileID: 1662371530970778147}
   - component: {fileID: 6254113549136613432}
   - component: {fileID: 4127429350620703609}
-  - component: {fileID: 6420154744659008690}
   - component: {fileID: 840766648683490720}
   - component: {fileID: 7459543254969404063}
+  - component: {fileID: 8353474706175351458}
+  - component: {fileID: 2882315107161635345}
   m_Layer: 7
   m_Name: Decayed Model
   m_TagString: Untagged
@@ -311,32 +312,6 @@ MonoBehaviour:
   CheckMovementInitialOverlaps: 1
   KillVelocityWhenExceedMaxMovementIterations: 1
   KillRemainingMovementWhenExceedMaxMovementIterations: 1
---- !u!114 &6420154744659008690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5296925727539463049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 472673f96eb08914996d06c926556dcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  soundData:
-    Clip: {fileID: 8300000, guid: 7be4d6739cc99064b8e7e358c93c403e, type: 3}
-    mixerGroup: {fileID: 0}
-    Loop: 0
-    PlayOnAwake: 0
-    SpatialBlend: 1
-    IsFrequent: 1
-  CurrentHealth: 30
-  MaxHealth: 30
-  _RB: {fileID: 7459543254969404063}
-  DestroyOnDeath: 0
-  DesactivateOnDeath: 0
-  Died: 0
-  _Context: {fileID: 7768544437872115800}
 --- !u!114 &840766648683490720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,6 +360,46 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8353474706175351458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5296925727539463049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cf79737eb409cc40af24dd4770fe0a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundData:
+    Clip: {fileID: 8300000, guid: 7be4d6739cc99064b8e7e358c93c403e, type: 3}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 1
+  CurrentHealth: 30
+  MaxHealth: 30
+  _RB: {fileID: 0}
+  DestroyOnDeath: 0
+  DesactivateOnDeath: 0
+  Died: 0
+  _Context: {fileID: 7768544437872115800}
+--- !u!114 &2882315107161635345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5296925727539463049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 685d4f8a757bf7b4ca153d0f76d95ff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rend: {fileID: 8059655785188596884}
+  flashDuration: 0.35
 --- !u!1 &5509668419067739157
 GameObject:
   m_ObjectHideFlags: 0
@@ -1489,6 +1504,12 @@ Rigidbody:
     type: 3}
   m_PrefabInstance: {fileID: 5047534244673787327}
   m_PrefabAsset: {fileID: 0}
+--- !u!137 &8059655785188596884 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3014552586673981739, guid: 918355dba35195b43a4d585c3294065f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5047534244673787327}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7032028219657345025
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1497,11 +1518,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1662371530970778147}
     m_Modifications:
-    - target: {fileID: 3665748875050823484, guid: 1cbde343ab5779a4e8368d393da22337,
-        type: 3}
-      propertyPath: health
-      value: 
-      objectReference: {fileID: 6420154744659008690}
     - target: {fileID: 4611328800601888442, guid: 1cbde343ab5779a4e8368d393da22337,
         type: 3}
       propertyPath: m_Name
