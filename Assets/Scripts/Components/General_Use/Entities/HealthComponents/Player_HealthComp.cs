@@ -20,7 +20,8 @@ public class Player_HealthComp : Health_Component
         _RB = GetComponent<Rigidbody>();
         _Context = GetComponentInParent<PlayerContext>();
 
-       OnDamaged += updateHealthBar;
+        OnDamaged += updateHealthBar;
+        
 
     }
 

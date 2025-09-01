@@ -14,6 +14,7 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] Transform _spawnPointReward;
     [SerializeField] SoundData _spawnSound,_rewardSound;
     [SerializeField] private Animator _animatorObjective;
+    [SerializeField] private GameObject _reward;
 
     [Space]
     [Header("Variables")]
@@ -131,8 +132,9 @@ public class RoomSpawnerManager : MonoBehaviour
 
             if (ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
             {
-               
-
+                Instantiate(_reward, _spawnPointReward.transform.position, _spawnPointReward.transform.rotation);
+                BloodEchoesManager.AddBloodEchoes(500);
+                print(BloodEchoesManager.BloodEchoes);
 
                 SoundManager.Instance.CreateSound().
                     WithSoundData(_rewardSound).
