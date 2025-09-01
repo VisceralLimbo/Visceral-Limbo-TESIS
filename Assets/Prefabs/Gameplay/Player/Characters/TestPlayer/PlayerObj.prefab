@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 103244012193870917}
   - component: {fileID: 3192022336288905773}
   - component: {fileID: 8379972921328494493}
+  - component: {fileID: 3388075606135687695}
   m_Layer: 6
   m_Name: PlayerModel
   m_TagString: Player
@@ -418,12 +419,24 @@ MonoBehaviour:
     SpatialBlend: 1
     IsFrequent: 0
   CurrentHealth: 0
-  MaxHealth: 100
+  MaxHealth: 200
   _RB: {fileID: 103244012193870917}
   DestroyOnDeath: 0
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 388799400367065248}
+--- !u!114 &3388075606135687695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740337010980209942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29c54b5a38f43164bab0fc0879355b61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3383968953081563100
 GameObject:
   m_ObjectHideFlags: 0

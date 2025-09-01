@@ -65,7 +65,6 @@ public class SwordTest : Visceral_WeaponBase
         
         HPComp.TakeDamageWithKnockback(Dir,KnockBack,damageScore);
 
-        BloodScreenManager.Instance?.ShowRandomBloodSplash();
 
         SlowMotion.Stop(0.08f, 0.05f);
 
