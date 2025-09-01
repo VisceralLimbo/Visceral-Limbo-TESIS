@@ -738,4 +738,20 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     // ligera refactorizacion de movimiento del suelo
     //
     // comentarios : no estoy seguro si llego con melee para esta entrega
+
+    //boosts cuando agarro el item
+    public void AddSpeed(float walk, float crouch, float air)
+    {
+        _WalkSpeed += walk;
+        _CrouchSpeed += crouch;
+        _AirSpeed += air;
+    }
+
+    //funcion para setear las velocidades y respetar los statcks y modif desde statsmanager
+    public void SetWalkSpeed(float walkSpeed, float crouchSpeed, float airSpeed)
+    {
+        _WalkSpeed = walkSpeed;
+        _CrouchSpeed = crouchSpeed;
+        _AirSpeed = airSpeed;
+    }
 }
