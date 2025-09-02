@@ -14,17 +14,18 @@ public class TestItemLogic : ItemLogic
 
     }
 
-    public override void OnPickUp()
+    public override void OnPickUp() // ser agarrado
     {
         Inventory.AddItemStack(_ItemDefinition);
         Destroy(this.gameObject);
 
         // TO DO:
         // CHANGE THIS HACK!
+        // este hack es para curar de manera directa al player
 
         Health_Component _HP = Inventory.GetComponentInChildren<Health_Component>();
 
-        if(_HP != null)
+        if(_HP != null) 
         {
             _HP.HealHP(_HealHP, false);
         }
@@ -32,18 +33,18 @@ public class TestItemLogic : ItemLogic
     }
     public override void AddStack()
     {
-        if (ItemStacks == 0)
+        if (ItemStacks == 0) // nuevo stack
         {
-            var StatManager = _Context.Stats;
-            StatModifierFloat StatMod = new StatModifierFloat();
-            StatMod.ModifierValueFloat = _MaxHP;
-            StatMod.ModType = ModifierType.flat;
-            StatMod.EffectName = "TestItemLogicHealthUP";
-            StatMod.Source = this;
-            StatManager.UpdateFloatStatValue("MaxHealth", StatMod);
-            ItemStacks++;
+            var StatManager = _Context.Stats; // stat manager
+            StatModifierFloat StatMod = new StatModifierFloat(); // creamos un nuevo modificador de float
+            StatMod.ModifierValueFloat = _MaxHP; // seteamos el valor del modificador
+            StatMod.ModType = ModifierType.flat; // seteamos el tipo de suma del modificador
+            StatMod.EffectName = "TestItemLogicHealthUP"; // le damos un nombre al modificador (util para saber que esta afectand)
+            StatMod.Source = this; // el origen del modificador 
+            StatManager.UpdateFloatStatValue("MaxHealth", StatMod); // cambiamos el valor de la estadistica guardada en el statmanager
+            ItemStacks++; // sumamos un stack
         }
-        else if(ItemStacks >= 1)
+        else if(ItemStacks >= 1) // sumar stat
         {
             ItemStacks++;
             var StatManager = _Context.Stats;

@@ -164,6 +164,13 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     private CharacterState _TempState; //este state sirve de cache, para permitir guardar el state pasado y sobreescribirlo sin correr riesgo de necesitarlo en runtime
     public CharacterState CurrentState { get { return _CurrentState; } }
 
+    [Space]
+    [Header("Stat ID for StatManager")]
+    [SerializeField] private string _MovementStatID; // la ID de la estadistica de movimiento
+    [SerializeField] private string _AirSpeedStatID; // la ID de la estadistica de movimiento en el aire
+    [SerializeField] private string _CrouchSpeedStatID; // la ID de la estadistica de movimiento agachado
+
+
 
     private Collider[] _UncrouchOverlapColliders; // solo usado para detectar si estamos golpeando algo
 
@@ -190,6 +197,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     public bool IsMovementBlocked { get; set; } = false;
 
 
+    //start del player
     public override void VS_Initialize()
     {
         _KCCMotor.CharacterController = this;
@@ -202,6 +210,9 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         //llamadas
         DialogueManager.instance.OnDialogueStart += LockMovement;
         DialogueManager.instance.OnDialogueEnd += UnlockMovement;
+
+        StatsManager _StatMan = GetComponentInParent<StatsManager>();
+        _StatMan.OnStatChanged += UpdateStats; // nos suscribimos al evento de actualizacion de stats
     }
 
     /// <summary>
@@ -740,18 +751,18 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     // comentarios : no estoy seguro si llego con melee para esta entrega
 
     //boosts cuando agarro el item
-    public void AddSpeed(float walk, float crouch, float air)
+
+    //  funcionamiento, recibimos un string que comparamos con nuestros ID de stats.
+    // de ser correcto, setteamos el valor de la variable a cambiar al valor
+    private void UpdateStats(string statChanged,float value)
     {
-        _WalkSpeed += walk;
-        _CrouchSpeed += crouch;
-        _AirSpeed += air;
+        //air speed
+        if (statChanged == _AirSpeedStatID) _AirSpeed = value;
+        // movement speed
+        else if (statChanged == _MovementStatID) _WalkSpeed = value;
+        // crouch speed
+        else if (statChanged == _CrouchSpeedStatID) _CrouchSpeed = value;
     }
 
-    //funcion para setear las velocidades y respetar los statcks y modif desde statsmanager
-    public void SetWalkSpeed(float walkSpeed, float crouchSpeed, float airSpeed)
-    {
-        _WalkSpeed = walkSpeed;
-        _CrouchSpeed = crouchSpeed;
-        _AirSpeed = airSpeed;
-    }
+
 }

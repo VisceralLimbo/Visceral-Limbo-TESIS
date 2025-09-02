@@ -5,13 +5,11 @@ using static UnityEditor.Progress;
 
 public class SpeedItemLogic : ItemLogic
 {
-    //las variables que va a afectar el item xd mas claro no se (te mato pato 3 horas viendo el PlayerBase pensando que eso era la velocidad porque me dijiste que SI ERA) 
+    //las variables que va a afectar el item xd mas claro no se (te mato pato 3 horas viendo el PlayerBase pensando que eso era la velocidad porque me dijiste que SI ERA)
+    // lmao, lo siento xd - pato
     [SerializeField] private float walkSpeedBoost = 5f;
     [SerializeField] private float crouchSpeedBoost = 3f;
     [SerializeField] private float airSpeedBoost = 4f;
-
-    //ref de Player_Movement
-    private Player_Movement player;
 
     //el trigger nada mas q decir :p 
     private void OnTriggerEnter(Collider other)
@@ -24,8 +22,7 @@ public class SpeedItemLogic : ItemLogic
             {
                 _Context = context;
                 Inventory = context.Inventory;
-                //como player movement esta en player model y eso es hijo de player obj tengo q llamarlo asi 
-                player = context.GetComponentInChildren<Player_Movement>();
+                //como player movement esta en player model y eso es hijo de player obj tengo q llamarlo asi   
                 OnPickUp();
             }
         }
@@ -36,13 +33,8 @@ public class SpeedItemLogic : ItemLogic
         Inventory.AddItemStack(_ItemDefinition);
         Destroy(this.gameObject);
 
-        if (player == null)
-        {
-            return;
-        }
-
-        // aplico velocidad apenas agarro
-        player.AddSpeed(walkSpeedBoost, crouchSpeedBoost, airSpeedBoost);
+     
+        
     }
 
     public override void AddStack()
@@ -51,7 +43,7 @@ public class SpeedItemLogic : ItemLogic
         {
             var statManager = _Context.Stats;
 
-            StatModifierFloat statMod = new StatModifierFloat
+            StatModifierFloat statMod = new StatModifierFloat // stat modificador de movimiento
             {
                 ModifierValueFloat = walkSpeedBoost,
                 ModType = ModifierType.flat,
@@ -60,14 +52,30 @@ public class SpeedItemLogic : ItemLogic
             };
             statManager.UpdateFloatStatValue("WalkSpeed", statMod);
 
+            StatModifierFloat airMod = new StatModifierFloat // stat modificador de aire
+            {
+                ModifierValueFloat = airSpeedBoost,
+                ModType = ModifierType.flat,
+                EffectName = "SpeedItemJumpLogicBoost",
+                Source = this
+            };
+            statManager.UpdateFloatStatValue("AirSpeed",airMod);
+
+            StatModifierFloat CrouchMod = new StatModifierFloat // stat modificador de agachado
+            {
+                ModifierValueFloat = crouchSpeedBoost,
+                ModType = ModifierType.flat,
+                EffectName = "SpeedItemCrouchLogicBoost",
+                Source = this
+            };
+            statManager.UpdateFloatStatValue("CrouchSpeed", CrouchMod);
             ItemStacks++;
         }
         else if (ItemStacks >= 1)
         {
             ItemStacks++;
             var statManager = _Context.Stats;
-
-            StatModifierFloat statMod = new StatModifierFloat
+            StatModifierFloat statMod = new StatModifierFloat // stat modificador de movimiento
             {
                 ModifierValueFloat = walkSpeedBoost * ItemStacks,
                 ModType = ModifierType.flat,
@@ -75,6 +83,24 @@ public class SpeedItemLogic : ItemLogic
                 Source = this
             };
             statManager.UpdateFloatStatValue("WalkSpeed", statMod);
+
+            StatModifierFloat airMod = new StatModifierFloat // stat modificador de aire
+            {
+                ModifierValueFloat = airSpeedBoost * ItemStacks,
+                ModType = ModifierType.flat,
+                EffectName = "SpeedItemJumpLogicBoost",
+                Source = this
+            };
+            statManager.UpdateFloatStatValue("AirSpeed", airMod);
+
+            StatModifierFloat CrouchMod = new StatModifierFloat // stat modificador de agachado
+            {
+                ModifierValueFloat = crouchSpeedBoost * ItemStacks,
+                ModType = ModifierType.flat,
+                EffectName = "SpeedItemCrouchLogicBoost",
+                Source = this
+            };
+            statManager.UpdateFloatStatValue("CrouchSpeed", CrouchMod);
         }
     }
 
