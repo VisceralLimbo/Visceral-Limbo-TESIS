@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 7459543254969404063}
   - component: {fileID: 8353474706175351458}
   - component: {fileID: 2882315107161635345}
+  - component: {fileID: 2277065540204055716}
   m_Layer: 7
   m_Name: Decayed Model
   m_TagString: Untagged
@@ -400,6 +401,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rend: {fileID: 8059655785188596884}
   flashDuration: 0.35
+--- !u!114 &2277065540204055716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5296925727539463049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c0a2fd80011bb943ae00e137dfb420b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthDropPrefab: {fileID: 5905992647120320316, guid: ac2e132d58b9cde408aec08f6a9cf99c,
+    type: 3}
+  dropChance: 1
+  dropOffset: {x: 0, y: 0.2, z: 0}
 --- !u!1 &5509668419067739157
 GameObject:
   m_ObjectHideFlags: 0
