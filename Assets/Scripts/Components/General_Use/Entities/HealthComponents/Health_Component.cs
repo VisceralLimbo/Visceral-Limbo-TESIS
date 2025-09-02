@@ -15,12 +15,10 @@ public class Health_Component : Visceral_Component
     [SerializeField] protected PlayerContext _Context;
     public PlayerContext Context { get { return _Context; } }
 
-    public event Action OnDeath, OnDamaged;
+    public event Action OnDeath, OnDamaged, OnHealed; //agregue onhealed porque habia evento para todo menos para recibir cura xd
     public event Action<Vector3, float> OnKnockbackTaken;
 
     //public ParticleSystem bloodParticles;
-
- 
 
     private void Start()
     {
@@ -149,6 +147,8 @@ public class Health_Component : Visceral_Component
     /// si esta en falso,la vida sera clampeada a la maxima salud posible</param>
     public virtual void HealHP(float ExtraHP,bool OverHeal = false)
     {
+        float oldHP = CurrentHealth; // guardo la vida vieja por que si agarro la cura tendria una nueva
+
         if (OverHeal)
         {
             CurrentHealth += ExtraHP;
@@ -156,10 +156,16 @@ public class Health_Component : Visceral_Component
         else
         {
             CurrentHealth += ExtraHP;
-            if(CurrentHealth > MaxHealth)
+            if (CurrentHealth > MaxHealth)
             {
                 CurrentHealth = MaxHealth;
             }
+        }
+
+        // hago el evento si la vida actual es mayor que la vieja. (osea q recibio cura xd 1+1=2) lo hago por fuera del overheal porque si no se bugea 
+        if (CurrentHealth > oldHP)
+        {
+            OnHealed?.Invoke();
         }
     }
 

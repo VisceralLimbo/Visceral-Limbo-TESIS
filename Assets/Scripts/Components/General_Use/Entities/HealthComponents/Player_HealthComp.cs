@@ -21,13 +21,15 @@ public class Player_HealthComp : Health_Component
         _Context = GetComponentInParent<PlayerContext>();
 
         OnDamaged += updateHealthBar;
-        
-
+        OnHealed += updateHealthBar;  //se suscribe para curación igual q arriba para el damage xdxd
     }
 
     public override void HealHP(float ExtraHP, bool OverHeal = false)
     {
         base.HealHP(ExtraHP, OverHeal);
+
+        //esto es mas facil y te evitas el evento si no lo queres (es lo que haces en updatestatvalue) lo hice para seguir tu logica pero hace la q pinte 
+        //updateHealthBar();
     }
 
     public override void SimpleDamage(float Damage)
