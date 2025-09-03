@@ -99,7 +99,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
                     var DMScore = new DamageScore { Attacker = _UserContext };
                     DMScore.AddTag(ScoreFlags.Skill2Kill);
                     DMScore.AddTag(ScoreFlags.Parried);       
-                    SlowMotion.Stop(0.4f);
+                    SlowMotion.Stop(0.4f, 0.2f, true);
 
                 if(_ParryCoroutine != null)
                 {

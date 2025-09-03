@@ -86,7 +86,7 @@ public class RoomSpawnerManager : MonoBehaviour
             //spawnear otra oleada
             MusicManager.Instance?.PlayCombatMusic();
 
-            SlowMotion.Stop(1f, 0.35f); //el segundo valor cambia el pitch de la musica y sonidos
+            SlowMotion.Stop(1f, 0.35f, true); //el segundo valor cambia el pitch de la musica y sonidos
             FindObjectOfType<SlowMotionController>()?.ApplyEffect(1f, 0.6f); //intensidad es el primer numero, el otro es la duracion
 
           
