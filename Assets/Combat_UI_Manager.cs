@@ -30,6 +30,7 @@ public class Combat_UI_Manager : MonoBehaviour
     [SerializeField] VerticalLayoutGroup _layoutGroup;
     [SerializeField] GameObject _ScorePrefab;
     [SerializeField] Transform _LayoutGroupPosition;
+    [SerializeField] FloatingText _FloatingText;
     Queue<GameObject> _ScoreQueue = new Queue<GameObject>();
     [SerializeField] float _maximunEntries, _timeToClearEntry;
 
@@ -145,6 +146,17 @@ public class Combat_UI_Manager : MonoBehaviour
                 var PrefabText = _Prefab.GetComponentInChildren<TextMeshProUGUI>();
                 PrefabText.text = IndividualScore;
                 if (!_ScoreQueue.Contains(_Prefab)) _ScoreQueue.Enqueue(_Prefab);
+
+
+                // HAAACKKK!! 
+                // EL UI NO TENDRIA QUE SER QUIEN HAGA ESTO!!!
+                // DIOS QUE HORRIBLE VIOLACION DE TODO LO QUE ME ENSEÑARON EN LA FACU
+                // QUE CHATGPT SE AMPARE DE MIIIIIIIIIIIIIII  - pato
+                var _FloatingTextPrefav = Instantiate(_FloatingText._Prefab,
+                    DMScore.Victim.transform.position,
+                    DMScore.Victim.transform.rotation);
+
+                   _FloatingText.SetText(IndividualScore, Color.yellow);
             }
         }
 

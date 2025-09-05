@@ -11,15 +11,18 @@ public class ScoreManager : MonoBehaviour
     //to do: reemplazar por un GlobalBusCommunicator => un script que comunique todos los eventos, similar a un event manager
     public static ScoreManager Instance;
 
+    [Header("Variables")]
     [SerializeField] float AirKillExtra;
     [SerializeField] float FriendlyFireExtra;
     [SerializeField] float PlayerScore;
     [SerializeField] float Skill1ScoreBonus;
     [SerializeField] float Skill2ScoreBonus;
     [SerializeField] float ParryBonus;
+
+    [Header("References")]
     [SerializeField] TextMeshProUGUI ScoreText;
 
-    [Header("Desiere points")]
+    [Header("Desired points")]
     private List<float> milestoneThresholds = new List<float>();
     [SerializeField] AudioClip milestoneClip;
     private AudioSource audioSource;
@@ -38,6 +41,10 @@ public class ScoreManager : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
     }
 
+    /// <summary>
+    /// Registro de milestones 
+    /// </summary>
+    /// <param name="threshold"></param>
     public void RegisterMilestone(float threshold)
     {
         if (!milestoneThresholds.Contains(threshold))
@@ -52,29 +59,36 @@ public class ScoreManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Funcion de proceso de la muerte del NPC
+    /// </summary>
+    /// <param name="DamageData"></param>
     public void ProcessKill(DamageScore DamageData)
     {
-        if(DamageData.Victim == null|| DamageData.Attacker == null) return;
+        if(DamageData.Victim == null|| DamageData.Attacker == null) return; // no hay atacante o victima
 
-        if (DamageData.Victim == null || DamageData.Attacker == null) return;
 
-        float FinalScore = DamageData.EnemyScoreBase;
+        float FinalScore = DamageData.EnemyScoreBase; // creamos el valor base
 
-        if (DamageData.IsTagged(ScoreFlags.Airkill))
+        if (DamageData.IsTagged(ScoreFlags.Airkill)) // chequeamos si tenemos flag de airkill
         {
-            FinalScore += AirKillExtra;
+            FinalScore += AirKillExtra; //sumamos extra
         }
 
-        if (DamageData.IsTagged(ScoreFlags.Overkill))
+        if (DamageData.IsTagged(ScoreFlags.Overkill)) // chequeamos si tenemos flag de overkill
         {
-            FinalScore += DamageData.Overkill;
+            FinalScore += DamageData.Overkill; // sumamos overkill
         }
 
+        //chequeamos si tiene tag de muerte de trampa Y no tiene tag de daño explosivo
+        // en pocas palabras, los barriles estan excentos
         if (DamageData.IsTagged(ScoreFlags.TrapKill) && !DamageData.IsTagged(ScoreFlags.Explosion))
         {
-            FinalScore += FriendlyFireExtra * 0.8f;
+            FinalScore += FriendlyFireExtra * 0.8f; // hack: usamos el friendlyfire menos un valor
         }
 
+        // hack!: tecnicamente este flag puede ser levantado por cualquier source de daño explosivo
+        // pero solo el barril tiene la habilidad de levantar ese flag... yem
         if (DamageData.IsTagged(ScoreFlags.Explosion))
         {
             FinalScore += FriendlyFireExtra * 1.2f;
@@ -103,7 +117,7 @@ public class ScoreManager : MonoBehaviour
 
 
         PlayerScore += FinalScore;
-        ScoreText.text = PlayerScore.ToString();
+        ScoreText.text = PlayerScore.ToString(); // componemos el score
 
         for (int i = milestoneThresholds.Count - 1; i >= 0; i--)
         {
