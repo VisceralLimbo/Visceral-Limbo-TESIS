@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &789846053378413162
+--- !u!1 &1679387175240385900
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7748691150075437395}
-  - component: {fileID: 5224166401688052430}
-  - component: {fileID: 8074255358667639827}
-  - component: {fileID: 1790379729956263655}
+  - component: {fileID: 8470755053229340213}
+  - component: {fileID: 2536578731318098501}
+  - component: {fileID: 3880667055415593840}
   m_Layer: 9
   m_Name: LogsCombat
   m_TagString: Untagged
@@ -19,32 +18,32 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &7748691150075437395
+--- !u!224 &8470755053229340213
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 789846053378413162}
-  m_LocalRotation: {x: -0, y: -0.99997324, z: -0, w: -0.0073265433}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 1679387175240385900}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 869672297831445161}
   m_LocalEulerAnglesHint: {x: 0, y: -180.84, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 6.32, y: 0}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!23 &5224166401688052430
+--- !u!23 &2536578731318098501
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 789846053378413162}
+  m_GameObject: {fileID: 1679387175240385900}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -80,13 +79,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8074255358667639827
+--- !u!114 &3880667055415593840
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 789846053378413162}
+  m_GameObject: {fileID: 1679387175240385900}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
@@ -170,23 +169,56 @@ MonoBehaviour:
   _SortingLayerID: 0
   _SortingOrder: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 5224166401688052430}
+  m_renderer: {fileID: 2536578731318098501}
   m_maskType: 0
---- !u!114 &1790379729956263655
+--- !u!1 &8315751030954162110
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 869672297831445161}
+  - component: {fileID: 9004983313160215823}
+  m_Layer: 9
+  m_Name: NewLogCombat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &869672297831445161
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8315751030954162110}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.99997324, z: -0, w: -0.0073265433}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8470755053229340213}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9004983313160215823
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 789846053378413162}
+  m_GameObject: {fileID: 8315751030954162110}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27e7129ad0c587f4f9b00d1ed4297184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 1
-  lifeTime: 1
+  lifeTime: 3
   _MessageOverload: 
-  _Prefab: {fileID: 0}
-  _textmesh: {fileID: 0}
+  _Prefab: {fileID: 8315751030954162110}
+  _textmesh: {fileID: 3880667055415593840}
   _canvasGroup: {fileID: 0}

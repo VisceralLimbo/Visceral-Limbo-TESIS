@@ -16,12 +16,13 @@ public class FloatingText : MonoBehaviour
     [Header("References")]
     public GameObject _Prefab; // prefab a spawnear
 
-    [SerializeField] TextMeshProUGUI _textmesh;
+
+    [SerializeField] TextMeshPro _textmesh;
     [SerializeField] CanvasGroup _canvasGroup;
 
     private void Start()
     {
-        _textmesh = GetComponentInChildren<TextMeshProUGUI>();
+        _textmesh = GetComponentInChildren<TextMeshPro>();
         _canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
         if(_textmesh != null)
