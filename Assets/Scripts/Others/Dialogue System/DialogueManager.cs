@@ -66,7 +66,7 @@ public class DialogueManager : Visceral_Script
     {
         if (!_dialogueActive) return;
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (_IsTyping)
             {
