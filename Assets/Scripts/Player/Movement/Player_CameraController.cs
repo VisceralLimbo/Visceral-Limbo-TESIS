@@ -50,6 +50,12 @@ public class Player_CameraController : Visceral_Script
     /// <param name="inputData"></param>
     public void UpdateRotation(InputStruct inputData)
     {
+        // que no pueda rotar la camara cuando esta en pausa
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+
         _EulerAngles += new Vector3(-inputData.LookDelta.y, inputData.LookDelta.x) * sensitivity * Time.unscaledDeltaTime;
         _EulerAngles.x = Mathf.Clamp(_EulerAngles.x, -80, 80);
         transform.eulerAngles = _EulerAngles;
