@@ -141,7 +141,7 @@ public class Player_Base : Visceral_Script
         if (_uiElementToMove != null)
         {
             Vector2 targetPosition = _isTabPressed
-                ? _originalUIPosition + Vector2.up * moveAmount
+                ? _originalUIPosition + Vector2.left * moveAmount
                 : _originalUIPosition;
 
             _uiElementToMove.anchoredPosition = Vector2.Lerp(
