@@ -13,6 +13,7 @@ public static class SlowMotion
 
     private static bool Waiting;
 
+    public static float GlobalMultiplier = 1f; // para mantener el hardcodeo que hacen de que cada cosa tenga diferentes valores use un multipiclador 
 
     private static HitStopRunner Runner
     {
@@ -33,6 +34,9 @@ public static class SlowMotion
     public static void Stop(float duration, float slowdownFactor = 0.2f, bool affectAudio = true)
     {
         if (Waiting) return;
+
+        // entra el multi
+        duration *= GlobalMultiplier;
 
         slowdownFactor = Mathf.Clamp(slowdownFactor, 0.01f, 1f);
 

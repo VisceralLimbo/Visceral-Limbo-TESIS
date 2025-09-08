@@ -81,3 +81,10 @@ public class CameraShake : MonoBehaviour
         shakePivot.localPosition = originalPosition;
     }
 }
+
+//para darle la intencidad cree la clase estatica q era lo me habia pedido pato
+public static class CameraShakeIntensity
+{
+    public static float currentIntensity = 0.5f; // defau 0.5
+}
+

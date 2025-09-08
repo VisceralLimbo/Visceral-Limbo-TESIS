@@ -103,7 +103,8 @@ public class Player_MeleeAttack : Visceral_Script
 
     private void AnimatorSelector()
     {
-        Vector2 value= _PlayerInputs.Movement;
+        // ya no se hace camerashake cuando se pega
+        Vector2 value = _PlayerInputs.Movement;
         if(value == Vector2.left)
         {
             CurrentCombo = AttackDictionary["Left"];
@@ -118,8 +119,6 @@ public class Player_MeleeAttack : Visceral_Script
         else if(value == Vector2.up)
         {
             CurrentCombo = AttackDictionary["Up"];
-
-            CameraShake.instance.ShakeCamera(0.5f, 0.5f, ShakeType.Vertical);
 
         }
         else if(value == Vector2.down)

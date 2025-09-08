@@ -63,6 +63,11 @@ public class InventoryUIBehaviour : MonoBehaviour
             {
                 GMIDPrefab.GetComponent<Image>().sprite = Definition.ItemSprite;
             }
+
+            GMIDPrefab.GetComponent<RectTransform>().rotation = Quaternion.Euler(0, 0, 0);
+
+            
+            InventoryDic.Add(Definition, GMIDPrefab);
         }
 
 
