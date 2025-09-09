@@ -26,7 +26,8 @@ public class DungeonPart : MonoBehaviour
     /// El tipo de parte de mazmorra, usado para generar los pools de habitaciones
     /// </summary>
     [SerializeField]    
-    private DungeonPartType _Type;
+    private DungeonPartType _RoomType;
+    public DungeonPartType RoomType { get { return _RoomType; } }
 
     /// <summary>
     /// El tipo de "Fill" usado para tapar las salidas no usadas.

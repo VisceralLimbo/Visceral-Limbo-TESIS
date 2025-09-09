@@ -75,6 +75,7 @@ public class RoomSpawnerManager : MonoBehaviour
     //evento de que murio un minion
     public void NotifyMinionDeath()
     {
+        print("Murieron minions");
         if (StopThisManager) return; // manager apagado
 
         MinionsAlive = Spawners.Any(x => x.HasMinion); //chequeamos si los spawners tienen minions vivos

@@ -161,6 +161,7 @@ GameObject:
   - component: {fileID: 9070953200009587554}
   - component: {fileID: 4522663607637162043}
   - component: {fileID: 2720108056664274099}
+  - component: {fileID: 4507215781358888684}
   m_Layer: 11
   m_Name: RoomTest3
   m_TagString: Untagged
@@ -178,7 +179,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 911.27, y: 662.3336, z: -1531.6}
-  m_LocalScale: {x: 4.7361, y: 0.29253, z: 4.2769}
+  m_LocalScale: {x: 19.390068, y: 1.1976471, z: 17.510056}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8235693741975531076}
@@ -206,7 +207,7 @@ MonoBehaviour:
   _RoomLayerMask:
     serializedVersion: 2
     m_Bits: 2048
-  _Type: 0
+  _RoomType: 0
   _WallFill: {fileID: 6958557271831292321, guid: 1bafe71bf5444a740a7722d390a2c777,
     type: 3}
   EntryPoints:
@@ -231,12 +232,53 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.80371135, y: 13.999999, z: 0.9451038}
   m_Center: {x: 0.004761827, y: 3.7208433, z: -0.059238456}
+--- !u!114 &4507215781358888684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2639338478424731530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8b6cb27f13d0849a564d58f7f7234f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Spawners: []
+  roomTriggers: []
+  audioSource: {fileID: 0}
+  _finishCombatDialogue: {fileID: 0}
+  _spawnPointReward: {fileID: 0}
+  _spawnSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
+  _rewardSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
+  _animatorObjective: {fileID: 0}
+  _reward: {fileID: 6356117999051576394, guid: 5244e3d3ebae0cf4db60fcccad9caa5a, type: 3}
+  MinionsAlive: 0
+  SpawnersSpent: 0
+  StopThisManager: 1
+  _ShouldOffsetSpawnTime: 0
+  _OffsetSpawnTime: 0
+  _StartingCombatScore: 0
+  _AddExtraRequiredScore: 0
+  trapsInThisRoom: []
 --- !u!1 &3726261534411984014
 GameObject:
   m_ObjectHideFlags: 0

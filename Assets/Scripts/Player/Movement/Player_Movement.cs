@@ -208,8 +208,8 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         _KCCMotor.AttachedRigidbodyOverride= _Rb;
 
         //llamadas
-        DialogueManager.instance.OnDialogueStart += LockMovement;
-        DialogueManager.instance.OnDialogueEnd += UnlockMovement;
+        //DialogueManager.instance.OnDialogueStart += LockMovement;
+        //DialogueManager.instance.OnDialogueEnd += UnlockMovement;
 
         StatsManager _StatMan = GetComponentInParent<StatsManager>();
         _StatMan.OnStatChanged += UpdateStats; // nos suscribimos al evento de actualizacion de stats

@@ -258,13 +258,45 @@ public class DungeonGenerator : MonoBehaviour
                         // =====================================================
                         placementSuccessful = true;
 
-                    // Lock the entry points since we used them
+                        // Lock the entry points since we used them
                         sourceEntryPoint.SetOccupied(true);
                         newPartEntryPoint.SetOccupied(true);
 
                         // Create the door between them
                         var Door = Instantiate(DoorOBJ, sourceEntryPoint.transform.position, sourceEntryPoint.transform.rotation);
                         Door.transform.SetParent(sourceEntryPoint.transform, true);
+
+                        //Ahora le decimos a la puerta a quien le pertenece
+                        if(Door.TryGetComponent(out DoorScript DoorScript))
+                        {
+                            //Si estamos generando un pasillo, entonces nuestra habitacion
+                            //asignada sería el Source
+                            if (GenerateHallway)
+                            {
+                                if(sourceRoom.TryGetComponent(out RoomSpawnerManager Manager))
+                                {
+                                    DoorScript.Initialize(Manager);
+                                }
+                                else 
+                                {
+                                    Debug.LogError("Visceral Limbo Proc.Gen: " + sourceRoom.name + " no tiene script de RoomManager");
+                                }
+                            }
+                            // Si no
+                            // Entonces acabamos de generar una habitacion.
+                            // por ende, nuestro partToPlace será la habitacion
+                            else if (!GenerateHallway)
+                            {
+                                if(partToPlace.TryGetComponent(out RoomSpawnerManager manager))
+                                {
+                                    DoorScript.Initialize(manager);
+                                }
+                                else
+                                {
+                                    Debug.LogError("Visceral Limbo Proc.Gen: " + partToPlace.name + " no tiene script de RoomManager");
+                                }
+                            }
+                        }
 
                         // Add the new part to the correct list
                         if (GenerateHallway)
