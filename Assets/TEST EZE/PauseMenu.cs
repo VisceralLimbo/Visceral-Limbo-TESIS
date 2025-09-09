@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using static UnityEditor.PlayerSettings;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject pausePanel; 
+    public GameObject pausePanel;
     private bool isPaused = false;
     [SerializeField] private Player_Base playerBase; // ref al player base para traer el _Player_InputActions (no lo tienen en la jerarquia, lo llaman en playerbase entonces tuve que hacer esto xd)
 
@@ -49,6 +50,19 @@ public class PauseMenu : MonoBehaviour
         {
             playerBase._Player_InputActions.Gameplay.Enable();
         }
+
+        ResetUIState();
+    }
+
+    // limpio seleccion y flechitas
+    public void ResetUIState()
+    {
+        ArrowsUI arrowSelector = FindObjectOfType<ArrowsUI>();
+        if (arrowSelector != null)
+            arrowSelector.HideArrows();
+
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(null);
     }
 
     //ataque cuando cierro menu de pausa (corregir) CORREGIDO

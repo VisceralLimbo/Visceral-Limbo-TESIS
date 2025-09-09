@@ -7,12 +7,18 @@ public class PauseMenuUI : MonoBehaviour
     public GameObject opcionesPanel;    // menu opciones 
     public GameObject abandonPanel;     // menu abandonar
 
+    [Header("Refes")]
+    public PauseMenu ref_PauseMenu;
+
     //no hace falta explicar
     public void ShowPauseMenu()
     {
         pauseMenuPanel.SetActive(true);
         opcionesPanel.SetActive(false);
         abandonPanel.SetActive(false);
+
+        //reseteo la ui por bug en flechitas xd
+        ref_PauseMenu.ResetUIState();
     }
 
     public void ShowOpciones()
@@ -20,6 +26,8 @@ public class PauseMenuUI : MonoBehaviour
         pauseMenuPanel.SetActive(false);
         opcionesPanel.SetActive(true);
         abandonPanel.SetActive(false);
+
+        ref_PauseMenu.ResetUIState();
     }
 
     public void ShowAbandon()
@@ -27,6 +35,8 @@ public class PauseMenuUI : MonoBehaviour
         pauseMenuPanel.SetActive(false);
         opcionesPanel.SetActive(false);
         abandonPanel.SetActive(true);
+
+        ref_PauseMenu.ResetUIState();
     }
 
     public void BackToPauseMenu()
