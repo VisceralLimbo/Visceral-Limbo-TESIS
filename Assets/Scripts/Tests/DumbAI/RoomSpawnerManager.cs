@@ -28,6 +28,13 @@ public class RoomSpawnerManager : MonoBehaviour
 
     [SerializeField] private List<FireballTrap> trapsInThisRoom;
 
+    [Header("Lights Setup")]
+    [SerializeField] private List<Light> combatLights; 
+    [SerializeField] private Color lastWaveColor = Color.red; 
+    [SerializeField] private Color endWaveColor = Color.blue;
+    [SerializeField] private bool lightsChanged = false;
+
+
     public event System.Action OnCombatEnded;
 
     private void Start()
@@ -41,6 +48,8 @@ public class RoomSpawnerManager : MonoBehaviour
         {
             trapsInThisRoom = GetComponentsInChildren<FireballTrap>().ToList();
         }
+
+        
     }
 
 
@@ -62,6 +71,8 @@ public class RoomSpawnerManager : MonoBehaviour
     {
         _animatorObjective.SetTrigger("StartCombat");
 
+        lightsChanged = false;
+
         foreach (var trap in trapsInThisRoom)
         {
             trap.ActivateTrap();
@@ -72,26 +83,30 @@ public class RoomSpawnerManager : MonoBehaviour
 
     }
 
-    //evento de que murio un minion
     public void NotifyMinionDeath()
     {
-        if (StopThisManager) return; // manager apagado
+        if (StopThisManager) return;
 
-        MinionsAlive = Spawners.Any(x => x.HasMinion); //chequeamos si los spawners tienen minions vivos
+        MinionsAlive = Spawners.Any(x => x.HasMinion);
         SpawnersSpent = Spawners.All(x => x.IsSpent);
 
+        // no hay minions vivos pero todavía quedan spawners = spawnear otra oleada
         if (!MinionsAlive && !SpawnersSpent)
         {
-            //no hay minions vivos pero tampoco hay spawners vacios =
-            //spawnear otra oleada
+            bool nextWaveWillBeLast = Spawners.All(s => s.RemainingSpawns <= 1);
+
+
+            if (nextWaveWillBeLast && !lightsChanged)
+            {
+                ChangeLightsToLastWave();
+                lightsChanged = true;
+            }
+
             MusicManager.Instance?.PlayCombatMusic();
 
-            SlowMotion.Stop(1f, 0.35f, true); //el segundo valor cambia el pitch de la musica y sonidos
-            FindObjectOfType<SlowMotionController>()?.ApplyEffect(1f, 0.6f); //intensidad es el primer numero, el otro es la duracion
+            SlowMotion.Stop(1f, 0.35f, true);
+            FindObjectOfType<SlowMotionController>()?.ApplyEffect(1f, 0.6f);
 
-          
-
-            //comenzar la coroutina de spawneo
             StartCoroutine(SpawnCoroutine());
 
             foreach (var item in roomTriggers)
@@ -102,81 +117,89 @@ public class RoomSpawnerManager : MonoBehaviour
             }
         }
 
-        // no hay minions activos y los spawners estan vacios
-        // finalizar combate
+        // no hay minions y no quedan spawners = combate terminado
         if (!MinionsAlive && SpawnersSpent)
         {
             foreach (var item in roomTriggers)
             {
-               
-
-
                 item.SetSolidState(true);
                 item.SetCombatState(false);
-
-
             }
 
             StopThisManager = true;
+
             foreach (var trap in trapsInThisRoom)
             {
                 trap.DeactivateTrap();
             }
-            audioSource.Play();
 
+            audioSource.Play();
             _animatorObjective.SetTrigger("EndCombat");
 
-            // la sala tiene reward y la puntuacion final del jugador
-            // es mayor a la requerida X sala
-
+            ChangeLightsToEndWave();
 
             if (ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
             {
                 Instantiate(_reward, _spawnPointReward.transform.position, _spawnPointReward.transform.rotation);
                 BloodEchoesManager.AddBloodEchoes(500);
-                print(BloodEchoesManager.BloodEchoes);
 
-                SoundManager.Instance.CreateSound().
-                    WithSoundData(_rewardSound).
-                    WithRandomPitch(true).
-                    WithPosition(_spawnPointReward.position).
-                    WithSpatialBlend(1).play();
+                SoundManager.Instance.CreateSound()
+                    .WithSoundData(_rewardSound)
+                    .WithRandomPitch(true)
+                    .WithPosition(_spawnPointReward.position)
+                    .WithSpatialBlend(1).play();
             }
+
             DialogueManager.instance.StartDialogue(_finishCombatDialogue);
 
-            
             MusicManager.Instance?.PlayExplorationMusic();
-
             OnCombatEnded?.Invoke();
         }
     }
 
+
+    private void ChangeLightsToLastWave()
+    {
+        SetLightsColor(lastWaveColor);
+    }
+
+
+    private void ChangeLightsToEndWave()
+    {
+        SetLightsColor(endWaveColor);
+    }
     //script hecho por Patricio Malvasio Maddalena
     // uso de Any / all (Grupo 3)
 
+    private void SetLightsColor(Color c)
+    {
+        if (combatLights == null) return;
+        foreach (var light in combatLights)
+        {
+            if (light != null)
+                light.color = c;
+        }
+    }
 
-    //coroutina de spawn
     IEnumerator SpawnCoroutine()
     {
-        foreach(var item in Spawners) 
+        foreach (var item in Spawners)
         {
             item.SetPlayerIndex(playerContext);
-
             item.SpawnEnemy();
 
-            SoundManager.Instance.CreateSound().
-                WithSoundData(_spawnSound).
-                WithPosition(item.transform.position).
-                WithRandomPitch(true).
-                WithSpatialBlend(1)
-               .play();
-               
+            SoundManager.Instance.CreateSound()
+                .WithSoundData(_spawnSound)
+                .WithPosition(item.transform.position)
+                .WithRandomPitch(true)
+                .WithSpatialBlend(1)
+                .play();
 
             if (_ShouldOffsetSpawnTime)
             {
                 yield return new WaitForSeconds(_OffsetSpawnTime);
             }
-
         }
     }
+
 }
