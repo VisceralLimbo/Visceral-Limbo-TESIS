@@ -1,62 +1,76 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class FloatingText : MonoBehaviour
 {
-
     [Header("Variables")]
-    [SerializeField] float _moveSpeed = 1;
-    [SerializeField] float lifeTime = 1;
-    [SerializeField] string _MessageOverload; // el mensaje a utilizar
-    Color _ColorOverload; // el color del nuevo mensaje 
+    [SerializeField] float _moveSpeed = 1f;   // velocidad de subida
+    [SerializeField] float lifeTime = 1.5f;   // duración antes de desaparecer
 
-    [Space]
+    [SerializeField] string _MessageOverload = "Text";
+    Color _ColorOverload = Color.white;
+
     [Header("References")]
-    public GameObject _Prefab; // prefab a spawnear
-
-
     [SerializeField] TextMeshPro _textmesh;
-    [SerializeField] CanvasGroup _canvasGroup;
+
+    private float _timeElapsed = 0f;
+    private Color _initialColor;
+
+    private void Awake()
+    {
+        if (_textmesh == null)
+            _textmesh = GetComponentInChildren<TextMeshPro>(true);
+    }
 
     private void Start()
     {
-        _textmesh = GetComponentInChildren<TextMeshPro>();
-        _canvasGroup = gameObject.AddComponent<CanvasGroup>();
-
-        if(_textmesh != null)
+        if (_textmesh != null)
         {
-            _textmesh.color = _ColorOverload;
             _textmesh.text = _MessageOverload;
-        } 
-    }
-    private void LateUpdate()
-    {
-        transform.LookAt(Camera.main.transform);
-        transform.Rotate(0, 180, 0);
+            _textmesh.color = _ColorOverload;
+            _initialColor = _textmesh.color;
+        }
     }
 
-    /// <summary>
-    /// Funcion para setear texto del mensaje
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="color"></param>
     public void SetText(string message, Color color)
     {
-        //debido a que esta funcion puede ser llamada antes de que se termine de inicializar el
-        // tmpro, es preferible guardar el texto como variable y cargarlo más adelante cuando
-        // estemos seguros de que si existe - pato
-       _MessageOverload = message;
+        _MessageOverload = message;
         _ColorOverload = color;
+
+        if (_textmesh != null)
+        {
+            _textmesh.text = _MessageOverload;
+            _textmesh.color = _ColorOverload;
+            _initialColor = _ColorOverload;
+        }
     }
+
+    private void LateUpdate()
+    {
+        if (Camera.main != null)
+        {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180f, 0);
+        }
+    }
+
     private void Update()
     {
+        _timeElapsed += Time.deltaTime;
+        float t = _timeElapsed / lifeTime;
+
+        // Movimiento hacia arriba mientras existe
         transform.position += Vector3.up * _moveSpeed * Time.deltaTime;
 
-        _canvasGroup.alpha -= Time.deltaTime / lifeTime;
+        // Fade out (alpha de 1 ? 0)
+        if (_textmesh != null)
+        {
+            Color c = _initialColor;
+            c.a = Mathf.Lerp(1f, 0f, t);
+            _textmesh.color = c;
+        }
 
-        if (_canvasGroup.alpha <= 0)
+        if (_timeElapsed >= lifeTime)
             Destroy(gameObject);
     }
 }
