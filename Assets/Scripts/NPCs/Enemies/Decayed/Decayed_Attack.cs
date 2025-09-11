@@ -12,6 +12,7 @@ public class Decayed_Attack : BaseState
     [SerializeField] Transform _BulletSpawnPoint;
     [SerializeField] Transform _Target;
     [SerializeField] KinematicCharacterMotor _KCC;
+    [SerializeField] GameObject flashAttackParticle;
 
     [Header("Variables")]
     [SerializeField] float _AttackSpeed;
@@ -116,6 +117,7 @@ public class Decayed_Attack : BaseState
                 var correctTarget = _Target.transform.position + Vector3.up;
                 //apuntado al player
                 _BulletSpawnPoint.LookAt(correctTarget, _KCC.CharacterUp);
+
 
                 // instanciado de bala
                 var bullet =Instantiate(_BulletPrefab, _BulletSpawnPoint.position, _BulletSpawnPoint.rotation);
