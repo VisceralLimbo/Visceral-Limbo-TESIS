@@ -39,6 +39,14 @@ public class Player_Base : Visceral_Script
     [SerializeField] private float moveSpeed = 5f; 
     private Vector2 _originalUIPosition;
     private bool _isTabPressed;
+    [SerializeField] private float moveAmountRight;
+
+    [SerializeField] private RectTransform uiElementToMoveRight1;
+    [SerializeField] private RectTransform uiElementToMoveRight2;
+
+    private Vector2 _originalUIRight1Pos;
+    private Vector2 _originalUIRight2Pos;
+
 
     void Start()
     {
@@ -67,6 +75,12 @@ public class Player_Base : Visceral_Script
         DialogueManager.instance.OnDialogueEnd += DialogueEnd;
 
         _originalUIPosition = _uiElementToMove.anchoredPosition;
+
+        if (uiElementToMoveRight1 != null)
+            _originalUIRight1Pos = uiElementToMoveRight1.anchoredPosition;
+
+        if (uiElementToMoveRight2 != null)
+            _originalUIRight2Pos = uiElementToMoveRight2.anchoredPosition;
 
     }
 
@@ -147,6 +161,32 @@ public class Player_Base : Visceral_Script
             _uiElementToMove.anchoredPosition = Vector2.Lerp(
                 _uiElementToMove.anchoredPosition,
                 targetPosition,
+                Time.deltaTime * moveSpeed
+            );
+        }
+
+        if (uiElementToMoveRight1 != null)
+        {
+            Vector2 targetPos1 = _isTabPressed
+                ? _originalUIRight1Pos + Vector2.right * moveAmountRight
+                : _originalUIRight1Pos;
+
+            uiElementToMoveRight1.anchoredPosition = Vector2.Lerp(
+                uiElementToMoveRight1.anchoredPosition,
+                targetPos1,
+                Time.deltaTime * moveSpeed
+            );
+        }
+
+        if (uiElementToMoveRight2 != null)
+        {
+            Vector2 targetPos2 = _isTabPressed
+                ? _originalUIRight2Pos + Vector2.right * moveAmountRight
+                : _originalUIRight2Pos;
+
+            uiElementToMoveRight2.anchoredPosition = Vector2.Lerp(
+                uiElementToMoveRight2.anchoredPosition,
+                targetPos2,
                 Time.deltaTime * moveSpeed
             );
         }
