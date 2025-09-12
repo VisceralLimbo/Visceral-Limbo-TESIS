@@ -69,7 +69,8 @@ public class RoomSpawnerManager : MonoBehaviour
 
     public void StartRoomCombat()
     {
-        _animatorObjective.SetTrigger("StartCombat");
+        //comentado porque se rompia todo xd
+        //_animatorObjective.SetTrigger("StartCombat");
 
         lightsChanged = false;
 
@@ -134,7 +135,7 @@ public class RoomSpawnerManager : MonoBehaviour
             }
 
             audioSource.Play();
-            _animatorObjective.SetTrigger("EndCombat");
+            //_animatorObjective.SetTrigger("EndCombat");
 
             ChangeLightsToEndWave();
 

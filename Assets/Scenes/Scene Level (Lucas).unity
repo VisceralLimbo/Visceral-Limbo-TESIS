@@ -241,6 +241,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: MainCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 2939575827477362910, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4039303074304250013, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: m_Name
@@ -22907,6 +22912,53 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 443364693}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &443872540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 443872542}
+  - component: {fileID: 443872541}
+  m_Layer: 0
+  m_Name: PoolParticle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &443872541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443872540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d0dc1b235f6fcc4b9309c214e2b856b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlePrefab: {fileID: 4611328800601888442, guid: 1cbde343ab5779a4e8368d393da22337,
+    type: 3}
+  poolSize: 10
+--- !u!4 &443872542
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443872540}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 882.2141, y: 668.9914, z: -1590.3574}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &444058783
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -107345,12 +107397,12 @@ PrefabInstance:
     - target: {fileID: 2708526188946727188, guid: f171aae8b43b0a74f99563be33d4cd00,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.540039
+      value: -11.7
       objectReference: {fileID: 0}
     - target: {fileID: 2708526188946727188, guid: f171aae8b43b0a74f99563be33d4cd00,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.232666
+      value: -4.2
       objectReference: {fileID: 0}
     - target: {fileID: 2708526188946727188, guid: f171aae8b43b0a74f99563be33d4cd00,
         type: 3}
@@ -120096,3 +120148,4 @@ SceneRoots:
   - {fileID: 1090063710763864929}
   - {fileID: 1333765903}
   - {fileID: 3156708867007062290}
+  - {fileID: 443872542}
