@@ -42,6 +42,15 @@ public class Spawner : MonoBehaviour
         Player = NewPlayer;
     }
 
+    public int RemainingSpawns
+    {
+        get
+        {
+            if (EnemySpawns == null) return 0;
+            return Mathf.Max(0, EnemySpawns.Length - Index);
+        }
+    }
+
     //spawn de enemigo
     public void SpawnEnemy()
     {
