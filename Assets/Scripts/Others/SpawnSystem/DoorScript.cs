@@ -22,11 +22,14 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         " 1 = el jugador esta frente de la puerta, -1 = el jugador esta detras de la puerta")]
     [SerializeField] float DoorThreshold; // el limite a partir de que se considera adentro de la habitacion
     [SerializeField] bool PlayerEnteredRoom;
+    [Tooltip("Si esta puerta debería de activar eventos (ejemplo: comenzar combate)")]
+    [SerializeField] bool NonTriggerRoom; // esta habitacion NO genera trigger Events
 
     public void Initialize(RoomSpawnerManager SpawnerManager)
     {
+        if (roomSpawnerManager == null) return;
+            
         roomSpawnerManager = SpawnerManager;
-
 
         // alineamiento de las puertas.
         // calculamos la direccion hacia el centro de la sala
@@ -48,10 +51,13 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     }
 
+    public void ShouldGenerateEvents(bool value = false)
+    {
+        NonTriggerRoom = value;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-
         CheckPlayerEnteredRoom(other);
 
     }
@@ -86,9 +92,12 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         //usamos el valor de InwardAlignment para calcular la direccion del player
         float DotProduct = Vector3.Dot(InWardAlignment, DirectionToPlayer);
 
+        print("Dot product: " + DotProduct);
+
         // calculamos si el jugador cruzo la puerta
-        if (DotProduct > DoorThreshold)
+        if (DotProduct > DoorThreshold && !NonTriggerRoom)
         {
+            print("entro a la habitacion");
             // correr animacion de puerta abriendose
             _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, false);
             roomSpawnerManager.AssignPlayerContext(Pcontext);
@@ -115,7 +124,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     {
        
     }
-
+ 
     public void OnRayCastExit(RayCastWrapper Detector = null)
     {
         

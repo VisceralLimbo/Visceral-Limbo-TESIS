@@ -91,6 +91,7 @@ public class RoomSpawnerManager : MonoBehaviour
         MinionsAlive = Spawners.Any(x => x.HasMinion);
         SpawnersSpent = Spawners.All(x => x.IsSpent);
 
+        print("Fighting");
         // no hay minions vivos pero todavía quedan spawners = spawnear otra oleada
         if (!MinionsAlive && !SpawnersSpent)
         {

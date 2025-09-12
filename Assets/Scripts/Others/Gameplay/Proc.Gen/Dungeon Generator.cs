@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using System.Linq;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -127,17 +128,25 @@ public class DungeonGenerator : MonoBehaviour
     }
     private void Regenerate()
     {
-        foreach(DungeonPart room in generatedRooms)
+        foreach (DungeonPart room in generatedRooms)
         {
             Destroy(room.gameObject);
         }
         generatedRooms.Clear();
 
-        foreach(DungeonPart hall in generatedHallways)
+        foreach (DungeonPart hall in generatedHallways)
         {
             Destroy(hall.gameObject);
         }
         generatedHallways.Clear();
+
+        foreach (DungeonPart special in generatedSpecialRooms)
+        {
+            Destroy(special.gameObject);
+        }
+        generatedSpecialRooms.Clear();
+
+
         StartGeneration();
     }
 
@@ -155,7 +164,7 @@ public class DungeonGenerator : MonoBehaviour
         
             print("Generating dungeon...");
 
-            // Place the entrance room first
+            // ponemos la sala inicial
             if (RegularRoomCount > 0)
             {
                 GameObject entranceObj = Instantiate(Entrance, this.transform.position, this.transform.rotation);
@@ -166,18 +175,17 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
 
-            // Use a 'while' loop to ensure we generate the correct number of rooms
+            // usamos un while loop para garantizar que tenemos la cantidad de salas correctas
             while (generatedRooms.Count < RegularRoomCount)
             {
                 bool placementSuccessful = false;
-                DungeonPart partToPlace = null; // This will hold our new room or hallway
+                DungeonPart partToPlace = null; // la nueva pieza a colocar
 
                
-                // It will try up to 'TotalTriesPerRoomGeneration'
-                // times to place ONE new part.
+                // Watchdog de cantidad de veces que PUEDE tratar de poner una pieza
                 for (int i = 0; i < TotalTriesPerRoomGeneration; i++)
                 {
-                // 1. SELECT A RANDOM EXISTING ROOM AND ENTRY POINT
+                // 1. SELECCIONAMOS UNA PIEZA EXISTENTE PARA COLOCARLE LA NUEVA
                 // ===================================================
                     List<DungeonPart> SourcePool;
                     
@@ -191,7 +199,7 @@ public class DungeonGenerator : MonoBehaviour
                        SourcePool = generatedHallways.FindAll(x => x.HasAvailableEntryPoint(out _));
                     }
 
-                    // Catch! we avoid possible crash due to empty pool
+                    // CATCH! evitamos referenciar un pool nulo
                     if(SourcePool.Count == 0)
                     {
                        continue;
@@ -204,10 +212,10 @@ public class DungeonGenerator : MonoBehaviour
                     {
                         Debug.Log("room has no entry points" + sourceRoom.name );
                         //SourcePool.Remove(sourceRoom);
-                        continue; // This room has no open doors, try another one  
+                        continue; // esta sala no tiene puntos abiertos, probemos otro lugar
                     }
 
-                    // 2. CREATE THE NEW PART TO PLACE (ROOM OR HALLWAY)
+                    // 2. CREAMOS LA PIEZA NUEVA Y LA COLOCAMOS
                     // =====================================================
                     GameObject newPartObject;
                     if (GenerateHallway)
@@ -226,13 +234,15 @@ public class DungeonGenerator : MonoBehaviour
                                                       (out DungeonEntryPoint newPartEntryPoint))
                     {
                         Debug.Log("We failed to place a room" + sourceRoom.name);
-                        Destroy(newPartObject); // Clean up the failed part
+                        Destroy(newPartObject); // destruimos la pieza ERRONEA
+
                         sourceEntryPoint.SetOccupied(false);
                         sourceRoom.UnuseEntryPoint(sourceEntryPoint);
-                        continue; // The prefab was bad or had no entries, try again
+                        continue; // el prefab usado no era viable, por ende limpiamos lo que hicimos
+                                  // y probamos de nuevo
                     }
 
-                    // 3. ALIGN THE NEW PART AND CHECK FOR INTERSECTIONS
+                    // 3. ALINEAMIENTO Y CHEQUEO DE COLISIONES
                     // =====================================================
                     AlignRooms(sourceRoom.transform, partToPlace.transform, sourceEntryPoint.transform, newPartEntryPoint.transform);
 
@@ -246,23 +256,23 @@ public class DungeonGenerator : MonoBehaviour
                         newPartEntryPoint.SetOccupied(false);
                         partToPlace.UnuseEntryPoint(newPartEntryPoint);
 
-                        // INTERSECTION! Clean up and let the loop try again.
+                        // HAY INTERSECCION! LIMPIAMOS LO HECHO Y VOLVEMOS A PROBAR
                         Destroy(newPartObject);
                         partToPlace = null;
                         continue;
-                }
+                    }
                     else
                     {
                     
-                        // 4. SUCCESS!
+                        // 4. GENERACION EXITOSA
                         // =====================================================
                         placementSuccessful = true;
 
-                        // Lock the entry points since we used them
+                        // bloqueamos los puntos de accesso usados
                         sourceEntryPoint.SetOccupied(true);
                         newPartEntryPoint.SetOccupied(true);
 
-                        // Create the door between them
+                        // creamos una puerta en el punto ocupado
                         var Door = Instantiate(DoorOBJ, sourceEntryPoint.transform.position, sourceEntryPoint.transform.rotation);
                         Door.transform.SetParent(sourceEntryPoint.transform, true);
 
@@ -298,7 +308,7 @@ public class DungeonGenerator : MonoBehaviour
                             }
                         }
 
-                        // Add the new part to the correct list
+                        // añadimos la parte nueva al pool de salas generadas
                         if (GenerateHallway)
                         {
                             generatedHallways.Add(partToPlace);
@@ -308,19 +318,20 @@ public class DungeonGenerator : MonoBehaviour
                             generatedRooms.Add(partToPlace);
                         }
 
-                        GenerateHallway = !GenerateHallway; // Alternate for the next part
+                        GenerateHallway = !GenerateHallway; // flip flop de sala / pasillo
 
                         newPartObject.transform.SetParent(this.transform,true);
-                        break; // Exit the "Retry" loop, we successfully placed this part.
+                        break; // salimos del loop para colocar una nueva pieza
                     }
                 }
 
-                // If after all tries we couldn't place a part, stop the generation to avoid an infinite loop.
+                // si consumimos todos los intentos posibles y no generamos nada
+                // salimos del LOOP para evitar stack overflow
                 if (!placementSuccessful)
                 {
                     Debug.LogError("Dungeon generation failed. Could not find a valid placement after " + TotalTriesPerRoomGeneration + " attempts.");
-                    Regenerate();
-                    break; // Exit the main 'while' loop
+                    Regenerate(); // regeneramos la mazmorra desde 0
+                    break; 
                 }
 
                 if (SlowGen)
@@ -329,10 +340,173 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
 
-            FillEmptyEntries();
-            IsGenerated = true;
-            print("Dungeon generation finished!");
+            // =====================================================
+            //
+            //  AHORA QUE FINALIZAMOS LA ESTRUCTURA BASE DE LA MAZMORRA
+            //  VAMOS A COLOCAR LAS SALAS ESPECIALES
+            //
+            // =====================================================
+            StartCoroutine(GenerateSpecialRooms());
+    
+    }
 
+    IEnumerator GenerateSpecialRooms()
+    {
+
+        print("Generating Special Rooms...");
+        while (generatedSpecialRooms.Count < SpecialRoomCount)
+        {
+            //comenzamos asignando las nuevas salas
+            bool placementSuccessful = false;
+            DungeonPart partToPlace = null; // la nueva sala especial
+            // bucle de intentos maximos
+            for (int I = 0; I < TotalTriesPerRoomGeneration; I++)
+            {
+
+          
+                // 1: CREAMOS UN NUEVO SOURCE POOL
+                // VAMOS A SALIR CON LA IDEA DE QUE NUESTRAS SALAS ESPECIALES
+                // PUEDEN CONECTARSE CON CUALQUIER OTRO TIPO DE SALA (MENOS ESPECIALES Y JEFE)
+                // ============================================================================
+                List<DungeonPart> SourcePool = new List<DungeonPart>();
+
+                List<DungeonPart> FilteredRoomList = generatedRooms.FindAll(x => x.HasAvailableEntryPoint(out _));
+
+                List<DungeonPart> FilteredHallwayList = generatedRooms.FindAll(x => x.HasAvailableEntryPoint(out _));
+
+                SourcePool.AddRange(FilteredRoomList);
+                SourcePool.AddRange(FilteredHallwayList);
+
+                // CHEQUEAMOS QUE HAYAN POSIBLES CONECCIONES EN TODA LA MAZMORRA
+                // 
+                if (SourcePool.Count == 0)
+                {
+                    Debug.LogError("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
+                    Regenerate();
+                }
+
+
+
+
+                int randomSourceSeed = Random.Range(0, SourcePool.Count);
+                DungeonPart SourceRoom = SourcePool[randomSourceSeed];
+
+                // source pool deberia de contener las salas y pasillos disponibles
+                if (!SourceRoom.HasAvailableEntryPoint(out DungeonEntryPoint sourceEntryPoint))
+                {
+                    Debug.Log("room has no entry points" + SourceRoom.name);
+                    //SourcePool.Remove(sourceRoom);
+                    continue; // esta sala no tiene puntos abiertos, probemos otro lugar
+                }
+             
+
+                // =====================================================
+                //
+                // 2. CREAMOS LA PIEZA NUEVA Y LA COLOCAMOS
+                //
+                // =====================================================
+
+                GameObject newPartObject;
+
+                int RandomSpecialPartSeed = Random.Range(0, SpecialRoomPrefabs.Count);
+
+                newPartObject = Instantiate(SpecialRoomPrefabs[RandomSpecialPartSeed]);
+
+                // chequeamos si la pieza generada tiene Script de DungeonPart o
+                // tiene espacios disponibles
+                if (!newPartObject.TryGetComponent(out DungeonPart NewPart) ||
+                    !NewPart.HasAvailableEntryPoint(out DungeonEntryPoint NewPartEntryPoint))
+                {
+
+                    Debug.Log("We failed to place a room" + SourceRoom.name);
+                    Destroy(newPartObject); // destruimos la pieza ERRONEA
+
+                    sourceEntryPoint.SetOccupied(false);
+                    SourceRoom.UnuseEntryPoint(sourceEntryPoint);
+                    continue; // el prefab usado no era viable, por ende limpiamos lo que hicimos
+                              // y probamos de nuevo
+                }
+
+
+                // 3. ALINEAMIENTO Y CHEQUEO DE COLISIONES
+                // =====================================================
+                AlignRooms(SourceRoom.transform, NewPart.transform, sourceEntryPoint.transform, NewPartEntryPoint.transform);
+
+                if (HandleIntersection(NewPart))
+                {
+                    Debug.Log("Oops, the special room intersects" + SourceRoom.name);
+
+                    SourceRoom.UnuseEntryPoint(sourceEntryPoint);
+                    // LIBERAR LOS PUNTOS OCUPADOS
+                    sourceEntryPoint.SetOccupied(false);
+                    NewPartEntryPoint.SetOccupied(false);
+                    NewPart.UnuseEntryPoint(NewPartEntryPoint);
+
+                    // HAY INTERSECCION! LIMPIAMOS LO HECHO Y VOLVEMOS A PROBAR
+                    Destroy(newPartObject);
+                    partToPlace = null;
+                    continue;
+                }
+                else
+                {
+
+                    // 4. GENERACION EXITOSA
+                    // =====================================================
+                    placementSuccessful = true;
+
+                    // bloqueamos los puntos de accesso usados
+                    sourceEntryPoint.SetOccupied(true);
+                    NewPartEntryPoint.SetOccupied(true);
+
+                    // creamos una puerta en el punto ocupado
+                    var Door = Instantiate(DoorOBJ, sourceEntryPoint.transform.position, sourceEntryPoint.transform.rotation);
+                    Door.transform.SetParent(sourceEntryPoint.transform, true);
+
+                    // TESTEAMOS SI EL SOURCE ES UNA SALA,LA INICIAMOS
+                    if(SourceRoom.RoomType == DungeonPart.DungeonPartType.Room)
+                    {
+                        if(SourceRoom.TryGetComponent(out RoomSpawnerManager Manager))
+                        {
+                            if (Door.TryGetComponent(out DoorScript DoorSC))
+                            {
+                                DoorSC.Initialize(Manager);
+                                DoorSC.ShouldGenerateEvents(false);
+
+                            }
+                        }
+                    }
+
+
+
+                    // añadimos la sala especial al listado de salas generadas
+                    generatedSpecialRooms.Add(NewPart);
+                    NewPart.transform.SetParent(this.transform,true);
+                    placementSuccessful = true;
+                    break;
+                }
+
+            }
+            if (!placementSuccessful)
+            {
+                Debug.LogError("Dungeon generation failed. Could not find a valid placement for special room after : " + TotalTriesPerRoomGeneration + " attempts.");
+                Regenerate(); // regeneramos la mazmorra desde 0
+                break;
+            }
+
+            if (SlowGen)
+            {
+                yield return new WaitForSeconds(SlowGenSpeed);
+            }
+   
+        }
+
+        // =================================================
+        //
+        // 5: COMO YA GENERAMOS TODAS LAS SALAS DESEADAS, ENTONCES 
+        // BLOQUEAMOS LAS CONECCIONES NO USADAS
+        //
+        // =================================================
+        FillEmptyEntries();
     }
 
 
@@ -340,7 +514,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         generatedRooms.ForEach(room => room.FillEmptyPoints());
         generatedHallways.ForEach(hallway => hallway.FillEmptyPoints());
-
+        print("Dungeon generation finished!");
         IsGenerated = true;
 
     }

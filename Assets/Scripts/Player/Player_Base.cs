@@ -74,14 +74,16 @@ public class Player_Base : Visceral_Script
         DialogueManager.instance.OnDialogueStart += DialogueStart;
         DialogueManager.instance.OnDialogueEnd += DialogueEnd;
 
-        _originalUIPosition = _uiElementToMove.anchoredPosition;
+        if(uiElementToMoveRight1!= null && uiElementToMoveRight2 != null && _uiElementToMove != null)
+        {
+            _originalUIPosition = _uiElementToMove.anchoredPosition;
 
-        if (uiElementToMoveRight1 != null)
             _originalUIRight1Pos = uiElementToMoveRight1.anchoredPosition;
 
-        if (uiElementToMoveRight2 != null)
+
             _originalUIRight2Pos = uiElementToMoveRight2.anchoredPosition;
 
+        }
     }
 
     private void Update()

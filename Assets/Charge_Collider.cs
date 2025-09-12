@@ -94,7 +94,8 @@ public class Charge_Collider : Visceral_Script
     private void DealDamage(GameObject Target,float Damage)
     {
         if(Target == null) return;
-        //realizar daño
+        //realizar daño 
+        // agarro el componente de vida
         if (Target.TryGetComponent(out Health_Component HPComp))
         {
             Vector3 dir = Target.transform.position - this.transform.position;
@@ -111,6 +112,31 @@ public class Charge_Collider : Visceral_Script
             //el camerashake solo se activa cuando el player recibe un hit (esta puesto para todas direcciones)
             CameraShake.instance.ShakeCamera(0.5f, 0.5f * CameraShakeIntensity.currentIntensity, ShakeType.AllDirections);
 
+        }
+
+        else
+        {
+            // como este proyecto esta bien diseñado
+            // por las dudas chequeo los hijos - pato
+
+            HPComp = Target.GetComponentInChildren<Health_Component>();
+            if(HPComp != null)
+            {
+             
+                    Vector3 dir = Target.transform.position - this.transform.position;
+
+                    DamageScore DamageDT = new DamageScore();
+                    DamageDT.Attacker = _OwnerContext;
+                    DamageDT.DamageAmount = Damage;
+                    DamageDT.ElementalDamage = ElementType.Physical;
+                    DamageDT.FactionID = FactionID.LimboMonster1;
+
+                    if (HPComp.Context == null) { HPComp.SimpleDamage(Damage); return; }
+                    HPComp.TakeDamageWithKnockback(dir.normalized, 30, DamageDT);
+
+                    //el camerashake solo se activa cuando el player recibe un hit (esta puesto para todas direcciones)
+                    CameraShake.instance.ShakeCamera(0.5f, 0.5f * CameraShakeIntensity.currentIntensity, ShakeType.AllDirections);
+            }
         }
     }
 
