@@ -43,6 +43,11 @@ public class RayCastWrapper : MonoBehaviour
     /// </summary>
     [SerializeField] protected float SphereRadius = 0.05f;
 
+    /// <summary>
+    /// los layer masks afectados por el RayCaster
+    /// </summary>
+    [SerializeField] protected LayerMask _RaycastLayers;
+
 
     /// <summary>
     /// El tipo de raycast seleccionado
@@ -55,7 +60,7 @@ public class RayCastWrapper : MonoBehaviour
 
     protected void Awake()
     {
-        Core = new RayCastCore(RayDistance,SphereRadius);
+        Core = new RayCastCore(RayDistance,_RaycastLayers,SphereRadius);
     }
 
     /// <summary>

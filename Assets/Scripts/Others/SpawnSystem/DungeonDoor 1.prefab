@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1597258480917572388}
-  - component: {fileID: 1016609842675645041}
+  - component: {fileID: 8652782461937287741}
   m_Layer: 0
   m_Name: DungeonDoor
   m_TagString: Untagged
@@ -36,26 +36,24 @@ Transform:
   - {fileID: 1095924864605985459}
   - {fileID: 5418251688141630114}
   - {fileID: 3035032342541354402}
-  - {fileID: 5154282312513536426}
   - {fileID: 2104238842374475742}
   m_Father: {fileID: 6976678919281710141}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1016609842675645041
+--- !u!114 &8652782461937287741
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47255018628013178}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27d071dc3a3b43d4194c773feeca4576, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d6368eca891fd04484d56f26aad3c62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SolidCollider: {fileID: 0}
-  DoorTrigger: {fileID: 0}
-  roomSpawnerManager: {fileID: 0}
-  IsInCombat: 0
+  AnimatorsData:
+  - AnimatorController: {fileID: 2124750486409562316}
+    ID: DoorAnim
 --- !u!1 &308815914566362510
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3035032342541354402}
   - component: {fileID: 2124750486409562316}
+  - component: {fileID: 1154526609604485376}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -346,6 +345,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &1154526609604485376
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3052510363436013098}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.014262506, y: 0.022973483, z: 0.0013286759}
+  m_Center: {x: 0.0055842064, y: 0.002314418, z: 0.0003014126}
 --- !u!1 &3136643045339544705
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,7 +494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 2124750486409562316}
-  roomEnterTrigger: {fileID: 1016609842675645041}
+  roomEnterTrigger: {fileID: 0}
 --- !u!1 &3520955403208047373
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,6 +544,7 @@ MonoBehaviour:
   SolidCollider: {fileID: 0}
   DoorTrigger: {fileID: 0}
   roomSpawnerManager: {fileID: 0}
+  _AnimHandler: {fileID: 8652782461937287741}
   DoorThreshold: 0.5
   PlayerEnteredRoom: 0
 --- !u!65 &1084895324497264032
@@ -545,8 +566,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5.14, y: 4.85, z: 1.13}
-  m_Center: {x: -0.0000859499, y: 1.763247, z: -0.000019989908}
+  m_Size: {x: 8.011353, y: 4.8499994, z: 2.8703613}
+  m_Center: {x: 0.20513916, y: 1.763247, z: 0.047729492}
 --- !u!1 &4131869996078666283
 GameObject:
   m_ObjectHideFlags: 0
@@ -808,69 +829,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6879462413622390055
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5154282312513536426}
-  - component: {fileID: 8937265587879109889}
-  m_Layer: 0
-  m_Name: DoorCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5154282312513536426
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6879462413622390055}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.01897, z: -0.0001}
-  m_LocalScale: {x: 0.007559852, y: 0.00204125, z: 0.015587513}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1597258480917572388}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8937265587879109889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6879462413622390055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed8f6f85a1d6f964dba185fa3eb03047, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerEventList:
-  - TargetTag: Player
-    TriggerEvent:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1016609842675645041}
-          m_TargetAssemblyTypeName: RoomEnterTrigger, Assembly-CSharp
-          m_MethodName: PlayerEnteredRoom
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    _IsTriggered: 0
-  _Reusable: 0
 --- !u!1 &7041371059173068007
 GameObject:
   m_ObjectHideFlags: 0

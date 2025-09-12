@@ -6,16 +6,18 @@ public class RayCastCore
 {
     float _Distance;
     float _Radius;
+    LayerMask _Masks;
 
     /// <summary>
     /// Builder del RaycastCore
     /// </summary>
     /// <param name="distance">Distancia del Raycast</param>
     /// <param name="radius">Radio del Raycast, solo para SphereCast</param>
-    public RayCastCore(float distance, float radius = 0)
+    public RayCastCore(float distance,LayerMask newMask, float radius = 0)
     {
         _Distance = distance;
         _Radius = radius;
+        _Masks = newMask;
     }
 
     /// <summary>
@@ -27,7 +29,7 @@ public class RayCastCore
     public IRaycastDetectable CheckRayCast(Vector3 From, Vector3 Direction)
     {
         //chequeo de RayCast
-        if (Physics.Raycast(From,Direction.normalized,out RaycastHit Hit, _Distance))
+        if (Physics.Raycast(From,Direction.normalized,out RaycastHit Hit, _Distance,_Masks,QueryTriggerInteraction.Collide))
         {
             //devolver la Interfaz de RaycastDetectable
             if (Hit.collider.TryGetComponent(out IRaycastDetectable Raycasted)) return Raycasted;
@@ -45,7 +47,7 @@ public class RayCastCore
     public IRaycastDetectable CheckSphereCast(Vector3 From,Vector3 Direction)   
     {
         //chequeo de SphereCast
-        if(Physics.SphereCast(From,_Radius,Direction.normalized,out RaycastHit Hit, _Distance))
+        if(Physics.SphereCast(From,_Radius,Direction.normalized,out RaycastHit Hit, _Distance,_Masks, QueryTriggerInteraction.Collide))
         {
             //devolver la Interfaz de RaycastDetectable
             if (Hit.collider.TryGetComponent(out IRaycastDetectable RayCasted)) return RayCasted;

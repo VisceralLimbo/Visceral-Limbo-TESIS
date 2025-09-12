@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class DoorScript : MonoBehaviour
+public class DoorScript : MonoBehaviour, IRaycastInteractable
 {
     [Header("References")]
     [SerializeField] Collider SolidCollider;
     [SerializeField] Collider DoorTrigger;
     [SerializeField] RoomSpawnerManager roomSpawnerManager;
+    [SerializeField] AnimatorHandler _AnimHandler;
 
     private Vector3 InWardAlignment;
 
@@ -88,6 +89,8 @@ public class DoorScript : MonoBehaviour
         // calculamos si el jugador cruzo la puerta
         if (DotProduct > DoorThreshold)
         {
+            // correr animacion de puerta abriendose
+            _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, false);
             roomSpawnerManager.AssignPlayerContext(Pcontext);
             roomSpawnerManager.StartRoomCombat();
             roomSpawnerManager.NotifyMinionDeath();
@@ -96,4 +99,25 @@ public class DoorScript : MonoBehaviour
 
     }
 
+    public void OnInteract()
+    {
+        print("me han interactuado");
+        // correr animacion de puerta abriendose
+        _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
+    }
+
+    public void OnRayCastEnter(RayCastWrapper Detector = null)
+    {
+   
+    }
+
+    public void OnRayCastStay(RayCastWrapper Detector = null)
+    {
+       
+    }
+
+    public void OnRayCastExit(RayCastWrapper Detector = null)
+    {
+        
+    }
 }
