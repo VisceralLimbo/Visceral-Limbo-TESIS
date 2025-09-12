@@ -50,6 +50,9 @@ public class Player_MeleeAttack : Visceral_Script
     [SerializeField] private TrailRenderer swordTrail;
     [SerializeField] private TrailRenderer swordTrail2;
 
+    // variable para la dir del ataque (como hacian con el cs antes)
+    private Vector3 _AttackDir = Vector3.zero;
+
     public override void VS_Initialize()
     {
 
@@ -108,32 +111,37 @@ public class Player_MeleeAttack : Visceral_Script
         if(value == Vector2.left)
         {
             CurrentCombo = AttackDictionary["Left"];
-
-
+            _AttackDir = new Vector3(1, 0, 0); // der (tiene mas sentido asi para mi pero si quieren pongan el menos adelante y le cambian direccion)
         }
         else if(value == Vector2.right)
         {
             CurrentCombo = AttackDictionary["Right"];
+            _AttackDir = new Vector3(-1, 0, 0); // izq
 
         }
         else if(value == Vector2.up)
         {
             CurrentCombo = AttackDictionary["Up"];
-
+            _AttackDir = new Vector3(0, -1, 0);  //abajo
         }
         else if(value == Vector2.down)
         {
             CurrentCombo = AttackDictionary["Down"];
+            _AttackDir = new Vector3(0, 1, 0); // arriba
 
         }
         else
         {
             CurrentCombo = AttackDictionary["Left"];
+            _AttackDir = new Vector3(-1, 0, 0); // der
         }
     } // funcion de seleccion de animaciones de ataque
 
     private void AttackHandle()
     {
+        // llamo al efecto de la cam dependiendo el animselector para q siga el tipo de golpe  (izq,der,etc)
+        Camera.main.GetComponent<CameraFollowSword>()?.DoHitEffect(_AttackDir);
+
         if (swordTrail != null) swordTrail.emitting = true;
         if (swordTrail2 != null) swordTrail2.emitting = true;
 
