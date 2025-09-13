@@ -10,21 +10,22 @@ public class PlayerAnimHandler : MonoBehaviour
     {
         _anim = GetComponent<Animator>();
     }
-
-    public void AttackAnim()
+    private void OnEnable()
     {
-        _anim.SetTrigger("Attack");
+        PlayerEvents.OnAttack += AttackAnim;
+        PlayerEvents.OnDash += DashAnim;
+        PlayerEvents.OnParry += ParryAnim;
+        PlayerEvents.OnWhirlwind += WhirlwindAnim;
     }
-    public void DashAnim()
+    private void AttackAnim() => _anim.SetTrigger("Attack");
+    private void DashAnim() => _anim.SetTrigger("Dash");
+    private void ParryAnim() => _anim.SetTrigger("Parry");
+    private void WhirlwindAnim() => _anim.SetTrigger("Whirlwind");
+    private void OnDisable()
     {
-        _anim.SetTrigger("Dash");
-    }
-    public void ParryAnim()
-    {
-        _anim.SetTrigger("Parry");
-    }
-    public void WhirlwindAnim()
-    {
-        _anim.SetTrigger("Whirlwind");
+        PlayerEvents.OnAttack -= AttackAnim;
+        PlayerEvents.OnDash -= DashAnim;
+        PlayerEvents.OnParry -= ParryAnim;
+        PlayerEvents.OnWhirlwind -= WhirlwindAnim;
     }
 }
