@@ -12,6 +12,8 @@ public class EnemyDamageFlash : MonoBehaviour
 
     private HostileNPC_HealthComp healthComp;
 
+    public Transform particleSpawn; // pos para las particulas
+
     void Start()
     {
         if (rend == null)
@@ -29,6 +31,9 @@ public class EnemyDamageFlash : MonoBehaviour
 
     void TriggerFlash()
     {
+        //activo particulas 
+        Vector3 hitPosition = particleSpawn.position;
+        PoolParticle.Instance.PlayParticle(hitPosition);
         flashTimer = flashDuration; 
     }
 

@@ -13,7 +13,6 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private DialogueData _finishCombatDialogue;
     [SerializeField] Transform _spawnPointReward;
     [SerializeField] SoundData _spawnSound,_rewardSound;
-    [SerializeField] private Animator _animatorObjective;
     [SerializeField] private GameObject _reward;
 
     [Space]
@@ -69,8 +68,6 @@ public class RoomSpawnerManager : MonoBehaviour
 
     public void StartRoomCombat()
     {
-        //comentado porque se rompia todo xd
-        //_animatorObjective.SetTrigger("StartCombat");
 
         lightsChanged = false;
 
@@ -91,7 +88,6 @@ public class RoomSpawnerManager : MonoBehaviour
         MinionsAlive = Spawners.Any(x => x.HasMinion);
         SpawnersSpent = Spawners.All(x => x.IsSpent);
 
-        print("Fighting");
         // no hay minions vivos pero todavía quedan spawners = spawnear otra oleada
         if (!MinionsAlive && !SpawnersSpent)
         {
@@ -136,7 +132,6 @@ public class RoomSpawnerManager : MonoBehaviour
             }
 
             audioSource.Play();
-            //_animatorObjective.SetTrigger("EndCombat");
 
             ChangeLightsToEndWave();
 

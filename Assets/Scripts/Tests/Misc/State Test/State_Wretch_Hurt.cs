@@ -18,8 +18,6 @@ public class State_Wretch_Hurt : BaseState, IKnockback
 
     private Vector2 DirectionOfHit;
 
-    public Transform particleSpawn; // pos para las particulas
-
     public void ApplyKnockBack(Vector3 KnockbackDir, float Force)
     {
         DirectionOfHit = KnockbackDir;
@@ -137,9 +135,6 @@ public class State_Wretch_Hurt : BaseState, IKnockback
 
     private void GotHurt()
     {
-        //activo particulas 
-        Vector3 hitPosition = particleSpawn.position;
-        PoolParticle.Instance.PlayParticle(hitPosition);
         stateMachine.SetGlobalCondition("Hurt", true);
     }
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
