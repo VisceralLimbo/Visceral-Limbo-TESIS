@@ -5380,17 +5380,20 @@ MonoBehaviour:
     _ShouldTransitionWithNoConditions: 0
   _MinStateLifetime: 0
   _AnimHandler: {fileID: 0}
-  _BulletPrefab: {fileID: 7015282181434330681, guid: ad07d9de4d7d48c4a91489d1a91a70a5,
+  _BulletPrefab: {fileID: 2454136147042372353, guid: bc0f572b4ddbb564d872d42601a416fd,
     type: 3}
   _BulletSpawnPoint: {fileID: 3019179451065391839}
   _Target: {fileID: 0}
   _KCC: {fileID: 0}
   flashAttackParticle: {fileID: 0}
+  _EnemyMesh: {fileID: 8059655785188596884}
+  FlashEnemyMat: {fileID: 2100000, guid: 6a9bbce0b9884ab4d84dead0cc7d3af8, type: 2}
   _AttackSpeed: 1.5
   _SafeSpace: 8
   _FarAway: 15
   _TargetIsTooClose: 0
   _TargetIsTooFar: 0
+  flashDuration: 1
 --- !u!1 &7943146000144737427
 GameObject:
   m_ObjectHideFlags: 0
@@ -5765,6 +5768,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 3014552586673981739, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3014552586673981739, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a9bbce0b9884ab4d84dead0cc7d3af8, type: 2}
     - target: {fileID: 3196525485911759361, guid: 918355dba35195b43a4d585c3294065f,
         type: 3}
       propertyPath: m_Layer
@@ -5925,6 +5938,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 4796609476513720573, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4828196154705864226, guid: 918355dba35195b43a4d585c3294065f,
         type: 3}
       propertyPath: m_Layer
@@ -5964,6 +5982,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5528952700984920434, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5560469534259131340, guid: 918355dba35195b43a4d585c3294065f,
         type: 3}
@@ -6219,6 +6242,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8559314264701786928, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8626680284472731003, guid: 918355dba35195b43a4d585c3294065f,
         type: 3}
