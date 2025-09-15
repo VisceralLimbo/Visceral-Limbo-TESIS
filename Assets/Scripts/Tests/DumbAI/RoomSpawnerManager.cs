@@ -33,6 +33,8 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private Color endWaveColor = Color.blue;
     [SerializeField] private bool lightsChanged = false;
 
+    [SerializeField] private Light extraLight;
+
 
     public event System.Action OnCombatEnded;
 
@@ -158,12 +160,16 @@ public class RoomSpawnerManager : MonoBehaviour
     private void ChangeLightsToLastWave()
     {
         SetLightsColor(lastWaveColor);
+
     }
 
 
     private void ChangeLightsToEndWave()
     {
         SetLightsColor(endWaveColor);
+
+        if (extraLight != null)
+            extraLight.gameObject.SetActive(true);
     }
     //script hecho por Patricio Malvasio Maddalena
     // uso de Any / all (Grupo 3)
