@@ -9,10 +9,9 @@ public class RoomSpawnerManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private Spawner[] Spawners;
     [SerializeField] private List<RoomEnterTrigger> roomTriggers;
-    [SerializeField] private AudioSource audioSource;
     [SerializeField] private DialogueData _finishCombatDialogue;
     [SerializeField] Transform _spawnPointReward;
-    [SerializeField] SoundData _spawnSound,_rewardSound;
+    [SerializeField] SoundData _spawnSound,_rewardSound,_FinishWaveSound;
     [SerializeField] private GameObject _reward;
 
     [Space]
@@ -133,7 +132,9 @@ public class RoomSpawnerManager : MonoBehaviour
                 trap.DeactivateTrap();
             }
 
-            audioSource.Play();
+            //audioSource.Play();
+            SoundManager.Instance.CreateSound().WithSoundData(_FinishWaveSound).play();
+
 
             ChangeLightsToEndWave();
 
@@ -188,7 +189,7 @@ public class RoomSpawnerManager : MonoBehaviour
     {
         foreach (var item in Spawners)
         {
-            item.SetPlayerIndex(playerContext);
+         
             item.SpawnEnemy();
 
             SoundManager.Instance.CreateSound()

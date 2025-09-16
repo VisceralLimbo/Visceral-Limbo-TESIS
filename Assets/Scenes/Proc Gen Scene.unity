@@ -123,6 +123,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &97197499 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 301984172770424072, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 552598486}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &169223407
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,6 +583,51 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 273435371}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &314384910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 314384912}
+  - component: {fileID: 314384911}
+  m_Layer: 0
+  m_Name: Camera Shaker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &314384911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314384910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c4a1d332dfaad141a448126836c84f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakePivot: {fileID: 97197499}
+--- !u!4 &314384912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314384910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1032.6028, y: 677.60724, z: -1403.6517}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &552598486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -826,7 +877,7 @@ MonoBehaviour:
   generatedRooms: []
   generatedHallways: []
   generatedSpecialRooms: []
-  RegularRoomCount: 5
+  RegularRoomCount: 10
   SpecialRoomCount: 2
   RoomMask:
     serializedVersion: 2
@@ -834,7 +885,7 @@ MonoBehaviour:
   IsGenerated: 0
   TotalTriesPerRoomGeneration: 600
   SlowGen: 1
-  SlowGenSpeed: 0.05
+  SlowGenSpeed: 0.1
   Regen: 0
 --- !u!1 &849329343
 GameObject:
@@ -2703,7 +2754,7 @@ PrefabInstance:
     - target: {fileID: 2637786474617827785, guid: 670589b139ae694479490277858eedf7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 872.4
+      value: 717.5
       objectReference: {fileID: 0}
     - target: {fileID: 2637786474617827785, guid: 670589b139ae694479490277858eedf7,
         type: 3}
@@ -2713,7 +2764,7 @@ PrefabInstance:
     - target: {fileID: 2637786474617827785, guid: 670589b139ae694479490277858eedf7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1529.551
+      value: -1617.3
       objectReference: {fileID: 0}
     - target: {fileID: 2637786474617827785, guid: 670589b139ae694479490277858eedf7,
         type: 3}
@@ -2907,7 +2958,7 @@ PrefabInstance:
     - target: {fileID: 3649251009625253631, guid: 30b6a12f8020a104cb19595ce5ff5eab,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 905.5
+      value: 750.6
       objectReference: {fileID: 0}
     - target: {fileID: 3649251009625253631, guid: 30b6a12f8020a104cb19595ce5ff5eab,
         type: 3}
@@ -2917,7 +2968,7 @@ PrefabInstance:
     - target: {fileID: 3649251009625253631, guid: 30b6a12f8020a104cb19595ce5ff5eab,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1605.5
+      value: -1693.249
       objectReference: {fileID: 0}
     - target: {fileID: 3649251009625253631, guid: 30b6a12f8020a104cb19595ce5ff5eab,
         type: 3}
@@ -2994,3 +3045,4 @@ SceneRoots:
   - {fileID: 849329345}
   - {fileID: 7659165009973472982}
   - {fileID: 9077410149185623688}
+  - {fileID: 314384912}

@@ -43,6 +43,7 @@ Transform:
   - {fileID: 9018824476102128553}
   - {fileID: 809209371869223688}
   - {fileID: 2872923631197432211}
+  - {fileID: 5396747017462765615}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &885365015623783366
@@ -105,10 +106,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Spawners: []
   roomTriggers: []
-  audioSource: {fileID: 0}
   _finishCombatDialogue: {fileID: 11400000, guid: 39db01f020d4f884f9fdd2d0b79c0567,
     type: 2}
-  _spawnPointReward: {fileID: 0}
+  _spawnPointReward: {fileID: 5396747017462765615}
   _spawnSound:
     Clip: {fileID: 8300000, guid: 7051555c10ac127469bffe637f270068, type: 3}
     mixerGroup: {fileID: 0}
@@ -123,7 +123,13 @@ MonoBehaviour:
     PlayOnAwake: 0
     SpatialBlend: 1
     IsFrequent: 0
-  _animatorObjective: {fileID: 0}
+  _FinishWaveSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
   _reward: {fileID: 6793646747186521611, guid: 1a5c165768663ca4da9c92a0410adea7, type: 3}
   MinionsAlive: 0
   SpawnersSpent: 0
@@ -137,6 +143,7 @@ MonoBehaviour:
   lastWaveColor: {r: 1, g: 0, b: 0, a: 1}
   endWaveColor: {r: 0, g: 0, b: 1, a: 1}
   lightsChanged: 0
+  extraLight: {fileID: 0}
 --- !u!1 &299863055903289090
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,7 +303,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1 &1481824365974374708
 GameObject:
   m_ObjectHideFlags: 0
@@ -561,7 +567,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1 &2544756682448918564
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,3 +1017,34 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &8075674979667646862
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5396747017462765615}
+  m_Layer: 0
+  m_Name: Reward
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5396747017462765615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8075674979667646862}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.309, y: 1.8, z: -0.019}
+  m_LocalScale: {x: 0.051572792, y: 0.8349705, z: 0.05711004}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2768976608963461926}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

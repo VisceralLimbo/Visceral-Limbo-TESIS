@@ -27,9 +27,13 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     public void Initialize(RoomSpawnerManager SpawnerManager)
     {
-        if (roomSpawnerManager == null) return;
+        print("Initilializing with spawner" + SpawnerManager.name);
+
+        if (
+            SpawnerManager == null) return;
             
         roomSpawnerManager = SpawnerManager;
+        
 
         // alineamiento de las puertas.
         // calculamos la direccion hacia el centro de la sala

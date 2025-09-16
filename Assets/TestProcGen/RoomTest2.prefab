@@ -248,7 +248,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1 &3157535145611892102
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,6 +394,7 @@ Transform:
   - {fileID: 6948559132577441219}
   - {fileID: 8433762911179336495}
   - {fileID: 7761440173117481819}
+  - {fileID: 7381234767329270773}
   - {fileID: 5970380664759333289}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -457,9 +457,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Spawners: []
   roomTriggers: []
-  audioSource: {fileID: 0}
   _finishCombatDialogue: {fileID: 0}
-  _spawnPointReward: {fileID: 0}
+  _spawnPointReward: {fileID: 7381234767329270773}
   _spawnSound:
     Clip: {fileID: 0}
     mixerGroup: {fileID: 0}
@@ -474,7 +473,13 @@ MonoBehaviour:
     PlayOnAwake: 0
     SpatialBlend: 1
     IsFrequent: 0
-  _animatorObjective: {fileID: 0}
+  _FinishWaveSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
   _reward: {fileID: 6356117999051576394, guid: 5244e3d3ebae0cf4db60fcccad9caa5a, type: 3}
   MinionsAlive: 0
   SpawnersSpent: 0
@@ -488,6 +493,38 @@ MonoBehaviour:
   lastWaveColor: {r: 1, g: 0, b: 0, a: 1}
   endWaveColor: {r: 0, g: 0, b: 1, a: 1}
   lightsChanged: 0
+  extraLight: {fileID: 0}
+--- !u!1 &5464218755639305182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7381234767329270773}
+  m_Layer: 0
+  m_Name: Reward
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7381234767329270773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5464218755639305182}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.296, y: 0.9088152, z: -0.233}
+  m_LocalScale: {x: 0.051572792, y: 0.8349705, z: 0.05711004}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7625199513745037501}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5676199246602405395
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +578,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1 &6220520957430408278
 GameObject:
   m_ObjectHideFlags: 0

@@ -384,11 +384,8 @@ public class DungeonGenerator : MonoBehaviour
                     Debug.LogError("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
                     Regenerate();
                 }
+                int randomSourceSeed = Random.Range(0, SourcePool.Count-1);
 
-
-
-
-                int randomSourceSeed = Random.Range(0, SourcePool.Count);
                 DungeonPart SourceRoom = SourcePool[randomSourceSeed];
 
                 // source pool deberia de contener las salas y pasillos disponibles

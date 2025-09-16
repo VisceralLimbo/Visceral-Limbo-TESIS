@@ -22,7 +22,6 @@ public class Spawner : MonoBehaviour
     [Space]
     [Header("References")]
     [SerializeField] RoomSpawnerManager _SpawnManager;
-    public PlayerContext Player;
 
     private void Start()
     {
@@ -31,15 +30,6 @@ public class Spawner : MonoBehaviour
             _SpawnManager= GetComponentInParent<RoomSpawnerManager>();
         }
         EnemyGenerator = GetNextEnemy().GetEnumerator();
-    }
-
-    /// <summary>
-    /// set de contexto del jugador
-    /// </summary>
-    /// <param name="NewPlayer"> nuevo contexto</param>
-    public void SetPlayerIndex(PlayerContext NewPlayer)
-    {
-        Player = NewPlayer;
     }
 
     public int RemainingSpawns
@@ -60,14 +50,7 @@ public class Spawner : MonoBehaviour
             Debug.LogError("<Color = blue> Visceral Error: Spawner has no assigned Enemies </color>");
             return;
         }
-        if (Player == null)
-        {
-            Player = _SpawnManager.playerContext;
-            if(Player == null)
-            {
-                Debug.LogError("<Color = blue> Visceral Error: Spawner has no assigned value for PlayerContext");
-            }
-        }
+      
         if (HasMinion || IsSpent)
         {
             return;
@@ -80,12 +63,7 @@ public class Spawner : MonoBehaviour
 
             var InstantiatedEnemy = Instantiate(NextEnemy,transform.position,transform.rotation);
             //var DumbEnemySC = InstantiatedEnemy.GetComponent<DumbEnemy>();
-            if(InstantiatedEnemy.TryGetComponent(out DumbEnemy DumbEnemySC))
-            {
-                DumbEnemySC.SetPlayerReference(Player);
-                DumbEnemySC.SetTransformAndRotation(this.transform, this.transform.rotation);
-            }
-       
+   
             EnemySpawnedHP = InstantiatedEnemy.GetComponent<Health_Component>();
             if (EnemySpawnedHP == null) EnemySpawnedHP = InstantiatedEnemy.GetComponentInChildren<Health_Component>();
             EnemySpawnedHP.OnDeath += MyMinionDied;
