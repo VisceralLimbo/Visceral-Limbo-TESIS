@@ -13,18 +13,14 @@ public class Decayed_Attack : BaseState
     [SerializeField] Transform _Target;
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] GameObject flashAttackParticle;
-    //la mesh del enemigo
-    [SerializeField] SkinnedMeshRenderer _EnemyMesh;
-    //el mat del flash (se setea en la corutina)
-    [SerializeField] Material FlashEnemyMat;
 
     [Header("Variables")]
     [SerializeField] float _AttackSpeed;
     [SerializeField] float _SafeSpace,_FarAway;
     Vector3 TargetDirection;
     [SerializeField] bool _TargetIsTooClose,_TargetIsTooFar;
-    //duracion del flash
-    [SerializeField] float flashDuration = 1f;
+
+    bool isFlashing = false;
 
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
@@ -110,63 +106,43 @@ public class Decayed_Attack : BaseState
             return;
         }
 
-        //la llamo antes de disparar para que haga el flash (el cooldown es poco asi que no se como quieren trabajar eso)
-        TriggerFlash();
+        // Si no está haciendo flash, iniciarlo
+        if (!isFlashing)
+        {
+            CTX.StartCoroutine(FlashThenShoot());
+        }
+    }
 
-        //realizar ataque
+    private IEnumerator FlashThenShoot()
+    {
+        isFlashing = true;
+
+        // prefab de la paritucla
+        if (flashAttackParticle != null)
+        {
+            GameObject flashGO = Instantiate(flashAttackParticle, _BulletSpawnPoint.position, _BulletSpawnPoint.rotation);
+            ParticleSystem flashPS = flashGO.GetComponent<ParticleSystem>();
+            if (flashPS != null)
+                flashPS.Play();
+
+            // destruyo dsp de la duracion
+            Destroy(flashGO, flashPS.main.duration); ;
+        }
+
+        // espero 1 seg para disparar (ver de bajar subir etc)
+        yield return new WaitForSeconds(1f);
+
+        // Animación y disparo de bala
         _AnimHandler.SetParameter("Decayed", "Attack", AnimatorControllerParameterType.Trigger);
 
-        //obtener el animador que usamos
-        if(_AnimHandler.TryGetAnimator("Decayed",out Animator Anim))
-        {
-            // chequeo si termino la animacion actual
-            if(Anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)
-            {
-                pulse = 0;
-                var correctTarget = _Target.transform.position + Vector3.up;
-                //apuntado al player
-                _BulletSpawnPoint.LookAt(correctTarget, _KCC.CharacterUp);
+        //como estaba lo anterior
+        var correctTarget = _Target.position + Vector3.up;
+        _BulletSpawnPoint.LookAt(correctTarget, _KCC.CharacterUp);
 
+        var bullet = Instantiate(_BulletPrefab, _BulletSpawnPoint.position, _BulletSpawnPoint.rotation);
+        bullet.GetComponent<BulletDumb>().SetOwner(stateMachine.gameObject, stateMachine.GetComponent<PlayerContext>());
 
-                // instanciado de bala
-                var bullet =Instantiate(_BulletPrefab, _BulletSpawnPoint.position, _BulletSpawnPoint.rotation);
-                bullet.GetComponent<BulletDumb>().SetOwner(CTX.gameObject, CTX.GetComponent<PlayerContext>());
-           
-            }
-        }
-    
-    }
-
-    public void TriggerFlash()
-    {
-        //funcion para llamar a la courtina
-        StartCoroutine(FlashCoroutine());
-    }
-
-    private IEnumerator FlashCoroutine()
-    {
-        // agarro la lista de materiales q tiene el enemigo
-        Material[] currentMats = _EnemyMesh.materials;
-
-        // si tiene 1 agrego slot para otro mat el flash
-        if (currentMats.Length == 1)
-        {
-            System.Array.Resize(ref currentMats, 2);
-        }
-
-        // el original va en el 0
-        Material baseMat = currentMats[0];
-
-        // el flash 1 (seria el segundo)
-        currentMats[1] = FlashEnemyMat;
-        _EnemyMesh.materials = currentMats;
-
-        // espero la duracion del flash
-        yield return new WaitForSeconds(flashDuration);
-
-        // vuelvo a tener el material base
-        Material[] restoreMats = new Material[1];
-        restoreMats[0] = baseMat;
-        _EnemyMesh.materials = restoreMats;
+        pulse = 0;
+        isFlashing = false;
     }
 }
