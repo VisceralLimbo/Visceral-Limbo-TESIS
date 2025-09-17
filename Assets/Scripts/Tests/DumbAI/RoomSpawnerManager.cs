@@ -149,12 +149,12 @@ public class RoomSpawnerManager : MonoBehaviour
                     .WithPosition(_spawnPointReward.position)
                     .WithSpatialBlend(1).play();
             }
-
             DialogueManager.instance.StartDialogue(_finishCombatDialogue);
 
             MusicManager.Instance?.PlayExplorationMusic();
             OnCombatEnded?.Invoke();
         }
+
     }
 
 

@@ -6,8 +6,6 @@ using System.Linq;
 public class DoorScript : MonoBehaviour, IRaycastInteractable
 {
     [Header("References")]
-    [SerializeField] Collider SolidCollider;
-    [SerializeField] Collider DoorTrigger;
     [SerializeField] RoomSpawnerManager roomSpawnerManager;
     [SerializeField] AnimatorHandler _AnimHandler;
 
@@ -133,4 +131,5 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     {
         
     }
+
 }
