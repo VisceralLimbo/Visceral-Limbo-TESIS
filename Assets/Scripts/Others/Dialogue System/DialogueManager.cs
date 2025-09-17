@@ -41,13 +41,14 @@ public class DialogueManager : Visceral_Script
     public Material DialogueEffectMaterial;
 
     [SerializeField] private string damageFlashProperty = "_VignetteIntensity";
+    [SerializeField] private string damageBloodFlashProperty = "_VoronoiPower";
 
     public Material BloodEffectMaterial;
 
     [SerializeField] private float shaderTransitionDuration = 0.5f;
 
     private Coroutine dialogueShaderCoroutine;
-    private Coroutine bloodShaderCoroutine;
+    private Coroutine dialogueBloodShaderCoroutine;
 
     private bool _dialogueActive = false;
     private DialogueNode currentNodeData;
@@ -59,8 +60,6 @@ public class DialogueManager : Visceral_Script
     {
         if (instance == null && instance != this) instance = this;
 
-        if (BloodEffectMaterial != null)
-            BloodEffectMaterial.SetFloat("_SetActive", 0f);
     }
     private void Update()
     {
@@ -102,16 +101,19 @@ public class DialogueManager : Visceral_Script
 
        
 
+        if (BloodEffectMaterial != null)
+        {
+            if (dialogueBloodShaderCoroutine != null) StopCoroutine(dialogueBloodShaderCoroutine);
+            dialogueBloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_VoronoiPower", 2.3f));
+        }
+
         if (DialogueEffectMaterial != null)
         {
             if (dialogueShaderCoroutine != null) StopCoroutine(dialogueShaderCoroutine);
             dialogueShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(DialogueEffectMaterial, "_VignetteIntensity", 1f));
         }
 
-        if(BloodEffectMaterial != null)
-        {
-            BloodEffectMaterial.SetFloat("_SetActive", 1f);
-        }
+
 
         NextNode();
 
@@ -239,7 +241,8 @@ public class DialogueManager : Visceral_Script
 
         if (BloodEffectMaterial != null)
         {
-            BloodEffectMaterial.SetFloat("_SetActive", 0f);
+            if (dialogueBloodShaderCoroutine != null) StopCoroutine(dialogueBloodShaderCoroutine);
+            dialogueBloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_VoronoiPower", 0f));
         }
 
         Debug.Log("FinishDialogue");
@@ -250,7 +253,7 @@ public class DialogueManager : Visceral_Script
     private IEnumerator SetShaderFloatOverTime(Material mat, string property, float targetValue)
     {
         DialogueEffectMaterial.SetFloat(damageFlashProperty, 1f);
-
+        BloodEffectMaterial.SetFloat(damageBloodFlashProperty, 2.3f);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -262,9 +265,11 @@ public class DialogueManager : Visceral_Script
             elapsed += Time.deltaTime;
             float newValue = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
             DialogueEffectMaterial.SetFloat(damageFlashProperty, newValue);
+            BloodEffectMaterial.SetFloat(damageBloodFlashProperty, newValue);
             yield return null;
         }
         DialogueEffectMaterial.SetFloat(damageFlashProperty, 0f);
+        BloodEffectMaterial.SetFloat(damageBloodFlashProperty, 0f);
     }
 
 }
