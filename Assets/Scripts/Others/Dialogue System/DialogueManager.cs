@@ -99,7 +99,8 @@ public class DialogueManager : Visceral_Script
         foreach (var uiElement in UIElementsToHide)
             uiElement.SetActive(false);
 
-
+        //no se mueve
+        LockPlayerMovement();
 
         dialogueBloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_VoronoiPower", -15f));
         dialogueShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(DialogueEffectMaterial, "_VignetteIntensity", 25f));
@@ -225,6 +226,9 @@ public class DialogueManager : Visceral_Script
             uiElement.SetActive(true);
 
 
+        // se mueve
+        UnlockPlayerMovement();
+
         dialogueShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(DialogueEffectMaterial, "_VignetteIntensity", 0f));
         dialogueBloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_VoronoiPower", 0f));
 
@@ -251,6 +255,25 @@ public class DialogueManager : Visceral_Script
         mat.SetFloat(property, targetValue); 
     }
 
+    //funcion no se mueve
+    private void LockPlayerMovement()
+    {
+        Player_Movement player = FindObjectOfType<Player_Movement>();
+        if (player != null)
+        {
+            player.IsMovementBlocked = true;
+        }
+    }
+
+    //funcion se mueve
+    private void UnlockPlayerMovement()
+    {
+        Player_Movement player = FindObjectOfType<Player_Movement>();
+        if (player != null)
+        {
+            player.IsMovementBlocked = false;
+        }
+    }
 
 }
 

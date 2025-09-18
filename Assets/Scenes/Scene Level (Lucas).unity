@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.654
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0832654, g: 0.08773238, b: 0.07918536, a: 0.654}
+  m_IndirectSpecularColor: {r: 0.08326563, g: 0.08773251, b: 0.07918547, a: 0.654}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1189,7 +1189,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1 &22934743
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,7 +2518,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &49004706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9587,7 +9585,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &175479646
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10631,7 +10628,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &194569614
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11613,7 +11609,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &209133018
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12377,7 +12372,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &223217821
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24681,7 +24675,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &435256360
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27062,6 +27055,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4534105725624815546, guid: 88f9bc21929c47b4c9b3b34ca8a17b85,
     type: 3}
   m_PrefabInstance: {fileID: 478006938}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &480525330 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2476023761508969676, guid: e070b523ff47750449dd7adc60fa41d4,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017559239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &480525331
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480525330}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.050000004, y: 0.050000004, z: 0.030521343}
+  m_Center: {x: 0, y: 0, z: 0.0052606687}
+--- !u!114 &480525332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480525330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e12b0b5e1b9da545bdcb31f69f18a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 50
+  lootChest: {fileID: 11400000, guid: fd66439f2c9df564eac50645a0cf360c, type: 2}
+  chestAnimator: {fileID: 480525333}
+--- !u!95 &480525333 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 199079711916117779, guid: e070b523ff47750449dd7adc60fa41d4,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017559239}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &480778891
 PrefabInstance:
@@ -37081,7 +37122,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &640349897
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48426,7 +48466,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!4 &824242492 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8378155352308638074, guid: 810c7160d1bc2b1429cb8cc04201a232,
@@ -49929,7 +49968,6 @@ MonoBehaviour:
   roomTriggers:
   - {fileID: 1225143313}
   - {fileID: 710725139}
-  audioSource: {fileID: 852603609}
   _finishCombatDialogue: {fileID: 11400000, guid: 39db01f020d4f884f9fdd2d0b79c0567,
     type: 2}
   _spawnPointReward: {fileID: 1493433391}
@@ -49942,6 +49980,13 @@ MonoBehaviour:
     IsFrequent: 1
   _rewardSound:
     Clip: {fileID: 8300000, guid: aa4881152af6b5d45baea459ea9e7ed0, type: 3}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
+  _FinishWaveSound:
+    Clip: {fileID: 0}
     mixerGroup: {fileID: 0}
     Loop: 0
     PlayOnAwake: 0
@@ -55125,7 +55170,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &958377707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61098,7 +61142,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &1048906044
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66388,7 +66431,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &1131204130
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -72409,7 +72451,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &1229738083
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -72554,7 +72595,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &1233069591
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74800,7 +74840,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &1275805639
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -78523,7 +78562,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!4 &1334835496 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2439024607547813770, guid: 0c157397b45374447a0a4528864277ed,
@@ -79262,7 +79300,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &1356545472
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -81485,7 +81522,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &1391818501
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -84392,7 +84428,6 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
-  Player: {fileID: 0}
 --- !u!1001 &1440694831
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -99099,7 +99134,6 @@ MonoBehaviour:
   roomTriggers:
   - {fileID: 1658279160}
   - {fileID: 1194079804}
-  audioSource: {fileID: 1713126035}
   _finishCombatDialogue: {fileID: 11400000, guid: 39db01f020d4f884f9fdd2d0b79c0567,
     type: 2}
   _spawnPointReward: {fileID: 587468246}
@@ -99112,6 +99146,13 @@ MonoBehaviour:
     IsFrequent: 1
   _rewardSound:
     Clip: {fileID: 8300000, guid: aa4881152af6b5d45baea459ea9e7ed0, type: 3}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
+  _FinishWaveSound:
+    Clip: {fileID: 0}
     mixerGroup: {fileID: 0}
     Loop: 0
     PlayOnAwake: 0
@@ -100117,7 +100158,6 @@ MonoBehaviour:
   roomTriggers:
   - {fileID: 5394902006721349118}
   - {fileID: 1225143313}
-  audioSource: {fileID: 1732943721}
   _finishCombatDialogue: {fileID: 11400000, guid: 39db01f020d4f884f9fdd2d0b79c0567,
     type: 2}
   _spawnPointReward: {fileID: 1947264501}
@@ -100130,6 +100170,13 @@ MonoBehaviour:
     IsFrequent: 1
   _rewardSound:
     Clip: {fileID: 8300000, guid: aa4881152af6b5d45baea459ea9e7ed0, type: 3}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
+  _FinishWaveSound:
+    Clip: {fileID: 0}
     mixerGroup: {fileID: 0}
     Loop: 0
     PlayOnAwake: 0
@@ -109032,7 +109079,6 @@ MonoBehaviour:
   roomTriggers:
   - {fileID: 1557076596}
   - {fileID: 1658279160}
-  audioSource: {fileID: 1866535723}
   _finishCombatDialogue: {fileID: 11400000, guid: 39db01f020d4f884f9fdd2d0b79c0567,
     type: 2}
   _spawnPointReward: {fileID: 300414484}
@@ -109045,6 +109091,13 @@ MonoBehaviour:
     IsFrequent: 1
   _rewardSound:
     Clip: {fileID: 8300000, guid: aa4881152af6b5d45baea459ea9e7ed0, type: 3}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
+  _FinishWaveSound:
+    Clip: {fileID: 0}
     mixerGroup: {fileID: 0}
     Loop: 0
     PlayOnAwake: 0
@@ -111498,12 +111551,12 @@ PrefabInstance:
     - target: {fileID: 7105564217838861921, guid: f93b46a29e4a6334e8602e0b483004f2,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7105564217838861921, guid: f93b46a29e4a6334e8602e0b483004f2,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7147118578994758863, guid: f93b46a29e4a6334e8602e0b483004f2,
         type: 3}
@@ -118230,6 +118283,97 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &2017559239
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2476023761508969676, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_Name
+      value: CofreSimple
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 112.74111
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 112.74111
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 112.74111
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 878.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 665.453
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1612.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753327272160557097, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2476023761508969676, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 480525332}
+    - targetCorrespondingSourceObject: {fileID: 2476023761508969676, guid: e070b523ff47750449dd7adc60fa41d4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 480525331}
+  m_SourcePrefab: {fileID: 100100000, guid: e070b523ff47750449dd7adc60fa41d4, type: 3}
 --- !u!4 &2018387559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8378155352308638074, guid: 810c7160d1bc2b1429cb8cc04201a232,
@@ -120198,6 +120342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2049465976}
+  - component: {fileID: 2049465977}
   m_Layer: 5
   m_Name: Ecos de sangre
   m_TagString: Untagged
@@ -120226,6 +120371,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2049465977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049465975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a60a5d83db8a0994e9a6c1e1dc530033, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bloodEchoesText: {fileID: 1269061632}
 --- !u!1 &2050697798
 GameObject:
   m_ObjectHideFlags: 0
@@ -127614,3 +127772,4 @@ SceneRoots:
   - {fileID: 1333765903}
   - {fileID: 3156708867007062290}
   - {fileID: 443872542}
+  - {fileID: 2017559239}

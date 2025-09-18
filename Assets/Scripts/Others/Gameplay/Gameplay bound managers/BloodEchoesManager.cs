@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,28 +8,34 @@ public static class BloodEchoesManager
 
     private static float _BloodEchoes;
 
+    public static float BloodEchoes => _BloodEchoes;
+
     /// <summary>
-    /// La cantidad actual de ecos de sangre
+    /// evento que se llama cada q cambian los blood echoes
     /// </summary>
-    public static float BloodEchoes { get { return _BloodEchoes; } }
+
+    public static event Action<float> OnBloodEchoesChanged;
 
     /// <summary>
     /// añadir mas ecos de sangre al jugador
     /// </summary>
-    /// <param name="bloodEchoes">cantidad de ecos de sangre</param>
-    public static void AddBloodEchoes(float bloodEchoes)
+    /// <param name="amount">cantidad de ecos de sangre</param>
+    public static void AddBloodEchoes(float amount)
     {
-        _BloodEchoes += bloodEchoes;
+        _BloodEchoes += amount;
+        OnBloodEchoesChanged?.Invoke(_BloodEchoes); // llamo al evento para q se actualice
     }
 
     /// <summary>
     /// comprar con ecos de sangre, esta funcion es una compra directa
     /// no chequea nada
     /// </summary>
-    /// <param name="Cost"> restar ecos de sangre </param>
-    public static void PurchaseBloodEchoes(float Cost)
+    /// <param name="cost"> restar ecos de sangre </param>
+    public static void PurchaseBloodEchoes(float cost)
     {
-        _BloodEchoes -= BloodEchoes;
+        //se estaba llamando a todos los puntos en lugar de al coste
+        _BloodEchoes -= cost;
+        OnBloodEchoesChanged?.Invoke(_BloodEchoes); // llamo al evento para q se actualice
     }
 
     /// <summary>
@@ -39,7 +46,7 @@ public static class BloodEchoesManager
     /// <returns></returns>
     public static bool CanPurchase(float Cost)
     {
-        if (_BloodEchoes - Cost > 0)
+        if (_BloodEchoes >= Cost)
         {
             PurchaseBloodEchoes(Cost);
             return true;
