@@ -22,6 +22,11 @@ public class HealthDrop : MonoBehaviour
         {
             //lo curo
             health.HealHP(healAmount);
+
+            if (HealthFullscreenEffect.Instance != null)
+            {
+                HealthFullscreenEffect.Instance.PlayEffect(7f); 
+            }
             Destroy(gameObject);
         }
     }
