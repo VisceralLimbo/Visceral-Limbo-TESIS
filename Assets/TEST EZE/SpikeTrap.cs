@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpikeTrap : MonoBehaviour
@@ -11,8 +12,12 @@ public class SpikeTrap : MonoBehaviour
     [SerializeField] private float moveSpeed = 1f;      // velocidad del movimiento
     [SerializeField] private bool freezeMovement = false; // booleano para congelarlos (a modo de test, lo activan en el inspector)
 
-    private float nextDamageTime = 0f;
+    [Header("player")]
+    [SerializeField] private PlayerContext playerContext; // el contexto del player
+
     private Vector3 startPos;
+    //diccionario que respeta cada nextdamage de cada collider que entra
+    private Dictionary<Health_Component, float> lastDamageTime = new Dictionary<Health_Component, float>();
 
     private void Start()
     {
@@ -33,13 +38,35 @@ public class SpikeTrap : MonoBehaviour
         // solo hacen dmg si estan arriba
         if (transform.position.y <= startPos.y) return;
 
-        if (Time.time < nextDamageTime) return;
-
         if (other.TryGetComponent(out Health_Component HPComp))
         {
-            // aplico dmg
-            HPComp.SimpleDamage(damage);
-            nextDamageTime = Time.time + damageInterval;
+            // chequeo cooldown individual
+            float lastTime = 0f;
+            lastDamageTime.TryGetValue(HPComp, out lastTime);
+
+            if (Time.time < lastTime + damageInterval) return;
+
+            PlayerContext victimCtx = HPComp.Context;
+            if (victimCtx != null)
+            {
+                // ctrl c ctrl v de la trampa de fuego o barril ahrw
+                DamageScore dmg = new DamageScore();
+                dmg.Attacker = playerContext; // el playercontext
+                dmg.Victim = victimCtx;
+                dmg.DamageAmount = damage;
+                dmg.ElementalDamage = ElementType.Physical; //supongo physical xd
+                dmg.FactionID = FactionID.LimboTrap;
+
+                // hago dmg con el knonckback y de el score
+                HPComp.TakeDamageWithKnockback(Vector3.zero, 0, dmg);
+            }
+            else
+            {
+                HPComp.SimpleDamage(damage);
+            }
+
+            // se actualiza individualmente
+            lastDamageTime[HPComp] = Time.time;
         }
     }
 }
