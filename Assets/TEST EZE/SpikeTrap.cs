@@ -7,8 +7,9 @@ public class SpikeTrap : MonoBehaviour
     [SerializeField] private float damageInterval = 1f;  // cd del dmg
 
     [Header("sube y baja")]
-    [SerializeField] private float moveHeight = 0.5f;   // cuanto suben y bajan
-    [SerializeField] private float moveSpeed = 2f;      // velocidad del movimiento
+    [SerializeField] private float moveHeight = 1f;   // cuanto suben y bajan
+    [SerializeField] private float moveSpeed = 1f;      // velocidad del movimiento
+    [SerializeField] private bool freezeMovement = false; // booleano para congelarlos (a modo de test, lo activan en el inspector)
 
     private float nextDamageTime = 0f;
     private Vector3 startPos;
@@ -20,6 +21,8 @@ public class SpikeTrap : MonoBehaviour
 
     private void Update()
     {
+        if (freezeMovement) return; // bool on se congelan donde estan 
+
         // movimiento arriba y abajo
         float newY = startPos.y + Mathf.Sin(Time.time * moveSpeed) * moveHeight;
         transform.position = new Vector3(startPos.x, newY, startPos.z);
