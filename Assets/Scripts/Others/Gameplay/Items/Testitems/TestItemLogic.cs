@@ -84,6 +84,11 @@ public class TestItemLogic : ItemLogic
                 _Context = context;
                 Inventory = context.Inventory;
                 OnPickUp();
+
+                if (HealthFullscreenEffect.Instance != null)
+                {
+                    HealthFullscreenEffect.Instance.PlayEffect(7f);
+                }
             }
             else
             {
