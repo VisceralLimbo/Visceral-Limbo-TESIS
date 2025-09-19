@@ -151,15 +151,14 @@ public class Player_MeleeAttack : Visceral_Script
             _ComboCounter = 0;
         }
 
-        _AnimHandler.TryGetAnimator("Weapon", out Animator WeaponAnim); // obtener el animator
+        _AnimHandler.TryGetAnimator("PlayerWeapon", out Animator WeaponAnim); // obtener el animator
         WeaponAnim.runtimeAnimatorController = CurrentCombo[_ComboCounter]._AnimatorOV; //override de animaciones
         WeaponAnim.speed = AttackSpeedMod; // velocidad de ataque
         _Anim = WeaponAnim;
 
         //set de trigger
-        _AnimHandler.SetParameter("Weapon", "StartAttack", AnimatorControllerParameterType.Trigger);
+        _AnimHandler.SetParameter("PlayerWeapon", "Attack", AnimatorControllerParameterType.Trigger);
         //_AnimHandler.ResetAllTriggers("Weapon");
-        print("attack trigger!");
 
         float animationLength = 0f;
         foreach (var clip in WeaponAnim.runtimeAnimatorController.animationClips)
@@ -204,7 +203,7 @@ public class Player_MeleeAttack : Visceral_Script
             _Weapon.StopAttacking();
             //_Anim.SetTrigger("AttackTrigger");
             //_Anim.ResetTrigger("ChargeRelease");
-            _AnimHandler.SetParameter("Weapon", "AttackTrigger", AnimatorControllerParameterType.Trigger);
+            //_AnimHandler.SetParameter("Weapon", "AttackTrigger", AnimatorControllerParameterType.Trigger);
 
             if (swordTrail != null) swordTrail.emitting = false;
             if (swordTrail != null) swordTrail2.emitting = false;

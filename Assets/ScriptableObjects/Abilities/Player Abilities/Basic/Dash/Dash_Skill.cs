@@ -7,6 +7,7 @@ public class Dash_Skill : Visceral_SkillLogic
 {
 
     [SerializeField] Player_Movement _KCCMotorMovement;
+    [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Player_Base _Base;
     [SerializeField] private float _DashStrenght;
 
@@ -25,7 +26,7 @@ public class Dash_Skill : Visceral_SkillLogic
         FinalDashMovement *= _DashStrenght;
         _KCCMotorMovement.AddExternalVelocity(FinalDashMovement, true);
 
-
+        _AnimHandler.SetParameter("PlayerWeapon", "Exe_Support", AnimatorControllerParameterType.Trigger);
 
     }
 
@@ -43,6 +44,10 @@ public class Dash_Skill : Visceral_SkillLogic
         if(_Base == null)
         {
             _Base = UserContext.GetComponentInChildren<Player_Base>(true);
+        }
+        if(_AnimHandler == null)
+        {
+            _AnimHandler = UserContext.GetComponent<AnimatorHandler>();
         }
 
     }

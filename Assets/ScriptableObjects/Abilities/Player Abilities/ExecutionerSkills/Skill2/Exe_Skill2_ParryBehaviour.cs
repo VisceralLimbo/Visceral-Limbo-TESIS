@@ -46,7 +46,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
 
         _Anim.speed = SkillSpeedMod;
         _Anim.runtimeAnimatorController = _ANCO;
-        _AnimHandler.SetParameter("PlayerWeapon", "StartSkill2", AnimatorControllerParameterType.Trigger);   
+        _AnimHandler.SetParameter("PlayerWeapon", "Exe_Skill2", AnimatorControllerParameterType.Trigger);   
         StartCoroutine(LockSkill());
 
 
@@ -60,7 +60,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
    IEnumerator LockSkill()
    {
         //catch! la animacion actual NO es la del Parry
-        while (!_Anim.GetNextAnimatorStateInfo(0).IsName("Exe_Skill2"))
+        while (!_Anim.GetNextAnimatorStateInfo(0).IsName("Parry"))
         {
             yield return null;
         }
@@ -119,8 +119,8 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
             yield return null;
         }
 
-        print("Resseting trigger");
-        _AnimHandler.SetParameter("PlayerWeapon", "Skill2Trigger", AnimatorControllerParameterType.Trigger);
+
+        _AnimHandler.ResetTrigger("PlayerWeapon", "Exe_Skill2");
         _Anim.speed = 1.0f;
         //_AnimHandler.ResetAllTriggers("PlayerWeapon");
    }

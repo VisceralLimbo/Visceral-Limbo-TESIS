@@ -29,7 +29,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
     {
         _Anim.speed = SkillSpeedMod;
         _Anim.runtimeAnimatorController = _ANCO;
-        _Anim.Play("Exe_Skill1", 0, 0);
+        _Anim.SetTrigger("Exe_Skill1");
 
         Vector3 offsetPos = _UserContext.PlayerGameObject.transform.position + Vector3.up * 0.1f; // cambiá el 1.0f según lo alto que lo quieras
         GameObject vfx = Instantiate(_effectHability, offsetPos, Quaternion.identity, _UserContext.PlayerGameObject.transform);
@@ -58,7 +58,6 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         {
             yield return null;
         }
-        _Anim.SetTrigger("Skill1Trigger");
         _Anim.speed = 1.0f;
         Weapon.StopAttacking();
         SoundManager.Instance.ReturnToPool(_SoundEmit);
