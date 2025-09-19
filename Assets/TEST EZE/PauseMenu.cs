@@ -10,11 +10,17 @@ public class PauseMenu : MonoBehaviour
     private bool isPaused = false;
     [SerializeField] private Player_Base playerBase; // ref al player base para traer el _Player_InputActions (no lo tienen en la jerarquia, lo llaman en playerbase entonces tuve que hacer esto xd)
 
+
+
     void Update()
     {
         if (Keyboard.current.escapeKey.wasPressedThisFrame && !isPaused)
         {
             PauseGame();
+        }
+        else if(Keyboard.current.escapeKey.wasPressedThisFrame && isPaused)
+        {
+            ResumeGame();
         }
     }
 

@@ -414,7 +414,7 @@ Transform:
   m_GameObject: {fileID: 177438830}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 897.23834, y: 687.17, z: -1472.72}
+  m_LocalPosition: {x: 903.49835, y: 687.17, z: -1517.32}
   m_LocalScale: {x: 11.085, y: 0.47784874, z: 11.085}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -704,7 +704,7 @@ PrefabInstance:
     - target: {fileID: 1489878496788334027, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 890.94
+      value: 897.2
       objectReference: {fileID: 0}
     - target: {fileID: 1489878496788334027, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
@@ -714,7 +714,7 @@ PrefabInstance:
     - target: {fileID: 1489878496788334027, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1484.8
+      value: -1529.4
       objectReference: {fileID: 0}
     - target: {fileID: 1489878496788334027, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
@@ -905,7 +905,7 @@ Transform:
   m_GameObject: {fileID: 561880404}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 897.23834, y: 662.3336, z: -1472.72}
+  m_LocalPosition: {x: 898.31, y: 662.3336, z: -1516.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1272,6 +1272,7 @@ MonoBehaviour:
   DialogueEffectMaterial: {fileID: 2100000, guid: 88c60a332095304499c668ac12a373f2,
     type: 2}
   damageFlashProperty: _VignetteIntensity
+  damageBloodFlashProperty: _VoronoiPower
   BloodEffectMaterial: {fileID: 2100000, guid: 0aa4c37f1dd8602468fb14580ec11c68, type: 2}
   shaderTransitionDuration: 0.5
 --- !u!4 &1176747708
@@ -1613,6 +1614,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PauseMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5412291355700704744, guid: ec5496c101b85a04c8c76b2629a433f5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2018,14 +2024,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160263aff63b0014ba3f88689f76d767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AirKillExtra: 0
-  FriendlyFireExtra: 0
+  AirKillExtra: 100
+  FriendlyFireExtra: 200
   PlayerScore: 0
-  Skill1ScoreBonus: 0
-  Skill2ScoreBonus: 0
-  ParryBonus: 0
+  Skill1ScoreBonus: 50
+  Skill2ScoreBonus: 50
+  ParryBonus: 150
   ScoreText: {fileID: 1503552478}
-  milestoneClip: {fileID: 0}
+  milestoneClip: {fileID: 8300000, guid: b66402182ed823941b1f555d5b4f9180, type: 3}
+--- !u!1 &1896895758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1896895760}
+  - component: {fileID: 1896895759}
+  m_Layer: 0
+  m_Name: Debug
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1896895759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896895758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd92a04501caf34d92d2bce5896c218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnemyList: []
+  TestSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
+--- !u!4 &1896895760
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896895758}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1356.541, y: 669.5459, z: -1720.2751}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1976458043
 GameObject:
   m_ObjectHideFlags: 0
@@ -3306,3 +3364,4 @@ SceneRoots:
   - {fileID: 314384912}
   - {fileID: 1497467913}
   - {fileID: 65897422}
+  - {fileID: 1896895760}

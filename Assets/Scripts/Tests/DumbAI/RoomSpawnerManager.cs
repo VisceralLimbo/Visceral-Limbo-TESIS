@@ -23,6 +23,7 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] float _OffsetSpawnTime;
     [SerializeField] private float _StartingCombatScore;
     [SerializeField] private float _AddExtraRequiredScore;
+    [SerializeField] private int _BloodEchoesReward;
 
     [SerializeField] private List<FireballTrap> trapsInThisRoom;
 
@@ -140,8 +141,12 @@ public class RoomSpawnerManager : MonoBehaviour
 
             if (ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
             {
-                Instantiate(_reward, _spawnPointReward.transform.position, _spawnPointReward.transform.rotation);
-                BloodEchoesManager.AddBloodEchoes(500);
+                if(_reward != null)
+                {
+                    Instantiate(_reward, _spawnPointReward.transform.position, _spawnPointReward.transform.rotation);
+                }
+
+                BloodEchoesManager.AddBloodEchoes(_BloodEchoesReward);
 
                 SoundManager.Instance.CreateSound()
                     .WithSoundData(_rewardSound)

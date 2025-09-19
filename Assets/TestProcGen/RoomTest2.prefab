@@ -241,6 +241,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemySpawns:
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
+  - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
+  - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 1
   RandomTimeSeed: 0.2
@@ -394,6 +396,7 @@ Transform:
   - {fileID: 6948559132577441219}
   - {fileID: 8433762911179336495}
   - {fileID: 7761440173117481819}
+  - {fileID: 1303745604735480789}
   - {fileID: 7381234767329270773}
   - {fileID: 5970380664759333289}
   m_Father: {fileID: 0}
@@ -481,14 +484,15 @@ MonoBehaviour:
     PlayOnAwake: 0
     SpatialBlend: 1
     IsFrequent: 0
-  _reward: {fileID: 6356117999051576394, guid: 5244e3d3ebae0cf4db60fcccad9caa5a, type: 3}
+  _reward: {fileID: 0}
   MinionsAlive: 0
   SpawnersSpent: 0
   StopThisManager: 0
   _ShouldOffsetSpawnTime: 0
   _OffsetSpawnTime: 0
   _StartingCombatScore: 0
-  _AddExtraRequiredScore: 0
+  _AddExtraRequiredScore: 200
+  _BloodEchoesReward: 250
   trapsInThisRoom: []
   combatLights: []
   lastWaveColor: {r: 1, g: 0, b: 0, a: 1}
@@ -571,6 +575,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemySpawns:
+  - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
+  - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 1
@@ -789,6 +795,61 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &6916142451735999912
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1303745604735480789}
+  - component: {fileID: 5212657679363304541}
+  m_Layer: 0
+  m_Name: Spawner (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1303745604735480789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6916142451735999912}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.285, y: 0.9088152, z: -0.386}
+  m_LocalScale: {x: 0.051572792, y: 0.8349705, z: 0.05711004}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7625199513745037501}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5212657679363304541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6916142451735999912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d6544c1b973cd43a251891e0439fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemySpawns:
+  - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
+  - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
+  - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
+  Index: 0
+  RandomizedTime: 1
+  RandomTimeSeed: 0.2
+  IsSpent: 0
+  HasMinion: 0
+  EnemySpawnedHP: {fileID: 0}
+  _SpawnManager: {fileID: 0}
 --- !u!1 &7898420471976381647
 GameObject:
   m_ObjectHideFlags: 0

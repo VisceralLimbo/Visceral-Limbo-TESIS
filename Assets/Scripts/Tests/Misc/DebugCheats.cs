@@ -15,7 +15,7 @@ public class DebugCheats : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            m_EnemyList.Clear();
+            /*m_EnemyList.Clear();
             m_EnemyList = FindObjectsByType<DumbEnemy>(FindObjectsSortMode.None).ToList();
 
             foreach(var enemy in m_EnemyList)
@@ -30,7 +30,7 @@ public class DebugCheats : MonoBehaviour
                 };
                 hpcomp?.TakeDamage(Dmg);
                 print(enemy.name);
-            }
+            }*/
         }
 
         if(Input.GetKeyDown(KeyCode.L))
@@ -48,6 +48,11 @@ public class DebugCheats : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             SceneManager.LoadScene(1);
+        }
+        if (Input.GetKeyDown(KeyCode.K)) 
+        {
+            BloodEchoesManager.AddBloodEchoes(500);
+            Debug.Log("blood echoes" + BloodEchoesManager.BloodEchoes);
         }
         
     }

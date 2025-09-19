@@ -1,31 +1,23 @@
 using UnityEngine;
 
-public class Chest : MonoBehaviour
+public class Chest : MonoBehaviour, IRaycastInteractable
 {
     [Header("cofre config")]
-    public int cost = 50;
+    public int cost = 150;
     public LootChest lootChest;
     private bool isOpened = false;
-    private bool playerInRange = false;
 
     [Header("animator")]
     [SerializeField] private Animator chestAnimator;
-
-    private void Update()
-    {
-        if (playerInRange && !isOpened && Input.GetKeyDown(KeyCode.G))
-        {
-            TryOpen();
-        }
-    }
 
     public void TryOpen()
     {
         if (isOpened) return;
 
         // chequeo si se puede comprar
-        if (BloodEchoesManager.BloodEchoes >= cost)
+        if (BloodEchoesManager.CanPurchase(cost))
         {
+            isOpened = true;
             BloodEchoesManager.PurchaseBloodEchoes(cost); // descuenta y llamo el evento
             OpenChest();
         }
@@ -58,24 +50,25 @@ public class Chest : MonoBehaviour
                 Instantiate(loot.prefab, transform.position + Vector3.up, Quaternion.identity);
             }
         }
-
-        // le apago el collider despues de usarlo porque si spameaba podia instanciar dos
-        GetComponent<Collider>().enabled = false;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnInteract()
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = true;
-        }
+        TryOpen();
     }
 
-    private void OnTriggerExit(Collider other)
+    public void OnRayCastEnter(RayCastWrapper Detector = null)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = false;
-        }
+
+    }
+
+    public void OnRayCastStay(RayCastWrapper Detector = null)
+    {
+        
+    }
+
+    public void OnRayCastExit(RayCastWrapper Detector = null)
+    {
+
     }
 }

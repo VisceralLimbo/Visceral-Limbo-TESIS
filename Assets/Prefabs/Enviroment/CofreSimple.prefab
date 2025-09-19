@@ -41,6 +41,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2753327272160557097}
   - component: {fileID: 199079711916117779}
+  - component: {fileID: 6120672814699454460}
+  - component: {fileID: 8123005555908816331}
   m_Layer: 0
   m_Name: CofreSimple
   m_TagString: Untagged
@@ -58,7 +60,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 874.413, y: 664.27, z: -1819.26}
-  m_LocalScale: {x: 270.57, y: 270.57, z: 270.57}
+  m_LocalScale: {x: 112.74111, y: 112.74111, z: 112.74111}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8699463219052923834}
@@ -87,6 +89,42 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6120672814699454460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2476023761508969676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e12b0b5e1b9da545bdcb31f69f18a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 50
+  lootChest: {fileID: 11400000, guid: fd66439f2c9df564eac50645a0cf360c, type: 2}
+  chestAnimator: {fileID: 199079711916117779}
+--- !u!65 &8123005555908816331
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2476023761508969676}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.027892156, y: 0.019736892, z: 0.01754703}
+  m_Center: {x: 0.0018777573, y: 0.0044027297, z: 0.0016089653}
 --- !u!1 &3037176933305708155
 GameObject:
   m_ObjectHideFlags: 0
