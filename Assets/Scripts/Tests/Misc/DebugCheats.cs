@@ -45,7 +45,10 @@ public class DebugCheats : MonoBehaviour
                                  .WithRandomPitch(default)
                                  .play();
         }
-
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadScene(1);
+        }
         
     }
 }

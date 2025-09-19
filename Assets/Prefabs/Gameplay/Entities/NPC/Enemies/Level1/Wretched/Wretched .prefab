@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3514927230207140960}
-  - component: {fileID: 891115132177748603}
   m_Layer: 7
   m_Name: State - Hurt
   m_TagString: Untagged
@@ -32,29 +31,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8493371771134585519}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &891115132177748603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3087260152874162058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cd7194ec6ed3cf4db61d6c1990ae3d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stateMachine: {fileID: 0}
-  Mytransitions:
-  - conditions: []
-    _FromGO: {fileID: 3087260152874162058}
-    _ToGO: {fileID: 3593838866995410337}
-    _ShouldTransitionWithNoConditions: 1
-  _MinStateLifetime: 0.3
-  _AnimHandler: {fileID: 0}
-  ragDollTimer: {fileID: 1948345845278127201}
-  KnockBackResistance: 1
-  CanTransition: 0
 --- !u!1 &3593838866995410337
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,13 +78,6 @@ MonoBehaviour:
   stateMachine: {fileID: 4746130255494018027}
   Mytransitions:
   - conditions:
-    - ConditionName: Hurt
-      Value: 1
-      IsResetAfterSwitch: 0
-    _FromGO: {fileID: 3593838866995410337}
-    _ToGO: {fileID: 3087260152874162058}
-    _ShouldTransitionWithNoConditions: 0
-  - conditions:
     - ConditionName: Melee
       Value: 1
       IsResetAfterSwitch: 0
@@ -135,6 +104,7 @@ GameObject:
   - component: {fileID: 4091262336931204975}
   - component: {fileID: 4746130255494018027}
   - component: {fileID: 4654570009590822600}
+  - component: {fileID: 8734160248357180579}
   m_Layer: 7
   m_Name: 'Wretched '
   m_TagString: Untagged
@@ -174,7 +144,7 @@ MonoBehaviour:
   _States:
   - {fileID: 7930172695561420689}
   - {fileID: 8712699911459687716}
-  - {fileID: 891115132177748603}
+  - {fileID: 4563711927287464760}
   _StartingState: {fileID: 7930172695561420689}
   _CurrentState: {fileID: 0}
   _LastState: {fileID: 0}
@@ -183,9 +153,6 @@ MonoBehaviour:
     Value: 0
     IsResetAfterSwitch: 1
   - ConditionName: Melee
-    Value: 0
-    IsResetAfterSwitch: 1
-  - ConditionName: Hurt
     Value: 0
     IsResetAfterSwitch: 1
   _HPComp: {fileID: 1817444877513855909}
@@ -208,6 +175,25 @@ MonoBehaviour:
   KCCMotor: {fileID: 662010605306157248}
   faction: 1
   EnemyValueScore: 30
+--- !u!114 &8734160248357180579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4271440006843977573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49facc866bd71c743bd73bc01c92fa21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _AnimHandler: {fileID: 790518200079803162}
+  _HPComp: {fileID: 1817444877513855909}
+  KnockBackResistance: 1
+  _AnimatorKey: Wretched
+  _HurtTriggerParam: IsHurt
+  _HurtDirectionX: HurtDirectionX
+  _HurtDirectionY: HurtDirectionY
 --- !u!1 &4344612181453360247
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,13 +247,6 @@ MonoBehaviour:
     _FromGO: {fileID: 4344612181453360247}
     _ToGO: {fileID: 3593838866995410337}
     _ShouldTransitionWithNoConditions: 0
-  - conditions:
-    - ConditionName: Hurt
-      Value: 1
-      IsResetAfterSwitch: 0
-    _FromGO: {fileID: 4344612181453360247}
-    _ToGO: {fileID: 3087260152874162058}
-    _ShouldTransitionWithNoConditions: 0
   _MinStateLifetime: 0.15
   _DistanceToChase: 5
   _target: {fileID: 0}
@@ -318,13 +297,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateMachine: {fileID: 0}
   Mytransitions:
-  - conditions:
-    - ConditionName: Hurt
-      Value: 1
-      IsResetAfterSwitch: 0
-    _FromGO: {fileID: 5395917328680714576}
-    _ToGO: {fileID: 3087260152874162058}
-    _ShouldTransitionWithNoConditions: 0
   - conditions: []
     _FromGO: {fileID: 5395917328680714576}
     _ToGO: {fileID: 3593838866995410337}
@@ -1340,7 +1312,12 @@ PrefabInstance:
     - target: {fileID: 6670135137569344894, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6670135137569344894, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
+        type: 3}
+      propertyPath: AnimatorKey
+      value: Wretched
       objectReference: {fileID: 0}
     - target: {fileID: 6707039601386207379, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
         type: 3}
@@ -1501,18 +1478,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8803262148333724239}
   m_SourcePrefab: {fileID: 100100000, guid: dc976b1f30a78cb4ab849ef4adeb3c53, type: 3}
---- !u!114 &1948345845278127201 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6670135137569344894, guid: dc976b1f30a78cb4ab849ef4adeb3c53,
-    type: 3}
-  m_PrefabInstance: {fileID: 5159153372301179167}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cea55b9e6a3cec545a429fd6762105a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3912112279300530452 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8201727600979335179, guid: dc976b1f30a78cb4ab849ef4adeb3c53,

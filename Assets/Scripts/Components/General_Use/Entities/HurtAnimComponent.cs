@@ -21,20 +21,26 @@ public class HurtAnimComponent : MonoBehaviour,IKnockback
 
     private void Start()
     {
-        _HPComp= GetComponent<Health_Component>();
         if(_HPComp == null)
         {
-            _HPComp = GetComponentInParent<Health_Component>();
+            _HPComp = GetComponent<Health_Component>();
+            if (_HPComp == null)
+            {
+                _HPComp = GetComponentInParent<Health_Component>();
+            }
         }
+    
 
         _HPComp.OnKnockbackTaken += ApplyKnockBack;
 
-
-        _AnimHandler = GetComponent<AnimatorHandler>();
-        if(_AnimHandler == null)
+        if(_AnimHandler== null)
         {
-            _AnimHandler= GetComponentInParent<AnimatorHandler>();
-        }
+            _AnimHandler = GetComponent<AnimatorHandler>();
+            if (_AnimHandler == null)
+            {
+                _AnimHandler = GetComponentInParent<AnimatorHandler>();
+            }
+        }   
     }
 
 

@@ -60,10 +60,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
    IEnumerator LockSkill()
    {
         //catch! la animacion actual NO es la del Parry
-        while (!_Anim.GetNextAnimatorStateInfo(0).IsName("Parry"))
-        {
-            yield return null;
-        }
+        print("parring!");
 
          //direccion de la camara
          Vector3 ParryDirection = _camContext.transform.forward;
@@ -119,8 +116,6 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
             yield return null;
         }
 
-
-        _AnimHandler.ResetTrigger("PlayerWeapon", "Exe_Skill2");
         _Anim.speed = 1.0f;
         //_AnimHandler.ResetAllTriggers("PlayerWeapon");
    }
