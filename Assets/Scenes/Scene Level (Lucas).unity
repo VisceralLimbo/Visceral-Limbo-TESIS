@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.654
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.08326541, g: 0.08773236, b: 0.07918536, a: 0.654}
+  m_IndirectSpecularColor: {r: 0.0832654, g: 0.087732375, b: 0.07918535, a: 0.654}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -196,6 +196,11 @@ PrefabInstance:
       propertyPath: uiElementToMoveRight2
       value: 
       objectReference: {fileID: 1082420340}
+    - target: {fileID: 1645752977120970652, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3978679371100750462, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -210,6 +215,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerObj
+      objectReference: {fileID: 0}
+    - target: {fileID: 5974981713616569029, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6323216962684899046, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
@@ -71820,6 +71830,69 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1868943173}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1288884156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1288884158}
+  - component: {fileID: 1288884157}
+  - component: {fileID: 1288884159}
+  m_Layer: 0
+  m_Name: BloodEffectController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1288884157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288884156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 092568144cfe9194facfb3b67c06d8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bloodMaterial: {fileID: 2100000, guid: 0aa4c37f1dd8602468fb14580ec11c68, type: 2}
+  voronoiProperty: _VoronoiPower
+  transitionDuration: 1.6
+--- !u!4 &1288884158
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288884156}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 895.22394, y: 667.1818, z: -1608.8733}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1288884159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288884156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cd4b19f16a7a9f40accd6770dd09367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogMaterial: {fileID: 2100000, guid: 88c60a332095304499c668ac12a373f2, type: 2}
+  vignetteProperty: _VignetteIntensity
+  transitionDuration: 1.6
 --- !u!1001 &1289664845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113144,12 +113217,8 @@ MonoBehaviour:
   _IsTyping: 0
   CurrentOptionsList: []
   CurrentDialogue: {fileID: 11400000, guid: 31399bb954f2e614a8888318a40e56d8, type: 2}
-  DialogueEffectMaterial: {fileID: 2100000, guid: 88c60a332095304499c668ac12a373f2,
-    type: 2}
-  damageFlashProperty: _VignetteIntensity
-  damageBloodFlashProperty: _VoronoiPower
-  BloodEffectMaterial: {fileID: 2100000, guid: 0aa4c37f1dd8602468fb14580ec11c68, type: 2}
-  shaderTransitionDuration: 0.5
+  bloodController: {fileID: 1288884157}
+  vignetteController: {fileID: 1288884159}
 --- !u!4 &2008389182
 Transform:
   m_ObjectHideFlags: 0
@@ -122746,6 +122815,7 @@ SceneRoots:
   - {fileID: 185461475}
   - {fileID: 23849537}
   - {fileID: 2008389182}
+  - {fileID: 1288884158}
   - {fileID: 1454148426}
   - {fileID: 1732943719}
   - {fileID: 852603607}

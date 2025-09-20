@@ -9,6 +9,7 @@ using System;
 public class DialogueManager : Visceral_Script
 {
     public static DialogueManager instance;
+
     [Header("UI")]
     public TextMeshProUGUI DialogueText;
     public Image SpeakerIcon;
@@ -19,48 +20,33 @@ public class DialogueManager : Visceral_Script
 
     [Header("UI Elements to Hide During Dialogue")]
     public List<GameObject> UIElementsToHide;
-    //public GameObject PlayerSword;
-
-    //[Header("Player Control")]
-    //public Player_Movement PlayerMovement;
 
     [Header("Settings")]
-    [SerializeField] private float _TextSpeed;
+    [SerializeField] private float _TextSpeed = 0.05f;
     [SerializeField] private int _CurrentNodeIndex = 0;
     [SerializeField] private bool _IsTyping = false;
 
     [SerializeField] private List<GameObject> CurrentOptionsList = new List<GameObject>();
-
 
     private Coroutine TypingCoroutine;
     private Coroutine AutoAdvanceTextCoroutine;
 
     public DialogueData CurrentDialogue;
 
-    [Header("Shader Effect")]
-    public Material DialogueEffectMaterial;
-
-    [SerializeField] private string damageFlashProperty = "_VignetteIntensity";
-    [SerializeField] private string damageBloodFlashProperty = "_VoronoiPower";
-
-    public Material BloodEffectMaterial;
-
-    [SerializeField] private float shaderTransitionDuration = 0.5f;
-
-    private Coroutine dialogueShaderCoroutine;
-    private Coroutine dialogueBloodShaderCoroutine;
-
     private bool _dialogueActive = false;
     private DialogueNode currentNodeData;
 
-
     public Action OnDialogueStart, OnDialogueEnd;
+
+    [Header("External Effects")]
+    [SerializeField] private BloodEffectController bloodController;
+    [SerializeField] private DialogueShaderController vignetteController;
 
     public void Awake()
     {
         if (instance == null && instance != this) instance = this;
-
     }
+
     private void Update()
     {
         if (!_dialogueActive) return;
@@ -69,7 +55,12 @@ public class DialogueManager : Visceral_Script
         {
             if (_IsTyping)
             {
-                StopAllCoroutines();
+                if (TypingCoroutine != null)
+                {
+                    StopCoroutine(TypingCoroutine);
+                    TypingCoroutine = null;
+                }
+
                 DialogueText.text = currentNodeData.TextData;
                 _IsTyping = false;
 
@@ -89,6 +80,7 @@ public class DialogueManager : Visceral_Script
             }
         }
     }
+
     public void StartDialogue(DialogueData DialogeDT)
     {
         _dialogueActive = true;
@@ -99,20 +91,17 @@ public class DialogueManager : Visceral_Script
         foreach (var uiElement in UIElementsToHide)
             uiElement.SetActive(false);
 
-        //no se mueve
         LockPlayerMovement();
 
-        dialogueBloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_VoronoiPower", -15f));
-        dialogueShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(DialogueEffectMaterial, "_VignetteIntensity", 25f));
+        // activar efecto sangre
+        if (bloodController != null) bloodController.PlayEffect();
 
-
-
+        // activar vigneta
+        if (vignetteController != null) vignetteController.PlayEffect();
 
         NextNode();
-
         OnDialogueStart?.Invoke();
     }
-
 
     private void NextNode()
     {
@@ -126,9 +115,19 @@ public class DialogueManager : Visceral_Script
             return;
         }
 
-        StopAllCoroutines();
+        if (TypingCoroutine != null)
+        {
+            StopCoroutine(TypingCoroutine);
+            TypingCoroutine = null;
+        }
+        if (AutoAdvanceTextCoroutine != null)
+        {
+            StopCoroutine(AutoAdvanceTextCoroutine);
+            AutoAdvanceTextCoroutine = null;
+        }
+
         ClearOptions();
-        StartCoroutine(TypeText(CurrentDialogue.DialogueNodes[_CurrentNodeIndex]));
+        TypingCoroutine = StartCoroutine(TypeText(CurrentDialogue.DialogueNodes[_CurrentNodeIndex]));
     }
 
     private IEnumerator TypeText(DialogueNode NodeDT)
@@ -142,13 +141,14 @@ public class DialogueManager : Visceral_Script
             DialogueText.text += Letter;
             if (Input.GetKeyDown(KeyCode.E))
             {
-                DialogueText.text = NodeDT.TextData; // Mostrar todo el texto
+                DialogueText.text = NodeDT.TextData;
                 break;
             }
             yield return new WaitForSeconds(_TextSpeed);
         }
 
         _IsTyping = false;
+        TypingCoroutine = null;
 
         if (NodeDT.Options != null && NodeDT.Options.Count > 0)
         {
@@ -164,7 +164,7 @@ public class DialogueManager : Visceral_Script
     {
         OptionsPanel.SetActive(true);
 
-        var validoptions = options.Where(o => !string.IsNullOrEmpty(o.TextReply)).ToList(); //Hecho por Lucas - Where y ToList
+        var validoptions = options.Where(o => !string.IsNullOrEmpty(o.TextReply)).ToList();
 
         foreach (var Option in validoptions)
         {
@@ -173,7 +173,7 @@ public class DialogueManager : Visceral_Script
             ButtonText.text = Option.TextReply;
 
             Button Button = ButtonOBJ.GetComponent<Button>();
-            int nextOption = Option.nextDialogueID; // cache interno
+            int nextOption = Option.nextDialogueID;
             CurrentOptionsList.Add(ButtonOBJ);
             Button.onClick.AddListener(() => SelectOption(nextOption));
         }
@@ -185,6 +185,7 @@ public class DialogueManager : Visceral_Script
         OptionsPanel.SetActive(false);
         NextNode();
     }
+
     private void ClearOptions()
     {
         foreach (var Button in CurrentOptionsList)
@@ -197,7 +198,7 @@ public class DialogueManager : Visceral_Script
     private IEnumerator AutoAdvanceDialogue(float Duration)
     {
         yield return new WaitForSeconds(Duration);
-        if(_CurrentNodeIndex >= CurrentDialogue.DialogueNodes.Count)
+        if (_CurrentNodeIndex >= CurrentDialogue.DialogueNodes.Count)
         {
             _CurrentNodeIndex = 0;
             EndDialogue();
@@ -209,8 +210,8 @@ public class DialogueManager : Visceral_Script
             {
                 _CurrentNodeIndex = CurrentDialogue.DialogueNodes[_CurrentNodeIndex].NextDialogeOption;
                 NextNode();
-            }         
-        } 
+            }
+        }
     }
 
     private void EndDialogue()
@@ -221,61 +222,36 @@ public class DialogueManager : Visceral_Script
         DialoguePanel.SetActive(false);
         OptionsPanel.SetActive(false);
 
-
         foreach (var uiElement in UIElementsToHide)
             uiElement.SetActive(true);
 
-
-        // se mueve
         UnlockPlayerMovement();
 
-        dialogueShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(DialogueEffectMaterial, "_VignetteIntensity", 0f));
-        dialogueBloodShaderCoroutine = StartCoroutine(SetShaderFloatOverTime(BloodEffectMaterial, "_VoronoiPower", 0f));
+        // desactivar efecto sangre
+        if (bloodController != null) bloodController.StopEffect();
 
+        // desactivar vigneta
+        if (vignetteController != null) vignetteController.StopEffect();
 
         Debug.Log("FinishDialogue");
-
         OnDialogueEnd?.Invoke();
     }
 
-    private IEnumerator SetShaderFloatOverTime(Material mat, string property, float targetValue)
-    {
-        float startValue = mat.GetFloat(property); 
-        float duration = shaderTransitionDuration;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float newValue = Mathf.Lerp(startValue, targetValue, elapsed / duration);
-            mat.SetFloat(property, newValue);
-            yield return null;
-        }
-
-        mat.SetFloat(property, targetValue); 
-    }
-
-    //funcion no se mueve
     private void LockPlayerMovement()
     {
         Player_Movement player = FindObjectOfType<Player_Movement>();
-        if (player != null)
-        {
-            player.IsMovementBlocked = true;
-        }
+        if (player != null) player.IsMovementBlocked = true;
     }
 
-    //funcion se mueve
     private void UnlockPlayerMovement()
     {
         Player_Movement player = FindObjectOfType<Player_Movement>();
-        if (player != null)
-        {
-            player.IsMovementBlocked = false;
-        }
+        if (player != null) player.IsMovementBlocked = false;
     }
-
 }
+
+
+
 
 //codigo hecho por patricio malvasio
 // manager de dialogo
