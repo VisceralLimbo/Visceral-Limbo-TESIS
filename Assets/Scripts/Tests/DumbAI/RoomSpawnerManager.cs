@@ -38,6 +38,9 @@ public class RoomSpawnerManager : MonoBehaviour
 
     public event System.Action OnCombatEnded;
 
+    [Header("Particles Setup")]
+    [SerializeField] private List<ParticleSystem> fireParticles;
+
     private void Start()
     {
         if(Spawners.Length <= 0)
@@ -165,28 +168,91 @@ public class RoomSpawnerManager : MonoBehaviour
 
     private void ChangeLightsToLastWave()
     {
-        SetLightsColor(lastWaveColor);
-
+        SetLightsColor(lastWaveColor, 2f); // 2 segundos de transición
     }
 
 
     private void ChangeLightsToEndWave()
     {
-        SetLightsColor(endWaveColor);
+        SetLightsColor(endWaveColor, 2f);
 
         if (extraLight != null)
             extraLight.gameObject.SetActive(true);
     }
+
+
     //script hecho por Patricio Malvasio Maddalena
     // uso de Any / all (Grupo 3)
 
-    private void SetLightsColor(Color c)
+    private void SetLightsColor(Color targetColor, float duration = 2f)
     {
-        if (combatLights == null) return;
+        if (combatLights == null || combatLights.Count == 0) return;
+
+        StopAllCoroutines(); // paramos cualquier transición previa
+        StartCoroutine(TransitionLightsColor(targetColor, duration));
+    }
+
+    private IEnumerator TransitionLightsColor(Color targetColor, float duration)
+    {
+        float elapsed = 0f;
+        List<Color> initialColors = new List<Color>();
+
         foreach (var light in combatLights)
         {
             if (light != null)
-                light.color = c;
+                initialColors.Add(light.color);
+            else
+                initialColors.Add(Color.white);
+        }
+
+        List<Color> initialParticleColors = new List<Color>();
+        foreach (var ps in fireParticles)
+        {
+            if (ps != null)
+                initialParticleColors.Add(ps.main.startColor.color);
+            else
+                initialParticleColors.Add(Color.white);
+        }
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            // Luces
+            for (int i = 0; i < combatLights.Count; i++)
+            {
+                if (combatLights[i] != null)
+                    combatLights[i].color = Color.Lerp(initialColors[i], targetColor, t);
+            }
+
+            // Partículas
+            for (int i = 0; i < fireParticles.Count; i++)
+            {
+                if (fireParticles[i] != null)
+                {
+                    var main = fireParticles[i].main;
+                    main.startColor = Color.Lerp(initialParticleColors[i], targetColor, t);
+                }
+            }
+
+            yield return null;
+        }
+
+        // asegurar que terminan en el color correcto
+        for (int i = 0; i < combatLights.Count; i++)
+        {
+            if (combatLights[i] != null)
+                combatLights[i].color = targetColor;
+        }
+
+        for (int i = 0; i < fireParticles.Count; i++)
+        {
+            if (fireParticles[i] != null)
+            {
+                var main = fireParticles[i].main;
+                main.startColor = targetColor;
+            }
         }
     }
 
