@@ -114,4 +114,9 @@ public class InventoryManager : MonoBehaviour
 
         */
     }
+
+    public Dictionary<ItemDefinitionSO, ItemLogic> GetInventoryItems()
+    {
+        return _Inventory;
+    }
 }
