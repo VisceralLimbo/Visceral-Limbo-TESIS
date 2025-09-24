@@ -62,6 +62,7 @@ public abstract class ItemLogic : MonoBehaviour
         {
             if(other.TryGetComponent(out Inventory))
             {
+                print("item logic: adding self to inventory " + Inventory.GetInstanceID());
                 Inventory.AddItemStack(ItemDefinitionSO);
                 Destroy(this.gameObject);
             }

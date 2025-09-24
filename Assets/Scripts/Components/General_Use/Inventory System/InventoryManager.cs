@@ -9,6 +9,8 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] private Dictionary<ItemDefinitionSO,ItemLogic> _Inventory = new Dictionary<ItemDefinitionSO, ItemLogic>();
 
+    [SerializeField] private List<I_ItemActiveItem> _ActiveItems = new List<I_ItemActiveItem>();
+
     [SerializeField] StatsManager _StatsManager;
 
     [SerializeField] PlayerContext _Context;
@@ -52,6 +54,12 @@ public class InventoryManager : MonoBehaviour
             
             _Inventory[item] = NewComponentItem;
             print("nuevo item adquirido, seteando variables!");
+
+            if(NewComponentItem is I_ItemActiveItem ActiveItem && ActiveItem != null)
+            {
+                print("inventory: thats an active item!");
+                _ActiveItems.Add(ActiveItem);
+            }
 
         }
         else
@@ -113,5 +121,20 @@ public class InventoryManager : MonoBehaviour
         _Inventory.Remove(item);
 
         */
+    }
+
+
+    public void Update()
+    {
+        if(_ActiveItems.Count == 0)
+        {
+            print("inventory manager: no active items");
+            return;
+        }
+
+        foreach (var item in _ActiveItems)
+        {
+            item.UpdateActiveItem(this,_StatsManager);
+        }
     }
 }
