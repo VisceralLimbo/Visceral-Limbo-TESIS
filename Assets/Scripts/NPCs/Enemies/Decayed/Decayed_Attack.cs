@@ -20,6 +20,9 @@ public class Decayed_Attack : BaseState
     Vector3 TargetDirection;
     [SerializeField] bool _TargetIsTooClose,_TargetIsTooFar;
 
+    [SerializeField] private AudioSource _AudioSource;
+    [SerializeField] private AudioClip flashSound;
+
     bool isFlashing = false;
 
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
@@ -127,6 +130,11 @@ public class Decayed_Attack : BaseState
 
             // destruyo dsp de la duracion
             Destroy(flashGO, flashPS.main.duration); ;
+        }
+
+        if (_AudioSource != null && flashSound != null)
+        {
+            _AudioSource.PlayOneShot(flashSound);
         }
 
         // espero 1 seg para disparar (ver de bajar subir etc)
