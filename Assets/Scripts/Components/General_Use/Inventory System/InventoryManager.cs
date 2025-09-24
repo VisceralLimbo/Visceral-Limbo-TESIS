@@ -124,9 +124,10 @@ public class InventoryManager : MonoBehaviour
     }
 
 
+
     public void Update()
     {
-        if(_ActiveItems.Count == 0)
+        if (_ActiveItems.Count == 0)
         {
             print("inventory manager: no active items");
             return;
@@ -134,7 +135,14 @@ public class InventoryManager : MonoBehaviour
 
         foreach (var item in _ActiveItems)
         {
-            item.UpdateActiveItem(this,_StatsManager);
+            item.UpdateActiveItem(this, _StatsManager);
         }
+    }
+
+
+    public Dictionary<ItemDefinitionSO, ItemLogic> GetInventoryItems()
+    {
+        return _Inventory;
+
     }
 }
