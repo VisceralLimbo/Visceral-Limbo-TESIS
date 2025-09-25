@@ -10,7 +10,7 @@ public class Player_MeleeAttack : Visceral_Script
     [Header("References")]
     [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Visceral_WeaponBase _Weapon;
-    [SerializeField] Slider _ChargeSlider;
+
     private Animator _Anim;
     [Space]
 
@@ -32,7 +32,9 @@ public class Player_MeleeAttack : Visceral_Script
     [Header("Variables")]
     [SerializeField]int _ComboCounter; // el combo actual, para cyclear entre animaciones
     [SerializeField] bool _HasFinishedAttack = true; // lock | unlock de ataque, para que el evento de atacar solo se ejecute cuando se termina la animacion
-    
+    bool _PlaySound = true
+        ; // controla si podemos tocar un sonido
+
     /// <summary>
     /// valor que cambia la velocidad de animacion de ataque, valor 1 = normal
     /// </summary>
@@ -55,9 +57,12 @@ public class Player_MeleeAttack : Visceral_Script
 
     public override void VS_Initialize()
     {
+        if(DialogueManager.instance != null)
+        {
+            DialogueManager.instance.OnDialogueStart += sheateWeapon;
+            DialogueManager.instance.OnDialogueEnd += UnsheateWeapon;
+        }
 
-        DialogueManager.instance.OnDialogueStart += sheateWeapon;
-        DialogueManager.instance.OnDialogueEnd += UnsheateWeapon;
     }
 
 
@@ -72,6 +77,8 @@ public class Player_MeleeAttack : Visceral_Script
 
         if (swordTrail != null) swordTrail.emitting = false;
         if (swordTrail != null) swordTrail2.emitting = false;
+
+        _AnimHandler.TryGetAnimator("PlayerWeapon", out _Anim);
     }
 
 
@@ -95,12 +102,8 @@ public class Player_MeleeAttack : Visceral_Script
             print("perform attack");
             _HasFinishedAttack = false;
             AnimatorSelector(); // selector de animaciones
-            AttackHandle(); //ataque
+            StartCoroutine(AttackHandle());
             
-        }
-        else if((_Anim != null && !_HasFinishedAttack))
-        {
-            FinishAttack();
         }
     }
 
@@ -137,7 +140,7 @@ public class Player_MeleeAttack : Visceral_Script
         }
     } // funcion de seleccion de animaciones de ataque
 
-    private void AttackHandle()
+    private IEnumerator AttackHandle()
     {
         // llamo al efecto de la cam dependiendo el animselector para q siga el tipo de golpe  (izq,der,etc)
         Camera.main.GetComponent<CameraFollowSword>()?.DoHitEffect(_AttackDir);
@@ -146,60 +149,71 @@ public class Player_MeleeAttack : Visceral_Script
         if (swordTrail2 != null) swordTrail2.emitting = true;
 
 
+
         if (_ComboCounter >= CurrentCombo.Length) // nos excedimos de combo
         { 
             _ComboCounter = 0;
         }
 
-        _AnimHandler.TryGetAnimator("PlayerWeapon", out Animator WeaponAnim); // obtener el animator
-        WeaponAnim.runtimeAnimatorController = CurrentCombo[_ComboCounter]._AnimatorOV; //override de animaciones
-        WeaponAnim.speed = AttackSpeedMod; // velocidad de ataque
-        _Anim = WeaponAnim;
+        //obtenemos el ataque actual
+        var currentAttack = CurrentCombo[_ComboCounter];
 
-        //set de trigger
+        // seteamos variables de daño y knockback
+        _Weapon.Damage = currentAttack.Damage;
+        _Weapon.KnockBack = currentAttack.KnockBack;
+
+        //aceleramos / slowdown de animacion
+        _Anim.speed = AttackSpeedMod;
+
+
+        // obtenemos el hash.
+        int attackHash = currentAttack.HashedID;
+
+        //seteamos triggers
+        _AnimHandler.SetParameter("PlayerWeapon", "AttackID", AnimatorControllerParameterType.Int, attackHash);
         _AnimHandler.SetParameter("PlayerWeapon", "Attack", AnimatorControllerParameterType.Trigger);
-        //_AnimHandler.ResetAllTriggers("Weapon");
 
-        float animationLength = 0f;
-        foreach (var clip in WeaponAnim.runtimeAnimatorController.animationClips)
-        {
-            if (clip.name == "Attack")
-            {
-                animationLength = clip.length / AttackSpeedMod;
-                break;
-            }
-        }
+
+        //
+        //indicamos al arma que comienze a realizar daño
+        _Weapon.Attacking();
 
         // trails
-        float trailDeactivateTime = Mathf.Max(animationLength - 1f, 0.45f); //cuando se desactiva el trail antes del final de la animacion
+        float trailDeactivateTime = Mathf.Max(currentAttack.AnimationLenght - 1f, 0.45f); //cuando se desactiva el trail antes del final de la animacion
         Invoke(nameof(StopTrails), trailDeactivateTime);
 
 
-        // daño y knockbar
-        _Weapon.Damage = CurrentCombo[_ComboCounter].Damage;
-        _Weapon.KnockBack = CurrentCombo[_ComboCounter].KnockBack;
-        _Weapon.Attacking();
+        if (_PlaySound)
+        {
+            //ejemplo de funcionamiento del Sound manager
+            SoundManager.Instance.CreateSound() //creamos sonido
+                        .WithSoundData(soundData[0]) //con data de audio (variable setteada)
+                        .WithPosition(this.transform.position) //con posicion en custom (si no es 0,0,0)
+                        .WithSpatialBlend(soundData[0].SpatialBlend) // con blendeo espacial
+                        .WithRandomPitch(true) // con pitch de sonido (default -0.05 a 0.05)
+                        .play(); // tocamos el sonido
 
-        // nos desplazamos una animacion
-        _ComboCounter++;
+            _PlaySound = false;
+        }
+      
 
-        //lock de ejecucion de evento
-        _HasFinishedAttack = false;
 
-        //ejemplo de funcionamiento del Sound manager
-        SoundManager.Instance.CreateSound() //creamos sonido
-                    .WithSoundData(soundData[0]) //con data de audio (variable setteada)
-                    .WithPosition(this.transform.position) //con posicion en custom (si no es 0,0,0)
-                    .WithSpatialBlend(soundData[0].SpatialBlend) // con blendeo espacial
-                    .WithRandomPitch(true) // con pitch de sonido (default -0.05 a 0.05)
-                    .play(); // tocamos el sonido
+
+        //frenamos hasta que finalize la ejecucion
+        // reducimos un poco el cooldown para hacer mas smooth el ataque, basicamente que
+        // no tenga tiempo de volver a idle
+        float AttackCooldown = (currentAttack.AnimationLenght / AttackSpeedMod) *0.9f;
+
+        yield return new WaitForSeconds(AttackCooldown);
+
+        FinishAttack();
+
+     
     }
 
 
     public void FinishAttack()
     {
-        if (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)
-        {
             _Weapon.StopAttacking();
             //_Anim.SetTrigger("AttackTrigger");
             //_Anim.ResetTrigger("ChargeRelease");
@@ -207,11 +221,9 @@ public class Player_MeleeAttack : Visceral_Script
 
             if (swordTrail != null) swordTrail.emitting = false;
             if (swordTrail != null) swordTrail2.emitting = false;
-
-            //unlock de funcion
-            _HasFinishedAttack = true;
-        }
-
+        _PlaySound = true;
+        _HasFinishedAttack = true;
+        _ComboCounter++;
     }
 
 
