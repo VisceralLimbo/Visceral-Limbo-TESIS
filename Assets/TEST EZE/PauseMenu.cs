@@ -9,18 +9,35 @@ public class PauseMenu : MonoBehaviour
     public GameObject pausePanel;
     private bool isPaused = false;
     [SerializeField] private Player_Base playerBase; // ref al player base para traer el _Player_InputActions (no lo tienen en la jerarquia, lo llaman en playerbase entonces tuve que hacer esto xd)
-
-
+    [SerializeField] private PauseMenuUI _pauseMenuUI;
+    public GameObject description;
 
     void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame && !isPaused)
+        //lo planteo mas como un volver para atras que cerra desde cualquier punto mas q nada para no hacer cagada mas adelante si se meten mas cosas
+
+        // chequeo escape
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            PauseGame();
-        }
-        else if(Keyboard.current.escapeKey.wasPressedThisFrame && isPaused)
-        {
-            ResumeGame();
+            // si estaba pausado o nop
+            if (!isPaused)
+            {
+                PauseGame();
+            }
+            else // si ya esta pausado voy a cerrar el menu
+            {
+                // vuelvo al menu primero y dsp resumo
+                if (!_pauseMenuUI.pauseMenuPanel.activeSelf)
+                {
+                    //medio hardcodeado pero si el mouse quedaba encima del item y resumia con escape la descripcion se quedaba en pantalla 
+                    description.SetActive(false);
+                    _pauseMenuUI.BackToPauseMenu();
+                }
+                else
+                {
+                    ResumeGame();
+                }
+            }
         }
     }
 
