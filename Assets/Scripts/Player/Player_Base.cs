@@ -58,7 +58,6 @@ public class Player_Base : Visceral_Script
         //_DashTest.VS_InitializeWithParameters(_Player_Movement);
 
         _SkillManager = GetComponent<Visceral_SkillManager>();
-        _ChargedMeleeCombat.VS_Initialize();
 
 
         _SkillManager.VS_Initialize();
