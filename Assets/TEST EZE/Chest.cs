@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Chest : MonoBehaviour, IRaycastInteractable
@@ -31,23 +32,23 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     {
         isOpened = true;
 
-        // activo anim
         if (chestAnimator != null)
-        {
             chestAnimator.SetBool("isOpen", true);
-        }
 
-        //hago el random 
+        StartCoroutine(SpawnLootDelayed(0.4f)); 
+    }
+
+    private IEnumerator SpawnLootDelayed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
         LootItem loot = lootChest.GetRandomLoot();
-        if (loot != null)
+        if (loot != null && loot.prefab != null)
         {
-            //instancio el item que toque
-            if (loot.prefab != null)
-            {
-                // hice q los items spawneen un toque adelante para que no pase eso de que no se pueden agarrar, quiza era mejor agranadar simplemente el collider pero bue 
-                Vector3 spawnOffset = transform.up * 0.5f + transform.forward * 1f;
-                Instantiate(loot.prefab, transform.position + spawnOffset, Quaternion.identity);
-            }
+            Vector3 spawnOffset = transform.up * 0.5f;
+            GameObject spawned = Instantiate(loot.prefab, transform.position + spawnOffset, Quaternion.identity);
+            spawned.transform.forward = transform.forward;
+            spawned.AddComponent<LootFlyOut>();
         }
     }
 
