@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class SpeedItemLogic : ItemLogic
 {
-    //las variables que va a afectar el item xd mas claro no se (te mato pato 3 horas viendo el PlayerBase pensando que eso era la velocidad porque me dijiste que SI ERA)
-    // lmao, lo siento xd - pato
+    //las variables que va a afectar el item
     [SerializeField] private float walkSpeedBoost = 5f;
     [SerializeField] private float crouchSpeedBoost = 3f;
     [SerializeField] private float airSpeedBoost = 4f;
 
-    //el trigger nada mas q decir :p 
+    //trigger
     private void OnTriggerEnter(Collider other)
     {
         if (IsInventoryMaster) return;
@@ -31,9 +30,6 @@ public class SpeedItemLogic : ItemLogic
     {
         Inventory.AddItemStack(_ItemDefinition);
         Destroy(this.gameObject);
-
-     
-        
     }
 
     public override void AddStack()

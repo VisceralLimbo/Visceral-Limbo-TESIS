@@ -41,13 +41,12 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         LootItem loot = lootChest.GetRandomLoot();
         if (loot != null)
         {
-            //para debugeo que me muestre el nombre y rareza (se puede borrar)
-            Debug.Log($"Obtuviste: {loot.itemName} ({loot.rarity})");
-
             //instancio el item que toque
             if (loot.prefab != null)
             {
-                Instantiate(loot.prefab, transform.position + Vector3.up, Quaternion.identity);
+                // hice q los items spawneen un toque adelante para que no pase eso de que no se pueden agarrar, quiza era mejor agranadar simplemente el collider pero bue 
+                Vector3 spawnOffset = transform.up * 0.5f + transform.forward * 1f;
+                Instantiate(loot.prefab, transform.position + spawnOffset, Quaternion.identity);
             }
         }
     }
