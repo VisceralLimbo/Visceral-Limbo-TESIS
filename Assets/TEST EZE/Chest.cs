@@ -34,7 +34,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         if (chestAnimator != null)
             chestAnimator.SetBool("isOpen", true);
 
-        StartCoroutine(SpawnLootDelayed(0.4f)); 
+        StartCoroutine(SpawnLootDelayed(0.8f)); 
     }
 
     private IEnumerator SpawnLootDelayed(float delay)
