@@ -7,14 +7,19 @@ public static class BloodEchoesManager
 {
 
     private static float _BloodEchoes;
+    // variable para guardarme los echoes viejos
+    private static float _PreviousBloodEchoes;
 
     public static float BloodEchoes => _BloodEchoes;
+    public static float PreviousBloodEchoes => _PreviousBloodEchoes;
 
     /// <summary>
     /// evento que se llama cada q cambian los blood echoes
     /// </summary>
+    /// 
 
-    public static event Action<float> OnBloodEchoesChanged;
+    // para que muestre el total y el cambio (sea suma o resta)
+    public static event Action<float, float> OnBloodEchoesChanged;
 
     /// <summary>
     /// añadir mas ecos de sangre al jugador
@@ -22,8 +27,10 @@ public static class BloodEchoesManager
     /// <param name="amount">cantidad de ecos de sangre</param>
     public static void AddBloodEchoes(float amount)
     {
+        _PreviousBloodEchoes = _BloodEchoes; // guardo los echoes viejos antes de cambiarlo
         _BloodEchoes += amount;
-        OnBloodEchoesChanged?.Invoke(_BloodEchoes); // llamo al evento para q se actualice
+        // mando el total y lo q se suma
+        OnBloodEchoesChanged?.Invoke(_BloodEchoes, amount);
     }
 
     /// <summary>
@@ -33,9 +40,10 @@ public static class BloodEchoesManager
     /// <param name="cost"> restar ecos de sangre </param>
     public static void PurchaseBloodEchoes(float cost)
     {
-        //se estaba llamando a todos los puntos en lugar de al coste
+        _PreviousBloodEchoes = _BloodEchoes; // guardo los echoes viejos antes de cambiarlo
         _BloodEchoes -= cost;
-        OnBloodEchoesChanged?.Invoke(_BloodEchoes); // llamo al evento para q se actualice
+        // envio total y cantidad que se resta
+        OnBloodEchoesChanged?.Invoke(_BloodEchoes, -cost);
     }
 
     /// <summary>

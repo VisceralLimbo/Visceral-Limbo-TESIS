@@ -18,6 +18,9 @@ public class ItemsPanelBehaviour : MonoBehaviour
     [SerializeField] private GameObject descriptionPanel;
     [SerializeField] private TextMeshProUGUI descriptionText;
 
+    private CanvasGroup descriptionCanvasGroup;
+    private Coroutine descriptionFadeCoroutine; // una corrutina para ambos (escalado y fade) 
+
     private void Awake()
     {
         if (Instance == null && Instance != this)
@@ -27,6 +30,16 @@ public class ItemsPanelBehaviour : MonoBehaviour
         else
         {
             Destroy(this);
+        }
+        // inicio el canvasgroup y q este invisible 
+        {
+            descriptionCanvasGroup = descriptionPanel.GetComponent<CanvasGroup>();
+            if (descriptionCanvasGroup == null)
+            {
+                descriptionCanvasGroup = descriptionPanel.AddComponent<CanvasGroup>();
+            }
+            descriptionCanvasGroup.alpha = 0f;
+            descriptionPanel.SetActive(false);
         }
     }
 
@@ -108,5 +121,70 @@ public class ItemsPanelBehaviour : MonoBehaviour
         InventoryDic.Add(definition, itemSlot);
     }
 
+    // se llama en onpointenter del slot, muestra la descripcion
+    public void ShowDescription(Vector3 newPosition, string content, float fadeDuration)
+    {
+        // paro cualquier corrutina de animcion anterior
+        if (descriptionFadeCoroutine != null)
+        {
+            StopCoroutine(descriptionFadeCoroutine);
+            // visible y listo para el fade
+            descriptionPanel.SetActive(true);
+        }
 
+        descriptionPanel.GetComponent<RectTransform>().position = newPosition;
+        descriptionText.text = content;
+
+        // inicio corrutina de fade in
+        descriptionFadeCoroutine = StartCoroutine(FadeDescription(1f, fadeDuration));
+    }
+
+    // en el pointerexit oculto descripcion
+    public void HideDescription(float fadeDuration)
+    {
+        // paro cualquier animacion
+        if (descriptionFadeCoroutine != null)
+        {
+            StopCoroutine(descriptionFadeCoroutine);
+            // fuerzo el alpha a q este a 1 para que el fade out se vea por mas q no haya llegado a 1
+            descriptionCanvasGroup.alpha = 1f;
+            descriptionPanel.SetActive(true);
+        }
+
+        // inicio fade out
+        descriptionFadeCoroutine = StartCoroutine(FadeDescription(0f, fadeDuration));
+    }
+
+    //corrutina del fade
+    private IEnumerator FadeDescription(float targetAlpha, float fadeDuration)
+    {
+        if (descriptionCanvasGroup == null) yield break;
+
+        if (targetAlpha > 0 && !descriptionPanel.activeSelf)
+        {
+            descriptionPanel.SetActive(true);
+        }
+
+        float startAlpha = descriptionCanvasGroup.alpha;
+        float time = 0;
+
+        while (time < fadeDuration)
+        {
+            time += Time.unscaledDeltaTime;
+            float alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
+            descriptionCanvasGroup.alpha = alpha;
+            yield return null;
+        }
+
+        //no hay mucho q explicar pero el alpha del canvas groupe s mucho muy importante
+        descriptionCanvasGroup.alpha = targetAlpha;
+
+        if (targetAlpha == 0)
+        {
+            descriptionPanel.SetActive(false);
+        }
+
+        // limpio cuando termina
+        descriptionFadeCoroutine = null;
+    }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 public class Chest : MonoBehaviour, IRaycastInteractable
 {
     [Header("cofre config")]
-    public int cost = 150;
+    public int cost = 50;
     public LootChest lootChest;
     private bool isOpened = false;
 
@@ -19,12 +19,11 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         if (BloodEchoesManager.CanPurchase(cost))
         {
             isOpened = true;
-            BloodEchoesManager.PurchaseBloodEchoes(cost); // descuenta y llamo el evento
             OpenChest();
         }
         else
         {
-            Debug.Log("No tenés suficientes Ecos de Sangre");
+            //meter texto de no tenes suficiente ingmae
         }
     }
 
