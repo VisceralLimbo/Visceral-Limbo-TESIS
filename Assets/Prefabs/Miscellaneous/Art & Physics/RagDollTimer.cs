@@ -15,24 +15,12 @@ public class RagDollTimer : MonoBehaviour
     private void Start()
     {
         _ragdollBoneRetargeters = GetComponentsInChildren<RagdollBoneRetarget>(true);
-        Health_Component HPComp = GetComponentInParent<Health_Component>();
-        HPComp.OnDeath += StartRagdolling;
+        StartRagdolling();
     }
 
     private void StartRagdolling()
     {
-        AnimatorHandler animatorHandler = GetComponent<AnimatorHandler>();
-        if(animatorHandler == null)
-        {
-            animatorHandler= GetComponentInParent<AnimatorHandler>();
-            
-        }
-        if(animatorHandler.TryGetAnimator(AnimatorKey, out Animator anim))
-        {
-            anim.enabled = false;
-        }
-
-
+       
 
         StartCoroutine(DestroySelf());
 

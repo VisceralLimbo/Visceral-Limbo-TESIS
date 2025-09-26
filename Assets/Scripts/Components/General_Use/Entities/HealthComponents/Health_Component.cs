@@ -20,6 +20,8 @@ public class Health_Component : Visceral_Component
 
     private Coroutine bleedCoroutine;
 
+    [SerializeField] GameObject _RagdollPrefab;
+
     private void Start()
     {
         CurrentHealth = MaxHealth;
@@ -115,7 +117,11 @@ public class Health_Component : Visceral_Component
                 ScoreManager.Instance.ProcessKill(FinalScore);
             OnDeath?.Invoke();
 
-            
+
+            if (_RagdollPrefab != null)
+            {
+                Instantiate(_RagdollPrefab, this.transform.position, this.transform.rotation);
+            }
 
             if (DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
             if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);

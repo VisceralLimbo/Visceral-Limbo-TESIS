@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class HostileNPC_HealthComp : Health_Component
 {
+
+
+
+    public override void VS_Initialize()
+    {
+        base.VS_Initialize();
+    }
     public override void HealHP(float ExtraHP, bool OverHeal = false)
     {
         base.HealHP(ExtraHP, OverHeal);
@@ -34,4 +41,7 @@ public class HostileNPC_HealthComp : Health_Component
     {
         base.InternalDamage(damage, KnockbarDir, force, Score);
     }
+
+   
+  
 }
