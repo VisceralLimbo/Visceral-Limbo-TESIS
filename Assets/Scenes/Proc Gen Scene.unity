@@ -952,6 +952,12 @@ MonoBehaviour:
   SlowGen: 1
   SlowGenSpeed: 0.1
   Regen: 0
+--- !u!1 &724298633 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3474159215463307228, guid: ec5496c101b85a04c8c76b2629a433f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1497467913}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &849329343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1269,12 +1275,8 @@ MonoBehaviour:
   _IsTyping: 0
   CurrentOptionsList: []
   CurrentDialogue: {fileID: 11400000, guid: 31399bb954f2e614a8888318a40e56d8, type: 2}
-  DialogueEffectMaterial: {fileID: 2100000, guid: 88c60a332095304499c668ac12a373f2,
-    type: 2}
-  damageFlashProperty: _VignetteIntensity
-  damageBloodFlashProperty: _VoronoiPower
-  BloodEffectMaterial: {fileID: 2100000, guid: 0aa4c37f1dd8602468fb14580ec11c68, type: 2}
-  shaderTransitionDuration: 0.5
+  bloodController: {fileID: 0}
+  vignetteController: {fileID: 0}
 --- !u!4 &1176747708
 Transform:
   m_ObjectHideFlags: 0
@@ -1610,6 +1612,11 @@ PrefabInstance:
       propertyPath: cameraController
       value: 
       objectReference: {fileID: 1371531569}
+    - target: {fileID: 4650147150919792776, guid: ec5496c101b85a04c8c76b2629a433f5,
+        type: 3}
+      propertyPath: itemsPanel
+      value: 
+      objectReference: {fileID: 724298633}
     - target: {fileID: 5412291355700704744, guid: ec5496c101b85a04c8c76b2629a433f5,
         type: 3}
       propertyPath: m_Name

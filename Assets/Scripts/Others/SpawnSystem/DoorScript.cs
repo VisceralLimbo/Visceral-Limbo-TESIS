@@ -14,7 +14,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [Space]
     [Header("Variables")]
 
-    
+
     [Range(-1, 1)]
     [Tooltip("El limite a partir de que se considera adentro de la habitacion" +
         " 1 = el jugador esta frente de la puerta, -1 = el jugador esta detras de la puerta")]
@@ -23,6 +23,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [Tooltip("Si esta puerta debería de activar eventos (ejemplo: comenzar combate)")]
     [SerializeField] bool NonTriggerRoom; // esta habitacion NO genera trigger Events
 
+    [SerializeField] bool _LockDoor;
     public void Initialize(RoomSpawnerManager SpawnerManager)
     {
         print("Initilializing with spawner" + SpawnerManager.name);
@@ -51,6 +52,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             InWardAlignment = new Vector3(0, 0, Mathf.Sign(DirectionToRoom.x));
         }
 
+        roomSpawnerManager.OnCombatEnded += UnlockDoor; 
     }
 
     public void ShouldGenerateEvents(bool value = false)
@@ -73,7 +75,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     private void CheckPlayerEnteredRoom(Collider other)
     {
-        if (PlayerEnteredRoom)
+        if (PlayerEnteredRoom || _LockDoor)
         {
             return;
         }
@@ -106,15 +108,18 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             roomSpawnerManager.StartRoomCombat();
             roomSpawnerManager.NotifyMinionDeath();
             PlayerEnteredRoom = true;
+            _LockDoor = true;
         }
 
     }
 
     public void OnInteract()
     {
-        print("me han interactuado");
-        // correr animacion de puerta abriendose
-        _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
+        if (!_LockDoor)
+        {
+            // correr animacion de puerta abriendose
+            _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
+        }
     }
 
     public void OnRayCastEnter(RayCastWrapper Detector = null)
@@ -130,6 +135,11 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     public void OnRayCastExit(RayCastWrapper Detector = null)
     {
         
+    }
+
+    private void UnlockDoor()
+    {
+        _LockDoor = false;
     }
 
 }
