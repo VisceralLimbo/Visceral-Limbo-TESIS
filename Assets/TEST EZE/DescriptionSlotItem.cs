@@ -2,21 +2,31 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class DescriptionSlotItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // refe al so se asigna cuando se instancia
     public ItemDefinitionSO itemDefinition;
 
-    // refe del panel y texto para la descripcion se asignada desde el script itempanelbehaviour
-    [SerializeField] public GameObject descriptionPanel;
-    [SerializeField] public TextMeshProUGUI descriptionText;
 
-    // refe para los stacks
-    private InventoryManager inventoryManager;
+    [Header("refes")]
+    [SerializeField] public GameObject descriptionPanel; //panel de descripcion
+    [SerializeField] public TextMeshProUGUI descriptionText; //texto
+    private ItemsPanelBehaviour itemsPanelBehaviour; // refe al panel de items
+    private InventoryManager inventoryManager; // refe para los stacks
+    private RectTransform slotRectTransform; // ref del recttransform del slot por el q paso para saber donde pongo la descripcion
 
-    // ref del recttransform del slot por el q paso para saber donde pongo la descripcion
-    private RectTransform slotRectTransform;
+    [Header("fade duracion")]
+    [SerializeField] private float fadeDuration; // duracion del fade
+
+    [Header("slot scale config")]
+    [SerializeField] private float hoverScale; // lo q va a escalar cuando pase el mouse por encima
+    [SerializeField] private float scaleDuration; // duracion de la anim
+    private Vector3 originalScale;
+
+    private Coroutine scaleCoroutine; // refe para corrutina de escalado
+
 
     private void Awake()
     {
@@ -24,6 +34,30 @@ public class DescriptionSlotItem : MonoBehaviour, IPointerEnterHandler, IPointer
         inventoryManager = FindObjectOfType<InventoryManager>();
         // rect transform del slot
         slotRectTransform = GetComponent<RectTransform>();
+
+        // agarro refe
+        itemsPanelBehaviour = FindObjectOfType<ItemsPanelBehaviour>();
+
+        // guardo escala original del slot
+        originalScale = transform.localScale;
+
+    }
+
+    // anim de escalado
+    private IEnumerator ScaleSlot(Vector3 targetScale)
+    {
+        Vector3 startScale = transform.localScale;
+        float time = 0;
+
+        while (time < scaleDuration)
+        {
+            time += Time.unscaledDeltaTime;
+            transform.localScale = Vector3.Lerp(startScale, targetScale, time / scaleDuration); //lerp para suavizar
+            yield return null;
+        }
+
+        transform.localScale = targetScale;
+        scaleCoroutine = null; // limpio refe cuando termina
     }
 
     // me paro sobre el item y activo
@@ -31,40 +65,50 @@ public class DescriptionSlotItem : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         if (itemDefinition != null && descriptionText != null && inventoryManager != null)
         {
-            // calculo el buffo total dependiendo los stacks q tenga
+            // limpio y animo escalado
+            if (scaleCoroutine != null)
+            {
+                StopCoroutine(scaleCoroutine);
+                transform.localScale = originalScale;
+            }
+            scaleCoroutine = StartCoroutine(ScaleSlot(originalScale * hoverScale));
+
+            //todo el choclo de texto se arma aca
             int stackCount = inventoryManager.GetItemStack(itemDefinition);
             float totalBenefit = itemDefinition.buffvalueperstack * stackCount;
+            string descriptionContent = $"{itemDefinition.ItemDescription}\n\n";
+            descriptionContent += $"+{itemDefinition.buffvalueperstack} DE {itemDefinition.buff} POR STACK";
+            descriptionContent += $" {totalBenefit} EN TOTAL";
 
-            // todo el choclo de texto se arma aca
-            string descriptionContent = $"";
-            descriptionContent += $"{itemDefinition.ItemDescription}\n\n";
-            descriptionContent += $"+{itemDefinition.buffvalueperstack} de {itemDefinition.buff} por stack";
-            descriptionContent += $" ({totalBenefit} en total)";
+            //para asignar el lugar donde va a spawnear el panel 
+            RectTransform slotRect = GetComponent<RectTransform>();
+            float xOffset = slotRect.rect.width / 4f;
+            float yOffset = -slotRect.rect.height / 7f;
+            Vector3 newPosition = slotRect.position + new Vector3(xOffset, yOffset, 0);
 
-            descriptionText.text = descriptionContent;
-            descriptionPanel.SetActive(true);
+            // fade
+            if (itemsPanelBehaviour != null)
+            {
+                // pasa por, la descripcion y duracion de fade
+                itemsPanelBehaviour.ShowDescription(newPosition, descriptionContent, fadeDuration);
+            }
         }
-
-        //para hacer q el cuadro aparezca abajo a la dercha del slot
-        // agarro el recttransofmr
-        RectTransform descriptionRect = descriptionPanel.GetComponent<RectTransform>();
-
-        // ubicio abajo a la derecha del slot
-        float xOffset = slotRectTransform.rect.width / 4f; //fue prueba y error pero se divide para que se ubique bien si no aparece mal posicionado
-        float yOffset = -slotRectTransform.rect.height / 7f; //fue prueba y error pero se divide para que se ubique bien si no aparece mal posicionado
-        Vector3 offset = new Vector3(xOffset, yOffset, 0);
-
-        // sumo la pos del slot mas el offset de arriba
-        descriptionRect.position = slotRectTransform.position + offset;
-
-        // activo cuando estoy encima
-        descriptionPanel.SetActive(true);
     }
 
-    // saco el mouse del item y desactivo
     public void OnPointerExit(PointerEventData eventData)
     {
-        // panel off
-        descriptionPanel.SetActive(false);
+        // anim de escalado
+        if (scaleCoroutine != null)
+        {
+            StopCoroutine(scaleCoroutine);
+            transform.localScale = originalScale * hoverScale;
+        }
+        scaleCoroutine = StartCoroutine(ScaleSlot(originalScale));
+
+        // fade out
+        if (itemsPanelBehaviour != null)
+        {
+            itemsPanelBehaviour.HideDescription(fadeDuration);
+        }
     }
 }
