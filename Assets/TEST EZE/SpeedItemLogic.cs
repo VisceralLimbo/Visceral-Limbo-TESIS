@@ -9,6 +9,7 @@ public class SpeedItemLogic : ItemLogic
     [SerializeField] private float crouchSpeedBoost = 3f;
     [SerializeField] private float airSpeedBoost = 4f;
 
+
     //trigger
     private void OnTriggerEnter(Collider other)
     {
