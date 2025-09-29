@@ -28,7 +28,7 @@ public abstract class BuffBehavior : MonoBehaviour
     /// usar para logica de empowerment
     /// </summary>
     /// <param name="ExtraPotency"></param>
-    public abstract void OnAddPotency(float ExtraPotency);
+    public abstract void OnAddPotency(int ExtraPotency);
 
     /// <summary>
     /// funcion llamada cuando el buffo se expira

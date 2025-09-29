@@ -61,19 +61,28 @@ public class BuffManager : MonoBehaviour
             //si el nuevo buffo a aplicar tiene que overridear al buff viejo
             if (NewBuff.ShouldOverrideSameBuffs)
             {
-                //creamos el componente en el hierarchy deseado
+                //1) primero vamos a expirar el buffo viejo:
+                var LastBuff = targetdictionary[BuffID];
+
+                ExpireBuff(LastBuff, targetdictionary);
+
+
+                //2) creamos el componente en el hierarchy deseado
                 var finalBuff = BuffComponentHierarchy.gameObject.AddComponent(BuffType) as BuffBehavior;
 
-                // indicamos que la posicion BuffID es igual al nuevo buffo creado
+                //3) indicamos que la posicion BuffID es igual al nuevo buffo creado
                 targetdictionary[BuffID] = finalBuff;
 
-                //llamamos al OnApply
+                //4) ahora vamos a aplicar la potencia deseada
+                finalBuff.OnAddPotency(_Buffpotency);
+
+                //5) llamamos al OnApply
                 finalBuff.OnApply(this,StatManager);
 
-                // seteamos el duration del buff  
+                //6) seteamos el duration del buff  
                 buffDurationDictionary[finalBuff] = NewBuff.BuffDuration;
 
-                //hack?: como el componente no conoce el SO, se lo enviamos. para solucionar problemas futuros
+                //7) hack?: como el componente no conoce el SO, se lo enviamos. para solucionar problemas futuros
                 finalBuff.SetSO(NewBuff);
             }
 
@@ -106,33 +115,33 @@ public class BuffManager : MonoBehaviour
         // el buffo a aplicar no existe.
         else
         {
-            //añadimos el buff en la posicion deseada
+            //1) añadimos el buff en la posicion deseada
             var finalbuff = BuffComponentHierarchy.gameObject.AddComponent(BuffType) as BuffBehavior;
 
-            //guardamos la nueva posicion
+            //2) guardamos la nueva posicion
             targetdictionary.TryAdd(BuffID, finalbuff);
 
-            //añadimos la potencia del buff;
+            //3) añadimos la potencia del buff;
             finalbuff.OnAddPotency(_Buffpotency);
 
-            //llamamos al OnApply del nuevo buff
+            //4) llamamos al OnApply del nuevo buff
             finalbuff.OnApply(this,StatManager);
             
 
-            //seteamos el duration del buff
+            //5) seteamos el duration del buff
             buffDurationDictionary[finalbuff] = NewBuff.BuffDuration;
 
-            //le enviamos la referencia del scriptableObject al script.
+            //6) le enviamos la referencia del scriptableObject al script.
             finalbuff.SetSO(NewBuff);
         }
-
 
         print("buffo aplicado correctamente " + NewBuff.BuffName);
     }
 
 
+    //esta lista cachea los buffos expirados
+     List<BuffBehavior> ExpiredBuffs = new List<BuffBehavior>();
   
-
     private void Update()
     {
         if(BuffDictionary.Count > 0)
@@ -144,9 +153,9 @@ public class BuffManager : MonoBehaviour
                 // chequeamos si el buffo ya debería de haber expirado
                 if (buffDurationDictionary[buffScript] <= 0)
                 {
-                    ExpireBuff(buffScript,BuffDictionary);
-
-                    buffDurationDictionary.Remove(buffScript);
+                    // cacheamos el buffo expirado. hacemos esto porque modificar
+                    // la coleccion en un foreach == muerte
+                   ExpiredBuffs.Add(buffScript); 
                 }
                 else
                 {
@@ -164,15 +173,41 @@ public class BuffManager : MonoBehaviour
                 // chequeamos si el Debuffo ya debería de haber expirado
                 if (buffDurationDictionary[DebuffScript] <= 0)
                 {
-                    ExpireBuff(DebuffScript, DeBuffDictionary);
-
-                    buffDurationDictionary.Remove(DebuffScript);
+                    // cacheamos el buffo expirado. hacemos esto porque modificar
+                    // la coleccion en un foreach == muerte
+                    ExpiredBuffs.Add(DebuffScript);
                 }
                 else
                 {
                     buffDurationDictionary[DebuffScript] -= Time.deltaTime;
                 }
             }
+        }
+
+        //ahora vamos a eliminar todo buffo que este expirado
+        for(int i = 0; i < ExpiredBuffs.Count; i++)
+        {
+            var Buff = ExpiredBuffs[i];
+
+            if(Buff.GetSO().BuffType == BuffTypes.Buff)
+            {
+                ExpireBuff(Buff, BuffDictionary);
+            }
+            else
+            {
+                ExpireBuff(Buff, DeBuffDictionary);
+            }
+
+            //eliminamos la referencia del buff expirado en el diccionario de duraciones
+            buffDurationDictionary.Remove(Buff);
+
+
+        }
+
+        if(ExpiredBuffs.Count > 0)
+        {
+            //limpiamos listado
+            ExpiredBuffs.Clear();
         }
     }
 
