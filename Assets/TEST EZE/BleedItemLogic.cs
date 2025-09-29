@@ -15,6 +15,8 @@ public class BleedItemLogic : ItemLogic
     // refe de la espada
     [SerializeField] private SwordTest _Sword;
 
+    [SerializeField] private ParticleSystem swordParticles;
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -47,6 +49,11 @@ public class BleedItemLogic : ItemLogic
     {
         Inventory.AddItemStack(_ItemDefinition);
 
+        if (swordParticles != null)
+        {
+            swordParticles.gameObject.SetActive(true);
+            swordParticles.Play();
+        }
 
         Destroy(this.gameObject);
     }
@@ -104,7 +111,6 @@ public class BleedItemLogic : ItemLogic
                     
                      if (mat.HasProperty("_Color"))
                     {
-                        // Lo mismo pero en el color base
                         Color currentColor = mat.GetColor("_Color");
                         float intensity = currentColor.maxColorComponent;
                         Color baseColor = Color.red * intensity;
