@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
-using System;
 
 public class Dash_Skill : Visceral_SkillLogic
 {
-    // necesito un evento al activar el dash para el item de evasion
-    public event Action OnDashActivated;
 
     [SerializeField] Player_Movement _KCCMotorMovement;
     [SerializeField] AnimatorHandler _AnimHandler;
@@ -31,8 +28,6 @@ public class Dash_Skill : Visceral_SkillLogic
 
         _AnimHandler.SetParameter("PlayerWeapon", "Exe_Support", AnimatorControllerParameterType.Trigger);
 
-        // termina la logica del dash y activo el doubledamage
-        OnDashActivated?.Invoke();
     }
 
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
