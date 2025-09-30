@@ -113,6 +113,22 @@ public class FloatStat : Stat
         }
     }
 
+    // no habia para remover y me tome la libertad de hacerlo (para cumplir con el item de doble de daño al     30% de vida)
+    public void RemoveModifierByEffectID(string EffectID)
+    {
+        if (Modifiers.ContainsKey(EffectID))
+        {
+            // remuevo de list
+            var modToRemove = Modifiers[EffectID];
+            ModifiersList.Remove(modToRemove);
+
+            // remuevo del diccionario
+            Modifiers.Remove(EffectID);
+
+            // recalculo
+            RecalculateStat();
+        }
+    }
     /*var OrderedList = ModifiersList.OrderBy(x => x.ModifierValue).ToList();
 
         foreach(StatModifierFloat _Mod in OrderedList)
