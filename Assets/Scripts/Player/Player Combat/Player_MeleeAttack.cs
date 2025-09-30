@@ -32,8 +32,19 @@ public class Player_MeleeAttack : Visceral_Script
     [Header("Variables")]
     [SerializeField]int _ComboCounter; // el combo actual, para cyclear entre animaciones
     [SerializeField] bool _HasFinishedAttack = true; // lock | unlock de ataque, para que el evento de atacar solo se ejecute cuando se termina la animacion
-    bool _PlaySound = true
-        ; // controla si podemos tocar un sonido
+    bool _PlaySound = true; // controla si podemos tocar un sonido
+
+    [Space]
+    [Header("Daño multiplicador")]
+    public float AttackDamageMod = 1f; // base es 1
+
+    [Space] // cositas para el item de esquivar y dd
+    [Header("mods de item")]
+    public bool IsEvasionBoostActive = false; //booleano para saber si toco shift / esquivo
+    private const float EVASION_MULTIPLIER = 2.0f; // multi fijo del 2x (SIEMPRA VA A SER POR DOS) a menos q digan q lo quieren de mas pero me parece roto ahrw
+
+    [Header("refe del context")]
+    [SerializeField] private PlayerContext _PlayerContext;
 
     /// <summary>
     /// valor que cambia la velocidad de animacion de ataque, valor 1 = normal
@@ -148,7 +159,25 @@ public class Player_MeleeAttack : Visceral_Script
         if (swordTrail != null) swordTrail.emitting = true;
         if (swordTrail2 != null) swordTrail2.emitting = true;
 
+        // agarro el multiplicador desde las estadisticas
+        float currentDamageMultiplier = 1f; // el default
 
+        if (_PlayerContext != null && _PlayerContext.Stats != null)
+        {
+            //DamageMultiplier es lo seteado en el float stat list 
+            currentDamageMultiplier = _PlayerContext.Stats.GetFloatStatValue("DamageMultiplier");
+        }
+
+        // aplico el dd si la evasion esta true
+        if (IsEvasionBoostActive)
+        {
+            // si esta en true se usa el x2 ignorando los multis que puedas llegar a tener por el otro item de 30% de vida == dd
+            currentDamageMultiplier = EVASION_MULTIPLIER;
+
+            // despues del golpe queda en false
+            IsEvasionBoostActive = false;
+            Debug.Log("Golpe de evasion x2 aplicado"); // test
+        }
 
         if (_ComboCounter >= CurrentCombo.Length) // nos excedimos de combo
         { 
@@ -159,7 +188,7 @@ public class Player_MeleeAttack : Visceral_Script
         var currentAttack = CurrentCombo[_ComboCounter];
 
         // seteamos variables de daño y knockback
-        _Weapon.Damage = currentAttack.Damage;
+        _Weapon.Damage = currentAttack.Damage * currentDamageMultiplier; // multiplico el danio por el modif
         _Weapon.KnockBack = currentAttack.KnockBack;
 
         //aceleramos / slowdown de animacion

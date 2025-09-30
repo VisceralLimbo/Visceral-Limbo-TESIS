@@ -80,4 +80,25 @@ public class StatsManager : MonoBehaviour
         }
     }
 
+    // lo mismo que en stat no haba remover haci q lo hice 
+    public void RemoveFloatStatModifier(string StatID, string EffectID)
+    {
+        if (StatDictionary.TryGetValue(StatID, out Stat value))
+        {
+            if (value is FloatStat floatvalue)
+            {
+                floatvalue.RemoveModifierByEffectID(EffectID);
+
+                // notif el cambio dsp de recalcular
+                OnStatChanged?.Invoke(StatID, floatvalue.FinalValue);
+                Debug.Log($"remuevo modificador de EffectID: {EffectID} de stat: {StatID}.");
+            }
+            else
+            {
+                Debug.LogError($"[Visceral Error] StatManager, stat {StatID} wasn't a float stat");
+                return;
+            }
+        }
+    }
+
 }
