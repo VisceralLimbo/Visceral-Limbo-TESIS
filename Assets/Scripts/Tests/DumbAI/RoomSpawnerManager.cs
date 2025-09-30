@@ -32,9 +32,15 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private Color lastWaveColor = Color.red; 
     [SerializeField] private Color endWaveColor = Color.blue;
     [SerializeField] private bool lightsChanged = false;
-
     [SerializeField] private Light extraLight;
 
+    [Space]
+    [Header("Environmental Effect")]
+    [SerializeField] private bool _canHaveEnvironmentalEffect = true; // si no queremos q la sala tenga efectos desactivamos
+    [SerializeField] private EnvironmentalEffect _currentEffect = EnvironmentalEffect.None;
+    [SerializeField] private float _lowVisibilityLightIntensity = 0.1f; // intensidad luz
+    private float _originalExtraLightIntensity;
+    private List<float> _originalCombatLightIntensities = new List<float>(); //lista con la instensidad orignal de las lcues
 
     public event System.Action OnCombatEnded;
 
@@ -53,7 +59,11 @@ public class RoomSpawnerManager : MonoBehaviour
             trapsInThisRoom = GetComponentsInChildren<FireballTrap>().ToList();
         }
 
-        
+        // guarda la intensidad de la lzu
+        if (extraLight != null)
+        {
+            _originalExtraLightIntensity = extraLight.intensity;
+        }
     }
 
 
@@ -81,9 +91,15 @@ public class RoomSpawnerManager : MonoBehaviour
             trap.ActivateTrap();
         }
 
+        // cambio del enviroment
+        if (_canHaveEnvironmentalEffect)
+        {
+            ChooseRandomEffect();
+            ApplyEnvironmentalEffect(_currentEffect);
+        }
+
         //reseteamos el TEXTO de puntuacion, el valor de la misma sigue siendo igual
         ScoreManager.Instance.ResetScoreText();
-
     }
 
     public void NotifyMinionDeath()
@@ -106,7 +122,6 @@ public class RoomSpawnerManager : MonoBehaviour
             }
 
             MusicManager.Instance?.PlayCombatMusic();
-
             SlowMotion.Stop(1f, 0.35f, true);
             FindObjectOfType<SlowMotionController>()?.ApplyEffect(1f, 0.6f);
 
@@ -130,6 +145,9 @@ public class RoomSpawnerManager : MonoBehaviour
             }
 
             StopThisManager = true;
+
+            //revierto el cambio del enviroment
+            RevertEnvironmentalEffect(_currentEffect);
 
             foreach (var trap in trapsInThisRoom)
             {
@@ -277,4 +295,98 @@ public class RoomSpawnerManager : MonoBehaviour
         }
     }
 
+    // aca irian todos los efectos que queremos intente el frozen pero pincho xd
+    public enum EnvironmentalEffect
+    {
+        None, // normal
+        //Frozen, // congelado (hay q ver, creo q necesitamos un timescale manager porque se usa en 30mil lados)
+        LowVisibility, // poca visibilidad
+    }
+
+    //random para agarrar algun efecto
+    private void ChooseRandomEffect()
+    {
+        // agarro los valores del enum
+        var effects = System.Enum.GetValues(typeof(EnvironmentalEffect)).Cast<EnvironmentalEffect>().Where(e => e != EnvironmentalEffect.None).ToArray();
+
+        //menos return
+        if (effects.Length == 0)
+        {
+            _currentEffect = EnvironmentalEffect.None;
+            return;
+        }
+
+        // 50% de probabilidad de q tenga efecto o no
+        float probability = 0.5f;
+        if (Random.value < probability)
+        {
+            // elige un efecto random
+            _currentEffect = effects[Random.Range(0, effects.Length)];
+            Debug.Log($"Efecto ambiental activado en la sala: {_currentEffect}");
+        }
+        else
+        {
+            _currentEffect = EnvironmentalEffect.None;
+            Debug.Log("La sala no tiene efecto ambiental.");
+        }
+    }
+
+    private void ApplyEnvironmentalEffect(EnvironmentalEffect effect)
+    {
+        Debug.Log($"Aplicando efecto ambiental: {effect}");
+
+        switch (effect)
+        {
+            case EnvironmentalEffect.LowVisibility:
+                // guardo y aplico las luces
+                _originalCombatLightIntensities.Clear();
+                foreach (var light in combatLights)
+                {
+                    if (light != null)
+                    {
+                        _originalCombatLightIntensities.Add(light.intensity); // guardo
+                        light.intensity = _lowVisibilityLightIntensity;       // aplico la baja intensidad
+                    }
+                }
+                // aplico a extralight
+                if (extraLight != null)
+                {
+                    extraLight.intensity = _lowVisibilityLightIntensity;
+                    extraLight.gameObject.SetActive(true);
+                }
+                break;
+
+            case EnvironmentalEffect.None:
+            default:
+                break;
+        }
+    }
+
+    private void RevertEnvironmentalEffect(EnvironmentalEffect effect)
+    {
+        switch (effect)
+        {
+            case EnvironmentalEffect.LowVisibility:
+                // restauro
+                for (int i = 0; i < combatLights.Count; i++)
+                {
+                    if (combatLights[i] != null && i < _originalCombatLightIntensities.Count)
+                    {
+                        combatLights[i].intensity = _originalCombatLightIntensities[i];
+                    }
+                }
+                // restuaro extralight
+                if (extraLight != null)
+                {
+                    extraLight.intensity = _originalExtraLightIntensity;
+                }
+                break;
+
+            case EnvironmentalEffect.None:
+            default:
+                break;
+        }
+        Debug.Log($"Reverting effect: {effect} - Called unexpectedly!"); // test
+        _currentEffect = EnvironmentalEffect.None;
+    }
 }

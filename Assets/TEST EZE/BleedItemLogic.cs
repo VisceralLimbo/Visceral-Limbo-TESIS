@@ -13,9 +13,9 @@ public class BleedItemLogic : ItemLogic
     [SerializeField] private float bleedTickRate = 1f;
 
     // refe de la espada
-    [SerializeField] private SwordTest _Sword;
+    private SwordTest _Sword;
 
-    [SerializeField] private ParticleSystem swordParticles;
+    private ParticleSystem swordParticles;
 
 
     private void OnTriggerEnter(Collider other)
@@ -38,6 +38,12 @@ public class BleedItemLogic : ItemLogic
         base.Register(inventory, context);
         //agarro el swordtest
         _Sword = _Context.GetComponentInChildren<SwordTest>();
+
+        if (_Sword != null)
+        {
+            // busco particulas la espada
+            swordParticles = _Sword.GetComponentInChildren<ParticleSystem>(true);
+        }
     }
 
     public override void Unregister()
@@ -91,7 +97,6 @@ public class BleedItemLogic : ItemLogic
             };
             statManager.UpdateFloatStatValue("Bleed", statMod);
         }
-        base.AddStack();
 
         if (_Sword != null)
         {
