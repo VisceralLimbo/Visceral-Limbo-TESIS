@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class BleedItemLogic : ItemLogic
@@ -13,10 +12,7 @@ public class BleedItemLogic : ItemLogic
     [SerializeField] private float bleedTickRate = 1f;
 
     // refe de la espada
-    [SerializeField] private SwordTest _Sword;
-
-    [SerializeField] private ParticleSystem swordParticles;
-
+    private SwordTest _Sword;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -48,13 +44,6 @@ public class BleedItemLogic : ItemLogic
     public override void OnPickUp()
     {
         Inventory.AddItemStack(_ItemDefinition);
-
-        if (swordParticles != null)
-        {
-            swordParticles.gameObject.SetActive(true);
-            swordParticles.Play();
-        }
-
         Destroy(this.gameObject);
     }
 
@@ -91,35 +80,6 @@ public class BleedItemLogic : ItemLogic
             };
             statManager.UpdateFloatStatValue("Bleed", statMod);
         }
-        base.AddStack();
-
-        if (_Sword != null)
-        {
-            Transform espada4 = _Sword.GetComponentsInChildren<Transform>(true)
-                           .FirstOrDefault(t => t.name == "Espada4");
-
-            if (espada4 != null)
-            {
-                Renderer swordRenderer = espada4.GetComponent<Renderer>();
-                if (swordRenderer != null)
-                {
-                    Material mat = swordRenderer.material;
-
-                    if (mat.HasProperty("_FresnelGradientBlend"))
-                        mat.SetFloat("_FresnelGradientBlend", 0.04f);
-
-                    
-                     if (mat.HasProperty("_Color"))
-                    {
-                        Color currentColor = mat.GetColor("_Color");
-                        float intensity = currentColor.maxColorComponent;
-                        Color baseColor = Color.red * intensity;
-                        mat.SetColor("_Color", baseColor);
-                    }
-                }
-            }
-        }
-
     }
 
     public override void RemoveStack()
