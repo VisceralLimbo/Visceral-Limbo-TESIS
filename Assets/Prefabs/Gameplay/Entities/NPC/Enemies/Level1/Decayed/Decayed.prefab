@@ -93,8 +93,8 @@ MonoBehaviour:
   _Speed: 6
   _MovementAccel: 10
   _MaxRotationSpeed: 360
-  _MinDistance: 6
-  _MaxDistance: 10
+  _MinDistance: 3
+  _MaxDistance: 15
   _RunDirection: 1
 --- !u!1 &2357010806047519017
 GameObject:
@@ -5486,7 +5486,7 @@ MonoBehaviour:
     _FromGO: {fileID: 5509668419067739157}
     _ToGO: {fileID: 1094546387155140947}
     _ShouldTransitionWithNoConditions: 0
-  _MinStateLifetime: 0
+  _MinStateLifetime: 5
   _AnimHandler: {fileID: 0}
   _BulletPrefab: {fileID: 2454136147042372353, guid: bc0f572b4ddbb564d872d42601a416fd,
     type: 3}
@@ -5494,9 +5494,9 @@ MonoBehaviour:
   _Target: {fileID: 0}
   _KCC: {fileID: 0}
   flashAttackParticle: {fileID: 2357010806047519017}
-  _AttackSpeed: 1.5
-  _SafeSpace: 8
-  _FarAway: 15
+  _AttackSpeed: 0.75
+  _SafeSpace: 3
+  _FarAway: 25
   _TargetIsTooClose: 0
   _TargetIsTooFar: 0
   _AudioSource: {fileID: 4250433918990917085}
@@ -5795,6 +5795,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1706337572448997093, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71060933ba1932448bb44989b825b14b, type: 2}
     - target: {fileID: 1710290713654747255, guid: 918355dba35195b43a4d585c3294065f,
         type: 3}
       propertyPath: m_EnableCollision
@@ -5880,6 +5885,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3014552586673981739, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71060933ba1932448bb44989b825b14b, type: 2}
     - target: {fileID: 3014552586673981739, guid: 918355dba35195b43a4d585c3294065f,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
@@ -6295,6 +6305,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 7745674693073775757, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71060933ba1932448bb44989b825b14b, type: 2}
     - target: {fileID: 7866020560666620550, guid: 918355dba35195b43a4d585c3294065f,
         type: 3}
       propertyPath: m_Layer
