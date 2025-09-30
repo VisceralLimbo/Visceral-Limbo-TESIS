@@ -41,6 +41,7 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private float _lowVisibilityLightIntensity = 0.1f; // intensidad luz
     private float _originalExtraLightIntensity;
     private List<float> _originalCombatLightIntensities = new List<float>(); //lista con la instensidad orignal de las lcues
+    public ParticleSystem blackFog;
 
     public event System.Action OnCombatEnded;
 
@@ -347,6 +348,10 @@ public class RoomSpawnerManager : MonoBehaviour
                         _originalCombatLightIntensities.Add(light.intensity); // guardo
                         light.intensity = _lowVisibilityLightIntensity;       // aplico la baja intensidad
                     }
+                    if (blackFog !=null)
+                    {
+                        blackFog.Play();
+                    }
                 }
                 // aplico a extralight
                 if (extraLight != null)
@@ -373,6 +378,10 @@ public class RoomSpawnerManager : MonoBehaviour
                     if (combatLights[i] != null && i < _originalCombatLightIntensities.Count)
                     {
                         combatLights[i].intensity = _originalCombatLightIntensities[i];
+                    }
+                    if (blackFog != null)
+                    {
+                        blackFog.Stop();
                     }
                 }
                 // restuaro extralight

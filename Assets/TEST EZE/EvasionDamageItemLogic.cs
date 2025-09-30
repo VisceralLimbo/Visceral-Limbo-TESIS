@@ -75,7 +75,7 @@ public class EvasionDamageItemLogic : ItemLogic
     // se llama siempre q se haga un dash 
     private void ActivateDamageBoost()
     {
-        if (_playerAttack != null && ItemStacks > 0)
+        if (_playerAttack != null)
         {
             // bool en true del playerattack
             _playerAttack.IsEvasionBoostActive = true;

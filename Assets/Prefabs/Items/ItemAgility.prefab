@@ -458,6 +458,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4651863850255209267}
+  - component: {fileID: 6044075135540176732}
+  - component: {fileID: 265873517627918249}
+  - component: {fileID: 6657862490920682678}
   m_Layer: 0
   m_Name: ItemAgility
   m_TagString: Untagged
@@ -474,7 +477,7 @@ Transform:
   m_GameObject: {fileID: 5631872871940382841}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 863.47577, y: 666.53613, z: -1546.1971}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -482,6 +485,60 @@ Transform:
   - {fileID: 6556547315397203077}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6044075135540176732
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5631872871940382841}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: -0.18, y: 0, z: -0.69}
+--- !u!114 &265873517627918249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5631872871940382841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd833c90b09f064285e05d8eb346e09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Inventory: {fileID: 0}
+  _ItemDefinition: {fileID: 11400000, guid: 645a5fa168a6cbe4ab3947abd9a4f47c, type: 2}
+  _Context: {fileID: 0}
+  ItemStacks: 0
+  IsInventoryMaster: 0
+--- !u!114 &6657862490920682678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5631872871940382841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f32a9f4a6c9b8214eb5654e9a514c0db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flyHeight: 1.5
+  flyDistance: 1.5
+  duration: 1
+  finalScale: {x: 1, y: 1, z: 1}
 --- !u!1 &6592765573613099924
 GameObject:
   m_ObjectHideFlags: 0
