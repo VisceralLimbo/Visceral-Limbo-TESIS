@@ -46,6 +46,13 @@ public class Player_MeleeAttack : Visceral_Script
     [Header("refe del context")]
     [SerializeField] private PlayerContext _PlayerContext;
 
+    [Header("cambio de material")]
+    [SerializeField] private MeshRenderer _SwordMeshRenderer; // mesh de la espada
+    [SerializeField] private Material _NormalMaterial; //mat normal
+    [SerializeField] private Material _BoostMaterialGold; //mat dorado para el dd
+    private int _activeBoostSources = 0; // cuento los efectos activos (evade, dd al 30%, etc)
+
+
     /// <summary>
     /// valor que cambia la velocidad de animacion de ataque, valor 1 = normal
     /// </summary>
@@ -177,6 +184,8 @@ public class Player_MeleeAttack : Visceral_Script
             // despues del golpe queda en false
             IsEvasionBoostActive = false;
             Debug.Log("Golpe de evasion x2 aplicado"); // test
+            // elimino registro
+            UnregisterEvasionBoost();
         }
 
         if (_ComboCounter >= CurrentCombo.Length) // nos excedimos de combo
@@ -255,7 +264,54 @@ public class Player_MeleeAttack : Visceral_Script
         _ComboCounter++;
     }
 
+    // registro boost
+    public void RegisterBoostSource()
+    {
+        _activeBoostSources++;
+        UpdateMaterialEffect();
+    }
 
+    // elimino registro
+    public void UnregisterBoostSource()
+    {
+        _activeBoostSources = Mathf.Max(0, _activeBoostSources - 1);
+        UpdateMaterialEffect();
+    }
+
+    // se llama al inicio del dash. FUNC SOLO PARA EL DASH
+    public void RegisterEvasionBoost()
+    {
+        _activeBoostSources++;
+        UpdateMaterialEffect();
+    }
+
+    // se llama cuando el ataque usa el efecto
+    public void UnregisterEvasionBoost()
+    {
+        // contador para evitar el spam de dash y rompa el mat
+        if (_activeBoostSources > 0)
+        {
+            _activeBoostSources--;
+        }
+
+        UpdateMaterialEffect();
+    }
+    // updateo el material para aplicar el cambio de mesh
+    private void UpdateMaterialEffect()
+    {
+        if (_SwordMeshRenderer == null) return;
+
+        if (_activeBoostSources > 0)
+        {
+            // activo el material dorado si hay aunque sea >1 activo
+            _SwordMeshRenderer.material = _BoostMaterialGold;
+        }
+        else
+        {
+            // desactivo el mat y vuelvo al basico
+            _SwordMeshRenderer.material = _NormalMaterial;
+        }
+    }
     #region Misc
     void sheateWeapon()
     {

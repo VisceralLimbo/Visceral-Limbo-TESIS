@@ -77,7 +77,13 @@ public class EvasionDamageItemLogic : ItemLogic
     {
         if (_playerAttack != null)
         {
-            // bool en true del playerattack
+            if (!_playerAttack.IsEvasionBoostActive)
+            {
+                // solo registro la primera
+                _playerAttack.RegisterEvasionBoost();
+            }
+
+            // activo daño para el proximo golpe
             _playerAttack.IsEvasionBoostActive = true;
             Debug.Log("TENGO DOUBLE DAMAGE EN EL PROXIMO ATAQUE x2");
         }

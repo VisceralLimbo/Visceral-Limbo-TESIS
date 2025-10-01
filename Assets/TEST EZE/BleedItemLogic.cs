@@ -14,7 +14,6 @@ public class BleedItemLogic : ItemLogic
 
     // refe de la espada
     private SwordTest _Sword;
-
     private ParticleSystem swordParticles;
 
 
@@ -43,6 +42,7 @@ public class BleedItemLogic : ItemLogic
         {
             // busco particulas la espada
             swordParticles = _Sword.GetComponentInChildren<ParticleSystem>(true);
+            swordParticles.Play();
         }
     }
 

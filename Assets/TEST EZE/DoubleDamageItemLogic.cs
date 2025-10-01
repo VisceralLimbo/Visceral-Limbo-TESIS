@@ -12,6 +12,19 @@ public class DoubleDamageItemLogic : ItemLogic
     private float _totalBoostValue = 0f;
     private bool _isBoostActive = false;
 
+    // mismo q player health xq necesito el meeleattack
+    private Player_MeleeAttack _playerMeleeAttack;
+
+    private Player_MeleeAttack PlayerMeleeAttackComponent{get
+        {
+            if (_playerMeleeAttack == null && _Context != null)
+            {
+                _playerMeleeAttack = _Context.GetComponent<Player_MeleeAttack>();
+            }
+            return _playerMeleeAttack;
+        }
+    }
+
     private Player_HealthComp _playerHealthComp;
 
     private Player_HealthComp PlayerHealthComponent{get
@@ -85,6 +98,9 @@ public class DoubleDamageItemLogic : ItemLogic
 
         statManager.UpdateFloatStatValue(DAMAGE_STAT_NAME, damageMod);
         _isBoostActive = true;
+
+        // registro boost activo
+        PlayerMeleeAttackComponent?.RegisterBoostSource();
     }
 
     //remuevo
@@ -97,6 +113,9 @@ public class DoubleDamageItemLogic : ItemLogic
             // uso el nuevo removefloat
             _Context.Stats.RemoveFloatStatModifier(DAMAGE_STAT_NAME, EFFECT_NAME);
             _isBoostActive = false;
+
+            // elimino registro
+            PlayerMeleeAttackComponent?.UnregisterBoostSource();
         }
     }
 
@@ -162,6 +181,12 @@ public class DoubleDamageItemLogic : ItemLogic
         {
             PlayerHealthComponent.OnDamaged -= CheckHealthForDamageBoost;
             PlayerHealthComponent.OnHealed -= CheckHealthForDamageBoost;
+        }
+
+        // chequeo q se elimine el dorado al elminar registro
+        if (_isBoostActive)
+        {
+            PlayerMeleeAttackComponent?.UnregisterBoostSource();
         }
 
         // chequeo que se removio del statmanager
