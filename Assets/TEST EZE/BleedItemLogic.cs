@@ -16,6 +16,16 @@ public class BleedItemLogic : ItemLogic
     private SwordTest _Sword;
     private ParticleSystem swordParticles;
 
+    private Player_MeleeAttack _playerMeleeAttack;
+    private Player_MeleeAttack PlayerMeleeAttackComponent{get
+        {
+            if (_playerMeleeAttack == null && _Context != null)
+            {
+                _playerMeleeAttack = _Context.GetComponent<Player_MeleeAttack>();
+            }
+            return _playerMeleeAttack;
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -48,19 +58,22 @@ public class BleedItemLogic : ItemLogic
 
     public override void Unregister()
     {
+        // notifico efecto off
+        PlayerMeleeAttackComponent?.SetBleedEffectActive(false);
+
+        // paro particulas (de igual manera el bleed nunca se desactiva una vez agarrado pero lo dejo seteado igual)
+        if (swordParticles != null)
+        {
+            swordParticles.Stop();
+            swordParticles.gameObject.SetActive(false);
+        }
+
         base.Unregister();
     }
 
     public override void OnPickUp()
     {
         Inventory.AddItemStack(_ItemDefinition);
-
-        if (swordParticles != null)
-        {
-            swordParticles.gameObject.SetActive(true);
-            swordParticles.Play();
-        }
-
         Destroy(this.gameObject);
     }
 
@@ -98,33 +111,15 @@ public class BleedItemLogic : ItemLogic
             statManager.UpdateFloatStatValue("Bleed", statMod);
         }
 
-        if (_Sword != null)
+        // pase todo el efecto a playerattack quiza deberiamos tener un manager para todos los efectos son bastantes..
+        PlayerMeleeAttackComponent?.SetBleedEffectActive(true);
+
+        // particulas ya no estan en pickup
+        if (swordParticles != null)
         {
-            Transform espada4 = _Sword.GetComponentsInChildren<Transform>(true)
-                           .FirstOrDefault(t => t.name == "Espada4");
-
-            if (espada4 != null)
-            {
-                Renderer swordRenderer = espada4.GetComponent<Renderer>();
-                if (swordRenderer != null)
-                {
-                    Material mat = swordRenderer.material;
-
-                    if (mat.HasProperty("_FresnelGradientBlend"))
-                        mat.SetFloat("_FresnelGradientBlend", 0.04f);
-
-                    
-                     if (mat.HasProperty("_Color"))
-                    {
-                        Color currentColor = mat.GetColor("_Color");
-                        float intensity = currentColor.maxColorComponent;
-                        Color baseColor = Color.red * intensity;
-                        mat.SetColor("_Color", baseColor);
-                    }
-                }
-            }
+            swordParticles.gameObject.SetActive(true);
+            swordParticles.Play();
         }
-
     }
 
     public override void RemoveStack()

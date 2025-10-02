@@ -50,8 +50,11 @@ public class Player_MeleeAttack : Visceral_Script
     [SerializeField] private MeshRenderer _SwordMeshRenderer; // mesh de la espada
     [SerializeField] private Material _NormalMaterial; //mat normal
     [SerializeField] private Material _BoostMaterialGold; //mat dorado para el dd
+    // me traje el efecto de lucas en el bleed a aca ya q manejo el dorado aca
+    [SerializeField] private Color _BleedColor = new Color(1f, 0.1f, 0.1f, 1f); // color rojo para el bleed 
+    [SerializeField] private float _BleedBlendValue = 0.04f; // fresnelgradientblend para el item del bleed
     private int _activeBoostSources = 0; // cuento los efectos activos (evade, dd al 30%, etc)
-
+    private bool _isBleedEffectActive = false; //bool para saber si el efecto esta activo o no
 
     /// <summary>
     /// valor que cambia la velocidad de animacion de ataque, valor 1 = normal
@@ -296,6 +299,16 @@ public class Player_MeleeAttack : Visceral_Script
 
         UpdateMaterialEffect();
     }
+
+    // efecto sangrado
+    public void SetBleedEffectActive(bool isActive)
+    {
+        if (_isBleedEffectActive == isActive) return;
+
+        _isBleedEffectActive = isActive;
+        UpdateMaterialEffect();
+    }
+
     // updateo el material para aplicar el cambio de mesh
     private void UpdateMaterialEffect()
     {
@@ -303,12 +316,31 @@ public class Player_MeleeAttack : Visceral_Script
 
         if (_activeBoostSources > 0)
         {
-            // activo el material dorado si hay aunque sea >1 activo
+            //priorizo el dorado
             _SwordMeshRenderer.material = _BoostMaterialGold;
+        }
+        else if (_isBleedEffectActive)
+        {
+            // sangrado
+            // uso el base pero meto lo de sangre
+            _SwordMeshRenderer.material = _NormalMaterial;
+            Material mat = _SwordMeshRenderer.material;
+
+            if (mat.HasProperty("_FresnelGradientBlend"))
+            {
+                // blend del sangrado
+                mat.SetFloat("_FresnelGradientBlend", _BleedBlendValue);
+            }
+
+            if (mat.HasProperty("_Color"))
+            {
+                // color rojo
+                mat.SetColor("_Color", _BleedColor);
+            }
         }
         else
         {
-            // desactivo el mat y vuelvo al basico
+            // si no hay nada queda el normbal (ningun boost)
             _SwordMeshRenderer.material = _NormalMaterial;
         }
     }

@@ -9,6 +9,21 @@ public class SpeedItemLogic : ItemLogic
     [SerializeField] private float crouchSpeedBoost = 3f;
     [SerializeField] private float airSpeedBoost = 4f;
 
+    private Player_Base _playerBase;
+
+    // bool para el mov
+    private bool _isMoving = false;
+
+    // getter para el base
+    private Player_Base PlayerBaseComponent{get
+        {
+            if (_playerBase == null && _Context != null)
+            {
+                _playerBase = _Context.GetComponentInParent<Player_Base>();
+            }
+            return _playerBase;
+        }
+    }
 
     //trigger
     private void OnTriggerEnter(Collider other)
@@ -24,6 +39,28 @@ public class SpeedItemLogic : ItemLogic
                 //como player movement esta en player model y eso es hijo de player obj tengo q llamarlo asi   
                 OnPickUp();
             }
+        }
+    }
+
+    private void Update()
+    {
+        // chequeo si el item ya lo tengo
+        if (ItemStacks <= 0 || PlayerBaseComponent == null) return;
+
+        // leo input de playerbase
+        Vector2 movementInput = PlayerBaseComponent.CurrentMovementInput.Movement;
+        bool currentlyMoving = movementInput.sqrMagnitude > 0.01f;
+
+        // solo actualizo si cambio el mov
+        if (currentlyMoving != _isMoving)
+        {
+            _isMoving = currentlyMoving;
+
+            // el alpha cambia dependiendo si hay o no mov
+            float targetAlpha = _isMoving ? 1.0f : 0.0f;
+
+            // notifico efceto en pantalla
+            HealthFullscreenEffect.Instance?.SetWindAlpha(targetAlpha);
         }
     }
 
@@ -108,10 +145,18 @@ public class SpeedItemLogic : ItemLogic
         base.RemoveStack();
     }
     public override void Unregister() 
-    { 
+    {
+        // apago shader cuando elimino registro
+        if (HealthFullscreenEffect.Instance != null)
+        {
+            HealthFullscreenEffect.Instance.SetWindAlpha(0.0f); // apagado
+        }
+        base.Unregister();
     }
     public override void Register(InventoryManager inventory, PlayerContext Context)
     {
         base.Register(inventory, Context);
+        // ref a base lista
+        var dummy = PlayerBaseComponent;
     }
 }

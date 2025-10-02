@@ -25,6 +25,9 @@ public class Player_Base : Visceral_Script
     public PlayerContext _PlayerContext;
     public Health_Component _PlayerHealth { get; private set; }
 
+    // necesito ref para guardar el input de el frame
+    public InputMovement CurrentMovementInput { get; private set; }
+
 
     //PlayerInputActions es el mappeo de las acciones de Input del jugador
     //similar al Unreal con su Input Map
@@ -136,6 +139,8 @@ public class Player_Base : Visceral_Script
             Kick = Input.Kick.WasPressedThisFrame(),
            
         };
+        // guardo el input para llamar en speedlogic
+        CurrentMovementInput = movementInput;
         _Player_Movement.UpdateBodyPositions(Time.deltaTime);
         _Player_Movement.UpdateInput(movementInput);
         //_DashTest.PerformDash(movementInput);
