@@ -14,6 +14,12 @@ public class SpeedItemLogic : ItemLogic
     // bool para el mov
     private bool _isMoving = false;
 
+    private float currentAlpha;
+    private float targetAlpha;
+
+    [Header("Transición del efecto")]
+    [SerializeField] private float fadeSpeed = 3f;
+
     // getter para el base
     private Player_Base PlayerBaseComponent{get
         {
@@ -44,25 +50,26 @@ public class SpeedItemLogic : ItemLogic
 
     private void Update()
     {
-        // chequeo si el item ya lo tengo
         if (ItemStacks <= 0 || PlayerBaseComponent == null) return;
 
         // leo input de playerbase
         Vector2 movementInput = PlayerBaseComponent.CurrentMovementInput.Movement;
         bool currentlyMoving = movementInput.sqrMagnitude > 0.01f;
 
-        // solo actualizo si cambio el mov
+        
         if (currentlyMoving != _isMoving)
         {
             _isMoving = currentlyMoving;
-
-            // el alpha cambia dependiendo si hay o no mov
-            float targetAlpha = _isMoving ? 1.0f : 0.0f;
-
-            // notifico efceto en pantalla
-            HealthFullscreenEffect.Instance?.SetWindAlpha(targetAlpha);
+            targetAlpha = _isMoving ? 1.0f : 0.0f;
         }
+
+        // transición progresiva hacia targetAlpha
+        currentAlpha = Mathf.MoveTowards(currentAlpha, targetAlpha, fadeSpeed * Time.deltaTime);
+
+        // aplicar al efecto
+        HealthFullscreenEffect.Instance?.SetWindAlpha(currentAlpha);
     }
+
 
     public override void OnPickUp()
     {
