@@ -423,8 +423,8 @@ MonoBehaviour:
   - {fileID: 7294352422255708584}
   - {fileID: 8406971208101093883}
   collider: {fileID: 4195553191044311663}
-  DrawRoomCollider: 0
-  DrawEntryPoints: 0
+  DrawRoomCollider: 1
+  DrawEntryPoints: 1
 --- !u!65 &4195553191044311663
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -444,8 +444,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.91220564, y: 13.999999, z: 1.0837603}
-  m_Center: {x: -0.0050018514, y: 3.7208433, z: 0.06902817}
+  m_Size: {x: 0.91220564, y: 13.999999, z: 1.1469423}
+  m_Center: {x: -0.00500183, y: 3.720844, z: 0.03743707}
 --- !u!114 &1655847510503458854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -499,6 +499,10 @@ MonoBehaviour:
   endWaveColor: {r: 0, g: 0, b: 1, a: 1}
   lightsChanged: 0
   extraLight: {fileID: 0}
+  _canHaveEnvironmentalEffect: 1
+  _currentEffect: 0
+  _lowVisibilityLightIntensity: 0.1
+  blackFog: {fileID: 0}
   fireParticles: []
 --- !u!1 &5464218755639305182
 GameObject:
