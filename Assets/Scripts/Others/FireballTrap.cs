@@ -19,6 +19,11 @@ public class FireballTrap : MonoBehaviour
 
     private bool isActive = false;
 
+    public void FlipFlopTrap()
+    {
+        isActive = !isActive;
+    }
+
     public void ActivateTrap()
     {
         isActive = true;

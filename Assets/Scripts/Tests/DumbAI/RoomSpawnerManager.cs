@@ -19,6 +19,7 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] bool MinionsAlive;
     [SerializeField] bool SpawnersSpent;
     [SerializeField] bool StopThisManager;
+    public bool ManagerStopped { get { return StopThisManager; } }
     [SerializeField] bool _ShouldOffsetSpawnTime;
     [SerializeField] float _OffsetSpawnTime;
     [SerializeField] private float _StartingCombatScore;
@@ -139,10 +140,14 @@ public class RoomSpawnerManager : MonoBehaviour
         // no hay minions y no quedan spawners = combate terminado
         if (!MinionsAlive && SpawnersSpent)
         {
-            foreach (var item in roomTriggers)
+            if(roomTriggers.Count > 0)
             {
-                item.SetSolidState(true);
-                item.SetCombatState(false);
+                foreach (var item in roomTriggers)
+                {
+                    item.SetSolidState(true);
+                    item.SetCombatState(false);
+                }
+
             }
 
             StopThisManager = true;

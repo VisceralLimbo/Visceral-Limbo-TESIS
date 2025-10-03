@@ -20,7 +20,10 @@ public class BulletDumb : MonoBehaviour, IParriable
         _Collider = GetComponent<Collider>();
         _Collider.enabled = false;
         StartCoroutine(startDamage());
-        Physics.IgnoreCollision(this._Collider,_OwnerContext.PlayerTransform.root.GetComponentInChildren<Collider>());
+        if(_OwnerContext != null)
+        {
+            Physics.IgnoreCollision(this._Collider, _OwnerContext.PlayerTransform.GetComponent<Collider>());
+        }
     }
 
     IEnumerator startDamage()
@@ -43,17 +46,22 @@ public class BulletDumb : MonoBehaviour, IParriable
     }
     public void SetOwner(GameObject Owner,PlayerContext Context)
     {
+        if(Owner == null)
+        {
+            return;
+        }
+
         //desactivamos el ignore de colisiones del viejo owner
         if(_OwnerContext != null)
         {
-            Physics.IgnoreCollision(this._Collider, _OwnerContext.PlayerTransform.root.GetComponentInChildren<Collider>(), false);
+            Physics.IgnoreCollision(this._Collider, _OwnerContext.PlayerTransform.GetComponent<Collider>(), false);
         }
 
         _OwnerGameObject = Owner;
         _OwnerContext = Context;
 
         //activamos el ignore de colisiones del nuevo owner
-        Physics.IgnoreCollision(this._Collider, _OwnerContext.PlayerTransform.root.GetComponentInChildren<Collider>());
+        Physics.IgnoreCollision(this._Collider, _OwnerContext.PlayerTransform.GetComponent<Collider>());
     }
 
 

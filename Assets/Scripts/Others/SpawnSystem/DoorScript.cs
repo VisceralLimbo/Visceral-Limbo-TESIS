@@ -52,7 +52,12 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             InWardAlignment = new Vector3(0, 0, Mathf.Sign(DirectionToRoom.x));
         }
 
-        roomSpawnerManager.OnCombatEnded += UnlockDoor; 
+        roomSpawnerManager.OnCombatEnded += UnlockDoor;
+
+        if(roomSpawnerManager.ManagerStopped)
+        {
+            ShouldGenerateEvents(true);
+        }
     }
 
     public void ShouldGenerateEvents(bool value = false)
@@ -75,7 +80,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     private void CheckPlayerEnteredRoom(Collider other)
     {
-        if (PlayerEnteredRoom || _LockDoor)
+        if (PlayerEnteredRoom || _LockDoor || NonTriggerRoom)
         {
             return;
         }

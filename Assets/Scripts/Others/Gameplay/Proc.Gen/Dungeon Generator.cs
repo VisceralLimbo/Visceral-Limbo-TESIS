@@ -45,20 +45,17 @@ public class DungeonGenerator : MonoBehaviour
     /// <summary>
     /// la lista de habitaciones generadas
     /// </summary>
-    [SerializeField]
-    private List<DungeonPart> generatedRooms;
+    private List<DungeonPart> generatedRooms = new List<DungeonPart>();
 
     /// <summary>
     /// la lista de pasillos generados
     /// </summary>
-    [SerializeField]
-    private List<DungeonPart> generatedHallways;
+    private List<DungeonPart> generatedHallways = new List<DungeonPart>();
 
     /// <summary>
     /// la lista de habitaciones especiales generadas
     /// </summary>
-    [SerializeField]
-    private List<DungeonPart> generatedSpecialRooms;
+    private List<DungeonPart> generatedSpecialRooms = new List<DungeonPart>();
 
     [Space]
     [Header("Variables")]
@@ -379,12 +376,19 @@ public class DungeonGenerator : MonoBehaviour
 
                 // CHEQUEAMOS QUE HAYAN POSIBLES CONECCIONES EN TODA LA MAZMORRA
                 // 
-                if (SourcePool.Count == 0)
+                if (SourcePool.Count <= 0)
                 {
                     Debug.LogError("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
                     Regenerate();
+                    break;
                 }
                 int randomSourceSeed = Random.Range(0, SourcePool.Count-1);
+                if(randomSourceSeed < 0 || randomSourceSeed > SourcePool.Count)
+                {
+                    Debug.LogError("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
+                    Regenerate();
+                    break;
+                }
 
                 DungeonPart SourceRoom = SourcePool[randomSourceSeed];
 
@@ -551,11 +555,27 @@ public class DungeonGenerator : MonoBehaviour
     /// <returns></returns>
     private bool HandleIntersection(DungeonPart Part)
     {
+
+        /*
         foreach (var other in generatedRooms)
         {
             if (other == Part) continue;
             if (Part.collider.bounds.Intersects(other.collider.bounds))
-                return true;
+            return true;
+            
+            //tiene multiples colliders
+            foreach(var _col in Part._Colliders)
+            {
+                //por cada collider en part, chequeamos si colisiona con other colliders
+                foreach(var _otherCol in other._Colliders)
+                {
+                    if (_col.bounds.Intersects(_otherCol.bounds))
+                    {
+                        //interseccion
+                        return true;
+                    }
+                }
+            }
         }
 
         foreach (var other in generatedHallways)
@@ -563,8 +583,55 @@ public class DungeonGenerator : MonoBehaviour
             if (other == Part) continue;
             if (Part.collider.bounds.Intersects(other.collider.bounds))
                 return true;
+
+            foreach (var _col in Part._Colliders)
+            {
+                //por cada collider en part, chequeamos si colisiona con other colliders
+                foreach (var _otherCol in other._Colliders)
+                {
+                    if (_col.bounds.Intersects(_otherCol.bounds))
+                    {
+                        //interseccion
+                        return true;
+                    }
+                }
+            }
         }
 
+        */
+
+        List<DungeonPart> AllParts = new List<DungeonPart>();
+        AllParts.AddRange(generatedRooms);
+        AllParts.AddRange(generatedHallways);
+        AllParts.AddRange(generatedSpecialRooms);
+
+        foreach(var ExistingPart in AllParts)
+        {
+            if (ExistingPart == Part)
+            {
+                continue; // no nos chequemos a nosotros xd
+            }
+
+            // por cada collider en la pieza a poner
+            foreach(var partCol in Part._Colliders)
+            {
+                //por cada colider en TODAS las piezas existentes
+                foreach(var otherCol in ExistingPart._Colliders)
+                {
+                    // si la pieza a colocar intersecta con collider existente
+                    if (partCol.bounds.Intersects(otherCol.bounds))
+                    {
+                        Debug.LogWarning("[visceral Proc.Gen]pieza intersecta ");
+                        return true;
+                    }
+
+
+                }
+            }
+
+        }
+
+        //si llegamos acá, entonces no hay intersecciones
         return false;
     }
 

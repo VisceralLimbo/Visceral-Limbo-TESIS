@@ -31,11 +31,11 @@ public class SoundManager : MonoBehaviour
         if(Instance == null && Instance != this)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            Destroy(this.gameObject );
+            Destroy(this.gameObject);
         }
     }
 

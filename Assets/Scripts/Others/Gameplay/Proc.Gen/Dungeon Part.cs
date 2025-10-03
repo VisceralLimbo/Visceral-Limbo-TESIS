@@ -42,6 +42,8 @@ public class DungeonPart : MonoBehaviour
 
     public new Collider collider;
 
+    public Collider[] _Colliders ;
+
     [Space]
     [Header("Debug")]
     [SerializeField] bool DrawRoomCollider;
@@ -127,8 +129,12 @@ public class DungeonPart : MonoBehaviour
     {
         if (DrawRoomCollider)
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(collider.bounds.center, collider.bounds.size);
+            foreach(var _Col in _Colliders)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireCube(_Col.bounds.center, _Col.bounds.size);
+            }
+          
         }
 
         if (DrawEntryPoints)
