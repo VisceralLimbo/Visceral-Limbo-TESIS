@@ -185,6 +185,7 @@ public class RoomSpawnerManager : MonoBehaviour
 
             MusicManager.Instance?.PlayExplorationMusic();
             OnCombatEnded?.Invoke();
+            print("end wave");
         }
 
     }

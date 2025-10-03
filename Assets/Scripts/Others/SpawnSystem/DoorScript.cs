@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -20,7 +20,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         " 1 = el jugador esta frente de la puerta, -1 = el jugador esta detras de la puerta")]
     [SerializeField] float DoorThreshold; // el limite a partir de que se considera adentro de la habitacion
     [SerializeField] bool PlayerEnteredRoom;
-    [Tooltip("Si esta puerta deber�a de activar eventos (ejemplo: comenzar combate)")]
+    [Tooltip("Si esta puerta debería de activar eventos (ejemplo: comenzar combate)")]
     [SerializeField] bool NonTriggerRoom; // esta habitacion NO genera trigger Events
 
     [SerializeField] bool _LockDoor;
@@ -32,7 +32,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             SpawnerManager == null) return;
             
         roomSpawnerManager = SpawnerManager;
-        
+        roomSpawnerManager.OnCombatEnded += UnlockDoor;
 
         // alineamiento de las puertas.
         // calculamos la direccion hacia el centro de la sala
@@ -51,8 +51,6 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
             InWardAlignment = new Vector3(0, 0, Mathf.Sign(DirectionToRoom.x));
         }
-
-        roomSpawnerManager.OnCombatEnded += UnlockDoor;
 
         if(roomSpawnerManager.ManagerStopped)
         {
@@ -80,7 +78,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     private void CheckPlayerEnteredRoom(Collider other)
     {
-        if (PlayerEnteredRoom || _LockDoor || NonTriggerRoom)
+        if (PlayerEnteredRoom || _LockDoor || NonTriggerRoom|| roomSpawnerManager.ManagerStopped)
         {
             return;
         }
@@ -144,6 +142,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     private void UnlockDoor()
     {
+        print("unlocking door" + this.name);
         _LockDoor = false;
     }
 

@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class HostileNPC_HealthComp : Health_Component
 {
-
-
-
     public override void VS_Initialize()
     {
         base.VS_Initialize();
