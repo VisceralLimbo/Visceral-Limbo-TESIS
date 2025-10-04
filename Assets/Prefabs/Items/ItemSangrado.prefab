@@ -92,6 +92,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8034089316014099277}
+  - component: {fileID: 727247393430730045}
+  - component: {fileID: 4712584187833360221}
   m_Layer: 0
   m_Name: ItemSangrado
   m_TagString: Untagged
@@ -107,8 +109,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7841152829295470871}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.4600233, y: -0.52156025, z: -0.40353593, w: 0.5945689}
-  m_LocalPosition: {x: 863.6072, y: 666.271, z: -1542.59}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -116,7 +118,48 @@ Transform:
   - {fileID: 8174897049138194180}
   - {fileID: 5542547290879640982}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -75.459, y: -82.515, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &727247393430730045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7841152829295470871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74732509ab54a3b418ed96274e7b0e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Inventory: {fileID: 0}
+  _ItemDefinition: {fileID: 11400000, guid: 954755953a5274c4e85411da618d34f9, type: 2}
+  _Context: {fileID: 0}
+  ItemStacks: 0
+  IsInventoryMaster: 0
+  baseBleedDamage: 2
+  bleedDuration: 5
+  bleedTickRate: 1
+--- !u!65 &4712584187833360221
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7841152829295470871}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 1.17, y: 0, z: 0.45}
 --- !u!1 &8685403667947991689
 GameObject:
   m_ObjectHideFlags: 0
