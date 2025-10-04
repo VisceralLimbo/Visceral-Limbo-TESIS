@@ -24,9 +24,10 @@ public class ScoreManager : MonoBehaviour
 
     [Header("Desired points")]
     private List<float> milestoneThresholds = new List<float>();
-    [SerializeField] AudioClip milestoneClip;
+    //[SerializeField] AudioClip milestoneClip;
     private AudioSource audioSource;
     private bool milestoneReached = false;
+    [SerializeField] private AudioSource milestoneClip;
 
     public float GetPlayerScore { get { return PlayerScore; } }
 
@@ -124,7 +125,7 @@ public class ScoreManager : MonoBehaviour
             if (PlayerScore >= milestoneThresholds[i])
             {
                 if (milestoneClip != null)
-                    audioSource.PlayOneShot(milestoneClip);
+                    milestoneClip.Play();
 
                 milestoneThresholds.RemoveAt(i); 
             }

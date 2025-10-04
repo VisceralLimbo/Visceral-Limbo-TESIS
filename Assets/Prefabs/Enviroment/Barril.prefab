@@ -44203,32 +44203,32 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 41eee88bc85cdb34c8eb5828c6c133b1,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 109.9185
+      value: 61.904034
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41eee88bc85cdb34c8eb5828c6c133b1,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 109.9185
+      value: 61.904034
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41eee88bc85cdb34c8eb5828c6c133b1,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 109.9185
+      value: 61.904034
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41eee88bc85cdb34c8eb5828c6c133b1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41eee88bc85cdb34c8eb5828c6c133b1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.815
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41eee88bc85cdb34c8eb5828c6c133b1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41eee88bc85cdb34c8eb5828c6c133b1,
         type: 3}
@@ -44238,7 +44238,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 41eee88bc85cdb34c8eb5828c6c133b1,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41eee88bc85cdb34c8eb5828c6c133b1,
         type: 3}
@@ -44344,21 +44344,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Context: {fileID: 2189849915831026756}
-  explosionRadius: 7
+  explosionRadius: 8
   damage: 100
   knockbackForce: 10
   targetLayer:
     serializedVersion: 2
     m_Bits: 1217
-  _BarrelLaughs: {fileID: 1800119381231638649}
+  _BarrelLaughs: {fileID: 0}
   explosionParticles:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  explosionSound: {fileID: 8300000, guid: 81ababd085329034583c029e27da9c15, type: 3}
+  explosionSound: {fileID: 0}
   barrelRenderer: {fileID: 4757550470290488499}
 --- !u!114 &4368422275056222679
 MonoBehaviour:
@@ -44386,6 +44385,7 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 2189849915831026756}
+  _RagdollPrefab: {fileID: 0}
 --- !u!114 &2189849915831026756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44462,10 +44462,11 @@ AudioSource:
   m_GameObject: {fileID: 6415037378930908518}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: b66402182ed823941b1f555d5b4f9180, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.165
+  m_Volume: 0.658
   m_Pitch: 1
   Loop: 0
   Mute: 0

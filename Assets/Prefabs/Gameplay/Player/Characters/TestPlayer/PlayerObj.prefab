@@ -449,7 +449,7 @@ MonoBehaviour:
     PlayOnAwake: 0
     SpatialBlend: 1
     IsFrequent: 0
-  CurrentHealth: 0
+  CurrentHealth: 200
   MaxHealth: 200
   _RB: {fileID: 103244012193870917}
   DestroyOnDeath: 0
@@ -591,12 +591,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1 &3698310002534589070
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,7 +801,7 @@ MonoBehaviour:
   _Weapon: {fileID: 8935195771567458531}
   soundData:
   - Clip: {fileID: 8300000, guid: a2d450b1fbc9f754ab5d23e07a22fce6, type: 3}
-    mixerGroup: {fileID: 0}
+    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 0
@@ -820,6 +820,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 66a4e1f0045de794598eeaa7f855b0b9, type: 2}
   _ComboCounter: 0
   _HasFinishedAttack: 1
+  AttackDamageMod: 1
+  IsEvasionBoostActive: 0
+  _PlayerContext: {fileID: 0}
+  _SwordMeshRenderer: {fileID: 0}
+  _NormalMaterial: {fileID: 0}
+  _BoostMaterialGold: {fileID: 0}
+  _BleedColor: {r: 1, g: 0.1, b: 0.1, a: 1}
+  _BleedBlendValue: 0.04
   AttackSpeedMod: 1
   _SwordRenderer: {fileID: 3645706006359751121}
   shaderFloatName: _FresnelGradientBlend
@@ -1103,12 +1111,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!114 &8577399524032963587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,6 +1131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullscreenMat: {fileID: 2100000, guid: 7aa46986c35edb54a817572c37ab2175, type: 2}
   fadeDuration: 1
+  windEffectMat: {fileID: 0}
 --- !u!1 &5006734972074116238
 GameObject:
   m_ObjectHideFlags: 0

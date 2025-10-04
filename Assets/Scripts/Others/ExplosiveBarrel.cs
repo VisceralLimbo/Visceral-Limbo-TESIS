@@ -18,7 +18,8 @@ public class ExplosiveBarrel : MonoBehaviour
 
     [SerializeField] private GameObject[] explosionParticles; // Partículas de explosión
 
-    [SerializeField] private AudioClip explosionSound;
+    //tuve q hacerlo audiosource porque suaban clips no mas y no podia asignar el mixer
+    [SerializeField] private AudioSource explosionSound;
 
     [SerializeField] private Renderer barrelRenderer;
 
@@ -96,7 +97,7 @@ public class ExplosiveBarrel : MonoBehaviour
 
         if (explosionSound != null)
         {
-            AudioSource.PlayClipAtPoint(explosionSound, transform.position);
+            explosionSound.Play();
         }
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, targetLayer);

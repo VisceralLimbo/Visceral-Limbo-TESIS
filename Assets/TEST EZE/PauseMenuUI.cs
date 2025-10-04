@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuUI : MonoBehaviour
 {
@@ -61,8 +62,8 @@ public class PauseMenuUI : MonoBehaviour
         ShowPauseMenu();
     }
 
-    public void OnQuit()
+    public void Abandonn()
     {
-        Application.Quit();
+        SceneManager.LoadScene("MainMenu");
     }
 }
