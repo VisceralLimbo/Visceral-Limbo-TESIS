@@ -45,17 +45,17 @@ public class DungeonGenerator : MonoBehaviour
     /// <summary>
     /// la lista de habitaciones generadas
     /// </summary>
-    private List<DungeonPart> generatedRooms = new List<DungeonPart>();
+    public List<DungeonPart> generatedRooms = new List<DungeonPart>();
 
     /// <summary>
     /// la lista de pasillos generados
     /// </summary>
-    private List<DungeonPart> generatedHallways = new List<DungeonPart>();
+    public List<DungeonPart> generatedHallways = new List<DungeonPart>();
 
     /// <summary>
     /// la lista de habitaciones especiales generadas
     /// </summary>
-    private List<DungeonPart> generatedSpecialRooms = new List<DungeonPart>();
+    public List<DungeonPart> generatedSpecialRooms = new List<DungeonPart>();
 
     [Space]
     [Header("Variables")]
@@ -95,11 +95,14 @@ public class DungeonGenerator : MonoBehaviour
 
     private bool GenerateHallway = true;
 
+
     [Space]
     [Header("Debug")]
     [SerializeField] bool SlowGen = false;
     [SerializeField] float SlowGenSpeed;
     [SerializeField] bool Regen = false;
+    [SerializeField] bool IsRegenerating;
+    public List<DungeonPart> AllParts = new List<DungeonPart>();
 
     private void Awake()
     {
@@ -118,32 +121,46 @@ public class DungeonGenerator : MonoBehaviour
     private void Update()
     {
         if (Regen)
-        {
+        { 
             Regen = false;
-            Regenerate();
+            StartCoroutine(Regenerate());
         }
     }
-    private void Regenerate()
+    private IEnumerator Regenerate()
     {
+        if (IsRegenerating)
+        {
+            yield break;
+        }
+
+        IsRegenerating= true;
+
         foreach (DungeonPart room in generatedRooms)
         {
-            Destroy(room.gameObject);
+            if(room !=null) Destroy(room.gameObject);
         }
         generatedRooms.Clear();
 
         foreach (DungeonPart hall in generatedHallways)
         {
-            Destroy(hall.gameObject);
+            if(hall != null)Destroy(hall.gameObject);
         }
         generatedHallways.Clear();
 
         foreach (DungeonPart special in generatedSpecialRooms)
         {
-            Destroy(special.gameObject);
+            if(special != null)Destroy(special.gameObject);
         }
         generatedSpecialRooms.Clear();
 
+        AllParts.Clear();
 
+        //esperamos un tiempo para que Unity procese OnDestroy()
+        yield return null;
+
+        IsRegenerating = false;
+
+        //ahora que ya limpiamos todo, comenzamos con la generacion
         StartGeneration();
     }
 
@@ -327,7 +344,7 @@ public class DungeonGenerator : MonoBehaviour
                 if (!placementSuccessful)
                 {
                     Debug.LogError("Dungeon generation failed. Could not find a valid placement after " + TotalTriesPerRoomGeneration + " attempts.");
-                    Regenerate(); // regeneramos la mazmorra desde 0
+                    if(!IsRegenerating)StartCoroutine(Regenerate());
                     break; 
                 }
 
@@ -379,14 +396,14 @@ public class DungeonGenerator : MonoBehaviour
                 if (SourcePool.Count <= 0)
                 {
                     Debug.LogError("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
-                    Regenerate();
+                    if (!IsRegenerating) StartCoroutine(Regenerate());
                     break;
                 }
                 int randomSourceSeed = Random.Range(0, SourcePool.Count-1);
                 if(randomSourceSeed < 0 || randomSourceSeed > SourcePool.Count)
                 {
                     Debug.LogError("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
-                    Regenerate();
+                    if (!IsRegenerating) StartCoroutine(Regenerate());
                     break;
                 }
 
@@ -490,7 +507,7 @@ public class DungeonGenerator : MonoBehaviour
             if (!placementSuccessful)
             {
                 Debug.LogError("Dungeon generation failed. Could not find a valid placement for special room after : " + TotalTriesPerRoomGeneration + " attempts.");
-                Regenerate(); // regeneramos la mazmorra desde 0
+                if (!IsRegenerating) StartCoroutine(Regenerate()); // regeneramos la mazmorra desde 0
                 break;
             }
 
@@ -507,6 +524,10 @@ public class DungeonGenerator : MonoBehaviour
         // BLOQUEAMOS LAS CONECCIONES NO USADAS
         //
         // =================================================
+        AllParts.AddRange(generatedHallways);
+        AllParts.AddRange(generatedRooms);
+        AllParts.AddRange(generatedSpecialRooms);
+
         FillEmptyEntries();
     }
 
