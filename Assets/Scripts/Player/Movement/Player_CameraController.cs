@@ -18,6 +18,19 @@ public class Player_CameraController : Visceral_Script
     [SerializeField] private Transform _CameraAnchor;
 
     [SerializeField] private Player_Base _Base;
+
+    void Awake()
+    {
+        // por las dudas chequeo del singleton
+        if (CS_settingsUI.Instance == null) return;
+
+        // lo asigno al singleton
+        CS_settingsUI.Instance.cameraController = this;
+
+        // cargo la sens q tenia guardada
+        CS_settingsUI.Instance.ApplySettingsToGame();
+    }
+
     public override void VS_InitializeWithParameters(params object[] a)
     {
         if(a == null || a.Length == 0)

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -18,7 +16,7 @@ public class MainMenu : MonoBehaviour
 
     public void MainMenuPlayGame()
     {
-        LoadTargetScene("GameScene");
+        LoadGameScene("GameScene");
         ResetUIState();
     }
 
@@ -38,7 +36,8 @@ public class MainMenu : MonoBehaviour
 
     public void MainMenuGenProc()
     {
-        LoadTargetScene("Proc Gen Scene");
+        //hay q cambiarle el nobmre a esto me comi los espacios y las mayusxd
+        LoadGameScene("Proc Gen Scene");
         ResetUIState();
     }
 
@@ -58,15 +57,13 @@ public class MainMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
     }
 
-    // parte del loadscene
-    private void LoadTargetScene(string targetSceneName)
+    public void LoadGameScene(string sceneName)
     {
-        // target
-        LoadingScreenManager.sceneToLoad = targetSceneName;
+        // chequeo q este guardado el nobmre de la escena
+        LoadingScreenManager.sceneToLoad = sceneName;
 
-        // cargo escena de carga
+        // cargo la loadscreen
         SceneManager.LoadScene("LoadingScene");
-        ResetUIState();
     }
 
 }

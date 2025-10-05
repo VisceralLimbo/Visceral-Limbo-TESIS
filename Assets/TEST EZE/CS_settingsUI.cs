@@ -1,39 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Audio; // <-- NUEVO: Para el Audio Mixer
+using UnityEngine.Audio;
 using TMPro;
 
 public class CS_settingsUI : MonoBehaviour
 {
     public static CS_settingsUI Instance; // st
 
-    // uso de playerprefs para guardar valores del slider y pasarlos en la escena ingame
+    // playerprefs para guardar valores del slider y pasarlos en la escena ingame
     public const string SENSITIVITY_KEY = "GameSensitivity";
     public const string SHAKE_KEY = "CameraShakeIntensity";
     public const string HITSTOP_KEY = "HitStopDuration";
     public const string VOLUME_KEY = "Volume";
-    // ----------------------------
-    private const float DEFAULT_SENS = 5f;
-    private const float DEFAULT_SHAKE = 0.5f;
-    private const float DEFAULT_HITSTOP = 0.1f;
-    private const float DEFAULT_VOLUME = 1.0f;
 
-    [Header("Sliders")]
-    public Slider sensSlider;
-    public Slider shakeSlider;
-    public Slider hitStopSlider; 
-    public Slider volumeSlider;
+    public const float DEFAULT_SENS = 5f;
+    public const float DEFAULT_SHAKE = 0.5f;
+    public const float DEFAULT_HITSTOP = 0.1f;
+    public const float DEFAULT_VOLUME = 1.0f;
 
-    [Header("Valores")]
-    public TMP_Text sensitivityText;
-    public TMP_Text shakeText;
-    public TMP_Text hitStopText;
-    public TMP_Text volumeText;
-
-    [Header("Referencias")]
-    public Player_CameraController cameraController;
+    [Header("refes")]
+    public Player_CameraController cameraController;    
     public CameraShake cameraShake;
 
     [Header("HitStop Opciones")]
@@ -52,6 +38,8 @@ public class CS_settingsUI : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject); // lo mantengo
+            LoadSettings(); // cargo valaores
         }
         else if (Instance != this)
         {
@@ -61,40 +49,74 @@ public class CS_settingsUI : MonoBehaviour
 
     private void Start()
     {
-        LoadSettings();
-
-        // agrego listeners
-        sensSlider.onValueChanged.AddListener(OnSensitivityChanged);
-        shakeSlider.onValueChanged.AddListener(OnShakeChanged);
-        hitStopSlider.onValueChanged.AddListener(OnHitStopChanged);
-        volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
-
-        // aplico si estoy en la escena de juego (lo q guarde en el menu)
+        // sollo aplico
         ApplySettingsToGame();
-        UpdateTexts();
     }
 
     private void LoadSettings()
     {
-        // cargo lo guardado o uso default
-        sensSlider.value = PlayerPrefs.GetFloat(SENSITIVITY_KEY, DEFAULT_SENS);
-        shakeSlider.value = PlayerPrefs.GetFloat(SHAKE_KEY, DEFAULT_SHAKE);
-        hitStopSlider.value = PlayerPrefs.GetFloat(HITSTOP_KEY, DEFAULT_HITSTOP);
-        volumeSlider.value = PlayerPrefs.GetFloat(VOLUME_KEY, DEFAULT_VOLUME);
+        //cargo las default para la primera vez
+
+        if (!PlayerPrefs.HasKey(SENSITIVITY_KEY))
+            PlayerPrefs.SetFloat(SENSITIVITY_KEY, DEFAULT_SENS);
+
+        if (!PlayerPrefs.HasKey(SHAKE_KEY))
+            PlayerPrefs.SetFloat(SHAKE_KEY, DEFAULT_SHAKE);
+
+        if (!PlayerPrefs.HasKey(HITSTOP_KEY))
+            PlayerPrefs.SetFloat(HITSTOP_KEY, DEFAULT_HITSTOP);
+
+        if (!PlayerPrefs.HasKey(VOLUME_KEY))
+            PlayerPrefs.SetFloat(VOLUME_KEY, DEFAULT_VOLUME);
+
+        PlayerPrefs.Save();
     }
 
-    private void ApplySettingsToGame()
+    // inicio y conecto sliders y textos
+
+    public void InitializeUI(Slider sens, Slider shake, Slider hitStop, Slider vol, TMP_Text sensT, TMP_Text shakeT, TMP_Text hitStopT, TMP_Text volT)
     {
-        //  solo aplico si existe refe
+        // aplico vlaores a sliders
+        sens.value = PlayerPrefs.GetFloat(SENSITIVITY_KEY, DEFAULT_SENS);
+        shake.value = PlayerPrefs.GetFloat(SHAKE_KEY, DEFAULT_SHAKE);
+        hitStop.value = PlayerPrefs.GetFloat(HITSTOP_KEY, DEFAULT_HITSTOP);
+        vol.value = PlayerPrefs.GetFloat(VOLUME_KEY, DEFAULT_VOLUME);
+
+        // agrego listerns a la ui, primero remuevo para no tener duplicados
+
+        sens.onValueChanged.RemoveListener(OnSensitivityChanged);
+        shake.onValueChanged.RemoveListener(OnShakeChanged);
+        hitStop.onValueChanged.RemoveListener(OnHitStopChanged);
+        vol.onValueChanged.RemoveListener(OnVolumeChanged);
+
+        sens.onValueChanged.AddListener(OnSensitivityChanged);
+        shake.onValueChanged.AddListener(OnShakeChanged);
+        hitStop.onValueChanged.AddListener(OnHitStopChanged);
+        vol.onValueChanged.AddListener(OnVolumeChanged);
+
+        // acutalizo textos
+        UpdateTexts(sens.value, vol.value, shake.value, hitStop.value, sensT, shakeT, hitStopT, volT);
+    }
+
+    public void ApplySettingsToGame()
+    {
+        // agarro valores desde los playerprefs
+        float sensValue = PlayerPrefs.GetFloat(SENSITIVITY_KEY, DEFAULT_SENS);
+        float shakeValue = PlayerPrefs.GetFloat(SHAKE_KEY, DEFAULT_SHAKE);
+        float volumeValue = PlayerPrefs.GetFloat(VOLUME_KEY, DEFAULT_VOLUME);
+
         if (cameraController != null)
         {
-            cameraController.sensitivity = sensSlider.value;
+            cameraController.sensitivity = sensValue;
         }
-        CameraShakeIntensity.currentIntensity = shakeSlider.value;
-        OnVolumeChanged(volumeSlider.value);
+        CameraShakeIntensity.currentIntensity = shakeValue;
+
+        // aplico volumen
+        ApplyVolumeToMixer(volumeValue);
     }
 
-    private void OnSensitivityChanged(float value)
+    // ahora son publicas y hacen lo de antes, cambio y guardado
+    public void OnSensitivityChanged(float value)
     {
         if (cameraController != null)
         {
@@ -102,60 +124,49 @@ public class CS_settingsUI : MonoBehaviour
         }
         PlayerPrefs.SetFloat(SENSITIVITY_KEY, value);
         PlayerPrefs.Save();
-
-        UpdateTexts();
     }
 
-    private void OnShakeChanged(float value)
+    public void OnShakeChanged(float value)
     {
         CameraShakeIntensity.currentIntensity = value;
         PlayerPrefs.SetFloat(SHAKE_KEY, value);
         PlayerPrefs.Save();
-        UpdateTexts();
     }
 
-    private void OnHitStopChanged(float value)
+    public void OnHitStopChanged(float value)
     {
-        // normalize porque a veces estaba 10 anios en pausa
         SlowMotion.GlobalMultiplier = Mathf.Clamp(value, 0.1f, 2f);
         PlayerPrefs.SetFloat(HITSTOP_KEY, value);
         PlayerPrefs.Save();
-
-        UpdateTexts();
     }
 
-    private void OnVolumeChanged(float value)
+    public void OnVolumeChanged(float value)
     {
-        // aplico al audio mixer el volumen
+        ApplyVolumeToMixer(value);
+        PlayerPrefs.SetFloat(VOLUME_KEY, value);
+        PlayerPrefs.Save();
+    }
+
+    private void ApplyVolumeToMixer(float value)
+    {
         float volume;
         if (value <= 0.0001f)
         {
-            volume = -80f; //full muteee
+            volume = -80f; // full mute
         }
         else
         {
-            // q sea decibelios
-            volume = Mathf.Log10(value) * 20;
+            volume = Mathf.Log10(value) * 20; // q sea decibelios
         }
-
         masterMixer.SetFloat(MASTER_VOLUME_PARAM, volume);
-        PlayerPrefs.SetFloat(VOLUME_KEY, value);
-        PlayerPrefs.Save();
-        UpdateTexts();
     }
 
-    private void UpdateTexts()
+    // textos
+    public void UpdateTexts(float sensVal, float volVal, float shakeVal, float hitStopVal, TMP_Text sensT, TMP_Text shakeT, TMP_Text hitStopT, TMP_Text volT)
     {
-        if (sensitivityText != null)
-            sensitivityText.text = "Sensibilidad: " + sensSlider.value.ToString("F1");
-
-        if (shakeText != null)
-            shakeText.text = "Camera Shake: " + shakeSlider.value.ToString("F1");
-
-        if (hitStopText != null)
-            hitStopText.text = "HitStop: " + hitStopSlider.value.ToString("F1");
-
-        if (volumeText != null)
-            volumeText.text = "Volume: " + volumeSlider.value.ToString("F1");
+        if (sensT != null) sensT.text = "Sensibilidad: " + sensVal.ToString("F1");
+        if (shakeT != null) shakeT.text = "Camera Shake: " + shakeVal.ToString("F1");
+        if (hitStopT != null) hitStopT.text = "HitStop: " + hitStopVal.ToString("F1");
+        if (volT != null) volT.text = "Volume: " + volVal.ToString("F1");
     }
 }

@@ -30,33 +30,55 @@ public class LoadingScreenManager : MonoBehaviour
 
     IEnumerator LoadSceneAsync()
     {
-        // carga asincronica
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneToLoad);
+        yield return null;
 
-        // me quedo en la pantalla hasta q llegue al 100
+        string targetScene = sceneToLoad; // la escena a cargar 
+        sceneToLoad = null;              // reinicio la estatica
+
+        if (string.IsNullOrEmpty(targetScene))
+        {
+            // debug por qsoy bobo xd
+            Debug.LogError("ESCRIBISTE MAL EL NOMBRE BOLUDAZO");
+            yield break;
+        }
+
+        // asincronicaaa jaja odio
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(targetScene);
         operation.allowSceneActivation = false;
 
         while (!operation.isDone)
         {
-            // muetsro el progreso en la barra
-            float progress = Mathf.Clamp01(operation.progress / 0.9f);
+            // barrita de carga
+            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
+            int progressPercentage = Mathf.RoundToInt(progressValue * 100f);
 
-            // actualizo barra
+            // actualizo
             if (progressBar != null)
-                progressBar.value = progress;
+            {
+                progressBar.value = progressValue;
+            }
 
+            // actualizo el texto
             if (progressText != null)
-                progressText.text = Mathf.Round(progress * 100f) + "%";
+            {
+                progressText.text = progressPercentage.ToString() + "%";
+            }
 
-            yield return null;
-
-            // si esta completa activo escena
             if (operation.progress >= 0.9f)
             {
-                // fuerzo q este un toque en la de carga porque el proc gen carga de una y ni ideacomo conectar las cosas para que no se inicie hasta este hecha la generacion xd
-                yield return new WaitForSeconds(0.5f);
+                //  cuando llega al 90 muestra 100 y que este llena (nunca veia el 100% tonces lo fuerzo, igual la carga termina al 90 basciamente xd)
+                if (progressText != null)
+                {
+                    progressText.text = "100%";
+                }
+                if (progressBar != null)
+                {
+                    progressBar.value = 1f;
+                }
                 operation.allowSceneActivation = true;
             }
+            yield return null;
         }
     }
 }

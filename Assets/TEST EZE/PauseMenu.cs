@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -11,6 +9,12 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private Player_Base playerBase; // ref al player base para traer el _Player_InputActions (no lo tienen en la jerarquia, lo llaman en playerbase entonces tuve que hacer esto xd)
     [SerializeField] private PauseMenuUI _pauseMenuUI;
     public GameObject description;
+
+    private void Awake()
+    {
+        // fuerzo el timescale porque se rompia al cargar escena
+        Time.timeScale = 1.0f;
+    }
 
     void Update()
     {
