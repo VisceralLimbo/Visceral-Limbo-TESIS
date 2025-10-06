@@ -45,6 +45,7 @@ public class RoomSpawnerManager : MonoBehaviour
     public ParticleSystem blackFog;
 
     public event System.Action OnCombatEnded;
+    public event System.Action OnCombatStart;
 
     [Header("Particles Setup")]
     [SerializeField] private List<ParticleSystem> fireParticles;
@@ -102,6 +103,8 @@ public class RoomSpawnerManager : MonoBehaviour
 
         //reseteamos el TEXTO de puntuacion, el valor de la misma sigue siendo igual
         ScoreManager.Instance.ResetScoreText();
+
+        OnCombatStart?.Invoke();
     }
 
     public void NotifyMinionDeath()

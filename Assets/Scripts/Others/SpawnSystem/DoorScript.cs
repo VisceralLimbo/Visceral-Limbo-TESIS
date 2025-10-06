@@ -33,6 +33,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             
         roomSpawnerManager = SpawnerManager;
         roomSpawnerManager.OnCombatEnded += UnlockDoor;
+        roomSpawnerManager.OnCombatStart += LockDoor;
 
         // alineamiento de las puertas.
         // calculamos la direccion hacia el centro de la sala
@@ -95,6 +96,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         }
 
         var DirectionToPlayer = other.transform.position - this.transform.position;
+        DirectionToPlayer.Normalize();
 
         //usamos el valor de InwardAlignment para calcular la direccion del player
         float DotProduct = Vector3.Dot(InWardAlignment, DirectionToPlayer);
@@ -118,7 +120,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     public void OnInteract()
     {
-        if (!_LockDoor)
+        if (!_LockDoor && roomSpawnerManager.ManagerStopped || !_LockDoor && !PlayerEnteredRoom)
         {
             // correr animacion de puerta abriendose
             _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
@@ -142,8 +144,12 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     private void UnlockDoor()
     {
-        print("unlocking door" + this.name);
         _LockDoor = false;
+    }
+
+    private void LockDoor()
+    {
+        _LockDoor = true;
     }
 
 }
