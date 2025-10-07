@@ -50,6 +50,9 @@ public class Player_Base : Visceral_Script
     private Vector2 _originalUIRight1Pos;
     private Vector2 _originalUIRight2Pos;
 
+    // bool para el control de las habilidades
+    public bool IsSkillActive { get; private set; } = false;
+
 
     void Start()
     {
@@ -150,7 +153,19 @@ public class Player_Base : Visceral_Script
         {
             //_MeleeAttack.RunData(movementInput);
             //_ChargedMeleeCombat.VS_Runlogic(movementInput);
-            _MeleeAttack.VS_Runlogic(movementInput);
+            
+            if (!IsSkillActive)
+            {
+                // si no tengo una hablidad activa puedo hacer el melee 
+                _MeleeAttack.VS_Runlogic(movementInput);
+
+                // lo q ya teniamos
+                if (!movementInput.SustainedLeftMouseClick && !movementInput.LeftMouseClick)
+                {
+                    //x2
+                    ActivateSkills(movementInput);
+                }
+            }
 
             if(!movementInput.SustainedLeftMouseClick && !movementInput.LeftMouseClick)
             {
@@ -203,6 +218,12 @@ public class Player_Base : Visceral_Script
 
     private void ActivateSkills(InputMovement Inputs)
     {
+        // si estoy usando una habilidad return / si no sigue la cadena de ifs
+        if (IsSkillActive)
+        {
+            return;
+        }
+
         if (Inputs.Ability_1)
         {
             _SkillManager.TryUseSkill("Skill1");
@@ -252,6 +273,12 @@ public class Player_Base : Visceral_Script
     private void DialogueEnd()
     {
         OnDialogue = false;
+    }
+
+    // para q cambien el estado las habilidaeds
+    public void SetSkillActiveState(bool state)
+    {
+        IsSkillActive = state;
     }
 
 }

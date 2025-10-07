@@ -34,6 +34,9 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         Vector3 offsetPos = _UserContext.PlayerGameObject.transform.position + Vector3.up * 0.1f; // cambiá el 1.0f según lo alto que lo quieras
         GameObject vfx = Instantiate(_effectHability, offsetPos, Quaternion.identity, _UserContext.PlayerGameObject.transform);
 
+        //activo bloqueo
+        _PlayerBase.SetSkillActiveState(true);
+
         StartCoroutine(LockSkill());
 
 
@@ -57,7 +60,10 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         _Anim.speed = 1.0f;
         Weapon.StopAttacking();
         SoundManager.Instance.ReturnToPool(_SoundEmit);
-        StopAllCoroutines();
+
+        // desactivo bloqueo
+        _PlayerBase.SetSkillActiveState(false);
+
     }
 
 

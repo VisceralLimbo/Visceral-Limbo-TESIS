@@ -28,7 +28,12 @@ public abstract class Visceral_SkillLogic : MonoBehaviour
     /// <summary>
     /// data para sonidos
     /// </summary>
-    [SerializeField] protected SoundData[] _SoundDataList; 
+    [SerializeField] protected SoundData[] _SoundDataList;
+
+    /// <summary>
+    /// refe del player base para tema de inputs
+    /// </summary>
+    protected Player_Base _PlayerBase;
 
     public float cooldown => _AbilitySO.Cooldown;
     /// <summary>
@@ -66,7 +71,17 @@ public abstract class Visceral_SkillLogic : MonoBehaviour
             _AbilitySO = data;
             _UserContext = UserContext;
             _SkillManager = Skmanager;
-            
+
+            // sumo aca q se asigne la refe del base
+            if (_UserContext != null)
+            {
+                _PlayerBase = _UserContext.GetComponent<Player_Base>();
+
+                if (_PlayerBase == null)
+                {
+                    Debug.LogError("no esta el player base je");
+                }
+            }
         }
         else
         {

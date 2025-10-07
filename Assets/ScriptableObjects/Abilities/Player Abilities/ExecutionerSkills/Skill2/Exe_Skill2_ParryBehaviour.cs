@@ -49,6 +49,11 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
         _AnimHandler.SetParameter("PlayerWeapon", "Exe_Skill2", AnimatorControllerParameterType.Trigger);   
         StartCoroutine(LockSkill());
 
+        //activo bloqueo
+        _PlayerBase.SetSkillActiveState(true);
+
+
+        StartCoroutine(LockSkill());
 
         SoundManager.Instance.CreateSound()
             .WithSoundData(_SoundDataList[0])
@@ -110,7 +115,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
          }
 
          //Catch! no terminamos la animacion del ataque
-        while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.3f)
+        while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
         {
             //print("animation not finished: " +_Anim.GetCurrentAnimatorStateInfo(0).ToString() + _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
             yield return null;
@@ -118,7 +123,11 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
 
         _Anim.speed = 1.0f;
         //_AnimHandler.ResetAllTriggers("PlayerWeapon");
-   }
+
+        // desactivo bloqueo
+        _PlayerBase.SetSkillActiveState(false);
+
+    }
 
     IEnumerator ParryCoroutine(IParriable parriable,MonoBehaviour MBRef,DamageScore DMS)
     {
