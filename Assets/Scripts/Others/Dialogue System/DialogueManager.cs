@@ -83,6 +83,8 @@ public class DialogueManager : Visceral_Script
 
     public void StartDialogue(DialogueData DialogeDT)
     {
+        if (DialoguePanel == null || DialogeDT == null) return;
+
         _dialogueActive = true;
         CurrentDialogue = DialogeDT;
         _CurrentNodeIndex = 0;
