@@ -42,8 +42,10 @@ public static class SlowMotion
 
         float originalFixedDeltaTime = Time.fixedDeltaTime;
 
-        Time.timeScale = slowdownFactor;
-        Time.fixedDeltaTime = originalFixedDeltaTime * slowdownFactor;
+        //Time.timeScale = slowdownFactor;
+        //Time.fixedDeltaTime = originalFixedDeltaTime * slowdownFactor;
+
+        TimeDilationManager.SetTimeScale(slowdownFactor);
 
         AudioSource[] audioSources = null;
         float[] originalPitches = null;
@@ -71,8 +73,10 @@ public static class SlowMotion
         Waiting = true;
         yield return new WaitForSecondsRealtime(duration);
 
-        Time.timeScale = 1f;
-        Time.fixedDeltaTime = originalFixedDeltaTime;
+        //Time.timeScale = 1f;
+        //Time.fixedDeltaTime = originalFixedDeltaTime;
+
+        TimeDilationManager.ResetTimeScale();
 
         if (sources != null && originalPitches != null)
         {

@@ -294,7 +294,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
             (
                 a: _CameraTarget.localPosition,
                 b: new Vector3(0f, CameraTargetHeight, 0f),
-                t: 1f- Mathf.Exp(-_CrouchHeightResponse * DeltaTime) // sirve para generar mas consistencia entre frames
+                t: 1f- Mathf.Exp(-_CrouchHeightResponse * (TimeDilationManager.GlobalTimeScale*DeltaTime)) // sirve para generar mas consistencia entre frames
             );
 
         _RootTransform.localScale = RootTargetScale;
@@ -477,7 +477,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
                     (
                         a: currentVelocity,
                         b: TargetVelocity,
-                        t: 1f - Mathf.Exp(-MovementAcceleration * deltaTime)
+                        t: 1f - Mathf.Exp(-MovementAcceleration * (TimeDilationManager.GlobalTimeScale * deltaTime))
                     );
 
             }
@@ -487,7 +487,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
             else
             {
                 //friccion
-                currentVelocity -= currentVelocity * (_SlideFriction*deltaTime);
+                currentVelocity -= currentVelocity * (_SlideFriction*(TimeDilationManager.GlobalTimeScale*deltaTime));
 
                 //steering
                 {
@@ -497,7 +497,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
                     //Target Velocity es la direccion de movimiento en la velocidad actual
                     var targetVelocity = groundedMovement * currentVelocity.magnitude;
-                    var steerForce = _SlideResponce * deltaTime * (targetVelocity - currentVelocity);
+                    var steerForce = _SlideResponce * (TimeDilationManager.GlobalTimeScale * deltaTime) * (targetVelocity - currentVelocity);
 
                     //añadimos velocidad de steer, pero clampeamos la velocidad total para evitar sumar velocidad extra por steer
                     currentVelocity += steerForce;
@@ -518,7 +518,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         //estamos en el aire
         {
             #region airmovement
-            _RequestedTimeSinceUngrounded += deltaTime;
+            _RequestedTimeSinceUngrounded += (TimeDilationManager.GlobalTimeScale * deltaTime);
             //si estamos en el aire tratando de movernos
             if (_RequestedMovement.sqrMagnitude> 0f)
             {
@@ -539,7 +539,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
                     );
 
                 //calcular la fuerza de movimiento
-                var InAirMovementForce = _AirResponse * deltaTime * AirTimePlanarMovement;
+                var InAirMovementForce = _AirResponse * (TimeDilationManager.GlobalTimeScale * deltaTime) * AirTimePlanarMovement;
 
 
                 //si nos estamos moviendo mas lento que la velocidad maxima del aire, tratar movementforce como un steer normal
@@ -578,7 +578,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
             {
                 effectivegravity *= _JumpSustainGravity;
             }
-            currentVelocity += effectivegravity * deltaTime * _KCCMotor.CharacterUp;
+            currentVelocity += effectivegravity * (TimeDilationManager.GlobalTimeScale * deltaTime) * _KCCMotor.CharacterUp;
             #endregion
         }
 
@@ -607,7 +607,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
             else
             {
                 //chequear si es posible poner en queue el salto pedido
-                _RequestedTimeSinceJumpRequest += deltaTime;
+                _RequestedTimeSinceJumpRequest += TimeDilationManager.GlobalTimeScale * deltaTime;
 
                 //queue del salto, si es posible, el jugador saltara tan solo toque el suelo
                 var CanQueueJump = _RequestedTimeSinceJumpRequest < _CoyoteTime;
@@ -665,7 +665,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
         if (_RequestedAdditiveForce.sqrMagnitude != 0 )
         {
-            _RequestedAdditiveForce = Vector3.Lerp(_RequestedAdditiveForce, Vector3.zero, Time.deltaTime);
+            _RequestedAdditiveForce = Vector3.Lerp(_RequestedAdditiveForce, Vector3.zero, (TimeDilationManager.GlobalTimeScale * Time.deltaTime));
 
             if(_RequestedAdditiveForce.sqrMagnitude < 0.1)
             {

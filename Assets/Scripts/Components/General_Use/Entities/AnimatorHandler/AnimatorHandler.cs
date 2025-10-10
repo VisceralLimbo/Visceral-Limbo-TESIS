@@ -36,7 +36,18 @@ public class AnimatorHandler : MonoBehaviour
 
             print("added animator to dictionary" + entry.ToString() + entry.ID);
         }
+
+        TimeDilationManager.OnTimeScaleChanged += ChangeAnimTime;
     }
+    
+    private void ChangeAnimTime(float time)
+    {
+        foreach(var anim in AnimatorDictionary.Values)
+        {
+            anim.AnimatorController.speed = time;
+        }
+    }
+
 
     /// <summary>
     /// esta funcion devuelve un bool (y opcionalmente el valor) si existe el animator

@@ -133,7 +133,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
                  (
                      a: currentVelocity,
                      b: TargetVelocity,
-                     t: 1f - Mathf.Exp(-_MovementAccel * deltaTime)
+                     t: 1f - Mathf.Exp(-_MovementAccel * (TimeDilationManager.GlobalTimeScale * deltaTime))
 
                  );
         }

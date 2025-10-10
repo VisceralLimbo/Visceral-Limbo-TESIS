@@ -24,6 +24,8 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] bool NonTriggerRoom; // esta habitacion NO genera trigger Events
 
     [SerializeField] bool _LockDoor;
+    [SerializeField] bool _IsOpen;
+
     public void Initialize(RoomSpawnerManager SpawnerManager)
     {
         print("Initilializing with spawner" + SpawnerManager.name);
@@ -104,7 +106,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         print("Dot product: " + DotProduct);
 
         // calculamos si el jugador cruzo la puerta
-        if (DotProduct > DoorThreshold && !NonTriggerRoom)
+        if (DotProduct > DoorThreshold && !NonTriggerRoom && _IsOpen == true)
         {
             print("entro a la habitacion");
             // correr animacion de puerta abriendose
@@ -114,6 +116,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             roomSpawnerManager.NotifyMinionDeath();
             PlayerEnteredRoom = true;
             _LockDoor = true;
+            
         }
 
     }
@@ -124,6 +127,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         {
             // correr animacion de puerta abriendose
             _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
+            _IsOpen = true;
         }
     }
 

@@ -31,6 +31,8 @@ public class ScoreManager : MonoBehaviour
 
     public float GetPlayerScore { get { return PlayerScore; } }
 
+    private float CurrentPlayerScore;
+
 
     private void Awake()
     {
@@ -56,7 +58,8 @@ public class ScoreManager : MonoBehaviour
 
     public void ResetScoreText()
     {
-        ScoreText.text = "0";
+        CurrentPlayerScore = 0;
+        ScoreText.text = CurrentPlayerScore.ToString();
     }
 
 
@@ -116,7 +119,7 @@ public class ScoreManager : MonoBehaviour
             FinalScore += FriendlyFireExtra;
         }
 
-
+        CurrentPlayerScore += FinalScore;
         PlayerScore += FinalScore;
         ScoreText.text = PlayerScore.ToString(); // componemos el score
 
