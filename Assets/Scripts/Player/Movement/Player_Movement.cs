@@ -199,6 +199,8 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     public bool IsMovementBlocked { get; set; } = false;
 
 
+    private float _LastGlobalTimeScale = 1f;
+
     //start del player
     public override void VS_Initialize()
     {
@@ -215,6 +217,8 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
         StatsManager _StatMan = GetComponentInParent<StatsManager>();
         _StatMan.OnStatChanged += UpdateStats; // nos suscribimos al evento de actualizacion de stats
+
+        TimeDilationManager.OnTimeScaleChanged += changedTimeScale;
     }
 
     /// <summary>
@@ -302,6 +306,26 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         _RootTransform.localScale = RootTargetScale;
     }
 
+    /// <summary>
+    /// funcion para escalar las fuerzas de KCC para la nueva escala de tiempo global :)
+    /// </summary>
+    /// <param name="newScale"></param>
+    private void changedTimeScale(float newScale)
+    {
+        if(_KCCMotor != null)
+        {
+            float ScaleFactor = newScale / _LastGlobalTimeScale;
+            _KCCMotor.BaseVelocity *= ScaleFactor;
+
+            //escalar fuerzas externas uwu
+
+            _RequestedAdditiveForce *= ScaleFactor;
+            _RequestedAdditiveVelocity *= ScaleFactor;
+
+        }
+
+        _LastGlobalTimeScale = newScale;
+    }
 
 
     //funcion usada para obtener el anchor de la camara
