@@ -23,8 +23,8 @@ public class Fireball : MonoBehaviour, IParriable
 
     public void Update()
     {
-        Health -= Time.deltaTime;
-        this.transform.position += this.transform.forward * Speed * Time.deltaTime;
+        Health -= ((TimeDilationManager.GlobalTimeScale* Time.deltaTime));
+        this.transform.position += this.transform.forward * Speed * (TimeDilationManager.GlobalTimeScale*Time.deltaTime);
 
         if (Health < 0) 
         {

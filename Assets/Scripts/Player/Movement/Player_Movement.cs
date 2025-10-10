@@ -121,6 +121,8 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     [SerializeField] private float _CrouchSpeed = 8f;
     [SerializeField] private float _WalkAcceleration = 25f; // controla la aceleracion
     [SerializeField] private float _CrouchAcceleration = 20f; // controla la aceleracion
+    [SerializeField] private float _WalkDeAcceleration = 40f;
+    [SerializeField] private float _CrouchDeAcceleration = 40f;
 
     [Space]
 
@@ -438,9 +440,13 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
                 if (Moving && CrouchingStance && (wasStanding || wasInAir))
                 {
                     _CurrentState.CharStance = Stance.Sliding;
+                    
+                    // escalamos la velocidad inicial del slide
+                    var ScaledSlideSpeed = _SlideStartSpeed * TimeDilationManager.GlobalTimeScale;
 
                     //elegimos la velocidad mayor
-                    var _SlideSpeed = Mathf.Max(_SlideStartSpeed,currentVelocity.magnitude);
+                    var _SlideSpeed = Mathf.Max(ScaledSlideSpeed, currentVelocity.magnitude);
+
                     currentVelocity = _KCCMotor.GetDirectionTangentToSurface
                         (
                             direction: currentVelocity,
@@ -464,12 +470,19 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
                     _ => _WalkSpeed,
                 };
 
-                var MovementAcceleration = _CurrentState.CharStance switch
+                // importante, escalar la velocidad en funcion del globaltimescale.
+                movementSpeed *= TimeDilationManager.GlobalTimeScale;
+
+                bool IsTryingToMove =  _RequestedMovement.sqrMagnitude > 0f;
+
+                var EffectiveAccel = _CurrentState.CharStance switch
                 {
-                    Stance.Standing => _WalkAcceleration,
-                    Stance.crouching => _CrouchAcceleration,
-                    _ => _WalkSpeed,
+                    Stance.Standing => IsTryingToMove ? _WalkAcceleration : _WalkDeAcceleration,
+                    Stance.crouching => IsTryingToMove ? _CrouchAcceleration : _CrouchDeAcceleration,
+                    Stance.Sliding => IsTryingToMove ? _WalkAcceleration : _WalkDeAcceleration,
+                    _ => IsTryingToMove ? _WalkAcceleration : _WalkDeAcceleration,
                 };
+
 
                 //movernos suavemente en la direccion deseada
                 var TargetVelocity = movementSpeed * groundedMovement;
@@ -477,7 +490,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
                     (
                         a: currentVelocity,
                         b: TargetVelocity,
-                        t: 1f - Mathf.Exp(-MovementAcceleration * (TimeDilationManager.GlobalTimeScale * deltaTime))
+                        t: 1f - Mathf.Exp(-EffectiveAccel * (TimeDilationManager.GlobalTimeScale * deltaTime))
                     );
 
             }
@@ -541,16 +554,18 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
                 //calcular la fuerza de movimiento
                 var InAirMovementForce = _AirResponse * (TimeDilationManager.GlobalTimeScale * deltaTime) * AirTimePlanarMovement;
 
+                // escalamos la velocidad de movimiento del aire en funcion del tiempo global
+                var ScaledAirSpeed = _AirSpeed * TimeDilationManager.GlobalTimeScale;
 
                 //si nos estamos moviendo mas lento que la velocidad maxima del aire, tratar movementforce como un steer normal
                 //esto permite que nos podamos mover mas rapido en el aire, sin perder el clamp de velocidad maxima normal
-                if (currentPlanarVelocity.magnitude < _AirSpeed) 
+                if (currentPlanarVelocity.magnitude < ScaledAirSpeed) 
                 {
                     //añadir el valor de fuerza a la velocidad planar actual para tener un objetivo de movimiento
                     var TargetAirMovementForce = currentPlanarVelocity + InAirMovementForce;
 
-                    //limitamos la velocidad maxima a la velocidad de movimiento del aire
-                    TargetAirMovementForce = Vector3.ClampMagnitude(TargetAirMovementForce, _AirSpeed);
+                    //limitamos la velocidad maxima a la velocidad de movimiento del aire escalada
+                    TargetAirMovementForce = Vector3.ClampMagnitude(TargetAirMovementForce, ScaledAirSpeed);
 
                     InAirMovementForce = TargetAirMovementForce - currentPlanarVelocity;
                 }

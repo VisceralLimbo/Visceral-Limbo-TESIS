@@ -68,7 +68,7 @@ public class SwordTest : Visceral_WeaponBase
         HPComp.TakeDamageWithKnockback(Dir,KnockBack,damageScore);
 
 
-        SlowMotion.Stop(1f, 0.05f, false);
+        SlowMotion.Stop(0.2f, 0.05f, false);
     }
 
     // efecto del bleed

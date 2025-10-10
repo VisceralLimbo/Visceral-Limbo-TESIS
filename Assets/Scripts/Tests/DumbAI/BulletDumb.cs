@@ -35,8 +35,8 @@ public class BulletDumb : MonoBehaviour, IParriable
 
     private void Update()
     {
-        _Health -= Time.deltaTime; 
-        this.transform.position += this.transform.forward * BulletSpeed * Time.deltaTime;
+        _Health -= (TimeDilationManager.GlobalTimeScale*Time.deltaTime); 
+        this.transform.position += this.transform.forward * BulletSpeed * (TimeDilationManager.GlobalTimeScale*Time.deltaTime);
 
         if(_Health < 0)
         {
