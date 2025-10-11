@@ -168,13 +168,20 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
                );
 
-            var Rotation = Quaternion.LookRotation(Calculatedforward, _KCC.CharacterUp);
+            //limite minimo de rotacion abs.
+          if(Calculatedforward.sqrMagnitude > 0.001f)
+          {
 
-            currentRotation = Rotation;
+                var rotation = Quaternion.LookRotation(Calculatedforward, _KCC.CharacterUp);
+                currentRotation = Quaternion.RotateTowards
+                    (
+                        from:currentRotation,
+                        to:rotation,
+                        maxDegreesDelta:_MaxRotationSpeed * (TimeDilationManager.GlobalTimeScale * Time.deltaTime)
+                    );
+          }
             return;
         }
-
-
             //sentido adelante
             var forward = Vector3.ProjectOnPlane(
                     vector: _TargetVelocity,
@@ -183,9 +190,16 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
                 );
 
-            var CalculatedRotation = Quaternion.LookRotation(forward, _KCC.CharacterUp);
-
-            currentRotation = CalculatedRotation;
+        // si la diferencia de rotacion es muy menor
+        if (forward.sqrMagnitude > 0.001f)
+        {
+            var calculatedRotation = Quaternion.LookRotation(forward, _KCC.CharacterUp);
+            // También es buena idea suavizar esta rotación
+            currentRotation = Quaternion.RotateTowards(
+                 from:currentRotation
+                , to: calculatedRotation
+                , maxDegreesDelta: _MaxRotationSpeed *(TimeDilationManager.GlobalTimeScale * deltaTime));
+        }
 
     }
 

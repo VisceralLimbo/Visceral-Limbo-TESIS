@@ -224,7 +224,7 @@ public class Player_MeleeAttack : Visceral_Script
         Invoke(nameof(StopTrails), trailDeactivateTime);
 
 
-        if (_PlaySound)
+        if (_PlaySound && !_HasFinishedAttack)
         {
             //ejemplo de funcionamiento del Sound manager
             SoundManager.Instance.CreateSound() //creamos sonido
