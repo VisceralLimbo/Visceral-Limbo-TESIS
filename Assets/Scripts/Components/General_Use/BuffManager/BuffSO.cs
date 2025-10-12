@@ -25,6 +25,9 @@ public class BuffSO : ScriptableObject
     [Tooltip("Duracion del buff")]
     public float BuffDuration;
 
+    [Tooltip("Este buff no expira por tiempo?")]
+    public bool IsInfinityDuration;
+
     [Tooltip("Potencia máxima que puede ser aplicada al buff")]
     public float MaxBuffPotency;
 

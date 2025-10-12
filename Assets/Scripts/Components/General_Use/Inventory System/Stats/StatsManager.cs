@@ -4,8 +4,11 @@ using UnityEngine;
 using System;
 public class StatsManager : MonoBehaviour
 {
+    [Tooltip("Quick Setup, cargar SO aquí con los datos de stats deseados")]
+     public StatBlockData blockData;
 
-     public FloatStat[] FloatStatList;
+    [Tooltip("Los Stats del StatManager, estos valores son de setup, que quedan guardados internamente")]
+     public List<FloatStat> FloatStatList = new List<FloatStat>();
 
      public Dictionary<string, Stat> StatDictionary = new Dictionary<string, Stat>();
 
@@ -13,6 +16,11 @@ public class StatsManager : MonoBehaviour
 
     private void Awake()
     {
+        if(blockData!= null)
+        {
+            FloatStatList.AddRange(blockData.Stats);
+        }
+
         var StatList = new List<Stat>();
         foreach(var stat in FloatStatList)
         {

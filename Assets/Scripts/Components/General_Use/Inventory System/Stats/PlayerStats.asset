@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bcab32ead95da14d989584314c6a723, type: 3}
+  m_Name: PlayerStats
+  m_EditorClassIdentifier: 
+  Stats:
+  - StatID: MaxHealth
+    Statmanager: {fileID: 0}
+    BaseValueFloat: 300
+    FinalValueFloat: 350
+    ModifiersList:
+    - ModType: 0
+      Source: {fileID: 0}
+      EffectName: TestItemLogicHealthUP
+      ModifierValueFloat: 50
+  - StatID: WalkSpeed
+    Statmanager: {fileID: 0}
+    BaseValueFloat: 12
+    FinalValueFloat: 14
+    ModifiersList:
+    - ModType: 0
+      Source: {fileID: 0}
+      EffectName: SpeedItemLogicBoost
+      ModifierValueFloat: 2
+  - StatID: AirSpeed
+    Statmanager: {fileID: 0}
+    BaseValueFloat: 10
+    FinalValueFloat: 14
+    ModifiersList:
+    - ModType: 0
+      Source: {fileID: 0}
+      EffectName: SpeedItemJumpLogicBoost
+      ModifierValueFloat: 4
+  - StatID: CrouchSpeed
+    Statmanager: {fileID: 0}
+    BaseValueFloat: 8
+    FinalValueFloat: 11
+    ModifiersList:
+    - ModType: 0
+      Source: {fileID: 0}
+      EffectName: SpeedItemCrouchLogicBoost
+      ModifierValueFloat: 3
+  - StatID: BaseAttack
+    Statmanager: {fileID: 0}
+    BaseValueFloat: 10
+    FinalValueFloat: 0
+    ModifiersList:
+    - ModType: 0
+      Source: {fileID: 0}
+      EffectName: SpeedItemCrouchLogicBoost
+      ModifierValueFloat: 3

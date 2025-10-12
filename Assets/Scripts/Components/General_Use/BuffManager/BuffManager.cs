@@ -79,8 +79,11 @@ public class BuffManager : MonoBehaviour
                 //5) llamamos al OnApply
                 finalBuff.OnApply(this,StatManager);
 
-                //6) seteamos el duration del buff  
-                buffDurationDictionary[finalBuff] = NewBuff.BuffDuration;
+                if (!NewBuff.IsInfinityDuration)
+                {
+                    //6) seteamos el duration del buff  
+                    buffDurationDictionary[finalBuff] = NewBuff.BuffDuration;
+                }
 
                 //7) hack?: como el componente no conoce el SO, se lo enviamos. para solucionar problemas futuros
                 finalBuff.SetSO(NewBuff);
@@ -95,13 +98,20 @@ public class BuffManager : MonoBehaviour
                     //sumamos más potencia al buffo actual
                     targetdictionary[BuffID].OnAddPotency(_Buffpotency);
 
-                    //reiniciamos duracion
-                    buffDurationDictionary[targetdictionary[BuffID]] = NewBuff.BuffDuration;
+                    if (!NewBuff.IsInfinityDuration)
+                    {
+                        //reiniciamos duracion
+                        buffDurationDictionary[targetdictionary[BuffID]] = NewBuff.BuffDuration;
+                    }
+                 
                 }
                 else
                 {
-                    // no sumamos más potencia, pero si le reiniciamos el cooldown
-                    buffDurationDictionary[targetdictionary[BuffID]] = NewBuff.BuffDuration;
+                    if (!NewBuff.IsInfinityDuration)
+                    {
+                        // no sumamos más potencia, pero si le reiniciamos el cooldown
+                        buffDurationDictionary[targetdictionary[BuffID]] = NewBuff.BuffDuration;
+                    }
                 }
             }
             else
@@ -127,10 +137,13 @@ public class BuffManager : MonoBehaviour
             //4) llamamos al OnApply del nuevo buff
             finalbuff.OnApply(this,StatManager);
             
+            // si el buff no es infinito
+            if(!NewBuff.IsInfinityDuration)
+            {
+                //5) seteamos el duration del buff
+                buffDurationDictionary[finalbuff] = NewBuff.BuffDuration;
 
-            //5) seteamos el duration del buff
-            buffDurationDictionary[finalbuff] = NewBuff.BuffDuration;
-
+            }
             //6) le enviamos la referencia del scriptableObject al script.
             finalbuff.SetSO(NewBuff);
         }
@@ -149,9 +162,14 @@ public class BuffManager : MonoBehaviour
             foreach(BuffBehavior buffScript in BuffDictionary.Values)
             {
                 buffScript.OnUpdate(Time.deltaTime);
+                if (!buffDurationDictionary.ContainsKey(buffScript))
+                {
+                    //skip
+                    continue;
+                }
 
                 // chequeamos si el buffo ya debería de haber expirado
-                if (buffDurationDictionary[buffScript] <= 0)
+                if ((buffDurationDictionary[buffScript]) <= 0)
                 {
                     // cacheamos el buffo expirado. hacemos esto porque modificar
                     // la coleccion en un foreach == muerte
@@ -169,6 +187,12 @@ public class BuffManager : MonoBehaviour
             foreach (BuffBehavior DebuffScript in DeBuffDictionary.Values)
             {
                 DebuffScript.OnUpdate(Time.deltaTime);
+
+                if (!buffDurationDictionary.ContainsKey(DebuffScript))
+                {
+                    //skip
+                    continue;
+                }
 
                 // chequeamos si el Debuffo ya debería de haber expirado
                 if (buffDurationDictionary[DebuffScript] <= 0)
