@@ -14,6 +14,9 @@ public class EnemyDamageFlash : MonoBehaviour
 
     public Transform particleSpawn; // pos para las particulas
 
+    // nuevo para las nuevas particulas
+    private bool _isBleedActiveOnHit = false;
+
     void Start()
     {
         if (rend == null)
@@ -29,12 +32,19 @@ public class EnemyDamageFlash : MonoBehaviour
             healthComp.OnDamaged += TriggerFlash;
     }
 
+    // nuevo para las nuevas particulas
+    public void SetBleedStatus(bool isBleed)
+    {
+        _isBleedActiveOnHit = isBleed;
+    }
+
     void TriggerFlash()
     {
-        //activo particulas 
+        // activo particulas
         Vector3 hitPosition = particleSpawn.position;
-        PoolParticle.Instance.PlayParticle(hitPosition);
-        flashTimer = flashDuration; 
+        PoolParticle.Instance.PlayParticle(hitPosition, _isBleedActiveOnHit);
+
+        flashTimer = flashDuration;
     }
 
     void Update()
