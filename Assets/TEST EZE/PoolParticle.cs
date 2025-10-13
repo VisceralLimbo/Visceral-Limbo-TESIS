@@ -1,37 +1,52 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class PoolParticle : MonoBehaviour
 {
     public static PoolParticle Instance;
 
     [Header("config")]
-    public GameObject particlePrefab;
+    public GameObject normalParticlePrefab; // particula normal
+    public GameObject bleedParticlePrefab;  // particula bleed
     public int poolSize = 10;
 
-    private List<GameObject> pool;
+    private List<GameObject> normalPool; // pool normal
+    private List<GameObject> bleedPool;  // pool bleed
 
     private void Awake()
     {
         Instance = this;
 
-        pool = new List<GameObject>();
+        // pool normal
+        normalPool = new List<GameObject>();
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject obj = Instantiate(particlePrefab);
+            GameObject obj = Instantiate(normalParticlePrefab);
             obj.SetActive(false);
-            pool.Add(obj);
+            normalPool.Add(obj);
+        }
 
-            //seteo de la lista basicamente. apaga las que instancia para hacer el pool
+        // pool bleed
+        bleedPool = new List<GameObject>();
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject obj = Instantiate(bleedParticlePrefab);
+            obj.SetActive(false);
+            bleedPool.Add(obj);
         }
     }
 
-    public void PlayParticle(Vector3 position)
+    // play a la q quiero
+    public void PlayParticle(Vector3 position, bool isBleedEffect)
     {
-        foreach (var particle in pool)
+        // elijo dependiendo si esta activo o no el bleed
+        List<GameObject> targetPool = isBleedEffect ? bleedPool : normalPool;
+
+        foreach (var particle in targetPool)
         {
-            if (!particle.activeInHierarchy) //busco una desactivada 
+            if (!particle.activeInHierarchy) // agarro una apagada
             {
                 // muevo la particula a la pos q quiero
                 particle.transform.position = position;

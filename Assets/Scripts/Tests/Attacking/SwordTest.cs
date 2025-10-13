@@ -49,6 +49,19 @@ public class SwordTest : Visceral_WeaponBase
         //hitting user
         if (HPComp.Context != null && HPComp.Context == _UserContext) return;
 
+        // nuevo para las nuevas particulas
+        bool isBleedActive = false;
+
+        if (_BleedItem == null && _UserContext != null)
+        {
+            _BleedItem = _UserContext.GetComponentInChildren<BleedItemLogic>();
+        }
+
+        if (_BleedItem != null)
+        {
+            isBleedActive = true;
+        }
+
         DamageScore damageScore = new DamageScore()
         {
             DamageAmount = Damage,
@@ -67,6 +80,12 @@ public class SwordTest : Visceral_WeaponBase
 
         HPComp.TakeDamageWithKnockback(Dir,KnockBack,damageScore);
 
+        // notifico al flash sobre el bleed
+        EnemyDamageFlash damageFlash = HPComp.GetComponent<EnemyDamageFlash>();
+        if (damageFlash != null)
+        {
+            damageFlash.SetBleedStatus(isBleedActive);
+        }
 
         SlowMotion.Stop(0.05f, 0.05f, false);
     }

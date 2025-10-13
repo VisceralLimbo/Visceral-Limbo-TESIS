@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class Chest : MonoBehaviour, IRaycastInteractable
 {
@@ -11,6 +12,31 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     [Header("animator")]
     [SerializeField] private Animator chestAnimator;
 
+    [Header("Feedback de UI")]
+    // para no tener el quilmobo de arratras las cosas matcheo con el nombre exacto y fue
+    private const string COMBAT_UI_CANVAS_NAME = "CombatUI";
+    private const string CHEST_TEXT_NAME = "ChestText";
+
+    private TextMeshProUGUI interactText; //el texto
+    private GameObject interactTextObject; // donde esta
+
+    private void Awake()
+    {
+        // busco canvas
+        GameObject combatUICanvas = GameObject.Find(COMBAT_UI_CANVAS_NAME);
+        // busco el texto dentro del canvas
+        Transform textTransform = combatUICanvas.transform.Find(CHEST_TEXT_NAME);
+
+        if (textTransform != null)
+        {
+            interactTextObject = textTransform.gameObject;
+            // saco el componente del texto
+            interactText = interactTextObject.GetComponent<TextMeshProUGUI>();
+            // lo apago al inciar
+            interactTextObject.SetActive(false);
+        }
+    }
+
     public void TryOpen()
     {
         if (isOpened) return;
@@ -21,9 +47,11 @@ public class Chest : MonoBehaviour, IRaycastInteractable
             isOpened = true;
             OpenChest();
         }
-        else
+
+        // oculto dsp de intentar interactuar
+        if (interactTextObject != null)
         {
-            //meter texto de no tenes suficiente ingmae
+            interactTextObject.SetActive(false);
         }
     }
 
@@ -58,16 +86,46 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
     public void OnRayCastEnter(RayCastWrapper Detector = null)
     {
-
+        if (isOpened || interactTextObject == null || interactText == null) return;
+        UpdateInteractText(true);
     }
 
     public void OnRayCastStay(RayCastWrapper Detector = null)
     {
-        
     }
 
     public void OnRayCastExit(RayCastWrapper Detector = null)
     {
+        if (interactTextObject != null)
+        {
+            interactTextObject.SetActive(false);
+        }
+    }
 
+    private void UpdateInteractText(bool activate)
+    {
+        // controlo el msg q aparece, si tenes "toca g" si no tenes "no tenes"
+
+        if (isOpened || interactTextObject == null || interactText == null) return;
+
+        if (activate)
+        {
+            bool canAfford = BloodEchoesManager.CanPurchase(cost);
+
+            if (canAfford)
+            {
+                interactText.text = "Toca G para abrir";
+            }
+            else
+            {
+                interactText.text = $"No tenes los suficientes Blood Echoes ({cost})";
+            }
+
+            interactTextObject.SetActive(true);
+        }
+        else
+        {
+            interactTextObject.SetActive(false);
+        }
     }
 }
