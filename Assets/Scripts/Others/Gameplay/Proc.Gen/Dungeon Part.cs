@@ -49,6 +49,14 @@ public class DungeonPart : MonoBehaviour
     [SerializeField] bool DrawRoomCollider;
     [SerializeField] bool DrawEntryPoints;
 
+    public void Awake()
+    {
+        foreach(var entryPoint in EntryPoints)
+        {
+            entryPoint.SetOwner(this);
+        }
+    }
+
     public bool HasAvailableEntryPoint( out DungeonEntryPoint EntryPoint)
     {
         DungeonEntryPoint ResultingPoint = null; // punto resultante que esta disponible

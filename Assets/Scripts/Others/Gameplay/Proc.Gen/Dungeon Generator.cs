@@ -164,6 +164,13 @@ public class DungeonGenerator : MonoBehaviour
         }
         generatedSpecialRooms.Clear();
 
+        if(BossRoom != null) 
+        {
+            Destroy(BossRoom.gameObject);
+            GeneratedBossRoom = false;
+        }
+   
+
         AllParts.Clear();
 
         //esperamos un tiempo para que Unity procese OnDestroy()
@@ -542,8 +549,13 @@ public class DungeonGenerator : MonoBehaviour
         AllParts.AddRange(generatedSpecialRooms);
 
 
+        // =====================================================
+        //
+        // 6: VAMOS A GENERAR LA SALA DE JEFE
+        //
+        // =======================================================
 
-        FillEmptyEntries();
+        StartCoroutine(GenerateBossRoom());
     }
 
     /// <summary>
@@ -555,24 +567,128 @@ public class DungeonGenerator : MonoBehaviour
 
         print("Generating Boss Room");
 
+        // =====================================================================
         //
-        // paso 1: seleccionamos todos los puntos viables para la generacion procedural
+        // Paso 1: Seleccionamos todos los puntos viables para la generacion procedural
         //
+        // ===================================================================
+
         List<DungeonEntryPoint> viableEntryPoints = new List<DungeonEntryPoint>();
 
         foreach(DungeonPart Entry in generatedHallways)
         {
 
-            if (Entry.HasAvailableEntryPoint(out DungeonEntryPoint EntryPoint))
+            if (Entry.GetAvailableEntryPoints().Count > 0)
             {
+                viableEntryPoints.AddRange(Entry.GetAvailableEntryPoints());
             }
 
         }
 
-        
-        FillEmptyEntries();
-        yield return null;
+        // ==================================================================
+        //
+        // Paso 2: Ordenar la lista por distancia de más lejos a menos lejos.
+        //
+        // ==================================================================
 
+        var orderedEntryPoints = viableEntryPoints.OrderByDescending
+            (p => Vector3.Distance(p.transform.position, StartingRoom.transform.position))
+            .ToList();
+
+        // ==================================================
+        //
+        // Paso 3: iterar por lista buscando el punto viable
+        //
+        // ==================================================
+
+        bool placementSuccessful = false;
+
+        foreach(DungeonEntryPoint SourcePoint in orderedEntryPoints)
+        {
+            int bossRoomSeed = Random.Range(0, BossRoomPrefabs.Count);
+
+            //obtenemos una referencia del dueño del entrypoint
+            DungeonPart SourceRoom = SourcePoint.GetOwner();
+
+            GameObject NewBossRoom = Instantiate(BossRoomPrefabs[bossRoomSeed]);
+
+            if(!NewBossRoom.TryGetComponent(out DungeonPart BossPart) ||
+                !BossPart.HasAvailableEntryPoint(out DungeonEntryPoint BossEntryPoint))
+            {
+                Debug.LogError("Visceral Error: proc.Gen: " + NewBossRoom.name + " no tiene componente de DungeonPart o no tiene EntryPoints viables");
+                                    Destroy(NewBossRoom);
+                continue; // prefab invalido
+            }
+
+            // =================================================================
+            //
+            // Paso 4: Alineamos la sala con el punto
+            //
+            // =================================================================
+
+            AlignRooms(SourceRoom.transform, NewBossRoom.transform, SourcePoint.transform, BossEntryPoint.transform);
+
+            // ==================================================================
+            //
+            // Paso 5: Chequeamos colisiones
+            //
+            // ==================================================================
+            if (HandleIntersection(BossPart))
+            {
+                // hay colision
+                Destroy(NewBossRoom);
+                Debug.LogWarning("Visceral Warning: Proc. Gen. sala de jefe colisiona con la mazmorra");
+                continue;
+            }
+            else
+            {
+                placementSuccessful = true;
+                GeneratedBossRoom = NewBossRoom;
+
+                SourcePoint.SetOccupied(true);
+                BossEntryPoint.SetOccupied(true);
+
+                // =======================================================
+                //
+                // Paso 6: creamos una puerta
+                //
+                // =======================================================
+
+                GameObject Door = Instantiate(DoorOBJ,SourcePoint.transform.position,SourcePoint.transform.rotation);
+                Door.transform.SetParent(SourcePoint.transform,true);
+
+                // hacemos que la sala del jefe sea hijo del dungeonGenerator
+                // evita bloating en el hierarchy
+                BossPart.transform.SetParent(this.transform, true);
+
+                AllParts.Add(BossPart);
+                break; // salimos del foreach 
+            }
+
+
+        }
+
+        // ==================================================================
+        //
+        // Paso 7: manejo de fallo
+        //
+        // ==================================================================
+
+        if(placementSuccessful == false)
+        {
+            Debug.LogWarning("Visceral Warning: error al poner la sala del jefe, no hay lugar posible. regenerando");
+            if (!IsRegenerating) Regenerate();
+        }
+        else
+        {
+            // genero de manera exitosa.
+
+            print("Boss Room generada");
+            FillEmptyEntries();
+
+        }
+
+        yield return null;
     }
 
 
@@ -580,6 +696,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         generatedRooms.ForEach(room => room.FillEmptyPoints());
         generatedHallways.ForEach(hallway => hallway.FillEmptyPoints());
+        BossRoom.FillEmptyPoints();
         print("Dungeon generation finished!");
         IsGenerated = true;
 
