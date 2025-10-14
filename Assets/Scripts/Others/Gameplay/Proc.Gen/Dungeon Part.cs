@@ -137,16 +137,7 @@ public class DungeonPart : MonoBehaviour
             }
         }
 
-        if(AvailableEntryPoints.Count > 0)
-        {
-            return AvailableEntryPoints;
-        }
-        else
-        {
-            Debug.LogWarning("no available entry points found");
-            return null;
-
-        }
+        return AvailableEntryPoints;
     }
 
     public void FillEmptyPoints()

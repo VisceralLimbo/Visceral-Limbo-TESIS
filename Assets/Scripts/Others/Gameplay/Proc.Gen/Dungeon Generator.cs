@@ -168,6 +168,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             Destroy(BossRoom.gameObject);
             GeneratedBossRoom = false;
+            BossRoom= null;
         }
    
 
@@ -524,7 +525,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
 
             }
-            if (!placementSuccessful)
+            if (placementSuccessful == false)
             {
                 Debug.LogError("Dungeon generation failed. Could not find a valid placement for special room after : " + TotalTriesPerRoomGeneration + " attempts.");
                 if (!IsRegenerating) StartCoroutine(Regenerate()); // regeneramos la mazmorra desde 0
@@ -577,12 +578,17 @@ public class DungeonGenerator : MonoBehaviour
 
         foreach(DungeonPart Entry in generatedHallways)
         {
-
-            if (Entry.GetAvailableEntryPoints().Count > 0)
+            if(Entry == null)
             {
-                viableEntryPoints.AddRange(Entry.GetAvailableEntryPoints());
+                continue;
             }
 
+            List<DungeonEntryPoint> Entrypoints = Entry.GetAvailableEntryPoints();
+
+            if(Entrypoints!= null && Entrypoints.Count > 0)
+            {
+                viableEntryPoints.AddRange(Entrypoints);
+            }
         }
 
         // ==================================================================
@@ -643,7 +649,8 @@ public class DungeonGenerator : MonoBehaviour
             else
             {
                 placementSuccessful = true;
-                GeneratedBossRoom = NewBossRoom;
+                BossRoom = BossPart;
+                GeneratedBossRoom = true;
 
                 SourcePoint.SetOccupied(true);
                 BossEntryPoint.SetOccupied(true);
@@ -677,7 +684,7 @@ public class DungeonGenerator : MonoBehaviour
         if(placementSuccessful == false)
         {
             Debug.LogWarning("Visceral Warning: error al poner la sala del jefe, no hay lugar posible. regenerando");
-            if (!IsRegenerating) Regenerate();
+            if (!IsRegenerating) StartCoroutine(Regenerate());
         }
         else
         {

@@ -29,7 +29,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
 
 
-    private void Awake()
+    private void Start()
     {
         // busco canvas
         GameObject combatUICanvas = GameObject.Find(COMBAT_UI_CANVAS_NAME);
