@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class LootFlyOut : MonoBehaviour
 {
-    public float flyHeight = 1.5f;   // altura máxima de la parábola
-    public float flyDistance = 1.5f; // distancia hacia adelante
+    public float flyHeight = 2.8f;   // altura máxima de la parábola
+    public float flyDistance = 4f; // distancia hacia adelante
     public float duration = 1f;      // cuánto tarda en salir
     public Vector3 finalScale = Vector3.one;
 

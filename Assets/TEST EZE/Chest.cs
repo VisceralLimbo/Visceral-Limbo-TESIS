@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class Chest : MonoBehaviour, IRaycastInteractable
 {
@@ -20,6 +21,14 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     private TextMeshProUGUI interactText; //el texto
     private GameObject interactTextObject; // donde esta
 
+    [Header("Material visual feedback")]
+    [SerializeField] private List<Renderer> visualObjects = new List<Renderer>();
+    [SerializeField] private List<ParticleSystem> particleEffects = new List<ParticleSystem>();
+    [SerializeField] private List<Light> chestLights = new List<Light>();
+    [SerializeField] private ParticleSystem openChestParticle;
+
+
+
     private void Awake()
     {
         // busco canvas
@@ -35,6 +44,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
             // lo apago al inciar
             interactTextObject.SetActive(false);
         }
+
     }
 
     public void TryOpen()
@@ -62,7 +72,11 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         if (chestAnimator != null)
             chestAnimator.SetBool("isOpen", true);
 
-        StartCoroutine(SpawnLootDelayed(0.8f)); 
+        DisableVisuals();
+
+       
+
+        StartCoroutine(SpawnLootDelayed(0.5f)); 
     }
 
     private IEnumerator SpawnLootDelayed(float delay)
@@ -76,6 +90,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
             GameObject spawned = Instantiate(loot.prefab, transform.position + spawnOffset, Quaternion.identity);
             spawned.transform.forward = transform.forward;
             spawned.AddComponent<LootFlyOut>();
+            PlayOpenParticle();
         }
     }
 
@@ -100,6 +115,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         {
             interactTextObject.SetActive(false);
         }
+
     }
 
     private void UpdateInteractText(bool activate)
@@ -128,4 +144,38 @@ public class Chest : MonoBehaviour, IRaycastInteractable
             interactTextObject.SetActive(false);
         }
     }
+
+    private void DisableVisuals()
+    {
+        // Apaga renderers
+        foreach (Renderer rend in visualObjects)
+        {
+            if (rend != null)
+                rend.gameObject.SetActive(false);
+        }
+
+        // Apaga partículas
+        foreach (ParticleSystem ps in particleEffects)
+        {
+            if (ps != null)
+                ps.gameObject.SetActive(false);
+        }
+
+        // Apaga luces
+        foreach (Light l in chestLights)
+        {
+            if (l != null)
+                l.enabled = false;
+        }
+    }
+
+    private void PlayOpenParticle()
+    {
+        if (openChestParticle == null) return;
+
+        openChestParticle.gameObject.SetActive(true);
+        openChestParticle.Clear(true);
+        openChestParticle.Play();
+    }
 }
+    
