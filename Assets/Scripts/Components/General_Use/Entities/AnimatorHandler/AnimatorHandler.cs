@@ -42,9 +42,22 @@ public class AnimatorHandler : MonoBehaviour
     
     private void ChangeAnimTime(float time)
     {
-        foreach(var anim in AnimatorDictionary.Values)
+        foreach(var animEntry in AnimatorDictionary.Values)
         {
-            anim.AnimatorController.speed = time;
+            if(animEntry != null)
+            {
+                Animator Anim;
+                TryGetAnimator(animEntry.ID,out Anim);
+
+                if(Anim != null)
+                {
+                    Anim.speed = time;
+                }
+            }
+            else
+            {
+                Debug.LogError("Visceral Error: El Anim no existe" + animEntry.ID);
+            }
         }
     }
 
@@ -208,5 +221,13 @@ public class AnimatorHandler : MonoBehaviour
         return false;
     }
 
+    private void OnDestroy()
+    {
+        TimeDilationManager.OnTimeScaleChanged -= ChangeAnimTime;
+    }
 
+    private void OnDisable()
+    {
+        TimeDilationManager.OnTimeScaleChanged -= ChangeAnimTime;
+    }
 }

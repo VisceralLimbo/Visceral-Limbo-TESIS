@@ -31,6 +31,12 @@ public class DungeonGenerator : MonoBehaviour
     private List<GameObject> SpecialRoomPrefabs;
 
     /// <summary>
+    /// La Pool de posibles habitaciones de jefes.
+    /// </summary>
+    [SerializeField]
+    private List<GameObject> BossRoomPrefabs;
+
+    /// <summary>
     /// La Pool de posibles pasillos de la mazmorra
     /// </summary>
     [SerializeField]
@@ -56,6 +62,8 @@ public class DungeonGenerator : MonoBehaviour
     /// la lista de habitaciones especiales generadas
     /// </summary>
     public List<DungeonPart> generatedSpecialRooms = new List<DungeonPart>();
+
+
 
     [Space]
     [Header("Variables")]
@@ -94,7 +102,10 @@ public class DungeonGenerator : MonoBehaviour
     private int TotalTriesPerRoomGeneration = 100;
 
     private bool GenerateHallway = true;
+    private bool GeneratedBossRoom = false;
 
+    private DungeonPart StartingRoom;
+    private DungeonPart BossRoom;
 
     [Space]
     [Header("Debug")]
@@ -186,6 +197,7 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     generatedRooms.Add(part);
                     GenerateHallway = true;
+                    StartingRoom = part;
                 }
             }
 
@@ -399,6 +411,7 @@ public class DungeonGenerator : MonoBehaviour
                     if (!IsRegenerating) StartCoroutine(Regenerate());
                     break;
                 }
+
                 int randomSourceSeed = Random.Range(0, SourcePool.Count-1);
                 if(randomSourceSeed < 0 || randomSourceSeed > SourcePool.Count)
                 {
@@ -528,7 +541,38 @@ public class DungeonGenerator : MonoBehaviour
         AllParts.AddRange(generatedRooms);
         AllParts.AddRange(generatedSpecialRooms);
 
+
+
         FillEmptyEntries();
+    }
+
+    /// <summary>
+    /// Generar sala del jefe
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator GenerateBossRoom()
+    {
+
+        print("Generating Boss Room");
+
+        //
+        // paso 1: seleccionamos todos los puntos viables para la generacion procedural
+        //
+        List<DungeonEntryPoint> viableEntryPoints = new List<DungeonEntryPoint>();
+
+        foreach(DungeonPart Entry in generatedHallways)
+        {
+
+            if (Entry.HasAvailableEntryPoint(out DungeonEntryPoint EntryPoint))
+            {
+            }
+
+        }
+
+        
+        FillEmptyEntries();
+        yield return null;
+
     }
 
 
@@ -576,51 +620,6 @@ public class DungeonGenerator : MonoBehaviour
     /// <returns></returns>
     private bool HandleIntersection(DungeonPart Part)
     {
-
-        /*
-        foreach (var other in generatedRooms)
-        {
-            if (other == Part) continue;
-            if (Part.collider.bounds.Intersects(other.collider.bounds))
-            return true;
-            
-            //tiene multiples colliders
-            foreach(var _col in Part._Colliders)
-            {
-                //por cada collider en part, chequeamos si colisiona con other colliders
-                foreach(var _otherCol in other._Colliders)
-                {
-                    if (_col.bounds.Intersects(_otherCol.bounds))
-                    {
-                        //interseccion
-                        return true;
-                    }
-                }
-            }
-        }
-
-        foreach (var other in generatedHallways)
-        {
-            if (other == Part) continue;
-            if (Part.collider.bounds.Intersects(other.collider.bounds))
-                return true;
-
-            foreach (var _col in Part._Colliders)
-            {
-                //por cada collider en part, chequeamos si colisiona con other colliders
-                foreach (var _otherCol in other._Colliders)
-                {
-                    if (_col.bounds.Intersects(_otherCol.bounds))
-                    {
-                        //interseccion
-                        return true;
-                    }
-                }
-            }
-        }
-
-        */
-
         List<DungeonPart> AllParts = new List<DungeonPart>();
         AllParts.AddRange(generatedRooms);
         AllParts.AddRange(generatedHallways);

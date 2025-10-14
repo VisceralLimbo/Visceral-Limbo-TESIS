@@ -23,6 +23,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     public void Initialize(KinematicCharacterMotor _kcc, GameObject Model)
     {
+        
         _KCC= _kcc;
         _Model= Model;
         _KCC.CharacterController = this;
@@ -129,10 +130,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
 
             var TargetVelocity = _MovementSpeed * groundedMovement;
+            var ScaledVelocity = TargetVelocity * TimeDilationManager.GlobalTimeScale;
+
             currentVelocity = Vector3.Slerp
                  (
                      a: currentVelocity,
-                     b: TargetVelocity,
+                     b: ScaledVelocity,
                      t: 1f - Mathf.Exp(-_MovementAccel * (TimeDilationManager.GlobalTimeScale * deltaTime))
 
                  );
@@ -177,7 +180,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
                     (
                         from:currentRotation,
                         to:rotation,
-                        maxDegreesDelta:_MaxRotationSpeed * (TimeDilationManager.GlobalTimeScale * Time.deltaTime)
+                        maxDegreesDelta:_MaxRotationSpeed * (TimeDilationManager.GlobalTimeScale * deltaTime)
                     );
           }
             return;
@@ -251,8 +254,6 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     {
        
     }
-
-
 
 
 

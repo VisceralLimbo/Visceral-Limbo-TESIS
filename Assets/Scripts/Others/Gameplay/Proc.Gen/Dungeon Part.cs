@@ -112,6 +112,35 @@ public class DungeonPart : MonoBehaviour
         EntryPoint.SetOccupied(false);
     }
 
+    public List<DungeonEntryPoint> GetAvailableEntryPoints()
+    {
+        List<DungeonEntryPoint> AvailableEntryPoints = new List<DungeonEntryPoint>();
+
+        foreach(DungeonEntryPoint Entry in EntryPoints)
+        {
+            if (Entry.IsOccupied())
+            {
+                continue;
+            }
+            else
+            {
+                AvailableEntryPoints.Add(Entry);
+                // Guardamos el punto libre
+            }
+        }
+
+        if(AvailableEntryPoints.Count > 0)
+        {
+            return AvailableEntryPoints;
+        }
+        else
+        {
+            Debug.LogWarning("no available entry points found");
+            return null;
+
+        }
+    }
+
     public void FillEmptyPoints()
     {
         foreach(DungeonEntryPoint Entry in EntryPoints)
