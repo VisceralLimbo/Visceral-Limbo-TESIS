@@ -29,13 +29,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3665808910122172183}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.70799035, y: -0, z: -0, w: 0.7062222}
   m_LocalPosition: {x: 892.32874, y: 665.18, z: -1696.8479}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 10, y: 9.8435, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90.14099, y: 0, z: 0}
 --- !u!33 &4401804673706780981
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -98,6 +98,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 472673f96eb08914996d06c926556dcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundData:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 0
   CurrentHealth: 5
   MaxHealth: 5
   _RB: {fileID: -8483138317346510048}
@@ -105,6 +112,7 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
+  _RagdollPrefab: {fileID: 0}
 --- !u!54 &-8483138317346510048
 Rigidbody:
   m_ObjectHideFlags: 0
