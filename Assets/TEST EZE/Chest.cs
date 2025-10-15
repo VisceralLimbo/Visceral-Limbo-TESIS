@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Chest : MonoBehaviour, IRaycastInteractable
 {
@@ -18,8 +19,15 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     private const string COMBAT_UI_CANVAS_NAME = "CombatUI";
     private const string CHEST_TEXT_NAME = "ChestText";
 
+    // lo mismo de arriba pero ahora para las imagenes
+    private const string BG_CAN_AFFORD_NAME = "ChestTextBG_CanAfford";
+    private const string BG_CANT_AFFORD_NAME = "ChestTextBG_CantAfford"; 
+
     private TextMeshProUGUI interactText; //el texto
     private GameObject interactTextObject; // donde esta
+
+    private Image bgCanAfford; // podes
+    private Image bgCantAfford; // no podes
 
     [Header("Material visual feedback")]
     [SerializeField] private List<Renderer> visualObjects = new List<Renderer>();
@@ -45,6 +53,21 @@ public class Chest : MonoBehaviour, IRaycastInteractable
             interactTextObject.SetActive(false);
         }
 
+        // busco y apago los fondos
+        // primero el verde dsp el rojo
+        Transform bgCanTransform = combatUICanvas.transform.Find(BG_CAN_AFFORD_NAME);
+        if (bgCanTransform != null)
+        {
+            bgCanAfford = bgCanTransform.GetComponent<Image>();
+            bgCanAfford.gameObject.SetActive(false);
+        }
+
+        Transform bgCantTransform = combatUICanvas.transform.Find(BG_CANT_AFFORD_NAME);
+        if (bgCantTransform != null)
+        {
+            bgCantAfford = bgCantTransform.GetComponent<Image>();
+            bgCantAfford.gameObject.SetActive(false);
+        }
     }
 
     public void TryOpen()
@@ -116,6 +139,15 @@ public class Chest : MonoBehaviour, IRaycastInteractable
             interactTextObject.SetActive(false);
         }
 
+        if (bgCanAfford != null)
+        {
+            bgCanAfford.gameObject.SetActive(false);
+        }
+
+        if (bgCantAfford != null)
+        {
+            bgCantAfford.gameObject.SetActive(false);
+        }
     }
 
     private void UpdateInteractText(bool activate)
@@ -131,11 +163,31 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
             if (canAfford)
             {
-                interactText.text = "Toca G para abrir";
+                interactText.text = "PRESIONA G PARA ABRIR";
+                // activo podes y apago no podes
+                if (bgCanAfford != null)
+                {
+                    bgCanAfford.gameObject.SetActive(true);
+                }
+
+                if (bgCantAfford != null)
+                {
+                    bgCantAfford.gameObject.SetActive(false);
+                }
             }
             else
             {
-                interactText.text = $"No tenes los suficientes Blood Echoes ({cost})";
+                interactText.text = $"NO TENES LOS BLOOD ECHOES SUFICIENTES ({cost})";
+                // biceversa
+                if (bgCanAfford != null)
+                {
+                    bgCanAfford.gameObject.SetActive(false);
+                }
+
+                if (bgCantAfford != null)
+                {
+                    bgCantAfford.gameObject.SetActive(true);
+                }
             }
 
             interactTextObject.SetActive(true);
@@ -143,6 +195,16 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         else
         {
             interactTextObject.SetActive(false);
+            // y apago cuando se apaga el texto
+            if (bgCanAfford != null)
+            {
+                bgCanAfford.gameObject.SetActive(false);
+            }
+
+            if (bgCantAfford != null)
+            {
+                bgCantAfford.gameObject.SetActive(false);
+            }
         }
     }
 
