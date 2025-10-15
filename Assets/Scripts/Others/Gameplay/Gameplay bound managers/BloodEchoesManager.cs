@@ -54,7 +54,7 @@ public static class BloodEchoesManager
     /// <returns></returns>
     public static bool CanPurchase(float Cost)
     {
-        if (_BloodEchoes >= Cost)
+        if (CanAfford(Cost)) // uso el nbuevo chequeo
         {
             PurchaseBloodEchoes(Cost);
             return true;
@@ -64,5 +64,15 @@ public static class BloodEchoesManager
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// funcion para chequear si el jugador puede comprar algo sin ejecutar la compra.
+    /// </summary>
+    /// <param name="Cost">el costo de la compra</param>
+    /// <returns>true si el jugador tiene suficientes Blood Echoes false si no</returns>
+    public static bool CanAfford(float Cost) // Nuevo método solo para chequear!
+    {
+        return _BloodEchoes >= Cost;
     }
 }

@@ -126,7 +126,8 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
         if (activate)
         {
-            bool canAfford = BloodEchoesManager.CanPurchase(cost);
+            // chequea y no consume
+            bool canAfford = BloodEchoesManager.CanAfford(cost);
 
             if (canAfford)
             {
