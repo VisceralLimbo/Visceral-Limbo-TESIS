@@ -70,8 +70,7 @@ public class Player_MeleeAttack : Visceral_Script
     [SerializeField] private float chargeThreshold = 1.5f;
     [SerializeField] private float blendSpeed = 10f;
 
-    [SerializeField] private TrailRenderer swordTrail;
-    [SerializeField] private TrailRenderer swordTrail2;
+    [SerializeField] private List<TrailRenderer> _swordTrails = new List<TrailRenderer>();
 
     // variable para la dir del ataque (como hacian con el cs antes)
     private Vector3 _AttackDir = Vector3.zero;
@@ -96,8 +95,10 @@ public class Player_MeleeAttack : Visceral_Script
         AttackDictionary["Up"] = UP_SwordAttacks;
         AttackDictionary["Down"] = Down_SwordAttacks;
 
-        if (swordTrail != null) swordTrail.emitting = false;
-        if (swordTrail != null) swordTrail2.emitting = false;
+        foreach (var trail in _swordTrails)
+        {
+            if (trail != null) trail.emitting = false;
+        }
 
         _AnimHandler.TryGetAnimator("PlayerWeapon", out _Anim);
     }
@@ -166,8 +167,10 @@ public class Player_MeleeAttack : Visceral_Script
         // llamo al efecto de la cam dependiendo el animselector para q siga el tipo de golpe  (izq,der,etc)
         Camera.main.GetComponent<CameraFollowSword>()?.DoHitEffect(_AttackDir);
 
-        if (swordTrail != null) swordTrail.emitting = true;
-        if (swordTrail2 != null) swordTrail2.emitting = true;
+        foreach (var trail in _swordTrails)
+        {
+            if (trail != null) trail.emitting = true;
+        }
 
         // agarro el multiplicador desde las estadisticas
         float currentDamageMultiplier = 1f; // el default
@@ -256,12 +259,14 @@ public class Player_MeleeAttack : Visceral_Script
     public void FinishAttack()
     {
             _Weapon.StopAttacking();
-            //_Anim.SetTrigger("AttackTrigger");
-            //_Anim.ResetTrigger("ChargeRelease");
-            //_AnimHandler.SetParameter("Weapon", "AttackTrigger", AnimatorControllerParameterType.Trigger);
+        //_Anim.SetTrigger("AttackTrigger");
+        //_Anim.ResetTrigger("ChargeRelease");
+        //_AnimHandler.SetParameter("Weapon", "AttackTrigger", AnimatorControllerParameterType.Trigger);
 
-            if (swordTrail != null) swordTrail.emitting = false;
-            if (swordTrail != null) swordTrail2.emitting = false;
+        foreach (var trail in _swordTrails)
+        {
+            if (trail != null) trail.emitting = false;
+        }
         _PlaySound = true;
         _HasFinishedAttack = true;
         _ComboCounter++;
@@ -360,8 +365,10 @@ public class Player_MeleeAttack : Visceral_Script
 
     private void StopTrails()
     {
-        if (swordTrail != null) swordTrail.emitting = false;
-        if (swordTrail2 != null) swordTrail2.emitting = false;
+        foreach (var trail in _swordTrails)
+    {
+        if (trail != null) trail.emitting = false;
+    }
     }
 
 
