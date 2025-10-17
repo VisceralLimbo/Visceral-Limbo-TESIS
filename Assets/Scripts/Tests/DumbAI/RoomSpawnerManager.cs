@@ -13,6 +13,7 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] Transform _spawnPointReward;
     [SerializeField] SoundData _spawnSound,_rewardSound,_FinishWaveSound;
     [SerializeField] private GameObject _reward;
+    [SerializeField] private DungeonPart _DungeonPart;
 
     [Space]
     [Header("Variables")]
@@ -49,6 +50,15 @@ public class RoomSpawnerManager : MonoBehaviour
 
     [Header("Particles Setup")]
     [SerializeField] private List<ParticleSystem> fireParticles;
+
+    private void Awake()
+    {
+        _DungeonPart = GetComponent<DungeonPart>();
+        if(_DungeonPart == null)
+        {
+            _DungeonPart = GetComponentInChildren<DungeonPart>();
+        }
+    }
 
     private void Start()
     {
@@ -407,4 +417,8 @@ public class RoomSpawnerManager : MonoBehaviour
         Debug.Log($"Reverting effect: {effect} - Called unexpectedly!"); // test
         _currentEffect = EnvironmentalEffect.None;
     }
+
+
+
+    public void GetDungeonPart(out DungeonPart Part) => Part = _DungeonPart;
 }

@@ -121,7 +121,7 @@ public class ScoreManager : MonoBehaviour
 
         CurrentPlayerScore += FinalScore;
         PlayerScore += FinalScore;
-        ScoreText.text = PlayerScore.ToString(); // componemos el score
+        ScoreText.text = CurrentPlayerScore.ToString();
 
         for (int i = milestoneThresholds.Count - 1; i >= 0; i--)
         {

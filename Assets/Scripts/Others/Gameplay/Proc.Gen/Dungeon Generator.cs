@@ -363,7 +363,7 @@ public class DungeonGenerator : MonoBehaviour
                 // salimos del LOOP para evitar stack overflow
                 if (!placementSuccessful)
                 {
-                    Debug.LogError("Dungeon generation failed. Could not find a valid placement after " + TotalTriesPerRoomGeneration + " attempts.");
+                    Debug.LogWarning("Dungeon generation failed. Could not find a valid placement after " + TotalTriesPerRoomGeneration + " attempts.");
                     if(!IsRegenerating)StartCoroutine(Regenerate());
                     break; 
                 }
@@ -415,7 +415,7 @@ public class DungeonGenerator : MonoBehaviour
                 // 
                 if (SourcePool.Count <= 0)
                 {
-                    Debug.LogError("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
+                    Debug.LogWarning("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
                     if (!IsRegenerating) StartCoroutine(Regenerate());
                     break;
                 }
@@ -423,7 +423,7 @@ public class DungeonGenerator : MonoBehaviour
                 int randomSourceSeed = Random.Range(0, SourcePool.Count-1);
                 if(randomSourceSeed < 0 || randomSourceSeed > SourcePool.Count)
                 {
-                    Debug.LogError("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
+                    Debug.LogWarning("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
                     if (!IsRegenerating) StartCoroutine(Regenerate());
                     break;
                 }
@@ -527,7 +527,7 @@ public class DungeonGenerator : MonoBehaviour
             }
             if (placementSuccessful == false)
             {
-                Debug.LogError("Dungeon generation failed. Could not find a valid placement for special room after : " + TotalTriesPerRoomGeneration + " attempts.");
+                Debug.LogWarning("Dungeon generation failed. Could not find a valid placement for special room after : " + TotalTriesPerRoomGeneration + " attempts.");
                 if (!IsRegenerating) StartCoroutine(Regenerate()); // regeneramos la mazmorra desde 0
                 break;
             }

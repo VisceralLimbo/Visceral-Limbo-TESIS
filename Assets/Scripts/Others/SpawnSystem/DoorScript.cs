@@ -39,27 +39,63 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
         // alineamiento de las puertas.
         // calculamos la direccion hacia el centro de la sala
-        Vector3 DirectionToRoom = SpawnerManager.transform.position - this.transform.position;
 
-        // aplanamos esa direccion, porque solo nos interesa un eje 
-        //(ya que las conecciones son en angulos de 90 grados)
-        if(Mathf.Abs(DirectionToRoom.x) > Mathf.Abs(DirectionToRoom.z))
-        {
-            // la direccion principal es el eje X
-            InWardAlignment = new Vector3(Mathf.Sign(DirectionToRoom.x), 0, 0);
-        }
-        else
-        {
-            // la direccion principal es el eje Z
+        SpawnerManager.GetDungeonPart(out DungeonPart _DungeonPart);
 
-            InWardAlignment = new Vector3(0, 0, Mathf.Sign(DirectionToRoom.x));
+        Vector3 DirectionToRoom;
+
+        // fallback chequeo que tenemos dungeonPart
+        if (_DungeonPart == null || _DungeonPart._Colliders.Count() == 0)
+        {
+            Debug.LogWarning("Visceral Warning Proc. Gen : sala generada " + SpawnerManager.name + " no posee dungeon part o no tiene collider, usando default");
+            DirectionToRoom = SpawnerManager.transform.position - this.transform.position;
+            InWardAlignment = GetSnapPoint(DirectionToRoom);
+            return;
         }
 
-        if(roomSpawnerManager.ManagerStopped)
+        // 1) CALCULAMOS LOS LIMITES COMBINADOS DE TODOS LOS COLLIDERS DE LA SALA.
+
+        Bounds EncapsulatedBounds = _DungeonPart._Colliders[0].bounds;
+        for(int I = 1; I < _DungeonPart._Colliders.Length; I++)
+        {
+            EncapsulatedBounds.Encapsulate(_DungeonPart._Colliders[I].bounds);
+        }
+
+        // 2) OBTENEMOS EL VERDADERO CENTRO DE LA SALA 
+
+        Vector3 BoundCenter = EncapsulatedBounds.center;
+
+        // 3) CALCULAMOS LA DIRECCION HACIA EL CENTRO CORRECTO
+
+        DirectionToRoom = BoundCenter - this.transform.position;
+
+        // 4) SNAPPEAMOS LA PUERTA
+        InWardAlignment = GetSnapPoint(DirectionToRoom);
+
+        if (roomSpawnerManager.ManagerStopped)
         {
             ShouldGenerateEvents(true);
         }
     }
+
+
+    private Vector3 GetSnapPoint(Vector3 Direction) 
+    {
+        Direction.y = 0;
+
+        if (Mathf.Abs(Direction.x) > Mathf.Abs(Direction.z))
+        {
+
+            // la direccion nueva de snap
+            return new Vector3(Mathf.Sign(Direction.x), 0, 0);
+        }
+        else
+        {
+            // la direccion en Z es mayor, por ende vamos a snappear en funcion de Z
+            return new Vector3(0, 0, Mathf.Sign(Direction.z));
+        }
+    }
+
 
     public void ShouldGenerateEvents(bool value = false)
     {
