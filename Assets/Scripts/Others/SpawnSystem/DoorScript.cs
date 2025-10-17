@@ -141,6 +141,13 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
         print("Dot product: " + DotProduct);
 
+        if(roomSpawnerManager == null)
+        {
+            Debug.LogError("Visceral Error: Door Script no tiene asignado el room manager");
+            _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, false);
+            return;
+        }
+
         // calculamos si el jugador cruzo la puerta
         if (DotProduct > DoorThreshold && !NonTriggerRoom && _IsOpen == true)
         {
