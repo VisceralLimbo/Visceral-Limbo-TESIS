@@ -514,6 +514,15 @@ public class DungeonGenerator : MonoBehaviour
                             }
                         }
                     }
+                    else if(SourceRoom.RoomType == DungeonPart.DungeonPartType.Hallway)
+                    {
+                        if(Door.TryGetComponent(out DoorScript DoorSC))
+                        {
+                            DoorSC.ShouldGenerateEvents(false);
+                        }
+
+                        
+                    }
 
 
 
@@ -663,6 +672,17 @@ public class DungeonGenerator : MonoBehaviour
 
                 GameObject Door = Instantiate(DoorOBJ,SourcePoint.transform.position,SourcePoint.transform.rotation);
                 Door.transform.SetParent(SourcePoint.transform,true);
+
+                Door.TryGetComponent(out DoorScript DoorSC);
+
+                if(BossPart.gameObject.TryGetComponent(out RoomSpawnerManager RoomMan))
+                {
+                    DoorSC.Initialize(RoomMan);
+                }
+                else
+                {
+                    Debug.LogWarning("Visceral Warning: BossPart no reporta RoomManager para asignar a la puerta");
+                }
 
                 // hacemos que la sala del jefe sea hijo del dungeonGenerator
                 // evita bloating en el hierarchy
