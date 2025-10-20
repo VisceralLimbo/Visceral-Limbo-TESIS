@@ -14,9 +14,9 @@ public class CS_settingsUI : MonoBehaviour
     public const string VOLUME_KEY = "Volume";
 
     public const float DEFAULT_SENS = 5f;
-    public const float DEFAULT_SHAKE = 0.5f;
-    public const float DEFAULT_HITSTOP = 0.1f;
-    public const float DEFAULT_VOLUME = 1.0f;
+    public const float DEFAULT_SHAKE = 1.4f;
+    public const float DEFAULT_HITSTOP = 1.6f;
+    public const float DEFAULT_VOLUME = 0.5f;
 
     [Header("refes")]
     public Player_CameraController cameraController;    
