@@ -23,17 +23,19 @@ public class HitBox : Visceral_Script
     public void DeactivateCollider()
     {
         _collider.enabled = false;
+        TaggedColliders.Clear();
     }
 
 
-    private Collider[] othercolliders;
+    private List<Collider> TaggedColliders = new List<Collider>();
     private void OnTriggerEnter(Collider other)
     {
         if (_WeaponOwner != null)
         {
-            if (other.TryGetComponent(out Health_Component HPComp))
+            if (other.TryGetComponent(out Health_Component HPComp) && !TaggedColliders.Contains(other))
             {
                 _WeaponOwner.NotifyHit(other, HPComp);
+                TaggedColliders.Add(other);
             }
         }
     }

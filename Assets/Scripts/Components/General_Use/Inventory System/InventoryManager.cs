@@ -129,7 +129,6 @@ public class InventoryManager : MonoBehaviour
     {
         if (_ActiveItems.Count == 0)
         {
-            print("inventory manager: no active items");
             return;
         }
 

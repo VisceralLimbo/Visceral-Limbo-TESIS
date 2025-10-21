@@ -46,7 +46,6 @@ public class HurtAnimComponent : MonoBehaviour,IKnockback
 
     public void ApplyKnockBack(Vector3 KnockbackDir, float Force)
     {
-        print("kNOCKBACKED");
         DirectionOfHit = KnockbackDir;
         ForceOfHit = Force;
         ForceOfHit = ForceOfHit / KnockBackResistance;

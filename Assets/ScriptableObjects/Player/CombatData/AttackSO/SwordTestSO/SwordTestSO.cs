@@ -16,8 +16,17 @@ public class SwordTestSO : ScriptableObject
     public string AttackID = "Exe_Attack_Null";
 
 
-    [Tooltip("la duracion de la animacion, tiene que ser igual o ligeramente menor que la duracion del clip")]
+    [Tooltip("la duracion de la animacion en frames, tiene que ser igual o ligeramente menor que la cantidad de frames de la animacion")]
     public float AnimationLenght = 1.0f;
+
+    [Tooltip("El frame de la animacion en donde el ataque comienza a realizar daño")]
+    public int StartDealingDamageFrame;
+
+    [Tooltip("El frame de la animacion en donde el ataque deja de realizar daño")]
+    public int EndDealingDamageFrame;
+
+    [Tooltip("El framerate de la animacion")]
+    public int AnimFrameRate = 60;
 
     [Header("Gameplay Info")]
     [Tooltip("Daño base del ataque, este daño se le suma otros valores de daño del player")]

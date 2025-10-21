@@ -26,11 +26,16 @@ public class Player_MeleeAttack : Visceral_Script
 
     //diccionario de posibles animaciones
     Dictionary<string, SwordTestSO[]> AttackDictionary = new Dictionary<string, SwordTestSO[]>();
+
+    //diccionario de attack Clips
+    Dictionary<int, AnimationClip> AttackClipInfo = new Dictionary<int, AnimationClip>();
+
+
     SwordTestSO[] CurrentCombo; // la serie de animaciones que tenemos que ejecutar
 
     [Space]
     [Header("Variables")]
-    [SerializeField]int _ComboCounter; // el combo actual, para cyclear entre animaciones
+    [SerializeField] int _ComboCounter; // el combo actual, para cyclear entre animaciones
     [SerializeField] bool _HasFinishedAttack = true; // lock | unlock de ataque, para que el evento de atacar solo se ejecute cuando se termina la animacion
     bool _PlaySound = true; // controla si podemos tocar un sonido
 
@@ -82,7 +87,6 @@ public class Player_MeleeAttack : Visceral_Script
             DialogueManager.instance.OnDialogueStart += sheateWeapon;
             DialogueManager.instance.OnDialogueEnd += UnsheateWeapon;
         }
-
     }
 
 
@@ -101,6 +105,8 @@ public class Player_MeleeAttack : Visceral_Script
         }
 
         _AnimHandler.TryGetAnimator("PlayerWeapon", out _Anim);
+
+        
     }
 
 
@@ -118,13 +124,16 @@ public class Player_MeleeAttack : Visceral_Script
     public void RunData(InputMovement PlayerInputs)
     {
         _PlayerInputs = PlayerInputs;
-
-        if (PlayerInputs.SustainedLeftMouseClick && _HasFinishedAttack)
+        if (PlayerInputs.SustainedLeftMouseClick)
         {
-            print("perform attack");
-            _HasFinishedAttack = false;
-            AnimatorSelector(); // selector de animaciones
-            StartCoroutine(AttackHandle());
+            //terminamos de realizar un ataque?
+            if (_HasFinishedAttack)
+            {
+                _HasFinishedAttack = false;
+                AnimatorSelector(); // selector de animaciones
+                StartCoroutine(AttackHandle());
+            }
+        
             
         }
     }
@@ -218,6 +227,14 @@ public class Player_MeleeAttack : Visceral_Script
         _AnimHandler.SetParameter("PlayerWeapon", "Attack", AnimatorControllerParameterType.Trigger);
 
 
+
+
+        //primero esperamos a que la animacion llegue al momento de realizar daño
+        float WaitBeforeDealingDamage = (currentAttack.StartDealingDamageFrame / currentAttack.AnimFrameRate);
+
+        print("wait before dealing damage: " + WaitBeforeDealingDamage);
+
+        yield return new WaitForSeconds(WaitBeforeDealingDamage / AttackSpeedMod);
         //
         //indicamos al arma que comienze a realizar daño
         _Weapon.Attacking();
@@ -227,6 +244,7 @@ public class Player_MeleeAttack : Visceral_Script
         Invoke(nameof(StopTrails), trailDeactivateTime);
 
 
+        //tocamos el sonido del swing
         if (_PlaySound && !_HasFinishedAttack)
         {
             //ejemplo de funcionamiento del Sound manager
@@ -239,16 +257,29 @@ public class Player_MeleeAttack : Visceral_Script
 
             _PlaySound = false;
         }
-      
 
+
+        //ahora vamos a calcular cuando puede DEJAR de realizar daño
+        float DamageWindow = (currentAttack.EndDealingDamageFrame - WaitBeforeDealingDamage)/currentAttack.AnimFrameRate;
+
+
+        print("Damage Window " + DamageWindow);
+        yield return new WaitForSeconds(DamageWindow/AttackSpeedMod);
+
+        //ahora que paso el tiempo de daño, desactivamos el daño
+        _Weapon.StopAttacking();
+
+   
 
 
         //frenamos hasta que finalize la ejecucion
         // reducimos un poco el cooldown para hacer mas smooth el ataque, basicamente que
         // no tenga tiempo de volver a idle
-        float AttackCooldown = (currentAttack.AnimationLenght / AttackSpeedMod) *0.9f;
+        float AttackCooldown = (currentAttack.AnimationLenght/currentAttack.AnimFrameRate) - (currentAttack.EndDealingDamageFrame / currentAttack.AnimFrameRate);
 
-        yield return new WaitForSeconds(AttackCooldown);
+        print("Attack Cooldown " + AttackCooldown);
+
+        yield return new WaitForSeconds((AttackCooldown / AttackSpeedMod )*0.9f);
 
         FinishAttack();
 
@@ -258,7 +289,6 @@ public class Player_MeleeAttack : Visceral_Script
 
     public void FinishAttack()
     {
-            _Weapon.StopAttacking();
         //_Anim.SetTrigger("AttackTrigger");
         //_Anim.ResetTrigger("ChargeRelease");
         //_AnimHandler.SetParameter("Weapon", "AttackTrigger", AnimatorControllerParameterType.Trigger);
@@ -267,9 +297,10 @@ public class Player_MeleeAttack : Visceral_Script
         {
             if (trail != null) trail.emitting = false;
         }
+
         _PlaySound = true;
-        _HasFinishedAttack = true;
         _ComboCounter++;
+        _HasFinishedAttack = true;
     }
 
     // registro boost
