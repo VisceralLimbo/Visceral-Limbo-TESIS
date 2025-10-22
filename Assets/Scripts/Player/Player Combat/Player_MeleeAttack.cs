@@ -194,44 +194,6 @@ public class Player_MeleeAttack : Visceral_Script
         // llamo al efecto de la cam dependiendo el animselector para q siga el tipo de golpe  (izq,der,etc)
         Camera.main.GetComponent<CameraFollowSword>()?.DoHitEffect(_AttackDir);
 
-        // activo los trails q necesito
-        if (_isBleedEffectActive)
-        {
-            // los de sangrado
-            foreach (var trail in _bleedSwordTrails)
-            {
-                if (trail != null) trail.emitting = true;
-            }
-
-            // desactivo y limpio noramles
-            foreach (var trail in _swordTrails)
-            {
-                if (trail != null)
-                {
-                    trail.emitting = false;
-                    trail.Clear();
-                }
-            }
-        }
-        else // sin sangrado
-        {
-            // actvio normales
-            foreach (var trail in _swordTrails)
-            {
-                if (trail != null) trail.emitting = true;
-            }
-
-            // desactivo y limpio sangrado
-            foreach (var trail in _bleedSwordTrails)
-            {
-                if (trail != null)
-                {
-                    trail.emitting = false;
-                    trail.Clear();
-                }
-            }
-        }
-
         // agarro el multiplicador desde las estadisticas
         float currentDamageMultiplier = 1f; // el default
 
@@ -288,14 +250,56 @@ public class Player_MeleeAttack : Visceral_Script
         float remainingTime = totalDuration - endTime;
 
 
-        yield return new WaitForSeconds(waitBeforeDamage / AttackSpeedMod);
+        print("wait before dealing damage: " + WaitBeforeDealingDamage);
+
+        yield return new WaitForSeconds(WaitBeforeDealingDamage / AttackSpeedMod);
+
+        // activo los trails q necesito
+        if (_isBleedEffectActive)
+        {
+            // los de sangrado
+            foreach (var trail in _bleedSwordTrails)
+            {
+                if (trail != null) trail.emitting = true;
+            }
+
+            // desactivo y limpio noramles
+            foreach (var trail in _swordTrails)
+            {
+                if (trail != null)
+                {
+                    trail.emitting = false;
+                    trail.Clear();
+                }
+            }
+        }
+        else // sin sangrado
+        {
+            // actvio normales
+            foreach (var trail in _swordTrails)
+            {
+                if (trail != null) trail.emitting = true;
+            }
+
+            // desactivo y limpio sangrado
+            foreach (var trail in _bleedSwordTrails)
+            {
+                if (trail != null)
+                {
+                    trail.emitting = false;
+                    trail.Clear();
+                }
+            }
+        }
+
         //
         //indicamos al arma que comienze a realizar daño
         _Weapon.Attacking();
 
         // trails
         float trailDeactivateTime = Mathf.Max(currentAttack.AnimationLenght - 1f, 0.45f); //cuando se desactiva el trail antes del final de la animacion
-        Invoke(nameof(StopTrails), trailDeactivateTime);
+        // chau al invoke
+        //Invoke(nameof(StopTrails), trailDeactivateTime);
 
 
         //tocamos el sonido del swing
@@ -313,12 +317,22 @@ public class Player_MeleeAttack : Visceral_Script
         }
 
 
-      
-        yield return new WaitForSeconds(damageWindowDuration/AttackSpeedMod);
+
+        print("Damage Window " + DamageWindow);
+        yield return new WaitForSeconds(DamageWindow/AttackSpeedMod);
 
         //ahora que paso el tiempo de daño, desactivamos el daño
         _Weapon.StopAttacking();
 
+        // fuerzo el stop
+        StopTrails();
+
+        //frenamos hasta que finalize la ejecucion
+        // reducimos un poco el cooldown para hacer mas smooth el ataque, basicamente que
+        // no tenga tiempo de volver a idle
+        float AttackCooldown = (currentAttack.AnimationLenght/currentAttack.AnimFrameRate) - (currentAttack.EndDealingDamageFrame / currentAttack.AnimFrameRate);
+
+        print("Attack Cooldown " + AttackCooldown);
 
         yield return new WaitForSeconds((remainingTime / AttackSpeedMod));
 
