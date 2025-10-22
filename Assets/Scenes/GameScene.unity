@@ -427,6 +427,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
+      propertyPath: blendSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: AttackSpeedMod
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
       propertyPath: _PlayerContext
       value: 
       objectReference: {fileID: 851561497}
@@ -450,6 +460,36 @@ PrefabInstance:
       propertyPath: _WindVelocityMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 9926ece05ba3be5439b3cebbc351189b, type: 2}
+    - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[0]
+      value: 
+      objectReference: {fileID: 144772461}
+    - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[1]
+      value: 
+      objectReference: {fileID: 1013038767}
+    - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[2]
+      value: 
+      objectReference: {fileID: 1088260815}
+    - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[3]
+      value: 
+      objectReference: {fileID: 1254996088}
+    - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[4]
+      value: 
+      objectReference: {fileID: 284459036}
     - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: soundData.Array.data[0].mixerGroup
@@ -8116,6 +8156,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 144104224}
   m_PrefabAsset: {fileID: 0}
+--- !u!96 &144772461 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 2652949802101751772, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 372405}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &144870843
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14896,6 +14942,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3447279685162615919, guid: f1355c9890f2ad745a448d1d22b20e95,
     type: 3}
   m_PrefabInstance: {fileID: 281088414}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &284459036 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 7249689108911262204, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 372405}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &285053886
 PrefabInstance:
@@ -56783,6 +56835,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1011886168}
   m_PrefabAsset: {fileID: 0}
+--- !u!96 &1013038767 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 910483816258787721, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 372405}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1013497898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62182,6 +62240,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2439024607547813770, guid: 0c157397b45374447a0a4528864277ed,
     type: 3}
   m_PrefabInstance: {fileID: 1088001349}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &1088260815 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 5194719899523950829, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 372405}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1088943545 stripped
 GameObject:
@@ -71904,6 +71968,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 515620877db14ab46bf6133e5eb09d84, type: 3}
+--- !u!96 &1254996088 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 259649078539047552, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 372405}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1255301114 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8378155352308638074, guid: 810c7160d1bc2b1429cb8cc04201a232,

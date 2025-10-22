@@ -76,6 +76,7 @@ public class Player_MeleeAttack : Visceral_Script
     [SerializeField] private float blendSpeed = 10f;
 
     [SerializeField] private List<TrailRenderer> _swordTrails = new List<TrailRenderer>();
+    [SerializeField] private List<TrailRenderer> _bleedSwordTrails = new List<TrailRenderer>();
 
     // variable para la dir del ataque (como hacian con el cs antes)
     private Vector3 _AttackDir = Vector3.zero;
@@ -99,9 +100,24 @@ public class Player_MeleeAttack : Visceral_Script
         AttackDictionary["Up"] = UP_SwordAttacks;
         AttackDictionary["Down"] = Down_SwordAttacks;
 
+        // trails normales off
         foreach (var trail in _swordTrails)
         {
-            if (trail != null) trail.emitting = false;
+            if (trail != null)
+            {
+                trail.emitting = false;
+                trail.Clear();
+            }
+        }
+
+        // trails de sangre off
+        foreach (var trail in _bleedSwordTrails)
+        {
+            if (trail != null)
+            {
+                trail.emitting = false;
+                trail.Clear();
+            }
         }
 
         _AnimHandler.TryGetAnimator("PlayerWeapon", out _Anim);
@@ -176,9 +192,42 @@ public class Player_MeleeAttack : Visceral_Script
         // llamo al efecto de la cam dependiendo el animselector para q siga el tipo de golpe  (izq,der,etc)
         Camera.main.GetComponent<CameraFollowSword>()?.DoHitEffect(_AttackDir);
 
-        foreach (var trail in _swordTrails)
+        // activo los trails q necesito
+        if (_isBleedEffectActive)
         {
-            if (trail != null) trail.emitting = true;
+            // los de sangrado
+            foreach (var trail in _bleedSwordTrails)
+            {
+                if (trail != null) trail.emitting = true;
+            }
+
+            // desactivo y limpio noramles
+            foreach (var trail in _swordTrails)
+            {
+                if (trail != null)
+                {
+                    trail.emitting = false;
+                    trail.Clear();
+                }
+            }
+        }
+        else // sin sangrado
+        {
+            // actvio normales
+            foreach (var trail in _swordTrails)
+            {
+                if (trail != null) trail.emitting = true;
+            }
+
+            // desactivo y limpio sangrado
+            foreach (var trail in _bleedSwordTrails)
+            {
+                if (trail != null)
+                {
+                    trail.emitting = false;
+                    trail.Clear();
+                }
+            }
         }
 
         // agarro el multiplicador desde las estadisticas
@@ -293,10 +342,10 @@ public class Player_MeleeAttack : Visceral_Script
         //_Anim.ResetTrigger("ChargeRelease");
         //_AnimHandler.SetParameter("Weapon", "AttackTrigger", AnimatorControllerParameterType.Trigger);
 
-        foreach (var trail in _swordTrails)
-        {
-            if (trail != null) trail.emitting = false;
-        }
+        //foreach (var trail in _swordTrails)
+        //{
+        //    if (trail != null) trail.emitting = false;
+        //}
 
         _PlaySound = true;
         _ComboCounter++;
@@ -343,6 +392,30 @@ public class Player_MeleeAttack : Visceral_Script
 
         _isBleedEffectActive = isActive;
         UpdateMaterialEffect();
+
+        // limpio y activo trails para forzarlo y q no se cambien solo si hago el primer ataque
+        if (isActive)
+        {
+            foreach (var trail in _swordTrails)
+            {
+                if (trail != null)
+                {
+                    trail.emitting = false;
+                    trail.Clear();
+                }
+            }
+        }
+        else
+        {
+            foreach (var trail in _bleedSwordTrails)
+            {
+                if (trail != null)
+                {
+                    trail.emitting = false;
+                    trail.Clear();
+                }
+            }
+        }
     }
 
     // updateo el material para aplicar el cambio de mesh
@@ -396,10 +469,24 @@ public class Player_MeleeAttack : Visceral_Script
 
     private void StopTrails()
     {
+        // desactivo normales
         foreach (var trail in _swordTrails)
-    {
-        if (trail != null) trail.emitting = false;
-    }
+        {
+            if (trail != null)
+            {
+                trail.emitting = false;
+                trail.Clear();
+            }
+        }
+        // desactivo sangrados
+        foreach (var trail in _bleedSwordTrails)
+        {
+            if (trail != null)
+            {
+                trail.emitting = false;
+                trail.Clear();
+            }
+        }
     }
 
 
