@@ -250,9 +250,9 @@ public class Player_MeleeAttack : Visceral_Script
         float remainingTime = totalDuration - endTime;
 
 
-        print("wait before dealing damage: " + WaitBeforeDealingDamage);
+       
 
-        yield return new WaitForSeconds(WaitBeforeDealingDamage / AttackSpeedMod);
+        yield return new WaitForSeconds(waitBeforeDamage / AttackSpeedMod);
 
         // activo los trails q necesito
         if (_isBleedEffectActive)
@@ -318,8 +318,8 @@ public class Player_MeleeAttack : Visceral_Script
 
 
 
-        print("Damage Window " + DamageWindow);
-        yield return new WaitForSeconds(DamageWindow/AttackSpeedMod);
+      
+        yield return new WaitForSeconds(damageWindowDuration /AttackSpeedMod);
 
         //ahora que paso el tiempo de daño, desactivamos el daño
         _Weapon.StopAttacking();
@@ -330,10 +330,7 @@ public class Player_MeleeAttack : Visceral_Script
         //frenamos hasta que finalize la ejecucion
         // reducimos un poco el cooldown para hacer mas smooth el ataque, basicamente que
         // no tenga tiempo de volver a idle
-        float AttackCooldown = (currentAttack.AnimationLenght/currentAttack.AnimFrameRate) - (currentAttack.EndDealingDamageFrame / currentAttack.AnimFrameRate);
-
-        print("Attack Cooldown " + AttackCooldown);
-
+     
         yield return new WaitForSeconds((remainingTime / AttackSpeedMod));
 
         FinishAttack();
