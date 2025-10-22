@@ -137,7 +137,7 @@ public class RoomSpawnerManager : MonoBehaviour
             }
 
             MusicManager.Instance?.PlayCombatMusic();
-            SlowMotion.Stop(2f, 0.15f, true);
+            SlowMotion.Stop(1f, 0.15f, true);
             FindObjectOfType<SlowMotionController>()?.ApplyEffect(1f, 0.6f);
 
             StartCoroutine(SpawnCoroutine());

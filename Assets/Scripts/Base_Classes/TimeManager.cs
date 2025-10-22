@@ -32,7 +32,8 @@ public static class TimeDilationManager
 
     public static void ResetTimeScale()
     {
-        SetTimeScale(StartingTimeScale);
+        GlobalTimeScale= 1f;
+        OnTimeScaleChanged?.Invoke(GlobalTimeScale);
     }
 
 

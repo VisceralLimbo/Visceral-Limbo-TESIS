@@ -87,7 +87,7 @@ public class SwordTest : Visceral_WeaponBase
             damageFlash.SetBleedStatus(isBleedActive);
         }
 
-        SlowMotion.Stop(0.05f, 0.05f, false);
+        SlowMotion.Stop(0.1f, 0.05f, false);
     }
 
     // efecto del bleed

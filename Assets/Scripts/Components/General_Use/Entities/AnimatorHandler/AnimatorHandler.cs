@@ -50,8 +50,15 @@ public class AnimatorHandler : MonoBehaviour
                 TryGetAnimator(animEntry.ID,out Anim);
 
                 if(Anim != null)
-                {
-                    Anim.speed = time;
+                {  
+                    if(time == 1)
+                    {
+                        Anim.speed = 1;
+                    }
+                    else
+                    {
+                        Anim.speed *= time;
+                    }
                 }
             }
             else

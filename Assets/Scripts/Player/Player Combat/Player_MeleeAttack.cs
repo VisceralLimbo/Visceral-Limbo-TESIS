@@ -216,7 +216,7 @@ public class Player_MeleeAttack : Visceral_Script
         _Weapon.KnockBack = currentAttack.KnockBack;
 
         //aceleramos / slowdown de animacion
-        _Anim.speed = AttackSpeedMod;
+        _Anim.speed = AttackSpeedMod * TimeDilationManager.GlobalTimeScale;
 
 
         // obtenemos el hash.
