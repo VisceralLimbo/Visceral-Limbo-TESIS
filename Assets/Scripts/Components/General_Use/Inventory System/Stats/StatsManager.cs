@@ -16,9 +16,18 @@ public class StatsManager : MonoBehaviour
 
     private void Awake()
     {
+        // si tenemos un blockstat
         if(blockData!= null)
         {
-            FloatStatList.AddRange(blockData.Stats);
+            // COMO ESTAMOS USANDO UN SCRIPTABLEOBJECT
+            // NOS VEMOS OBLIGADOS A CREAR UNA COPIA DE LA LISTA DE ESTADISTICAS
+            // PARA EVITAR ACCIDENTALMENTE MODIFICAR LA LISTA DE STATS DEL SO.
+            foreach(var stat in blockData.Stats)
+            {
+                FloatStat ClonedStat = new FloatStat(stat);
+                FloatStatList.Add(ClonedStat);
+            }
+            
         }
 
         var StatList = new List<Stat>();

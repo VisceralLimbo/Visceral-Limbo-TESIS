@@ -59,7 +59,9 @@ public class FloatStat : Stat
      public float FinalValueFloat;
 
      public List<StatModifierFloat> ModifiersList = new();
-    private Dictionary<string, StatModifierFloat> Modifiers = new Dictionary<string, StatModifierFloat>();
+     private Dictionary<string, StatModifierFloat> Modifiers = new Dictionary<string, StatModifierFloat>();
+
+    
 
     public override void AddModifiers(StatModifiers mod,string EffectID)
     {
@@ -128,29 +130,46 @@ public class FloatStat : Stat
             // recalculo
             RecalculateStat();
         }
+
+
+       
     }
+
+    public FloatStat(FloatStat original)
+    {
+        this.StatID = original.StatID;
+        this.FinalValueFloat = original.FinalValueFloat;
+        this.BaseValue = original.BaseValue;
+        this.Modifiers = new Dictionary<string, StatModifierFloat>();
+        this.ModifiersList = new List<StatModifierFloat>();
+        this.BaseValueFloat = original.BaseValueFloat;
+
+    }
+
     /*var OrderedList = ModifiersList.OrderBy(x => x.ModifierValue).ToList();
 
-        foreach(StatModifierFloat _Mod in OrderedList)
-        {
-            if(_Mod.ModType == ModifierType.flat)
-            {
-                newFinalValue += _Mod.ModifierValueFloat;
-            }
-            else if(_Mod.ModType == ModifierType.percentAdd)
-            {
-                newFinalValue += (BaseValueFloat * _Mod.ModifierValueFloat);
-            }
-            else
-            {
-                newFinalValue *= _Mod.ModifierValueFloat;
-            }
-        }
+   foreach(StatModifierFloat _Mod in OrderedList)
+   {
+       if(_Mod.ModType == ModifierType.flat)
+       {
+           newFinalValue += _Mod.ModifierValueFloat;
+       }
+       else if(_Mod.ModType == ModifierType.percentAdd)
+       {
+           newFinalValue += (BaseValueFloat * _Mod.ModifierValueFloat);
+       }
+       else
+       {
+           newFinalValue *= _Mod.ModifierValueFloat;
+       }
+   }
 
-        if(newFinalValue != FinalValueFloat)
-        {
-            FinalValueFloat = newFinalValue;
-        }
-        */
+   if(newFinalValue != FinalValueFloat)
+   {
+       FinalValueFloat = newFinalValue;
+   }
+   */
+
+
 }
 
