@@ -25,6 +25,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     [SerializeField] bool _LockDoor;
     [SerializeField] bool _IsOpen;
+    [SerializeField] bool _OpenDoorInside;
 
     public void Initialize(RoomSpawnerManager SpawnerManager)
     {
@@ -152,8 +153,10 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         if (DotProduct > DoorThreshold && !NonTriggerRoom && _IsOpen == true)
         {
             print("entro a la habitacion");
-            // correr animacion de puerta abriendose
+            // correr animacion de puerta cerrandose
             _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, false);
+            // correr animacion de puerta cerrandose
+            _AnimHandler.SetParameter("DoorAnim", "AbrirAdentro", AnimatorControllerParameterType.Bool, false);
             roomSpawnerManager.AssignPlayerContext(Pcontext);
             roomSpawnerManager.StartRoomCombat();
             roomSpawnerManager.NotifyMinionDeath();
@@ -164,12 +167,35 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     }
 
-    public void OnInteract()
+    public void OnInteract(RayCastWrapper Detector)
     {
         if (!_LockDoor && roomSpawnerManager.ManagerStopped || !_LockDoor && !PlayerEnteredRoom)
         {
-            // correr animacion de puerta abriendose
-            _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
+            // CALCULO DE SENTIDO DE PUERTA 
+            var Dir = Detector.transform.position - this.transform.position;
+
+            var DirAlign = Vector3.Dot(Dir, InWardAlignment);
+
+            //LA PUERTA ESTA ADENTRO
+            if (DirAlign >= 0)
+            {
+                _OpenDoorInside = true;
+            }
+            else
+            {
+                _OpenDoorInside = false;
+            }
+
+            if (!_OpenDoorInside)
+            {
+                // correr animacion de puerta abriendose
+                _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
+            }
+            else
+            {
+                // correr animacion de puerta abriendose
+                _AnimHandler.SetParameter("DoorAnim", "AbrirAdentro", AnimatorControllerParameterType.Bool, true);
+            }
             _IsOpen = true;
         }
     }
@@ -181,7 +207,6 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     public void OnRayCastStay(RayCastWrapper Detector = null)
     {
-       
     }
  
     public void OnRayCastExit(RayCastWrapper Detector = null)

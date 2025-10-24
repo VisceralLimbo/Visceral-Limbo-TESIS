@@ -117,7 +117,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         }
     }
 
-    public void OnInteract()
+    public void OnInteract(RayCastWrapper Detector)
     {
         TryOpen();
     }

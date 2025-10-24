@@ -37,5 +37,5 @@ public interface IRaycastInteractable : IRaycastDetectable
     /// <summary>
     /// Funcion especifica de Interaccion.
     /// </summary>
-    public abstract void OnInteract();
+    public abstract void OnInteract(RayCastWrapper Detector = null);
 }

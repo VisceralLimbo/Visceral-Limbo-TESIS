@@ -13,10 +13,16 @@ public class PlayerRayCast : RayCastWrapper
     {
         PerformRayCast();
 
+        //estoy viendo un raycastDetectable
+        if(CurrentDetected != null)
+        {
+            CurrentDetected.OnRayCastStay(this);
+        }
+
         if(CurrentDetected != null && CurrentDetected is IRaycastInteractable interactable &&
             Input.GetKeyDown(InteractKey))
         {
-            interactable.OnInteract();
+            interactable.OnInteract(this);
         }
 
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RaycastTest : MonoBehaviour, IRaycastInteractable
 {
-    public void OnInteract()
+    public void OnInteract(RayCastWrapper Detector)
     {
         Debug.Log("ME HAN INTERACTUADO!");
     }
