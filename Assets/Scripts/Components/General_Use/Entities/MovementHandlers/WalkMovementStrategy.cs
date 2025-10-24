@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
 
-public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacterController
+public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacterController,IKnockback
 {
     [Header("References")]
     [SerializeField] KinematicCharacterMotor _KCC;
@@ -17,6 +17,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [SerializeField] float _MovementSpeed;
     [SerializeField] float _MovementAccel;
     [SerializeField] float _MaxRotationSpeed;
+    [SerializeField] bool GotKnockbacked;
 
     Vector3 _AddExternalVelocity;
 
@@ -49,6 +50,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         {
 
             HP.OnDeath += OnDeath;
+            HP.OnKnockbackTaken += ApplyKnockBack;
             print("death subscription");
         }
         else
@@ -56,6 +58,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
            if(this.TryGetComponent(out Health_Component _HP))
             {
                 _HP.OnDeath += OnDeath;
+                _HP.OnKnockbackTaken += ApplyKnockBack;
                 print("death subscription");
             }
         }
@@ -153,6 +156,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         // we applied external velocity
         if(_AddExternalVelocity.sqrMagnitude > 0.1f)
         {
+            if (GotKnockbacked)
+            {
+                currentVelocity = Vector3.zero;
+                GotKnockbacked = false;
+            }
+
             currentVelocity += _AddExternalVelocity;
         }
 
@@ -253,6 +262,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     void ICharacterController.ProcessHitStabilityReport(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, Vector3 atCharacterPosition, Quaternion atCharacterRotation, ref HitStabilityReport hitStabilityReport)
     {
        
+    }
+
+    public void ApplyKnockBack(Vector3 KnockbackDir, float Force)
+    {
+        ApplyExternalForce(KnockbackDir, Force);
+        GotKnockbacked = true;
     }
 
 

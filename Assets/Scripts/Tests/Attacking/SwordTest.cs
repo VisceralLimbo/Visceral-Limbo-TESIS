@@ -7,11 +7,14 @@ using UnityEngine.EventSystems;
 public class SwordTest : Visceral_WeaponBase
 {
     PlayerContext _UserContext;
-    private BleedItemLogic _BleedItem; //ref del item
+    private BleedItemLogic _BleedItem; //ref del item+
+
+    [SerializeField] private PlayerRayCast playerRay;
 
     private void Start()
     {
         _UserContext = this.transform.root.GetComponentInChildren<PlayerContext>();
+        playerRay = _UserContext.GetComponentInChildren<PlayerRayCast>();
     }
 
     public override void Attacking()
@@ -71,9 +74,8 @@ public class SwordTest : Visceral_WeaponBase
             FactionID = _UserContext.faction = FactionID.Player,
         };
 
-
-        Vector3 Dir = other.transform.position - this.transform.position;
-        Dir = Dir.normalized;
+        var Dir = playerRay.transform.forward; 
+        
 
         // efecto del bleed
         ApplyBleedEffect(HPComp);
