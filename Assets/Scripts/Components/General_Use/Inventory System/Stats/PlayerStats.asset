@@ -19,7 +19,6 @@ MonoBehaviour:
     FinalValueFloat: 350
     ModifiersList:
     - ModType: 0
-      Source: {fileID: 0}
       EffectName: TestItemLogicHealthUP
       ModifierValueFloat: 50
   - StatID: WalkSpeed
@@ -28,7 +27,6 @@ MonoBehaviour:
     FinalValueFloat: 14
     ModifiersList:
     - ModType: 0
-      Source: {fileID: 0}
       EffectName: SpeedItemLogicBoost
       ModifierValueFloat: 2
   - StatID: AirSpeed
@@ -37,7 +35,6 @@ MonoBehaviour:
     FinalValueFloat: 14
     ModifiersList:
     - ModType: 0
-      Source: {fileID: 0}
       EffectName: SpeedItemJumpLogicBoost
       ModifierValueFloat: 4
   - StatID: CrouchSpeed
@@ -46,7 +43,6 @@ MonoBehaviour:
     FinalValueFloat: 11
     ModifiersList:
     - ModType: 0
-      Source: {fileID: 0}
       EffectName: SpeedItemCrouchLogicBoost
       ModifierValueFloat: 3
   - StatID: BaseAttack
@@ -55,6 +51,21 @@ MonoBehaviour:
     FinalValueFloat: 0
     ModifiersList:
     - ModType: 0
-      Source: {fileID: 0}
+      EffectName: SpeedItemCrouchLogicBoost
+      ModifierValueFloat: 3
+  - StatID: BaseDamageFlatBoost
+    Statmanager: {fileID: 0}
+    BaseValueFloat: 0
+    FinalValueFloat: 0
+    ModifiersList:
+    - ModType: 0
+      EffectName: SpeedItemCrouchLogicBoost
+      ModifierValueFloat: 3
+  - StatID: Bleed
+    Statmanager: {fileID: 0}
+    BaseValueFloat: 0
+    FinalValueFloat: 0
+    ModifiersList:
+    - ModType: 0
       EffectName: SpeedItemCrouchLogicBoost
       ModifierValueFloat: 3
