@@ -20,6 +20,11 @@ public class MainMenu : MonoBehaviour
         ResetUIState();
     }
 
+    public void MainMenuShop()
+    {
+        LoadGameScene("Nexus");
+        ResetUIState();
+    }
     public void MainMenuOptions()
     {
         optionsPanel.SetActive(true);
@@ -55,6 +60,29 @@ public class MainMenu : MonoBehaviour
 
         if (EventSystem.current != null)
             EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    public void ClearPlayerRef()
+    {
+        // borro todo lo guardado
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save(); // guardo lo borrado
+
+        // CS_settingsUI crea los valores default de nuevo
+
+        if (CS_settingsUI.Instance != null)
+        {
+            CS_settingsUI.Instance.LoadSettings();
+        }
+
+        // fuerzo q las opciones se recargen
+        SettingsUIPanelManager uiManager = FindObjectOfType<SettingsUIPanelManager>();
+
+        if (uiManager != null)
+        {
+            // llamo al refresh
+            uiManager.RefreshUIFromPlayerPrefs();
+        }
     }
 
     public void LoadGameScene(string sceneName)

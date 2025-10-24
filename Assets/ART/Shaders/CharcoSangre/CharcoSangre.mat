@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WindVelocityMat
-  m_Shader: {fileID: -6465566751694194690, guid: 130589e8f3f560648b6b4f960ae20bbe,
+  m_Name: CharcoSangre
+  m_Shader: {fileID: -6465566751694194690, guid: db092463585a0ac43a073a969f139689,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,12 +24,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NoiseTex:
-        m_Texture: {fileID: 2800000, guid: 812a3594451f6494e8a9f289ca6f71b4, type: 3}
+    - _Blood:
+        m_Texture: {fileID: 2800000, guid: 66cf41c083b5a3e43871b7ea55b8df95, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -46,13 +42,26 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.21082838
-    - _Mask_Contrast: 0.884
-    - _NoiseLerp: -0.3
-    - _NoiseScale: 50
-    - _NoiseTime: 0.2
-    - _VignettePower: 0.833
+    - _Noise: 51.04
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _SpeedTransparence: 10
+    - _Transparencia: 0.1
+    - _speed: 4.51
+    - _trasparence: 0.2
     m_Colors:
-    - _Color: {r: 0.8572168, g: 1.7491893, b: 2.3601296, a: 1}
-    - _WindPosition: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Color: {r: 0.9764706, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &2459586771351661283
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
