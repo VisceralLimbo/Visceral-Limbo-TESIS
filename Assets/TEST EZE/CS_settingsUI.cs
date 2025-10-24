@@ -53,7 +53,7 @@ public class CS_settingsUI : MonoBehaviour
         ApplySettingsToGame();
     }
 
-    private void LoadSettings()
+    public void LoadSettings()
     {
         //cargo las default para la primera vez
 

@@ -196,11 +196,15 @@ public class Player_MeleeAttack : Visceral_Script
 
         // agarro el multiplicador desde las estadisticas
         float currentDamageMultiplier = 1f; // el default
+        float flatDamageBoost = 0f;         // nuevo para el progreso q compro
 
         if (_PlayerContext != null && _PlayerContext.Stats != null)
         {
             //DamageMultiplier es lo seteado en el float stat list 
             currentDamageMultiplier = _PlayerContext.Stats.GetFloatStatValue("DamageMultiplier");
+
+            // el statid que el playercontext va a actualizar
+            flatDamageBoost = _PlayerContext.Stats.GetFloatStatValue("BaseDamageFlatBoost");
         }
 
         // aplico el dd si la evasion esta true
@@ -224,8 +228,11 @@ public class Player_MeleeAttack : Visceral_Script
         //obtenemos el ataque actual
         var currentAttack = CurrentCombo[_ComboCounter];
 
+        // (dmg del so * el multiplicador del statsmanager) + el q compro
+        float finalCalculatedDamage = (currentAttack.Damage * currentDamageMultiplier) + flatDamageBoost;
+
         // seteamos variables de daño y knockback
-        _Weapon.Damage = currentAttack.Damage * currentDamageMultiplier; // multiplico el danio por el modif
+        _Weapon.Damage = finalCalculatedDamage; // uso el calculado de arriba
         _Weapon.KnockBack = currentAttack.KnockBack;
 
         //aceleramos / slowdown de animacion
