@@ -26,6 +26,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] bool _LockDoor;
     [SerializeField] bool _IsOpen;
     [SerializeField] bool _OpenDoorInside;
+    [SerializeField] bool _InvertAnimations;
 
     public void Initialize(RoomSpawnerManager SpawnerManager)
     {
@@ -77,6 +78,24 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         {
             ShouldGenerateEvents(true);
         }
+
+
+        // 5) PONDERAMOS LA ROTACION DEL PREFAB EN FUNCION DEL ROOM
+
+        Vector3 SnappedLocalForward = GetSnapPoint(this.transform.forward);
+
+
+        if (Vector3.Dot(SnappedLocalForward,InWardAlignment) > 0)
+        {
+            _InvertAnimations = true;
+        }
+        else
+        {
+            _InvertAnimations = false;
+        }
+
+
+
     }
 
 
@@ -169,12 +188,13 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     public void OnInteract(RayCastWrapper Detector)
     {
-        if (!_LockDoor && roomSpawnerManager.ManagerStopped || !_LockDoor && !PlayerEnteredRoom)
+        if (!_LockDoor && (roomSpawnerManager != null && roomSpawnerManager.ManagerStopped) || !_LockDoor && !PlayerEnteredRoom)
         {
             // CALCULO DE SENTIDO DE PUERTA 
-            var Dir = Detector.transform.position - this.transform.position;
 
-            var DirAlign = Vector3.Dot(Dir, InWardAlignment);
+            Vector3 Dir = Detector.transform.position - this.transform.position;
+
+             float DirAlign = Vector3.Dot(Dir, InWardAlignment);
 
             //LA PUERTA ESTA ADENTRO
             if (DirAlign >= 0)
@@ -186,15 +206,21 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
                 _OpenDoorInside = false;
             }
 
-            if (!_OpenDoorInside)
+            if (_InvertAnimations)
             {
-                // correr animacion de puerta abriendose
-                _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
+                _OpenDoorInside = !_OpenDoorInside;
             }
-            else
+
+            if (_OpenDoorInside)
             {
                 // correr animacion de puerta abriendose
                 _AnimHandler.SetParameter("DoorAnim", "AbrirAdentro", AnimatorControllerParameterType.Bool, true);
+            }
+            else
+            {
+
+                // correr animacion de puerta abriendose
+                _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
             }
             _IsOpen = true;
         }

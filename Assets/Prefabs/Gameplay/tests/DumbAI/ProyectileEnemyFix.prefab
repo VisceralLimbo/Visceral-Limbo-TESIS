@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 177883927076146984}
   - component: {fileID: 5791081757340450833}
   - component: {fileID: 6373537303490493898}
+  - component: {fileID: 6886771549260978235}
   m_Layer: 8
   m_Name: ProyectileEnemyFix
   m_TagString: Untagged
@@ -192,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f56f6c12c5a31549ba39af73fb17c7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletSpeed: 30
+  BulletSpeed: 20
   damage: 10
   Damage: 10
   _Collider: {fileID: 5464579254939514475, guid: 75dee924c2695e345b2c7dfb08dbd13d,
@@ -239,6 +240,33 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.41
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &6886771549260978235
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2454136147042372353}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &2545289353657167649
 GameObject:
   m_ObjectHideFlags: 0

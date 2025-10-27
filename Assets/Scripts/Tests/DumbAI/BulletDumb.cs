@@ -18,8 +18,8 @@ public class BulletDumb : MonoBehaviour, IParriable
     private void Start()
     {
         _Collider = GetComponent<Collider>();
-        _Collider.enabled = false;
-        StartCoroutine(startDamage());
+        //_Collider.enabled = false;
+        //StartCoroutine(startDamage());
         if(_OwnerContext != null)
         {
             Physics.IgnoreCollision(this._Collider, _OwnerContext.PlayerTransform.GetComponent<Collider>());
@@ -67,6 +67,8 @@ public class BulletDumb : MonoBehaviour, IParriable
 
     private void OnTriggerEnter(Collider other)
     {
+        print(other.gameObject.name);
+
         if (other.gameObject == _OwnerGameObject) return;
         if (other.GetComponent<PlayerContext>() == _OwnerContext) return;
         if (other.GetComponent<Visceral_SkillLogic>()) return;
