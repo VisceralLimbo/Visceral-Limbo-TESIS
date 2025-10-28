@@ -33,6 +33,10 @@ public class ScoreManager : MonoBehaviour
 
     private float CurrentPlayerScore;
 
+    public float GetCurrentPlayerScore { get { return CurrentPlayerScore; } }
+
+
+    public Action<float> OnPlayerScoreChanged;
 
     private void Awake()
     {
@@ -121,7 +125,7 @@ public class ScoreManager : MonoBehaviour
 
         CurrentPlayerScore += FinalScore;
         PlayerScore += FinalScore;
-        ScoreText.text = CurrentPlayerScore.ToString();
+        //ScoreText.text = CurrentPlayerScore.ToString();
 
         for (int i = milestoneThresholds.Count - 1; i >= 0; i--)
         {
@@ -134,8 +138,8 @@ public class ScoreManager : MonoBehaviour
             }
         }
 
-        Combat_UI_Manager._Instance.AddNewScoreEntry(DamageData);
-
+        //Combat_UI_Manager._Instance.AddNewScoreEntry(DamageData);
+        BloodEchoesManager.AddBloodEchoes(FinalScore);
     }
 
 

@@ -112,7 +112,7 @@ public class RoomSpawnerManager : MonoBehaviour
         }
 
         //reseteamos el TEXTO de puntuacion, el valor de la misma sigue siendo igual
-        ScoreManager.Instance.ResetScoreText();
+        //ScoreManager.Instance.ResetScoreText();
 
         OnCombatStart?.Invoke();
     }
@@ -179,21 +179,23 @@ public class RoomSpawnerManager : MonoBehaviour
 
             ChangeLightsToEndWave();
 
-            if (ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
-            {
-                if(_reward != null)
-                {
-                    Instantiate(_reward, _spawnPointReward.transform.position, _spawnPointReward.transform.rotation);
-                }
+            /* if (ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
+             {
+                 if(_reward != null)
+                 {
+                     Instantiate(_reward, _spawnPointReward.transform.position, _spawnPointReward.transform.rotation);
+                 }
 
-                BloodEchoesManager.AddBloodEchoes(_BloodEchoesReward);
+                 SoundManager.Instance.CreateSound()
+                     .WithSoundData(_rewardSound)
+                     .WithRandomPitch(true)
+                     .WithPosition(_spawnPointReward.position)
+                     .WithSpatialBlend(1).play();
+             }*/
 
-                SoundManager.Instance.CreateSound()
-                    .WithSoundData(_rewardSound)
-                    .WithRandomPitch(true)
-                    .WithPosition(_spawnPointReward.position)
-                    .WithSpatialBlend(1).play();
-            }
+            //sumamos el score del jugador obtenido en combate como moneda.
+            //BloodEchoesManager.AddBloodEchoes(ScoreManager.Instance.GetCurrentPlayerScore);
+
             DialogueManager.instance.StartDialogue(_finishCombatDialogue);
 
             MusicManager.Instance?.PlayExplorationMusic();

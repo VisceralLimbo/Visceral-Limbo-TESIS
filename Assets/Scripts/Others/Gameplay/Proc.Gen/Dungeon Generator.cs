@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using System.Linq;
+using System;
+using Random = UnityEngine.Random;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -115,6 +117,13 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] bool IsRegenerating;
     public List<DungeonPart> AllParts = new List<DungeonPart>();
 
+
+    public Action<float> GenerationValue;
+
+    public Action OnSuccessfulGeneration;
+
+    public Action OnUnSuccessfulGeneration;
+
     private void Awake()
     {
         // no hago un singleton porque la idea es que se muera el dungeon generator al 
@@ -135,8 +144,11 @@ public class DungeonGenerator : MonoBehaviour
         { 
             Regen = false;
             StartCoroutine(Regenerate());
+            OnUnSuccessfulGeneration?.Invoke();
         }
+  
     }
+
     private IEnumerator Regenerate()
     {
         if (IsRegenerating)
@@ -239,7 +251,7 @@ public class DungeonGenerator : MonoBehaviour
                        continue;
                     }
 
-                    int randomLinkRoomIndex = Random.Range(0,SourcePool.Count);
+                    int randomLinkRoomIndex = UnityEngine.Random.Range(0,SourcePool.Count);
                     DungeonPart sourceRoom = SourcePool[randomLinkRoomIndex];
 
                     if (!sourceRoom.HasAvailableEntryPoint(out DungeonEntryPoint sourceEntryPoint))
@@ -254,7 +266,7 @@ public class DungeonGenerator : MonoBehaviour
                     GameObject newPartObject;
                     if (GenerateHallway)
                     {
-                        int randomHallwayIndex = Random.Range(0, HallwayPrefabs.Count);
+                        int randomHallwayIndex = UnityEngine.Random.Range(0, HallwayPrefabs.Count);
                         newPartObject = Instantiate(HallwayPrefabs[randomHallwayIndex]);
                     }
                     else
@@ -355,6 +367,10 @@ public class DungeonGenerator : MonoBehaviour
                         GenerateHallway = !GenerateHallway; // flip flop de sala / pasillo
 
                         newPartObject.transform.SetParent(this.transform,true);
+
+                        //levantamos los eventos de generacion
+                        GenerationEvents();
+                            
                         break; // salimos del loop para colocar una nueva pieza
                     }
                 }
@@ -526,10 +542,14 @@ public class DungeonGenerator : MonoBehaviour
 
 
 
+
                     // añadimos la sala especial al listado de salas generadas
                     generatedSpecialRooms.Add(NewPart);
                     NewPart.transform.SetParent(this.transform,true);
                     placementSuccessful = true;
+
+                    //levantamos los eventos de generacion
+                    GenerationEvents();
                     break;
                 }
 
@@ -689,6 +709,10 @@ public class DungeonGenerator : MonoBehaviour
                 BossPart.transform.SetParent(this.transform, true);
 
                 AllParts.Add(BossPart);
+
+                //levantamos los eventos de generacion
+                GenerationEvents();
+
                 break; // salimos del foreach 
             }
 
@@ -726,6 +750,9 @@ public class DungeonGenerator : MonoBehaviour
         BossRoom.FillEmptyPoints();
         print("Dungeon generation finished!");
         IsGenerated = true;
+
+        //levantamos los eventos de generacion
+        GenerationEvents();
 
     }
 
@@ -817,7 +844,7 @@ public class DungeonGenerator : MonoBehaviour
         while(RandomGeneratedRoom == null && RetryIndex < TotalTries) 
         {
             //seleccionamos una sala a testear.
-            int RandomLinkRoomIndex = Random.Range(0, generatedRooms.Count - 1);
+            int RandomLinkRoomIndex = UnityEngine.Random.Range(0, generatedRooms.Count - 1);
             DungeonPart RoomToTest = generatedRooms[RandomLinkRoomIndex];
 
             //chequeamos si la sala tiene espacios abiertos de coneccion
@@ -861,4 +888,20 @@ public class DungeonGenerator : MonoBehaviour
     public List<DungeonPart> GetRooms() => generatedRooms;
 
     public bool HasFinishedGeneration() => IsGenerated;
+
+
+    private void GenerationEvents()
+    {
+        var FullRoomTarget = RegularRoomCount + SpecialRoomCount + 1f;
+        var TotalRooms = generatedRooms.Count + SpecialRoomCount;
+
+        GenerationValue?.Invoke(((int)(TotalRooms / FullRoomTarget)));
+
+        if (IsGenerated)
+        {
+            OnSuccessfulGeneration?.Invoke();
+        }
+    }
+
+
 }

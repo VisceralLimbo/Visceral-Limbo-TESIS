@@ -9,6 +9,7 @@ public class LoadingScreenManager : MonoBehaviour
     // estatica para q mainmenu diga q escena cargar
     public static string sceneToLoad;
 
+
     [Header("UI References")]
     public GameObject loadingPanel;
     public Slider progressBar;
