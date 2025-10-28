@@ -895,7 +895,7 @@ public class DungeonGenerator : MonoBehaviour
         var FullRoomTarget = RegularRoomCount + SpecialRoomCount + 1f;
         var TotalRooms = generatedRooms.Count + SpecialRoomCount;
 
-        GenerationValue?.Invoke(((int)(TotalRooms / FullRoomTarget)));
+        GenerationValue?.Invoke((int)(TotalRooms / FullRoomTarget));
 
         if (IsGenerated)
         {

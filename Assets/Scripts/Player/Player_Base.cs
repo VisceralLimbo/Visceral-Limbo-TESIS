@@ -53,6 +53,8 @@ public class Player_Base : Visceral_Script
     // bool para el control de las habilidades
     public bool IsSkillActive { get; private set; } = false;
 
+    [SerializeField] private bool IsPlayerActive = true;
+
 
     void Start()
     {
@@ -89,11 +91,25 @@ public class Player_Base : Visceral_Script
             _originalUIRight2Pos = uiElementToMoveRight2.anchoredPosition;
 
         }
+
+        DungeonGenerator Generator = FindObjectOfType<DungeonGenerator>();
+        if(Generator != null)
+        {
+            SetPlayerInactive();
+            Generator.OnSuccessfulGeneration += SetPlayerActive;
+        }
+        else
+        {
+            IsPlayerActive = true;
+        }
+
+
     }
 
     private void Update()
     {
-        if (!IsAlive) return;
+        if (!IsAlive|| !IsPlayerActive) return;
+
 
         var Input = _Player_InputActions.Gameplay;
 
@@ -281,4 +297,6 @@ public class Player_Base : Visceral_Script
         IsSkillActive = state;
     }
 
+    public void SetPlayerActive() => IsPlayerActive = true;
+    public void SetPlayerInactive() => IsPlayerActive = false;
 }
