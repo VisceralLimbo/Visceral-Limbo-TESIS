@@ -68,7 +68,7 @@ public class BloodEchoesUI : MonoBehaviour
     private IEnumerator AnimateBloodEchoes(float startValue, float endValue)
     {
         float timer = 0f;
-        string echoesText = " Blood Echoes"; // el texto
+        string echoesText = " ECOS DE SANGRE"; // el texto
 
         while (timer < AnimationDuration)
         {

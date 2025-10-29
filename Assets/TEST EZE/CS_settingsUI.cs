@@ -164,9 +164,9 @@ public class CS_settingsUI : MonoBehaviour
     // textos
     public void UpdateTexts(float sensVal, float volVal, float shakeVal, float hitStopVal, TMP_Text sensT, TMP_Text shakeT, TMP_Text hitStopT, TMP_Text volT)
     {
-        if (sensT != null) sensT.text = "Sensibilidad: " + sensVal.ToString("F1");
-        if (shakeT != null) shakeT.text = "Camera Shake: " + shakeVal.ToString("F1");
-        if (hitStopT != null) hitStopT.text = "HitStop: " + hitStopVal.ToString("F1");
-        if (volT != null) volT.text = "Volume: " + volVal.ToString("F1");
+        if (sensT != null) sensT.text = "SENSIBILIDAD: " + sensVal.ToString("F1");
+        if (shakeT != null) shakeT.text = "MOVIMIENTO DE LA CAMARA: " + shakeVal.ToString("F1");
+        if (hitStopT != null) hitStopT.text = "PAUSA DE IMPACTO: " + hitStopVal.ToString("F1");
+        if (volT != null) volT.text = "VOLUMEN: " + volVal.ToString("F1");
     }
 }
