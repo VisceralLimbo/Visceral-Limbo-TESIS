@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class BloodEchoesFeedbackUI : MonoBehaviour
 {
@@ -45,12 +46,12 @@ public class BloodEchoesFeedbackUI : MonoBehaviour
         {
             // si es ganancia verde y +
             feedbackText.color = Color.green;
-            feedbackText.text = $"+{deltaAmount.ToString("F0")} Blood Echoes";
+            feedbackText.text = $"+{deltaAmount.ToString("F0")}";
         }
         else // si es gasto rojo y -
         {
             feedbackText.color = Color.red;
-            feedbackText.text = $"-{deltaAmount.ToString("F0")} Blood Echoes";
+            feedbackText.text = $"{deltaAmount.ToString("F0")}";
         }
 
         bloodechoes.gameObject.SetActive(true);
@@ -67,7 +68,7 @@ public class BloodEchoesFeedbackUI : MonoBehaviour
     }
 
     // desactivo dsp del tiempo
-    private System.Collections.IEnumerator HideFeedbackAfterDelay()
+    private IEnumerator HideFeedbackAfterDelay()
     {
         yield return new WaitForSeconds(DisplayDuration);
         if (feedbackText != null)

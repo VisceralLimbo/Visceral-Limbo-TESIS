@@ -7,6 +7,16 @@ public class BloodEchoesUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bloodEchoesText;
     private Coroutine animateCoroutine;
     private const float AnimationDuration = 0.5f; // lo q dura la anim
+    private const float TotalVisibilityTime = 2f; // tiempo del aumento o disminucion
+
+    private void Awake()
+    {
+        // apago texto
+        if (bloodEchoesText != null)
+        {
+            bloodEchoesText.gameObject.SetActive(false);
+        }
+    }
 
     private void OnEnable()
     {
@@ -24,24 +34,17 @@ public class BloodEchoesUI : MonoBehaviour
     {
         if (bloodEchoesText != null && deltaAmount != 0) // se anima si hay cambio
         {
+            //activo
+            bloodEchoesText.gameObject.SetActive(true);
+
             // paro animaciones anteriores por las dudas
             if (animateCoroutine != null)
             {
                 StopCoroutine(animateCoroutine);
             }
 
-            // saco primero si fue una suma o resta
-            string simbol;
-            if (deltaAmount > 0)
-            {
-                simbol = "+"; // si es >0 va un +
-            }
-            else
-            {
-                simbol = "-"; // si no entonces es <0 y va un - 
-            }
-
-            animateCoroutine = StartCoroutine(AnimateBloodEchoes(BloodEchoesManager.PreviousBloodEchoes,currentValue,simbol));
+            // ya no se manda simbolo aca
+            animateCoroutine = StartCoroutine(AnimateBloodEchoes(BloodEchoesManager.PreviousBloodEchoes,currentValue));
         }
         else if (bloodEchoesText != null)
         {
@@ -51,16 +54,18 @@ public class BloodEchoesUI : MonoBehaviour
     }
 
     // ahora para refreshear el valor actual
-    public void RefreshUI()
+    public void RefreshUI(bool shouldShow = true)
     {
         // actualizo instantaneo
         if (bloodEchoesText != null)
         {
+            // paso el shouldshow
+            bloodEchoesText.gameObject.SetActive(shouldShow);
             bloodEchoesText.text = BloodEchoesManager.BloodEchoes.ToString("F0");
         }
     }
 
-    private IEnumerator AnimateBloodEchoes(float startValue, float endValue, string simbol)
+    private IEnumerator AnimateBloodEchoes(float startValue, float endValue)
     {
         float timer = 0f;
         string echoesText = " Blood Echoes"; // el texto
@@ -71,22 +76,26 @@ public class BloodEchoesUI : MonoBehaviour
             float animatedValue = Mathf.Lerp(startValue, endValue, timer / AnimationDuration);
 
             // actualizo el texto
-            bloodEchoesText.text = simbol + Mathf.Round(animatedValue).ToString("F0") + echoesText;
+            bloodEchoesText.text = Mathf.Round(animatedValue).ToString("F0") + echoesText;
 
             timer += Time.deltaTime;
             yield return null;
         }
 
-        // solo va a el + si fue positivo 
-        string finalSimbol = (BloodEchoesManager.BloodEchoes > 0 && BloodEchoesManager.BloodEchoes > BloodEchoesManager.PreviousBloodEchoes) ? "+" : "";
+        // valor sin signo osea el total
+        bloodEchoesText.text = endValue.ToString("F0") + echoesText;
 
-        // si es 0 no va a haber signo
-        if (BloodEchoesManager.BloodEchoes == 0)
+        // tiempo extra para que quede en pantalla y no se vaya apenas se suma o resta
+        float extraWaitTime = TotalVisibilityTime - AnimationDuration;
+
+        // q no sea negatvio xd
+        if (extraWaitTime > 0)
         {
-            finalSimbol = "";
+            yield return new WaitForSeconds(extraWaitTime);
         }
 
-        bloodEchoesText.text = finalSimbol + endValue.ToString("F0") + echoesText;
+        // apago el texto cuando termine todo
+        bloodEchoesText.gameObject.SetActive(false);
         animateCoroutine = null;
     }
 }
