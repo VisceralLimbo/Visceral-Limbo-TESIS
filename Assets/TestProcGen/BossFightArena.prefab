@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1437956747774554769}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 867.97, y: 685.52, z: -1563.515}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
+  m_LocalPosition: {x: 867.966, y: 685.279, z: -1563.5166}
   m_LocalScale: {x: 4.0941, y: 4.0941, z: 4.0941}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5279981437609713517}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!114 &8842465829345469679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,7 +189,7 @@ MonoBehaviour:
   _Colliders:
   - {fileID: 3674524395671256024}
   DrawRoomCollider: 1
-  DrawEntryPoints: 0
+  DrawEntryPoints: 1
 --- !u!65 &3674524395671256024
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -223,7 +223,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a8b6cb27f13d0849a564d58f7f7234f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Spawners: []
+  Spawners:
+  - {fileID: 327328245997048086}
+  - {fileID: 3276443061578362111}
+  - {fileID: 7430840569131292807}
+  - {fileID: 9204688180840141474}
   roomTriggers: []
   _finishCombatDialogue: {fileID: 11400000, guid: 39db01f020d4f884f9fdd2d0b79c0567,
     type: 2}
@@ -255,10 +259,10 @@ MonoBehaviour:
   SpawnersSpent: 0
   StopThisManager: 0
   _ShouldOffsetSpawnTime: 0
-  _OffsetSpawnTime: 0
+  _OffsetSpawnTime: 0.1
   _StartingCombatScore: 0
   _AddExtraRequiredScore: 200
-  _BloodEchoesReward: 250
+  _BloodEchoesReward: 0
   trapsInThisRoom: []
   combatLights:
   - {fileID: 1323001603246933150}
