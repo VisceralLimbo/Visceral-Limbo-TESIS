@@ -163,29 +163,29 @@ public class Player_MeleeAttack : Visceral_Script
         if(value == Vector2.left)
         {
             CurrentCombo = AttackDictionary["Left"];
-            _AttackDir = new Vector3(1, 0, 0); // der (tiene mas sentido asi para mi pero si quieren pongan el menos adelante y le cambian direccion)
+            _AttackDir = new Vector3(-1, 0, 0); // der (tiene mas sentido asi para mi pero si quieren pongan el menos adelante y le cambian direccion)
         }
         else if(value == Vector2.right)
         {
             CurrentCombo = AttackDictionary["Right"];
-            _AttackDir = new Vector3(-1, 0, 0); // izq
+            _AttackDir = new Vector3(1, 0, 0); // izq
 
         }
         else if(value == Vector2.up)
         {
             CurrentCombo = AttackDictionary["Up"];
-            _AttackDir = new Vector3(0, -1, 0);  //abajo
+            _AttackDir = new Vector3(0, 1, 0);  //abajo
         }
         else if(value == Vector2.down)
         {
             CurrentCombo = AttackDictionary["Down"];
-            _AttackDir = new Vector3(0, 1, 0); // arriba
+            _AttackDir = new Vector3(0, -1, 0); // arriba
 
         }
         else
         {
             CurrentCombo = AttackDictionary["Left"];
-            _AttackDir = new Vector3(-1, 0, 0); // der
+            _AttackDir = new Vector3(1, 0, 0); // der
         }
     } // funcion de seleccion de animaciones de ataque
 
