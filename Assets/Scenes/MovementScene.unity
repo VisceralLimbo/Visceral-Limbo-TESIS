@@ -5710,11 +5710,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateMachine: {fileID: 0}
   Mytransitions:
-  - conditions: []
+  - conditions:
+    - ConditionName: InRange
+      Value: 0
+      IsResetAfterSwitch: 0
     _FromGO: {fileID: 1358247914}
     _ToGO: {fileID: 509780984}
-    _ShouldTransitionWithNoConditions: 1
-  _MinStateLifetime: 0.1
+    _ShouldTransitionWithNoConditions: 0
+  _MinStateLifetime: 3
+  Model: {fileID: 0}
   Target: {fileID: 0}
   movementSpeed: 10
   thinkingMain: {fileID: 509780986}
@@ -7281,9 +7285,9 @@ MonoBehaviour:
   _Model: {fileID: 1848195936}
   _RB: {fileID: 0}
   _TargetVelocity: {x: 0, y: 0, z: 0}
-  _IsActive: 0
+  _IsActive: 1
   _KillAllMovement: 0
-  _MovementSpeed: 10
+  _MovementSpeed: 5
   _MovementAccel: 10
   _MaxRotationSpeed: 360
   GotKnockbacked: 0
