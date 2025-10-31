@@ -159,8 +159,6 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         //usamos el valor de InwardAlignment para calcular la direccion del player
         float DotProduct = Vector3.Dot(InWardAlignment, DirectionToPlayer);
 
-        print("Dot product: " + DotProduct);
-
         if(roomSpawnerManager == null)
         {
             Debug.LogError("Visceral Error: Door Script no tiene asignado el room manager");
@@ -179,7 +177,6 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             roomSpawnerManager.AssignPlayerContext(Pcontext);
             roomSpawnerManager.StartRoomCombat();
             roomSpawnerManager.NotifyMinionDeath();
-            PlayerEnteredRoom = true;
             _LockDoor = true;
             
         }
@@ -188,7 +185,8 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     public void OnInteract(RayCastWrapper Detector)
     {
-        if (!_LockDoor && (roomSpawnerManager != null && roomSpawnerManager.ManagerStopped) || !_LockDoor && !PlayerEnteredRoom)
+        print("DoorInteracted");
+        if (!_LockDoor && (roomSpawnerManager != null && !roomSpawnerManager.ManagerStopped) || !_LockDoor)
         {
             // CALCULO DE SENTIDO DE PUERTA 
 
@@ -223,21 +221,25 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
                 _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
             }
             _IsOpen = true;
+
+            PlayerEvents.Interact();
         }
     }
 
     public void OnRayCastEnter(RayCastWrapper Detector = null)
     {
+        PlayerEvents.InteractSeeing();
    
     }
 
     public void OnRayCastStay(RayCastWrapper Detector = null)
     {
+        print("Player looking at door");
     }
  
     public void OnRayCastExit(RayCastWrapper Detector = null)
     {
-        
+        PlayerEvents.InteractStopSeeing();
     }
 
     private void UnlockDoor()

@@ -119,6 +119,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
     public void OnInteract(RayCastWrapper Detector)
     {
+        PlayerEvents.Interact();
         TryOpen();
     }
 
@@ -126,6 +127,8 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     {
         if (isOpened || interactTextObject == null || interactText == null) return;
         UpdateInteractText(true);
+
+        PlayerEvents.InteractSeeing();
     }
 
     public void OnRayCastStay(RayCastWrapper Detector = null)
@@ -148,6 +151,8 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         {
             bgCantAfford.gameObject.SetActive(false);
         }
+
+        PlayerEvents.InteractStopSeeing();
     }
 
     private void UpdateInteractText(bool activate)

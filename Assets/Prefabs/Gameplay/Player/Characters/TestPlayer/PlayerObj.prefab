@@ -510,10 +510,11 @@ MonoBehaviour:
   SphereRadius: 0.05
   _RaycastLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2047
   CastType: 0
   Debug_DrawGizmos: 1
   InteractKey: 103
+  IsLookingAtInteractible: 0
 --- !u!114 &8172274253568062085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,7 +522,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2619682033311675946}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 083134cc5d9d80740a13d6232cabeb4b, type: 3}
   m_Name: 
@@ -535,6 +536,7 @@ MonoBehaviour:
   CastType: 0
   Debug_DrawGizmos: 1
   InteractKey: 101
+  IsLookingAtInteractible: 0
 --- !u!1 &2740337010980209942
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,7 +750,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 388799400367065248}
-  _RagdollPrefab: {fileID: 0}
 --- !u!114 &3388075606135687695
 MonoBehaviour:
   m_ObjectHideFlags: 0
