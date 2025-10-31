@@ -12,7 +12,10 @@ public class RagdollBoneRetarget : MonoBehaviour
     private void Awake()
     {
         _RB= GetComponent<Rigidbody>();
-       
+        if(change == false)
+        {
+
+        }
     }
 
     private void OnEnable()

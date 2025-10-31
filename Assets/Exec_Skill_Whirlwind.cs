@@ -13,6 +13,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
     [SerializeField] float SkillDuration;
     [SerializeField] float Damage;
+    [SerializeField] float SkillKnockback;
     [SerializeField]  GameObject _effectHability;
 
     [SerializeField] SoundEmitter _SoundEmit;
@@ -28,7 +29,6 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
     public override void ActivateSkill()
     {
         _Anim.speed = SkillSpeedMod;
-        _Anim.runtimeAnimatorController = _ANCO;
         _Anim.SetTrigger("Exe_Skill1");
 
         Vector3 offsetPos = _UserContext.PlayerGameObject.transform.position + Vector3.up * 0.1f; // cambiá el 1.0f según lo alto que lo quieras
@@ -52,15 +52,17 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
     IEnumerator LockSkill()
     {
-        var Weapon = _UserContext.PlayerTransform.root.GetComponentInChildren<Visceral_WeaponBase>();
-        Weapon.Damage = Damage;
-        Weapon.Attacking();
+        //var Weapon = _UserContext.PlayerTransform.root.GetComponentInChildren<Visceral_WeaponBase>();
+        //Weapon.Damage = Damage;
+        //Weapon.Attacking();
+        _col.enabled = true;
+        _col.transform.position = _UserContext.PlayerTransform.position;
 
         yield return new WaitForSeconds(SkillDuration);
         _Anim.speed = 1.0f;
-        Weapon.StopAttacking();
+        //Weapon.StopAttacking();
         SoundManager.Instance.ReturnToPool(_SoundEmit);
-
+        _col.enabled = false;
         // desactivo bloqueo
         _PlayerBase.SetSkillActiveState(false);
 
@@ -69,13 +71,15 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
     private void OnTriggerEnter(Collider other)
     {
+        print("Detected Enemy");
+
         if (other.name == _UserContext.name) return;
         if (other.gameObject == _UserContext.PlayerGameObject) return;
         if (other.GetComponent<PlayerContext>() == _UserContext) return;
 
         if (other.TryGetComponent(out Health_Component HPComp))
         {
-            Vector3 dir = other.gameObject.transform.position - this.transform.position;
+            Vector3 dir = other.gameObject.transform.position - _UserContext.PlayerTransform.transform.position;
 
             DamageScore DamageDT = new DamageScore();
             DamageDT.Attacker = _UserContext;
@@ -86,7 +90,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
             DamageDT.AddTag(ScoreFlags.Skill1Kill);
 
             if (HPComp.Context == null) { HPComp.SimpleDamage(Damage); return; }
-            HPComp.TakeDamageWithKnockback(dir.normalized, 5, DamageDT);
+            HPComp.TakeDamageWithKnockback(dir.normalized,SkillKnockback , DamageDT);
 
         }
     }

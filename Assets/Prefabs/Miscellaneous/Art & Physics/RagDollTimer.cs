@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RagDollTimer : MonoBehaviour
 {
+    [SerializeField] AnimatorHandler _AnimHandler;
+    [SerializeField] Health_Component _Hp;
     [SerializeField] float _RagDollDuration;
     [SerializeField] Rigidbody _RootRigid;
     [SerializeField] RagdollBoneRetarget[] _ragdollBoneRetargeters;
@@ -15,14 +17,36 @@ public class RagDollTimer : MonoBehaviour
     private void Start()
     {
         _ragdollBoneRetargeters = GetComponentsInChildren<RagdollBoneRetarget>(true);
-        StartRagdolling();
+
+        if(_AnimHandler == null)
+        {
+            _AnimHandler = GetComponent<AnimatorHandler>();
+            if(_AnimHandler == null)
+            {
+                _AnimHandler  = GetComponentInChildren<AnimatorHandler>();
+            }
+        }
+
+        if(_Hp == null)
+        {
+            _Hp = GetComponentInParent<Health_Component>();
+
+        }
+
+        if(_Hp != null)
+        {
+            _Hp.OnDeath += StartRagdolling;
+        }
     }
 
     private void StartRagdolling()
     {
-       
-
+        this.transform.parent = null;
         StartCoroutine(DestroySelf());
+
+        _AnimHandler.TryGetAnimator(AnimatorKey, out Animator Anim);
+        Anim.speed = 1;
+        Anim.enabled = false;
 
         if (_ragdollBoneRetargeters.Length > 0)
         {
