@@ -4299,6 +4299,9 @@ MonoBehaviour:
   _MovementSpeed: 10
   _MovementAccel: 10
   _MaxRotationSpeed: 360
+  GotKnockbacked: 0
+  _KnockbackDecay: 10
+  _KnockbackVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &790518200079803162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4393,13 +4396,11 @@ MonoBehaviour:
     IsFrequent: 0
   CurrentHealth: 50
   MaxHealth: 50
-  _RB: {fileID: 0}
+  _RB: {fileID: 3048824881661905011}
   DestroyOnDeath: 0
   DesactivateOnDeath: 1
   Died: 0
   _Context: {fileID: 4654570009590822600}
-  _RagdollPrefab: {fileID: 8215694608737253297, guid: 57feb22288aaac24fb6ee54834c20ab6,
-    type: 3}
 --- !u!1 &8132487428885576320
 GameObject:
   m_ObjectHideFlags: 0
@@ -4569,6 +4570,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5372180300158302468}
+  - component: {fileID: 4775146000818692725}
   m_Layer: 7
   m_Name: Ragdoll
   m_TagString: Untagged
@@ -4592,6 +4594,24 @@ Transform:
   - {fileID: 6499470882107032277}
   m_Father: {fileID: 1031295680299478082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4775146000818692725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8678294708374041245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cea55b9e6a3cec545a429fd6762105a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _AnimHandler: {fileID: 790518200079803162}
+  _Hp: {fileID: 1817444877513855909}
+  _RagDollDuration: 10
+  _RootRigid: {fileID: 313638280125663436}
+  _ragdollBoneRetargeters: []
+  AnimatorKey: Wretched
 --- !u!1 &8724511471017686902
 GameObject:
   m_ObjectHideFlags: 0

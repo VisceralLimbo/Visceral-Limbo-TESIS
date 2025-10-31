@@ -17,7 +17,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [SerializeField] float _MovementSpeed;
     [SerializeField] float _MovementAccel;
     [SerializeField] float _MaxRotationSpeed;
+
+    [Header("Knockback Config")]
     [SerializeField] bool GotKnockbacked;
+    [SerializeField] float _KnockbackDecay;
+    [SerializeField] Vector3 _KnockbackVelocity;
+    [SerializeField] float _KnockbackResistance;
 
     Vector3 _AddExternalVelocity;
 
@@ -120,8 +125,26 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
             return;
         }
 
+        //Si tenemos un knockback aplicado, lo aplicamos y cancelamos movimiento
+        if(_KnockbackVelocity.sqrMagnitude > 0.1f)
+        {
+            currentVelocity = _KnockbackVelocity;
+
+            if (!_KCC.GroundingStatus.IsStableOnGround)
+            {
+                currentVelocity += currentVelocity * (deltaTime * TimeDilationManager.GlobalTimeScale);
+            }
+
+            _KnockbackVelocity = Vector3.MoveTowards
+                (
+                    current: _KnockbackVelocity,
+                    target: Vector3.zero,
+                    maxDistanceDelta: _KnockbackDecay * (deltaTime * TimeDilationManager.GlobalTimeScale)
+
+                );
+        }
         // we are on stable ground
-        if (_KCC.GroundingStatus.IsStableOnGround)
+        else if (_KCC.GroundingStatus.IsStableOnGround)
         {
             
 
@@ -146,8 +169,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         else
         {
             // we are falling
-            currentVelocity = new Vector3(Physics.gravity.x, Physics.gravity.y, Physics.gravity.z);
-            print("im free falling");
+            currentVelocity += Physics.gravity * (TimeDilationManager.GlobalTimeScale * deltaTime);
         }
 
 
@@ -266,7 +288,9 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     public void ApplyKnockBack(Vector3 KnockbackDir, float Force)
     {
-        ApplyExternalForce(KnockbackDir, Force);
+        float FinalFloat = Force - _KnockbackResistance;
+        if (FinalFloat <= 0f) FinalFloat = 0f;
+        _KnockbackVelocity = KnockbackDir * FinalFloat;
         GotKnockbacked = true;
     }
 

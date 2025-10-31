@@ -20,7 +20,7 @@ public class Health_Component : Visceral_Component
 
     private Coroutine bleedCoroutine;
 
-    [SerializeField] GameObject _RagdollPrefab;
+    //[SerializeField] GameObject _RagdollPrefab;
 
     private void Start()
     {
@@ -109,39 +109,45 @@ public class Health_Component : Visceral_Component
 
         if (CurrentHealth <= 0f && _Context != null && Score != null && Score.Attacker != null)
         {
-            Died = true;
             DamageScore FinalScore = Score != null
                 ? DamageScoreBuilder.Complete(Score, _Context, CurrentHealth, MaxHealth) : null;
 
             if (ScoreManager.Instance != null)
                 ScoreManager.Instance.ProcessKill(FinalScore);
             OnDeath?.Invoke();
-
-
-            if (_RagdollPrefab != null)
-            {
-                Instantiate(_RagdollPrefab, this.transform.position, this.transform.rotation);
-            }
-
-            if (DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
-            if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);
+            StartCoroutine(DeathCoroutine());
         }
         else if (CurrentHealth <= 0f)
         {
             OnDeath?.Invoke();
-
-            Died = true;
-            if (_Context == null)
-            {
-                if (DesactivateOnDeath) gameObject.SetActive(false);
-                if (DestroyOnDeath) Destroy(gameObject);
-            }
-            else
-            {
-                if (DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
-                if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);
-            }
+            StartCoroutine(DeathCoroutine());
         }
+    }
+
+    /// <summary>
+    /// empujamos la desactivacion del death HASTA el end del frame
+    /// de esta manera le dejamos tiempo a que todos los scripts necesarios puedan procesar
+    /// la subscripcion del death.
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator DeathCoroutine()
+    {
+
+        Died = true;
+
+        yield return new WaitForEndOfFrame();
+        if (_Context == null)
+        {
+            if (DesactivateOnDeath) gameObject.SetActive(false);
+            if (DestroyOnDeath) Destroy(gameObject);
+        }
+        else
+        {
+            if (DesactivateOnDeath) _Context.PlayerGameObject.SetActive(false);
+            if (DestroyOnDeath) Destroy(_Context.PlayerGameObject);
+        }
+
+        yield return null;
     }
 
 
