@@ -1615,6 +1615,7 @@ GameObject:
   - component: {fileID: 4417049650179811554}
   - component: {fileID: 2719510382933356831}
   - component: {fileID: 8577399524032963587}
+  - component: {fileID: 3066669182626761229}
   m_Layer: 6
   m_Name: RootCamera
   m_TagString: MainCamera
@@ -1747,7 +1748,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullscreenMat: {fileID: 2100000, guid: 7aa46986c35edb54a817572c37ab2175, type: 2}
   fadeDuration: 1
-  windEffectMat: {fileID: 0}
+  windEffectMat: {fileID: 2100000, guid: 9926ece05ba3be5439b3cebbc351189b, type: 2}
+--- !u!114 &3066669182626761229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4847287270814997606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6ff15f1a225e049b5849dfdfef9479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitStrength: {x: 0.4, y: 0.03, z: 0.7}
+  totalDuration: 0.37
+  easeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.012187958
+      value: 0.63305664
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.97283936
+      value: 0.88331985
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5006734972074116238
 GameObject:
   m_ObjectHideFlags: 0
