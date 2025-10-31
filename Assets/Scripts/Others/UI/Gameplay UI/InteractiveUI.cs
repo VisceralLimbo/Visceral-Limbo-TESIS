@@ -10,8 +10,6 @@ public class InteractiveUI : MonoBehaviour
     {
         PlayerEvents.OnInteractSeeing += ActivateInteractUI;
         PlayerEvents.OnInteractStopSeeing += DeactivateInteractUI;
-
-
     }
 
 
@@ -23,6 +21,7 @@ public class InteractiveUI : MonoBehaviour
 
     private void ActivateInteractUI()
     {
+        print("UI activating");
         foreach(var element in _UI_Elements)
         {
             element.gameObject.SetActive(true);
@@ -31,6 +30,7 @@ public class InteractiveUI : MonoBehaviour
 
     private void DeactivateInteractUI()
     {
+        print("UI Deactivating");
         foreach (var element in _UI_Elements)
         {
             element.gameObject.SetActive(false);

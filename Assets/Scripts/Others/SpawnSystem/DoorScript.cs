@@ -228,13 +228,11 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     public void OnRayCastEnter(RayCastWrapper Detector = null)
     {
-        PlayerEvents.InteractSeeing();
-   
+            PlayerEvents.InteractSeeing();   
     }
 
     public void OnRayCastStay(RayCastWrapper Detector = null)
     {
-        print("Player looking at door");
     }
  
     public void OnRayCastExit(RayCastWrapper Detector = null)

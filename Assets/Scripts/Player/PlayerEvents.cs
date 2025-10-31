@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public static class PlayerEvents
 {
@@ -18,9 +19,22 @@ public static class PlayerEvents
     public static void Parry() => OnParry?.Invoke();
     public static void Whirlwind() => OnWhirlwind?.Invoke();
 
-    public static void Interact() => OnInteract?.Invoke();
+    public static void Interact()
+    {
+        OnInteract?.Invoke();
+      
+    }
 
-    public static void InteractSeeing() => OnInteractSeeing?.Invoke();
+    public static void InteractSeeing()
+    {
+        OnInteractSeeing?.Invoke();
 
-    public static void InteractStopSeeing() => OnInteractStopSeeing?.Invoke();
+    }
+
+
+    public static void InteractStopSeeing() 
+    {
+        OnInteractStopSeeing?.Invoke();
+      
+    }
 }
