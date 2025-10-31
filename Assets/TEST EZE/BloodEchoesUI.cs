@@ -18,6 +18,15 @@ public class BloodEchoesUI : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        // Para asegurarse que aparezcan desactivados al inicio del juego
+        if (bloodEchoesText != null)
+        {
+            bloodEchoesText.gameObject.SetActive(false);
+        }
+    }
+
     private void OnEnable()
     {
         BloodEchoesManager.OnBloodEchoesChanged += UpdateUI;
