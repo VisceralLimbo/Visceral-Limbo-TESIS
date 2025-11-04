@@ -169,7 +169,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!54 &26468421
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -578,7 +577,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!1 &104896530
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,7 +860,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!1001 &164861268
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1209,7 +1206,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!114 &282020965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1794,7 +1790,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!1 &360548702
 GameObject:
   m_ObjectHideFlags: 0
@@ -2172,13 +2167,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 509780984}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 381.1883, y: 51.25777, z: 247.25}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1358247916}
-  m_Father: {fileID: 0}
+  - {fileID: 2010972972}
+  m_Father: {fileID: 1481393780}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &509780986
 MonoBehaviour:
@@ -2195,8 +2191,36 @@ MonoBehaviour:
   stateMachine: {fileID: 0}
   Mytransitions:
   - conditions:
-    - ConditionName: InRange
-      Value: 0
+    - ConditionName: Attack_Melee1
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 509780984}
+    _ToGO: {fileID: 934781013}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Attack_Melee2
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 509780984}
+    _ToGO: {fileID: 1146229931}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Attack_Range1
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 509780984}
+    _ToGO: {fileID: 1466747815}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Attack_Range2
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 509780984}
+    _ToGO: {fileID: 1188941700}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: ShouldMove
+      Value: 1
       IsResetAfterSwitch: 0
     _FromGO: {fileID: 509780984}
     _ToGO: {fileID: 1358247914}
@@ -2204,10 +2228,19 @@ MonoBehaviour:
   _MinStateLifetime: 0
   Target: {fileID: 0}
   Model: {fileID: 1848195936}
-  MinimumAttackRange: 6
+  _MinimumAttackRange: 6
   Energy: 0
   MaxEnergy: 6
   EnergyRefillRate: 1
+  _AIResponsiveness: 0.2
+  _AIThoughPulse: 0
+  _CanMakeDecision: 0
+  MeleeAttacks:
+  - {fileID: 934781015}
+  - {fileID: 1146229933}
+  RangeAttacks:
+  - {fileID: 1466747817}
+  - {fileID: 1188941701}
 --- !u!1 &549347063
 GameObject:
   m_ObjectHideFlags: 0
@@ -3491,6 +3524,62 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 507628e2ef3abbb4d8f277fe932eb0e1, type: 3}
+--- !u!1 &934781013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 934781014}
+  - component: {fileID: 934781015}
+  m_Layer: 0
+  m_Name: Attack - melee1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &934781014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934781013}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2010972972}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &934781015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934781013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965d170a44edad142af357493f4ae7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
+  Mytransitions:
+  - conditions: []
+    _FromGO: {fileID: 934781013}
+    _ToGO: {fileID: 509780984}
+    _ShouldTransitionWithNoConditions: 1
+  _MinStateLifetime: 0
+  TransitionKey: Attack_Melee1
+  _Main_State: {fileID: 0}
+  EnergyCost: 1
+  TimingDuration: 3
+  CanExit: 0
 --- !u!1001 &945451967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4798,6 +4887,62 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5d9dc210aa5de74bab1f5d0ca34adeb, type: 3}
+--- !u!1 &1146229931
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1146229932}
+  - component: {fileID: 1146229933}
+  m_Layer: 0
+  m_Name: attack - melee2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1146229932
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146229931}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2010972972}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1146229933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146229931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965d170a44edad142af357493f4ae7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
+  Mytransitions:
+  - conditions: []
+    _FromGO: {fileID: 1146229931}
+    _ToGO: {fileID: 509780984}
+    _ShouldTransitionWithNoConditions: 1
+  _MinStateLifetime: 1
+  TransitionKey: Attack_Melee2
+  _Main_State: {fileID: 0}
+  EnergyCost: 2
+  TimingDuration: 2.5
+  CanExit: 0
 --- !u!1 &1179199913
 GameObject:
   m_ObjectHideFlags: 0
@@ -4905,6 +5050,62 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179199913}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1188941700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1188941702}
+  - component: {fileID: 1188941701}
+  m_Layer: 0
+  m_Name: attack - Range2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1188941701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188941700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965d170a44edad142af357493f4ae7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
+  Mytransitions:
+  - conditions: []
+    _FromGO: {fileID: 1188941700}
+    _ToGO: {fileID: 509780984}
+    _ShouldTransitionWithNoConditions: 1
+  _MinStateLifetime: 1
+  TransitionKey: Attack_Range2
+  _Main_State: {fileID: 0}
+  EnergyCost: 3
+  TimingDuration: 5
+  CanExit: 0
+--- !u!4 &1188941702
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188941700}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2010972972}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1207906190
 GameObject:
   m_ObjectHideFlags: 0
@@ -5137,7 +5338,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!114 &1287888136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5499,7 +5699,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!114 &1316342254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5712,7 +5911,7 @@ MonoBehaviour:
   Mytransitions:
   - conditions:
     - ConditionName: InRange
-      Value: 0
+      Value: 1
       IsResetAfterSwitch: 0
     _FromGO: {fileID: 1358247914}
     _ToGO: {fileID: 509780984}
@@ -5805,7 +6004,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!114 &1381973361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6162,6 +6360,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1466747815
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1466747816}
+  - component: {fileID: 1466747817}
+  m_Layer: 0
+  m_Name: attack - Range1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1466747816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466747815}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2010972972}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1466747817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466747815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965d170a44edad142af357493f4ae7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
+  Mytransitions:
+  - conditions: []
+    _FromGO: {fileID: 1466747815}
+    _ToGO: {fileID: 509780984}
+    _ShouldTransitionWithNoConditions: 1
+  _MinStateLifetime: 1
+  TransitionKey: Attack_Range1
+  _Main_State: {fileID: 0}
+  EnergyCost: 1
+  TimingDuration: 2.5
+  CanExit: 0
 --- !u!1 &1481393777
 GameObject:
   m_ObjectHideFlags: 0
@@ -6214,6 +6468,10 @@ MonoBehaviour:
   _States:
   - {fileID: 509780986}
   - {fileID: 1358247915}
+  - {fileID: 934781015}
+  - {fileID: 1146229933}
+  - {fileID: 1466747817}
+  - {fileID: 1188941701}
   _StartingState: {fileID: 509780986}
   _CurrentState: {fileID: 0}
   _LastState: {fileID: 0}
@@ -6221,6 +6479,21 @@ MonoBehaviour:
   - ConditionName: InRange
     Value: 0
     IsResetAfterSwitch: 0
+  - ConditionName: ShouldMove
+    Value: 0
+    IsResetAfterSwitch: 0
+  - ConditionName: Attack_Melee1
+    Value: 0
+    IsResetAfterSwitch: 1
+  - ConditionName: Attack_Melee2
+    Value: 0
+    IsResetAfterSwitch: 1
+  - ConditionName: Attack_Range1
+    Value: 0
+    IsResetAfterSwitch: 1
+  - ConditionName: Attack_Range2
+    Value: 0
+    IsResetAfterSwitch: 1
   _HPComp: {fileID: 0}
 --- !u!4 &1481393780
 Transform:
@@ -6235,6 +6508,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 509780985}
   - {fileID: 1848195939}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6531,7 +6805,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!114 &1625787947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6929,7 +7202,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!114 &1799041359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7268,7 +7540,6 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
-  _RagdollPrefab: {fileID: 0}
 --- !u!114 &1848195941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7291,6 +7562,9 @@ MonoBehaviour:
   _MovementAccel: 10
   _MaxRotationSpeed: 360
   GotKnockbacked: 0
+  _KnockbackDecay: 0
+  _KnockbackVelocity: {x: 0, y: 0, z: 0}
+  _KnockbackResistance: 0
 --- !u!23 &1848195942
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7832,6 +8106,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1753409033}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &2010972971
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2010972972}
+  m_Layer: 0
+  m_Name: Attack States
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2010972972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010972971}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 934781014}
+  - {fileID: 1146229932}
+  - {fileID: 1466747816}
+  - {fileID: 1188941702}
+  m_Father: {fileID: 509780985}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2030065492
 GameObject:
   m_ObjectHideFlags: 0
@@ -9908,4 +10217,3 @@ SceneRoots:
   - {fileID: 164861268}
   - {fileID: 945451967}
   - {fileID: 1481393780}
-  - {fileID: 509780985}

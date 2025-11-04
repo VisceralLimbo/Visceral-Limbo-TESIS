@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Corpus_Thinking_Main_State : BaseState
 {
     [Header("References")]
     [SerializeField] Transform Target;
     [SerializeField] GameObject Model;
+    [SerializeField] IMovementStrategy _MovementStrategy;
 
     [Header("Variables")]
     [Tooltip("Distancia minima para realizar un ataque, recubre tanto melee como rango")]
-    [SerializeField] float MinimumAttackRange;
+    [SerializeField] float _MinimumAttackRange;
+    public float MinimumAttackRange { get { return _MinimumAttackRange; } }
 
     [Tooltip("Energia del Corpus, determina cuantas acciones puede hacer")]
     [SerializeField] int Energy;
@@ -21,17 +24,20 @@ public class Corpus_Thinking_Main_State : BaseState
     [Tooltip("Regeneracion del Corpus en segundos")]
     [SerializeField] float EnergyRefillRate;
 
+    [Tooltip("Timer interno para determinar que tan responsiva la IA es")]
+    [SerializeField] float _AIResponsiveness;
+    [SerializeField] float _AIThoughPulse;
+    [SerializeField] bool _CanMakeDecision;
+
     private bool _StopRegeneratingEnergy;
+
+    [SerializeField] BaseState[] MeleeAttacks;
+    [SerializeField] BaseState[] RangeAttacks;
+
+    private List<IStateEnergyCost> AttacksCosts = new List<IStateEnergyCost>();
+    private List<IStateEnergyCost> RangeAttackCosts = new List<IStateEnergyCost>();
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
-        if(Vector3.Distance(Target.transform.position,Model.transform.position) <= MinimumAttackRange)
-        {
-            stateMachine.SetGlobalCondition("InRange", true);
-        }
-        else
-        {
-            stateMachine.SetGlobalCondition("InRange", false);
-        }
         return base.EvaluateTransitions(GlobalParams, out TO);
     }
 
@@ -51,6 +57,9 @@ public class Corpus_Thinking_Main_State : BaseState
         {
             StartCoroutine(EnergyCoroutine());
         }
+
+        _AIThoughPulse = 0;
+        _CanMakeDecision = false;
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -65,6 +74,25 @@ public class Corpus_Thinking_Main_State : BaseState
     {
         Target = FindObjectOfType<Player_Movement>().transform;
         stateMachine = CTX;
+
+        foreach(BaseState melee in MeleeAttacks)
+        {
+            if(melee.TryGetComponent(out IStateEnergyCost EnerCost))
+            {
+                AttacksCosts.Add(EnerCost);
+            }
+            
+        }
+
+        foreach (BaseState Range in RangeAttacks)
+        {
+            if(Range.TryGetComponent(out IStateEnergyCost Enerc))
+            {
+                RangeAttackCosts.Add(Enerc);
+            }
+        }
+
+        _MovementStrategy = transform.parent.GetComponentInChildren<IMovementStrategy>();
     }
 
     float EnergyPulse = 0;
@@ -75,17 +103,59 @@ public class Corpus_Thinking_Main_State : BaseState
             return;
         }
 
+        if (!_CanMakeDecision)
+        {
+            if (_AIThoughPulse <= _AIResponsiveness)
+            {
+                _AIThoughPulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+            }
+            else
+            {
+                _CanMakeDecision = true;
+            }
+        }
+       
+        
+
+
         // PASO 1: Calcular la distancia al jugador del Corpus
         float DistanceToPlayer = Vector3.Distance(Target.transform.position,Model.transform.position);
-        
-        // PASO 2: Determinar si el Corpus esta a distancia como para realizar melee.
-        if(DistanceToPlayer <= MinimumAttackRange && Energy > 0)
+
+
+        if (DistanceToPlayer <= MinimumAttackRange)
         {
-            // llamar ataque
-            return;
+            stateMachine.SetGlobalCondition("InRange", true);
         }
-        else if(DistanceToPlayer <= MinimumAttackRange && Energy <= 0)
+        else
         {
+            stateMachine.SetGlobalCondition("InRange", false);
+        }
+
+
+        // PASO 2: Determinar si puedo hacer un ataque
+        if(Energy > 0)
+        {
+            var NextAttack = ChooseNextAttack(out IStateEnergyCost EnerCost);
+
+            print("choosing next attack");
+
+            if(NextAttack != null)
+            {
+                stateMachine.SetGlobalCondition("ShouldMove", false);
+
+                stateMachine.SetGlobalCondition(EnerCost.GetTransitionKey(), true);
+
+                _StopRegeneratingEnergy = true;
+                _CanMakeDecision = false;
+
+                print("Next attack is");
+                return;
+            }
+        }
+        else if(DistanceToPlayer <= MinimumAttackRange)
+        {
+            stateMachine.SetGlobalCondition("ShouldMove", false);
+            _CanMakeDecision = false;
             // vamos a idle
             return;
         }
@@ -93,17 +163,17 @@ public class Corpus_Thinking_Main_State : BaseState
         // PASO 3: Determinar si vamos a Idle o movernos
         if(Target != null)
         {
-            //movernos
+            stateMachine.SetGlobalCondition("ShouldMove", true);
+            _CanMakeDecision = false;
             return;
         }
         else
         {
+            stateMachine.SetGlobalCondition("ShouldMove", false);
+            _CanMakeDecision = false;
             // idle
             return;
         }
-       
-
-
     }
 
     private IEnumerator EnergyCoroutine()
@@ -125,10 +195,64 @@ public class Corpus_Thinking_Main_State : BaseState
         }
     }
 
+
+    private BaseState ChooseNextAttack(out IStateEnergyCost IEnegyCost)
+    {
+        BaseState ChosenAttack = null;
+
+        IStateEnergyCost[] PossibleAttacks = null;
+        
+        // paso 1) determinar que ataques posibles puedo hacer
+        if(stateMachine.GetGlobalCondition("InRange") == true)
+        {
+            PossibleAttacks = AttacksCosts.ToArray();
+        }
+        else
+        {
+            PossibleAttacks = RangeAttackCosts.ToArray();
+        }
+
+        //paso 2) Determinar que ataques puedo comprar con mi energia actual
+
+        IStateEnergyCost[] ViableAttacks = PossibleAttacks.Where(x => Energy - x.GetCost() >= 0).ToArray();
+
+        // CATCH! no hay ataques viables
+        if(ViableAttacks.Length <= 0)
+        {
+            IEnegyCost = null;
+            return null;
+        }
+
+        // paso 3) elegimos un ataque random
+
+        int RandomAttack = Random.Range(0,ViableAttacks.Length);
+
+        
+        ChosenAttack = ViableAttacks[RandomAttack].GetState();
+
+        if(ChosenAttack != null)
+        {
+            Energy -= ViableAttacks[RandomAttack].GetCost();
+            IEnegyCost = ViableAttacks[RandomAttack];
+            return ChosenAttack;
+        }
+        else
+        {
+            IEnegyCost = null;
+            return null;
+        }
+    } 
+
+
     public Transform GetTargetTransform { get { return Target.transform; } }
 
     public float GetCurrentEnergy { get { return Energy; } }
 
     public GameObject GetModel { get { return Model; } }
+
+    public void KillMovement()
+    {
+        _MovementStrategy.KillAllMovement();
+    }
 
 }

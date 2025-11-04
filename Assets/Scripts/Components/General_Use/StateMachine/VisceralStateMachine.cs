@@ -139,6 +139,8 @@ public class VisceralStateMachine : MonoBehaviour
             var changed = Conditions.Find((X)=> X.ConditionName == conditionName);
             changed.Value = value;
 #endif
+
+
         }
         else
         {
@@ -173,7 +175,21 @@ public class VisceralStateMachine : MonoBehaviour
                 {
                     _GlobalConditions[condition.ConditionName] = condition.Value;
                     print("ResetCondition" + condition.ConditionName);
+
+
+#if UNITY_EDITOR
+                    //delete in unity build
+
+                    // Resetea el valor del INSPECTOR
+                    var changed = Conditions.Find((X) => X.ConditionName == condition.ConditionName);
+                    if (changed != null) // Pequeña seguridad extra
+                    {
+                        changed.Value = condition.Value;
+                    }
+#endif
                 }
+
+
             } 
         }
 

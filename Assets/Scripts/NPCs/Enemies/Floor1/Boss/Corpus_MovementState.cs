@@ -59,5 +59,18 @@ public class Corpus_MovementState : BaseState
 
         MovementStrategy.UpdateVelocity(Dir);
 
+        float DistanceToPlayer = Vector3.Distance(Target.transform.position, Model.transform.position);
+
+
+
+        if (DistanceToPlayer <= thinkingMain.MinimumAttackRange)
+        {
+            stateMachine.SetGlobalCondition("InRange", true);
+        }
+        else
+        {
+            stateMachine.SetGlobalCondition("InRange", false);
+        }
+
     }
 }

@@ -227,7 +227,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     }
 
     public void OnRayCastEnter(RayCastWrapper Detector = null)
-    {
+    {  
             PlayerEvents.InteractSeeing();   
     }
 
