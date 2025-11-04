@@ -114,67 +114,71 @@ public class Corpus_Thinking_Main_State : BaseState
                 _CanMakeDecision = true;
             }
         }
-       
-        
 
-
-        // PASO 1: Calcular la distancia al jugador del Corpus
-        float DistanceToPlayer = Vector3.Distance(Target.transform.position,Model.transform.position);
-
-
-        if (DistanceToPlayer <= MinimumAttackRange)
+        // meti adentro todo dentro del if
+        if (_CanMakeDecision) //  se dice si esta
         {
-            stateMachine.SetGlobalCondition("InRange", true);
-        }
-        else
-        {
-            stateMachine.SetGlobalCondition("InRange", false);
-        }
+            _AIThoughPulse = 0; // reset al pulse y hago lo q ya estaba
+
+            // PASO 1: Calcular la distancia al jugador del Corpus
+            float DistanceToPlayer = Vector3.Distance(Target.transform.position,Model.transform.position);
 
 
-        // PASO 2: Determinar si puedo hacer un ataque
-        if(Energy > 0)
-        {
-            var NextAttack = ChooseNextAttack(out IStateEnergyCost EnerCost);
+            if (DistanceToPlayer <= MinimumAttackRange)
+            {
+                stateMachine.SetGlobalCondition("InRange", true);
+            }
+            else
+            {
+                stateMachine.SetGlobalCondition("InRange", false);
+            }
 
-            print("choosing next attack");
 
-            if(NextAttack != null)
+            // PASO 2: Determinar si puedo hacer un ataque
+            if (Energy > 0)
+            {
+                var NextAttack = ChooseNextAttack(out IStateEnergyCost EnerCost);
+
+                print("choosing next attack");
+
+                if (NextAttack != null)
+                {
+                    stateMachine.SetGlobalCondition("ShouldMove", false);
+
+                    stateMachine.SetGlobalCondition(EnerCost.GetTransitionKey(), true);
+
+                    _StopRegeneratingEnergy = true;
+                    _CanMakeDecision = false; // Bloqueamos la decisión mientras se ejecuta el ataque
+
+                    print("Next attack is");
+                    return;
+                }
+            }
+            else if (DistanceToPlayer <= MinimumAttackRange)
             {
                 stateMachine.SetGlobalCondition("ShouldMove", false);
+                _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
+                                          // vamos a idle
+                return;
+            }
 
-                stateMachine.SetGlobalCondition(EnerCost.GetTransitionKey(), true);
-
-                _StopRegeneratingEnergy = true;
-                _CanMakeDecision = false;
-
-                print("Next attack is");
+            // PASO 3: Determinar si vamos a Idle o movernos
+            if (Target != null)
+            {
+                stateMachine.SetGlobalCondition("ShouldMove", true);
+                _CanMakeDecision = false; // Bloqueamos la decisión mientras se ejecuta el movimiento
+                return;
+            }
+            else
+            {
+                stateMachine.SetGlobalCondition("ShouldMove", false);
+                _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
+                                          // idle
                 return;
             }
         }
-        else if(DistanceToPlayer <= MinimumAttackRange)
-        {
-            stateMachine.SetGlobalCondition("ShouldMove", false);
-            _CanMakeDecision = false;
-            // vamos a idle
-            return;
-        }
-
-        // PASO 3: Determinar si vamos a Idle o movernos
-        if(Target != null)
-        {
-            stateMachine.SetGlobalCondition("ShouldMove", true);
-            _CanMakeDecision = false;
-            return;
-        }
-        else
-        {
-            stateMachine.SetGlobalCondition("ShouldMove", false);
-            _CanMakeDecision = false;
-            // idle
-            return;
-        }
     }
+
 
     private IEnumerator EnergyCoroutine()
     {

@@ -32,6 +32,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     public override void OnEnter(VisceralStateMachine CTX)
     {
         print("Starting Hammer ATTACK");
+        print("Performing hammer swings, woosh!" + this.name); // el print estaba en cada tick lo pase aca
         base.OnEnter(CTX);
         CanExit = false;
         _Main_State.KillMovement();
@@ -54,7 +55,6 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     {
         if(pulse < TimingDuration) 
         {
-            print("Performing hammer swings, woosh!" + this.name);
             pulse += Time.deltaTime;
         }
         else
