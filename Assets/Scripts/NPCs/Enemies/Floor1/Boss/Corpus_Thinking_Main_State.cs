@@ -53,7 +53,7 @@ public class Corpus_Thinking_Main_State : BaseState
             Target = FindObjectOfType<Player_Movement>().transform;
         }
 
-        if(Energy < MaxEnergy)
+        if(Energy < MaxEnergy && !_StopRegeneratingEnergy)
         {
             StartCoroutine(EnergyCoroutine());
         }
@@ -111,6 +111,7 @@ public class Corpus_Thinking_Main_State : BaseState
             }
             else
             {
+                print("puedo hacer algo");
                 _CanMakeDecision = true;
             }
         }
@@ -150,27 +151,32 @@ public class Corpus_Thinking_Main_State : BaseState
                     _StopRegeneratingEnergy = true;
                     _CanMakeDecision = false; // Bloqueamos la decisión mientras se ejecuta el ataque
 
-                    print("Next attack is");
+                    print("Next attack is " + NextAttack.name);
                     return;
                 }
             }
             else if (DistanceToPlayer <= MinimumAttackRange)
             {
+                print("Player too close");
                 stateMachine.SetGlobalCondition("ShouldMove", false);
                 _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
                                           // vamos a idle
+
+                _StopRegeneratingEnergy = false;
                 return;
             }
 
             // PASO 3: Determinar si vamos a Idle o movernos
             if (Target != null)
             {
+                _StopRegeneratingEnergy = false;
                 stateMachine.SetGlobalCondition("ShouldMove", true);
                 _CanMakeDecision = false; // Bloqueamos la decisión mientras se ejecuta el movimiento
                 return;
             }
             else
             {
+                _StopRegeneratingEnergy = false;
                 stateMachine.SetGlobalCondition("ShouldMove", false);
                 _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
                                           // idle
@@ -257,6 +263,7 @@ public class Corpus_Thinking_Main_State : BaseState
     public void KillMovement()
     {
         _MovementStrategy.KillAllMovement();
+        _MovementStrategy.SetActiveState(false);
     }
 
 }

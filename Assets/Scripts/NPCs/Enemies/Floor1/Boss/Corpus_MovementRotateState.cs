@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
 
-public class Corpus_MovementState : BaseState
+public class Corpus_MovementRotateState : BaseState
 {
     [SerializeField] Transform Model;
     [SerializeField] Transform Target;

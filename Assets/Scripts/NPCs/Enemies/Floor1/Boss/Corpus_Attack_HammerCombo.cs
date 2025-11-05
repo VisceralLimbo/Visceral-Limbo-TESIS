@@ -31,11 +31,12 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
 
     public override void OnEnter(VisceralStateMachine CTX)
     {
-        print("Starting Hammer ATTACK");
+        CTX.SetGlobalCondition(TransitionKey, false);
         print("Performing hammer swings, woosh!" + this.name); // el print estaba en cada tick lo pase aca
         base.OnEnter(CTX);
         CanExit = false;
         _Main_State.KillMovement();
+        pulse = 0;
     }
 
     public override void OnExit(VisceralStateMachine CTX)
