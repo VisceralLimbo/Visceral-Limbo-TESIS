@@ -282,7 +282,7 @@ public class DungeonGenerator : MonoBehaviour
                         Debug.Log("We failed to place a room" + sourceRoom.name);
                         Destroy(newPartObject); // destruimos la pieza ERRONEA
 
-                        sourceEntryPoint.SetOccupied(false);
+                        sourceEntryPoint.SetOccupied(null,false);
                         sourceRoom.UnuseEntryPoint(sourceEntryPoint);
                         continue; // el prefab usado no era viable, por ende limpiamos lo que hicimos
                                   // y probamos de nuevo
@@ -298,8 +298,8 @@ public class DungeonGenerator : MonoBehaviour
 
                         sourceRoom.UnuseEntryPoint(sourceEntryPoint);
                         // LIBERAR LOS PUNTOS OCUPADOS
-                        sourceEntryPoint.SetOccupied(false);
-                        newPartEntryPoint.SetOccupied(false);
+                        sourceEntryPoint.SetOccupied(null, false);
+                        newPartEntryPoint.SetOccupied(null, false);
                         partToPlace.UnuseEntryPoint(newPartEntryPoint);
 
                         // HAY INTERSECCION! LIMPIAMOS LO HECHO Y VOLVEMOS A PROBAR
@@ -315,8 +315,8 @@ public class DungeonGenerator : MonoBehaviour
                         placementSuccessful = true;
 
                         // bloqueamos los puntos de accesso usados
-                        sourceEntryPoint.SetOccupied(true);
-                        newPartEntryPoint.SetOccupied(true);
+                        sourceEntryPoint.SetOccupied(newPartEntryPoint.GetOwner(),true);
+                        newPartEntryPoint.SetOccupied(sourceEntryPoint.GetOwner(),true);
 
                         // creamos una puerta en el punto ocupado
                         var Door = Instantiate(DoorOBJ, sourceEntryPoint.transform.position, sourceEntryPoint.transform.rotation);
@@ -476,7 +476,7 @@ public class DungeonGenerator : MonoBehaviour
                     Debug.Log("We failed to place a room" + SourceRoom.name);
                     Destroy(newPartObject); // destruimos la pieza ERRONEA
 
-                    sourceEntryPoint.SetOccupied(false);
+                    sourceEntryPoint.SetOccupied(null, false);
                     SourceRoom.UnuseEntryPoint(sourceEntryPoint);
                     continue; // el prefab usado no era viable, por ende limpiamos lo que hicimos
                               // y probamos de nuevo
@@ -493,8 +493,8 @@ public class DungeonGenerator : MonoBehaviour
 
                     SourceRoom.UnuseEntryPoint(sourceEntryPoint);
                     // LIBERAR LOS PUNTOS OCUPADOS
-                    sourceEntryPoint.SetOccupied(false);
-                    NewPartEntryPoint.SetOccupied(false);
+                    sourceEntryPoint.SetOccupied(null, false);
+                    NewPartEntryPoint.SetOccupied(null, false);
                     NewPart.UnuseEntryPoint(NewPartEntryPoint);
 
                     // HAY INTERSECCION! LIMPIAMOS LO HECHO Y VOLVEMOS A PROBAR
@@ -510,8 +510,8 @@ public class DungeonGenerator : MonoBehaviour
                     placementSuccessful = true;
 
                     // bloqueamos los puntos de accesso usados
-                    sourceEntryPoint.SetOccupied(true);
-                    NewPartEntryPoint.SetOccupied(true);
+                    sourceEntryPoint.SetOccupied(NewPartEntryPoint.GetOwner(),true);
+                    NewPartEntryPoint.SetOccupied(sourceEntryPoint.GetOwner(),true);
 
                     // creamos una puerta en el punto ocupado
                     var Door = Instantiate(DoorOBJ, sourceEntryPoint.transform.position, sourceEntryPoint.transform.rotation);
@@ -681,8 +681,8 @@ public class DungeonGenerator : MonoBehaviour
                 BossRoom = BossPart;
                 GeneratedBossRoom = true;
 
-                SourcePoint.SetOccupied(true);
-                BossEntryPoint.SetOccupied(true);
+                SourcePoint.SetOccupied(BossEntryPoint.GetOwner(),true);
+                BossEntryPoint.SetOccupied(SourcePoint.GetOwner(),true);
 
                 // =======================================================
                 //

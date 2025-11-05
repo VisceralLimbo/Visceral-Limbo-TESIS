@@ -117,7 +117,7 @@ public class DungeonPart : MonoBehaviour
     /// <param name="EntryPoint"></param>
     public void UnuseEntryPoint(DungeonEntryPoint EntryPoint)
     {
-        EntryPoint.SetOccupied(false);
+        EntryPoint.SetOccupied(null, false);
     }
 
     public List<DungeonEntryPoint> GetAvailableEntryPoints()
