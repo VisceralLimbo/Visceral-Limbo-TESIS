@@ -608,6 +608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsOcupied: 0
   Owner: {fileID: 0}
+  ConectedTo: {fileID: 0}
 --- !u!1 &6143097473306152583
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,7 +824,7 @@ MonoBehaviour:
     SpatialBlend: 1
     IsFrequent: 0
   _reward: {fileID: 6356117999051576394, guid: 5244e3d3ebae0cf4db60fcccad9caa5a, type: 3}
-  _DungeonPart: {fileID: 0}
+  _DungeonPart: {fileID: 655306799343208179}
   MinionsAlive: 0
   SpawnersSpent: 0
   StopThisManager: 0
@@ -833,7 +834,9 @@ MonoBehaviour:
   _AddExtraRequiredScore: 1000
   _BloodEchoesReward: 500
   trapsInThisRoom:
-  - {fileID: 0}
+  - {fileID: 4253828976349710365}
+  - {fileID: 7172273054659159045}
+  - {fileID: 2675326630970725654}
   combatLights:
   - {fileID: 2696392199125343958}
   - {fileID: 4361912717063570415}
@@ -1019,6 +1022,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsOcupied: 0
   Owner: {fileID: 0}
+  ConectedTo: {fileID: 0}
 --- !u!1 &7842849057608955523
 GameObject:
   m_ObjectHideFlags: 0
@@ -4412,7 +4416,7 @@ PrefabInstance:
     - target: {fileID: 2439024607547813770, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -176.255
+      value: -175.8
       objectReference: {fileID: 0}
     - target: {fileID: 2439024607547813770, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
@@ -4575,7 +4579,7 @@ PrefabInstance:
     - target: {fileID: 2439024607547813770, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -189.011
+      value: -189.41
       objectReference: {fileID: 0}
     - target: {fileID: 2439024607547813770, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
@@ -5168,7 +5172,7 @@ PrefabInstance:
     - target: {fileID: 2439024607547813770, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -35.71
+      value: -33.61
       objectReference: {fileID: 0}
     - target: {fileID: 2439024607547813770, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
@@ -5537,6 +5541,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2923962400279830777}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4253828976349710365 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1413183213241739492, guid: b1f3105825eaf1543961828aed65b1df,
+    type: 3}
+  m_PrefabInstance: {fileID: 2923962400279830777}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647d7f1d12bc7ee4387879efc1cf6176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3079857326320722184
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6584,6 +6600,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1f3105825eaf1543961828aed65b1df, type: 3}
+--- !u!114 &2675326630970725654 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1413183213241739492, guid: b1f3105825eaf1543961828aed65b1df,
+    type: 3}
+  m_PrefabInstance: {fileID: 3944038095434202610}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647d7f1d12bc7ee4387879efc1cf6176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2874273546224307611 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1251843808047804521, guid: b1f3105825eaf1543961828aed65b1df,
@@ -11759,6 +11787,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8076549466955517153}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7172273054659159045 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1413183213241739492, guid: b1f3105825eaf1543961828aed65b1df,
+    type: 3}
+  m_PrefabInstance: {fileID: 8076549466955517153}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647d7f1d12bc7ee4387879efc1cf6176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8110327305320465072
 PrefabInstance:
   m_ObjectHideFlags: 0
