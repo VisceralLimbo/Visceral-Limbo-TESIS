@@ -6486,6 +6486,7 @@ GameObject:
   - component: {fileID: 1481393780}
   - component: {fileID: 1481393779}
   - component: {fileID: 1481393778}
+  - component: {fileID: 1481393781}
   m_Layer: 0
   m_Name: BossEnemy
   m_TagString: Untagged
@@ -6571,6 +6572,25 @@ Transform:
   - {fileID: 1848195939}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1481393781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481393777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fb4b2f187296534ca5161231e965e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTarget: {fileID: 1995439396}
+  indicatorPrefab: {fileID: 6491360723292831026, guid: bec3d587628fa564094b680bacd3935b,
+    type: 3}
+  timeBetweenPillars: 0.5
+  numberOfPillars: 5
+  indicatorDuration: 1.5
+  timeBetweenAttacks: 10
 --- !u!1 &1498710912
 GameObject:
   m_ObjectHideFlags: 0
@@ -8165,6 +8185,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1753409033}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &1995439396 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2740337010980209942, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6728285340898564725}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2010972971
 GameObject:
   m_ObjectHideFlags: 0
