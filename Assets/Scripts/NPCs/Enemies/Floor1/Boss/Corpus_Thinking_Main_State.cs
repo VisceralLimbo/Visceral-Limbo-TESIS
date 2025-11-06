@@ -48,6 +48,7 @@ public class Corpus_Thinking_Main_State : BaseState
 
     public override void OnEnter(VisceralStateMachine CTX)
     {
+
         if(Target == null)
         {
             Target = FindObjectOfType<Player_Movement>().transform;
@@ -140,11 +141,10 @@ public class Corpus_Thinking_Main_State : BaseState
             {
                 var NextAttack = ChooseNextAttack(out IStateEnergyCost EnerCost);
 
-                print("choosing next attack");
-
                 if (NextAttack != null)
                 {
                     stateMachine.SetGlobalCondition("ShouldMove", false);
+                    stateMachine.SetGlobalCondition("ShouldMoveAround", false);
 
                     stateMachine.SetGlobalCondition(EnerCost.GetTransitionKey(), true);
 
@@ -157,8 +157,9 @@ public class Corpus_Thinking_Main_State : BaseState
             }
             else if (DistanceToPlayer <= MinimumAttackRange)
             {
-                print("Player too close");
                 stateMachine.SetGlobalCondition("ShouldMove", false);
+
+                stateMachine.SetGlobalCondition("ShouldMoveAround", true);
                 _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
                                           // vamos a idle
 
@@ -171,6 +172,7 @@ public class Corpus_Thinking_Main_State : BaseState
             {
                 _StopRegeneratingEnergy = false;
                 stateMachine.SetGlobalCondition("ShouldMove", true);
+                stateMachine.SetGlobalCondition("ShouldMoveAround", false);
                 _CanMakeDecision = false; // Bloqueamos la decisión mientras se ejecuta el movimiento
                 return;
             }
@@ -178,6 +180,7 @@ public class Corpus_Thinking_Main_State : BaseState
             {
                 _StopRegeneratingEnergy = false;
                 stateMachine.SetGlobalCondition("ShouldMove", false);
+                stateMachine.SetGlobalCondition("ShouldMoveAround", false);
                 _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
                                           // idle
                 return;
