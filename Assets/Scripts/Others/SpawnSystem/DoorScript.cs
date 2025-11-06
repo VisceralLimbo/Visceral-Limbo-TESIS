@@ -28,8 +28,22 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] bool _OpenDoorInside;
     [SerializeField] bool _InvertAnimations;
 
+    [Header("Glow puerta sala de cofres")]
+    // refe al doorglow q va a ser null en varias puertas 
+    private DoorGlow _doorGlow;
+
     public void Initialize(RoomSpawnerManager SpawnerManager)
     {
+        // busco doorglow dsp de q se añado con lo de procedural
+        if (_doorGlow == null)
+        {
+            _doorGlow = GetComponent<DoorGlow>();
+            if (_doorGlow != null)
+            {
+                Debug.Log("lo encontre");
+            }
+        }
+
         print("Initilializing with spawner" + SpawnerManager.name);
 
         if (
@@ -221,6 +235,14 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
                 _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
             }
             _IsOpen = true;
+
+            // las apago si no son de la sala de cfores
+
+            if (_doorGlow != null)
+            {
+                _doorGlow.StartFadeOut();
+                Debug.Log("apagando las particulas");
+            }
 
             PlayerEvents.Interact();
         }

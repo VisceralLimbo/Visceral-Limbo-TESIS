@@ -517,6 +517,9 @@ public class DungeonGenerator : MonoBehaviour
                     var Door = Instantiate(DoorOBJ, sourceEntryPoint.transform.position, sourceEntryPoint.transform.rotation);
                     Door.transform.SetParent(sourceEntryPoint.transform, true);
 
+                    // añado el  doorflow (nuevo script) a la sala del cofre
+                    Door.AddComponent<DoorGlow>();
+
                     // TESTEAMOS SI EL SOURCE ES UNA SALA,LA INICIAMOS
                     if(SourceRoom.RoomType == DungeonPart.DungeonPartType.Room)
                     {
