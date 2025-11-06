@@ -15,6 +15,7 @@ public class PillarDamage : MonoBehaviour
 
     void Start()
     {
+        damageCollider = GetComponent<Collider>();
         // corrutina para destruir el pilar
         StartCoroutine(HandlePillarLifetime());
     }
