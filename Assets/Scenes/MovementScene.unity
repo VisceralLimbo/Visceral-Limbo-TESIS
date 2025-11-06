@@ -2226,6 +2226,13 @@ MonoBehaviour:
     _FromGO: {fileID: 509780984}
     _ToGO: {fileID: 1358247914}
     _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: ShouldMoveAround
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 509780984}
+    _ToGO: {fileID: 1466504398}
+    _ShouldTransitionWithNoConditions: 0
   _MinStateLifetime: 0
   Target: {fileID: 0}
   Model: {fileID: 1848195936}
@@ -6402,23 +6409,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1466504398}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31576bebbb8f3f54f9ce3df026cbf237, type: 3}
+  m_Script: {fileID: 11500000, guid: e57607a1758a8b34598b3928ad9bc7ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stateMachine: {fileID: 0}
   Mytransitions:
-  - conditions:
-    - ConditionName: InRange
-      Value: 1
-      IsResetAfterSwitch: 0
+  - conditions: []
     _FromGO: {fileID: 1466504398}
     _ToGO: {fileID: 509780984}
-    _ShouldTransitionWithNoConditions: 0
+    _ShouldTransitionWithNoConditions: 1
   _MinStateLifetime: 3
-  Model: {fileID: 0}
+  Model: {fileID: 1848195939}
   Target: {fileID: 0}
-  movementSpeed: 10
+  movementSpeed: 5
+  OrbitRadius: 2
+  SpiralDriftCorrection: 1
   thinkingMain: {fileID: 509780986}
+  Statepulse: 0
 --- !u!1 &1466747815
 GameObject:
   m_ObjectHideFlags: 0
@@ -6532,6 +6539,7 @@ MonoBehaviour:
   - {fileID: 1146229933}
   - {fileID: 1466747817}
   - {fileID: 1188941701}
+  - {fileID: 1466504400}
   _StartingState: {fileID: 509780986}
   _CurrentState: {fileID: 0}
   _LastState: {fileID: 0}
@@ -6540,6 +6548,9 @@ MonoBehaviour:
     Value: 0
     IsResetAfterSwitch: 0
   - ConditionName: ShouldMove
+    Value: 0
+    IsResetAfterSwitch: 1
+  - ConditionName: ShouldMoveAround
     Value: 0
     IsResetAfterSwitch: 1
   - ConditionName: Attack_Melee1
