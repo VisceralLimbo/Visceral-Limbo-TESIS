@@ -12,6 +12,13 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     [SerializeField] bool CanExit = false;
 
 
+    [Header("For Testing purposes")]
+    [SerializeField] float attackradius;
+    [SerializeField] float AttackDamage;
+    [SerializeField] bool DrawWireframe;
+    [SerializeField] Transform _Model;
+
+
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
         if (CanExit == false) 
@@ -29,6 +36,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
         base.OnDeInitialize(CTX);
     }
 
+    Collider[] hits;
     public override void OnEnter(VisceralStateMachine CTX)
     {
         CTX.SetGlobalCondition(TransitionKey, false);
@@ -37,6 +45,23 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
         CanExit = false;
         _Main_State.KillMovement();
         pulse = 0;
+        DrawWireframe = true;
+        _Main_State.DeactivateEnergy(true);
+
+        // debug purposes
+        hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
+
+        if(hits.Length > 0)
+        {
+            foreach(Collider collider in hits)
+            {
+                if(collider.TryGetComponent(out Health_Component Hp))
+                {
+                    Hp.SimpleDamage(AttackDamage);
+                }
+
+            }
+        }
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -52,11 +77,19 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     }
 
     float pulse = 0;
+
+  
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
         if(pulse < TimingDuration) 
         {
             pulse += Time.deltaTime;
+
+            if(pulse > 0.5)
+            {
+                DrawWireframe = false;
+            }
+
         }
         else
         {
@@ -83,5 +116,18 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     public string GetTransitionKey()
     {
         return TransitionKey;
+    }
+
+
+    public void OnDrawGizmos()
+    {
+        if(DrawWireframe)
+        {
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(_Model.transform.position, attackradius);
+        }
+
+
     }
 }

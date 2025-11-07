@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossAbility : MonoBehaviour
+public class BossAbility : BaseState,IStateEnergyCost
 {
     [Header("config del pilarr")]
     public GameObject playerTarget;
@@ -13,23 +13,48 @@ public class BossAbility : MonoBehaviour
     public float timeBetweenAttacks = 10f; // por ahora es un ataque automatico a modo de testeo (se ejecuta cada 10seg)
     private bool isAttacking = false;
 
-    private void Start()
+
+    [Header("Configuracion de state machine")]
+    [SerializeField] private string TransitionKey;
+
+    [SerializeField] private int EnergyCost;
+
+    [SerializeField] Corpus_Thinking_Main_State Thinker;
+
+    public override void OnInitialize(VisceralStateMachine CTX)
     {
-        // inicio corrutina
-        StartCoroutine(AutoAttackCoroutine());
+        base.OnInitialize(CTX);
+        Thinker = GetComponentInParent<Corpus_Thinking_Main_State>();
+
     }
 
-    private IEnumerator AutoAttackCoroutine()
+    public override void OnEnter(VisceralStateMachine CTX)
     {
-        // bucle para q se repita el ataque (esto no iria asi en el boss)
-        while (true)
-        {
-            // lanzo el ataque
-            StartPillarAttack();
+        base.OnEnter(CTX);
+        isAttacking = false;
+        Thinker.KillMovement();
 
-            // espero los 10seg para empezar de nuevo
-            yield return new WaitForSeconds(timeBetweenAttacks);
+        Thinker.DeactivateEnergy(true);
+        StartPillarAttack();
+    }
+
+    public override void OnExit(VisceralStateMachine CTX)
+    {
+        base.OnExit(CTX);
+    }
+
+    public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
+    {
+        if (isAttacking)
+        {
+            TO = null;
+            return false;
         }
+
+        stateMachine.SetGlobalCondition(TransitionKey, false);
+
+        print("Ending pilar attack");
+        return base.EvaluateTransitions(GlobalParams, out TO);
     }
 
     // se llama a esta para inciar el ataque
@@ -72,6 +97,26 @@ public class BossAbility : MonoBehaviour
         }
 
         isAttacking = false;
+    }
+
+    public string GetTransitionKey()
+    {
+        return TransitionKey;
+    }
+
+    public void SetCost(float NewCost)
+    {
+        EnergyCost = (int)NewCost;
+    }
+
+    public int GetCost()
+    {
+        return EnergyCost;
+    }
+
+    public BaseState GetState()
+    {
+        return this;
     }
 }
 

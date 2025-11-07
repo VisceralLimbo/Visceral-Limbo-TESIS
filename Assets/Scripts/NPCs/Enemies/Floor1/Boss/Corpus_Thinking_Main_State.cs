@@ -9,6 +9,7 @@ public class Corpus_Thinking_Main_State : BaseState
     [SerializeField] Transform Target;
     [SerializeField] GameObject Model;
     [SerializeField] IMovementStrategy _MovementStrategy;
+    Coroutine _EnergyCoroutine;
 
     [Header("Variables")]
     [Tooltip("Distancia minima para realizar un ataque, recubre tanto melee como rango")]
@@ -56,7 +57,17 @@ public class Corpus_Thinking_Main_State : BaseState
 
         if(Energy < MaxEnergy && !_StopRegeneratingEnergy)
         {
-            StartCoroutine(EnergyCoroutine());
+            if(_EnergyCoroutine == null)
+            {
+                print("activando regeneracion");
+                _EnergyCoroutine = StartCoroutine(EnergyCoroutine());
+            }
+
+        }
+        else if (_StopRegeneratingEnergy && _EnergyCoroutine != null)
+        {
+            StopCoroutine(_EnergyCoroutine);
+            _EnergyCoroutine = null;
         }
 
         _AIThoughPulse = 0;
@@ -65,10 +76,8 @@ public class Corpus_Thinking_Main_State : BaseState
 
     public override void OnExit(VisceralStateMachine CTX)
     {
-        if (_StopRegeneratingEnergy)
-        {
-            StopCoroutine(EnergyCoroutine());
-        }
+
+
     }
 
     public override void OnInitialize(VisceralStateMachine CTX)
@@ -148,7 +157,7 @@ public class Corpus_Thinking_Main_State : BaseState
 
                     stateMachine.SetGlobalCondition(EnerCost.GetTransitionKey(), true);
 
-                    _StopRegeneratingEnergy = true;
+
                     _CanMakeDecision = false; // Bloqueamos la decisión mientras se ejecuta el ataque
 
                     print("Next attack is " + NextAttack.name);
@@ -163,14 +172,14 @@ public class Corpus_Thinking_Main_State : BaseState
                 _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
                                           // vamos a idle
 
-                _StopRegeneratingEnergy = false;
+
                 return;
             }
 
             // PASO 3: Determinar si vamos a Idle o movernos
             if (Target != null)
             {
-                _StopRegeneratingEnergy = false;
+
                 stateMachine.SetGlobalCondition("ShouldMove", true);
                 stateMachine.SetGlobalCondition("ShouldMoveAround", false);
                 _CanMakeDecision = false; // Bloqueamos la decisión mientras se ejecuta el movimiento
@@ -178,7 +187,7 @@ public class Corpus_Thinking_Main_State : BaseState
             }
             else
             {
-                _StopRegeneratingEnergy = false;
+
                 stateMachine.SetGlobalCondition("ShouldMove", false);
                 stateMachine.SetGlobalCondition("ShouldMoveAround", false);
                 _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
@@ -193,6 +202,7 @@ public class Corpus_Thinking_Main_State : BaseState
     {
         while(Energy < MaxEnergy)
         {
+            print("regenerando energia");
             if (EnergyPulse < EnergyRefillRate)
             {
                 EnergyPulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
@@ -206,6 +216,8 @@ public class Corpus_Thinking_Main_State : BaseState
 
             yield return null;
         }
+
+        _EnergyCoroutine = null;
     }
 
 
@@ -267,6 +279,28 @@ public class Corpus_Thinking_Main_State : BaseState
     {
         _MovementStrategy.KillAllMovement();
         _MovementStrategy.SetActiveState(false);
+    }
+
+    public void DeactivateEnergy(bool value)
+    {
+        _StopRegeneratingEnergy = value;
+
+        if(value == true)
+        {
+            if(_EnergyCoroutine != null)
+            {
+                StopCoroutine(_EnergyCoroutine);
+                _EnergyCoroutine = null;
+            }
+        }
+        else
+        {
+            if(_EnergyCoroutine == null)
+            {
+               _EnergyCoroutine = StartCoroutine(EnergyCoroutine());
+            }
+           
+        }
     }
 
 }

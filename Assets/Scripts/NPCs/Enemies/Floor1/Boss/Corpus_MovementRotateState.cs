@@ -50,6 +50,7 @@ public class Corpus_MovementRotateState : BaseState
         CTX.SetGlobalCondition("ShouldMove", false);
         CTX.SetGlobalCondition("ShouldMoveAround", false);
         Statepulse = 0;
+        thinkingMain.DeactivateEnergy(false);
 
         FlipFlopDirection = !FlipFlopDirection;
     }

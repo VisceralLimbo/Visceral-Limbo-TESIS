@@ -30,6 +30,7 @@ public class Corpus_MovementState : BaseState
         Model = thinkingMain.GetModel.transform;
         MovementStrategy.SetActiveState(true);
 
+        thinkingMain.DeactivateEnergy(false);
         CTX.SetGlobalCondition("ShouldMove", false);
     }
 

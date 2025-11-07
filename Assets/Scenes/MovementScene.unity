@@ -2213,7 +2213,7 @@ MonoBehaviour:
     _ToGO: {fileID: 1466747815}
     _ShouldTransitionWithNoConditions: 0
   - conditions:
-    - ConditionName: Attack_Range2
+    - ConditionName: Attack_Pilar
       Value: 1
       IsResetAfterSwitch: 0
     _FromGO: {fileID: 509780984}
@@ -2245,10 +2245,8 @@ MonoBehaviour:
   _CanMakeDecision: 0
   MeleeAttacks:
   - {fileID: 934781015}
-  - {fileID: 1146229933}
   RangeAttacks:
-  - {fileID: 1466747817}
-  - {fileID: 1188941701}
+  - {fileID: 1188941703}
 --- !u!1 &549347063
 GameObject:
   m_ObjectHideFlags: 0
@@ -3588,6 +3586,10 @@ MonoBehaviour:
   EnergyCost: 1
   TimingDuration: 3
   CanExit: 0
+  attackradius: 3
+  AttackDamage: 30
+  DrawWireframe: 0
+  _Model: {fileID: 1848195939}
 --- !u!1001 &945451967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4951,6 +4953,10 @@ MonoBehaviour:
   EnergyCost: 2
   TimingDuration: 2.5
   CanExit: 0
+  attackradius: 0
+  AttackDamage: 0
+  DrawWireframe: 0
+  _Model: {fileID: 0}
 --- !u!1 &1179199913
 GameObject:
   m_ObjectHideFlags: 0
@@ -5067,38 +5073,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1188941702}
-  - component: {fileID: 1188941701}
+  - component: {fileID: 1188941703}
   m_Layer: 0
-  m_Name: attack - Range2
+  m_Name: attack -PilarAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1188941701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1188941700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 965d170a44edad142af357493f4ae7e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stateMachine: {fileID: 0}
-  Mytransitions:
-  - conditions: []
-    _FromGO: {fileID: 1188941700}
-    _ToGO: {fileID: 509780984}
-    _ShouldTransitionWithNoConditions: 1
-  _MinStateLifetime: 1
-  TransitionKey: Attack_Range2
-  _Main_State: {fileID: 0}
-  EnergyCost: 3
-  TimingDuration: 5
-  CanExit: 0
 --- !u!4 &1188941702
 Transform:
   m_ObjectHideFlags: 0
@@ -5114,6 +5096,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2010972972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1188941703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188941700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fb4b2f187296534ca5161231e965e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
+  Mytransitions:
+  - conditions: []
+    _FromGO: {fileID: 1188941700}
+    _ToGO: {fileID: 509780984}
+    _ShouldTransitionWithNoConditions: 1
+  _MinStateLifetime: 0
+  playerTarget: {fileID: 1995439396}
+  indicatorPrefab: {fileID: 6491360723292831026, guid: bec3d587628fa564094b680bacd3935b,
+    type: 3}
+  timeBetweenPillars: 0.5
+  numberOfPillars: 5
+  indicatorDuration: 1.5
+  timeBetweenAttacks: 10
+  TransitionKey: Attack_Pilar
+  EnergyCost: 3
+  Thinker: {fileID: 0}
 --- !u!1 &1207906190
 GameObject:
   m_ObjectHideFlags: 0
@@ -6482,6 +6493,10 @@ MonoBehaviour:
   EnergyCost: 1
   TimingDuration: 2.5
   CanExit: 0
+  attackradius: 0
+  AttackDamage: 0
+  DrawWireframe: 0
+  _Model: {fileID: 0}
 --- !u!1 &1481393777
 GameObject:
   m_ObjectHideFlags: 0
@@ -6493,7 +6508,6 @@ GameObject:
   - component: {fileID: 1481393780}
   - component: {fileID: 1481393779}
   - component: {fileID: 1481393778}
-  - component: {fileID: 1481393781}
   m_Layer: 0
   m_Name: BossEnemy
   m_TagString: Untagged
@@ -6535,11 +6549,9 @@ MonoBehaviour:
   _States:
   - {fileID: 509780986}
   - {fileID: 1358247915}
-  - {fileID: 934781015}
-  - {fileID: 1146229933}
-  - {fileID: 1466747817}
-  - {fileID: 1188941701}
   - {fileID: 1466504400}
+  - {fileID: 934781015}
+  - {fileID: 1188941703}
   _StartingState: {fileID: 509780986}
   _CurrentState: {fileID: 0}
   _LastState: {fileID: 0}
@@ -6562,10 +6574,10 @@ MonoBehaviour:
   - ConditionName: Attack_Range1
     Value: 0
     IsResetAfterSwitch: 1
-  - ConditionName: Attack_Range2
+  - ConditionName: Attack_Pilar
     Value: 0
     IsResetAfterSwitch: 1
-  _HPComp: {fileID: 0}
+  _HPComp: {fileID: 1848195940}
 --- !u!4 &1481393780
 Transform:
   m_ObjectHideFlags: 0
@@ -6583,25 +6595,6 @@ Transform:
   - {fileID: 1848195939}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1481393781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1481393777}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fb4b2f187296534ca5161231e965e79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTarget: {fileID: 1995439396}
-  indicatorPrefab: {fileID: 6491360723292831026, guid: bec3d587628fa564094b680bacd3935b,
-    type: 3}
-  timeBetweenPillars: 0.5
-  numberOfPillars: 5
-  indicatorDuration: 1.5
-  timeBetweenAttacks: 10
 --- !u!1 &1498710912
 GameObject:
   m_ObjectHideFlags: 0
@@ -7627,9 +7620,9 @@ MonoBehaviour:
   MaxHealth: 100
   _RB: {fileID: 0}
   DestroyOnDeath: 0
-  DesactivateOnDeath: 0
+  DesactivateOnDeath: 1
   Died: 0
-  _Context: {fileID: 0}
+  _Context: {fileID: 1481393778}
 --- !u!114 &1848195941
 MonoBehaviour:
   m_ObjectHideFlags: 0
