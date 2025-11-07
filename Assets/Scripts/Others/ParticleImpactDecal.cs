@@ -1,21 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public class ParticleImpactDecal : MonoBehaviour
 {
     [SerializeField] SoundData S_Data; // pato, datos del sonido que queremos tocar
 
    [SerializeField] private ParticleSystem particleSystemBlood;
-   [SerializeField] private GameObject decalPrefab;
-   [SerializeField] private LayerMask impactLayers;
+    [SerializeField] private List<GameObject> decalPrefabs = new List<GameObject>();
+    [SerializeField] private LayerMask impactLayers;
 
     private ParticleSystem.Particle[] particles;
     private Vector3[] previousPositions;
     [SerializeField]private Health_Component health;
 
     [SerializeField, Range(0.001f, 0.1f)]
-    private float decalOffset = 0.01f;
+    private float decalOffset = 0.0025f;
 
     void Start()
     {
@@ -42,6 +43,18 @@ public class ParticleImpactDecal : MonoBehaviour
 
     }
 
+    void SpawnDecal(RaycastHit hit)
+    {
+        // URP Decal Projector orienta el LookRotation así
+        Quaternion rot = Quaternion.LookRotation(hit.normal, Vector3.up);
+
+        Vector3 pos = hit.point + hit.normal * decalOffset;
+
+        GameObject randomDecal = decalPrefabs[Random.Range(0, decalPrefabs.Count)];
+        GameObject decal = Instantiate(randomDecal, pos, rot);
+        Destroy(decal, 30f);
+    }
+
     void OnDamagedHandler()
     {
         if (!particleSystemBlood.isPlaying)
@@ -49,11 +62,18 @@ public class ParticleImpactDecal : MonoBehaviour
 
         RaycastHit hit;
         Vector3 origin = transform.position;
-        Vector3 direction = -transform.up;
+        Vector3 dirForward = -transform.up;
 
-        if (Physics.Raycast(origin, direction, out hit, 2f, impactLayers))
+        if (Physics.SphereCast(origin, 0.03f, dirForward, out hit, 2f, impactLayers))
         {
-           Instantiate(decalPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
+            SpawnDecal(hit);
+        }
+        else
+        {
+            if (Physics.SphereCast(origin, 0.03f, Vector3.down, out hit, 5f, impactLayers))
+            {
+                SpawnDecal(hit);
+            }
         }
 
         SoundSFX();
@@ -87,14 +107,10 @@ public class ParticleImpactDecal : MonoBehaviour
 
             if (distance > 0.001f)
             {
-                if (Physics.Raycast(worldPrevPos, dir.normalized, out RaycastHit hit, distance, impactLayers))
+                if (Physics.SphereCast(worldPrevPos, 0.03f, dir.normalized, out RaycastHit hit, distance, impactLayers)
+)
                 {
-                    Vector3 decalPos = hit.point - hit.normal * 0.01f;
-                    Quaternion decalRot = Quaternion.LookRotation(-hit.normal);
-
-                    GameObject decal = Instantiate(decalPrefab, decalPos, decalRot);
-                    Destroy(decal, 30f);
-
+                    SpawnDecal(hit);
                     particles[i].remainingLifetime = 0;
                 }
             }
