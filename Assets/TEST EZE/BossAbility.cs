@@ -13,6 +13,8 @@ public class BossAbility : BaseState,IStateEnergyCost
     public float timeBetweenAttacks = 10f; // por ahora es un ataque automatico a modo de testeo (se ejecuta cada 10seg)
     private bool isAttacking = false;
 
+    public LayerMask groundLayer; // layer del piso
+    public float raycastDistance = 100f; // distancia del raycast
 
     [Header("Configuracion de state machine")]
     [SerializeField] private string TransitionKey;
@@ -76,20 +78,38 @@ public class BossAbility : BaseState,IStateEnergyCost
         for (int i = 0; i < numberOfPillars; i++)
         {
             // agarro la pos del player
-            Vector3 targetPosition = playerTarget.transform.position;
+            Vector3 spawnPoint = playerTarget.transform.position;
 
-            // rotacion del quad 
+            RaycastHit hit;
+            Vector3 finalSpawnPosition; // pos para el instance
+
+            // raycast al piso
+            if (Physics.Raycast(spawnPoint, Vector3.down, out hit, raycastDistance, groundLayer))
+            {
+                // si choca uso el hitpoint
+                finalSpawnPosition = hit.point;
+
+                // levanto un toque porque si no a veces pasa ese parpadeo de que estan encimados los objetos
+                finalSpawnPosition.y += 0.01f;
+            }
+            else
+            {
+                // si no hay piso uso la del player
+                Debug.LogWarning("no encontre suelo uso el player"); // no deberia pasar casi nunca esto igual xd
+                finalSpawnPosition = spawnPoint;
+            }
+
+            // rotacion del quad
             Quaternion flatRotation = Quaternion.Euler(90f, 0f, 0f);
 
-            // se instacia el indicador
-            GameObject indicator = Instantiate(indicatorPrefab, targetPosition, flatRotation);
-
+            // se instancia el indicador usando la pos q se calculo con el raycast
+            GameObject indicator = Instantiate(indicatorPrefab, finalSpawnPosition, flatRotation);
 
             // paso las cosas al indicador
             FlamePillarIndicator pillarScript = indicator.GetComponent<FlamePillarIndicator>();
             if (pillarScript != null)
             {
-                pillarScript.SetupIndicator(targetPosition, indicatorDuration);
+                pillarScript.SetupIndicator(finalSpawnPosition, indicatorDuration);
             }
 
             // espero el tiempo entre pilar

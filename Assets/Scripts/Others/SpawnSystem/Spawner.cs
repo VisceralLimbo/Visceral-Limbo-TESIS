@@ -23,6 +23,9 @@ public class Spawner : MonoBehaviour
     [Header("References")]
     [SerializeField] RoomSpawnerManager _SpawnManager;
 
+    [Header("Boss References")]
+    public GameObject playerTarget; // player aca ahre  
+
     private void Start()
     {
         if(_SpawnManager == null)
@@ -63,7 +66,22 @@ public class Spawner : MonoBehaviour
 
             var InstantiatedEnemy = Instantiate(NextEnemy,transform.position,transform.rotation);
             //var DumbEnemySC = InstantiatedEnemy.GetComponent<DumbEnemy>();
-   
+
+            // agarro scripts
+            BossAbility bossAbilityScript = InstantiatedEnemy.GetComponent<BossAbility>();
+
+            if (bossAbilityScript == null)
+            {
+                bossAbilityScript = InstantiatedEnemy.GetComponentInChildren<BossAbility>();
+            }
+
+            // si lo encuentro asigno el player
+            if (bossAbilityScript != null && playerTarget != null)
+            {
+                bossAbilityScript.playerTarget = playerTarget;
+                Debug.Log("aca ta el jefe y le asigno el player");
+            }
+
             EnemySpawnedHP = InstantiatedEnemy.GetComponent<Health_Component>();
             if (EnemySpawnedHP == null) EnemySpawnedHP = InstantiatedEnemy.GetComponentInChildren<Health_Component>();
             EnemySpawnedHP.OnDeath += MyMinionDied;

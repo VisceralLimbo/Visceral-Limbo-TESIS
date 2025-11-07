@@ -12,6 +12,9 @@ public class FlamePillarIndicator : MonoBehaviour
     private float duration; // viene del jefe el tiempo
     private float startTime; // para saber el tiempo q paso
 
+    [Header("ajuste para la altura del pilar")]
+    public float heightCorrection = 2f; // mitad de la altura para q no aparezca enterrado xd
+
     // llamado en boos ability
     public void SetupIndicator(Vector3 pos, float dur)
     {
@@ -41,7 +44,14 @@ public class FlamePillarIndicator : MonoBehaviour
         // activo pilar
         if (flamePillarVisuals != null)
         {
-            Instantiate(flamePillarVisuals, transform.position, Quaternion.identity);
+            // agarro la pos del indicador
+            Vector3 spawnPosition = transform.position;
+
+            //subo spawn
+            spawnPosition.y += heightCorrection;
+
+
+            Instantiate(flamePillarVisuals, spawnPosition, Quaternion.identity);
         }
 
         // espero que termine la vida del pilar
