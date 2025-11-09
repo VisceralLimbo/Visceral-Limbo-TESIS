@@ -155,7 +155,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
@@ -10325,6 +10325,20 @@ MonoBehaviour:
   _IsOpen: 0
   _OpenDoorInside: 0
   _InvertAnimations: 0
+  _SoundOpenDoor:
+    Clip: {fileID: 8300000, guid: c3183545df8e3624b836aa7520ebdfee, type: 3}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 1
+  _SoundCloseDoor:
+    Clip: {fileID: 8300000, guid: dff0db40e5d7d0c408ef1e90a3a5610b, type: 3}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    IsFrequent: 1
 --- !u!65 &1084895324497264032
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -35,7 +35,9 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     [SerializeField] private List<Light> chestLights = new List<Light>();
     [SerializeField] private ParticleSystem openChestParticle;
 
-
+    [SerializeField] SoundData _SoundNearByChest;
+    [SerializeField] SoundData _SoundOpenChest;
+    [SerializeField] SoundData _SoundCannotOpenChest;
 
     private void Start()
     {
@@ -70,6 +72,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         }
     }
 
+
     public void TryOpen()
     {
         if (isOpened) return;
@@ -79,6 +82,10 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         {
             isOpened = true;
             OpenChest();
+        }
+        else
+        {
+            SoundManager.Instance.CreateSound().WithSoundData(_SoundCannotOpenChest).WithRandomPitch(true).WithPosition(this.transform.position).play();
         }
 
         // oculto dsp de intentar interactuar
@@ -91,6 +98,8 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     private void OpenChest()
     {
         isOpened = true;
+
+        SoundManager.Instance.CreateSound().WithSoundData(_SoundOpenChest).WithRandomPitch(true).WithPosition(this.transform.position).play();
 
         if (chestAnimator != null)
             chestAnimator.SetBool("isOpen", true);
@@ -127,7 +136,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     {
         if (isOpened || interactTextObject == null || interactText == null) return;
         UpdateInteractText(true);
-
+       // SoundManager.Instance.CreateSound().WithSoundData(_SoundNearByChest).WithRandomPitch(true).WithPosition(this.transform.position).play(); 
         PlayerEvents.InteractSeeing();
     }
 

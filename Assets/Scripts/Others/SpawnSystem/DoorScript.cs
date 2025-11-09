@@ -32,6 +32,9 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     // refe al doorglow q va a ser null en varias puertas 
     private DoorGlow _doorGlow;
 
+    [SerializeField] SoundData _SoundOpenDoor;
+    [SerializeField] SoundData _SoundCloseDoor;
+
     public void Initialize(RoomSpawnerManager SpawnerManager)
     {
         // busco doorglow dsp de q se añado con lo de procedural
@@ -193,6 +196,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             roomSpawnerManager.NotifyMinionDeath();
             _LockDoor = true;
             
+            SoundManager.Instance.CreateSound().WithSoundData(_SoundCloseDoor).WithRandomPitch(true).WithPosition(this.transform.position).play();
         }
 
     }
@@ -227,12 +231,16 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             {
                 // correr animacion de puerta abriendose
                 _AnimHandler.SetParameter("DoorAnim", "AbrirAdentro", AnimatorControllerParameterType.Bool, true);
+
+                SoundManager.Instance.CreateSound().WithSoundData(_SoundOpenDoor).WithRandomPitch(true).WithPosition(this.transform.position).play();
             }
             else
             {
 
                 // correr animacion de puerta abriendose
                 _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, true);
+
+                SoundManager.Instance.CreateSound().WithSoundData(_SoundOpenDoor).WithRandomPitch(true).WithPosition(this.transform.position).play();
             }
             _IsOpen = true;
 
