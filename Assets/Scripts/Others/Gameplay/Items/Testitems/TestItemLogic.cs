@@ -9,6 +9,8 @@ public class TestItemLogic : ItemLogic
     //[SerializeField] protected InventoryManager Inventory;
     //[SerializeField] protected ItemDefinitionSO ItemDefinition;
 
+    [SerializeField] SoundData _PickUpSound;
+
     public override void OnDrop()
     {
 
@@ -17,6 +19,7 @@ public class TestItemLogic : ItemLogic
     public override void OnPickUp() // ser agarrado
     {
         Inventory.AddItemStack(_ItemDefinition);
+        SoundManager.Instance.CreateSound().WithSoundData(_PickUpSound).WithPosition(this.transform.position).play();
         Destroy(this.gameObject);
 
         // TO DO:

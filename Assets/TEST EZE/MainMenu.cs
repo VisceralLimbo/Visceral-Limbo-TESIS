@@ -7,28 +7,34 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject optionsPanel;
     [SerializeField] private GameObject buttonsHide;
 
+    [SerializeField] SoundData _ClickSound;
+
     private void Awake()
     {
         optionsPanel.SetActive(false);
         buttonsHide.SetActive(true);
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
     }
 
     public void MainMenuPlayGame()
     {
         LoadGameScene("GameScene");
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
     }
 
     public void MainMenuShop()
     {
         LoadGameScene("Nexus");
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
     }
     public void MainMenuOptions()
     {
         optionsPanel.SetActive(true);
         buttonsHide.SetActive(false);
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
     }
 
@@ -36,6 +42,7 @@ public class MainMenu : MonoBehaviour
     {
         optionsPanel.SetActive(false);
         buttonsHide.SetActive(true);
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
     }
 
@@ -43,11 +50,13 @@ public class MainMenu : MonoBehaviour
     {
         //hay q cambiarle el nobmre a esto me comi los espacios y las mayusxd
         LoadGameScene("Proc Gen Scene");
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
     }
 
     public void MainMenuCloseGame()
     {
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         Application.Quit();
     }
 
@@ -77,6 +86,7 @@ public class MainMenu : MonoBehaviour
 
         // fuerzo q las opciones se recargen
         SettingsUIPanelManager uiManager = FindObjectOfType<SettingsUIPanelManager>();
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
 
         if (uiManager != null)
         {

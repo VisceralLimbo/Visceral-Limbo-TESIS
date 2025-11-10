@@ -15,6 +15,8 @@ public class DoubleDamageItemLogic : ItemLogic
     // mismo q player health xq necesito el meeleattack
     private Player_MeleeAttack _playerMeleeAttack;
 
+    [SerializeField] SoundData _PickUpSound;
+
     private Player_MeleeAttack PlayerMeleeAttackComponent{get
         {
             if (_playerMeleeAttack == null && _Context != null)
@@ -198,7 +200,7 @@ public class DoubleDamageItemLogic : ItemLogic
     public override void OnPickUp()
     {
         Inventory.AddItemStack(_ItemDefinition);
-
+        SoundManager.Instance.CreateSound().WithSoundData(_PickUpSound).WithPosition(this.transform.position).play();
         // chequeo
         if (_Context != null && ItemStacks > 0)
         {
