@@ -215,6 +215,7 @@ public class DungeonGenerator : MonoBehaviour
                 GameObject entranceObj = Instantiate(Entrance, this.transform.position, this.transform.rotation);
                 if (entranceObj.TryGetComponent(out DungeonPart part))
                 {
+                    
                     generatedRooms.Add(part);
                     GenerateHallway = true;
                     StartingRoom = part;
@@ -319,8 +320,7 @@ public class DungeonGenerator : MonoBehaviour
                         newPartEntryPoint.SetOccupied(sourceEntryPoint.GetOwner(),true);
 
                         // creamos una puerta en el punto ocupado
-                        var Door = Instantiate(DoorOBJ, sourceEntryPoint.transform.position, sourceEntryPoint.transform.rotation);
-                        Door.transform.SetParent(sourceEntryPoint.transform, true);
+                        var Door = Instantiate(DoorOBJ);
 
                         //Ahora le decimos a la puerta a quien le pertenece
                         if(Door.TryGetComponent(out DoorScript DoorScript))
@@ -331,7 +331,9 @@ public class DungeonGenerator : MonoBehaviour
                             {
                                 if(sourceRoom.TryGetComponent(out RoomSpawnerManager Manager))
                                 {
-                                    DoorScript.Initialize(Manager);
+                                    // como la pieza nueva es un pasillo, esta puerta estará ubicada en el
+                                    // snap point de la pieza Source
+                                    DoorScript.Initialize(Manager,sourceEntryPoint);
                                 }
                                 else 
                                 {
@@ -345,7 +347,9 @@ public class DungeonGenerator : MonoBehaviour
                             {
                                 if(partToPlace.TryGetComponent(out RoomSpawnerManager manager))
                                 {
-                                    DoorScript.Initialize(manager);
+                                    // como la pieza nueva es una sala, esta puerta estará ubicada en el
+                                    // snap point de la pieza nueva
+                                    DoorScript.Initialize(manager,newPartEntryPoint);
                                 }
                                 else
                                 {
@@ -527,7 +531,7 @@ public class DungeonGenerator : MonoBehaviour
                         {
                             if (Door.TryGetComponent(out DoorScript DoorSC))
                             {
-                                DoorSC.Initialize(Manager);
+                                DoorSC.Initialize(Manager,sourceEntryPoint);
                                 DoorSC.ShouldGenerateEvents(false);
 
                             }
@@ -700,7 +704,7 @@ public class DungeonGenerator : MonoBehaviour
 
                 if(BossPart.gameObject.TryGetComponent(out RoomSpawnerManager RoomMan))
                 {
-                    DoorSC.Initialize(RoomMan);
+                    DoorSC.Initialize(RoomMan,BossEntryPoint);
                 }
                 else
                 {

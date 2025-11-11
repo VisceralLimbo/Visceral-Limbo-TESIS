@@ -8,6 +8,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [Header("References")]
     [SerializeField] RoomSpawnerManager roomSpawnerManager;
     [SerializeField] AnimatorHandler _AnimHandler;
+    [SerializeField] DungeonEntryPoint _EntryPoint;
 
     private Vector3 InWardAlignment;
 
@@ -27,6 +28,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] bool _IsOpen;
     [SerializeField] bool _OpenDoorInside;
     [SerializeField] bool _InvertAnimations;
+    [SerializeField] bool _Initialized;
 
     [Header("Glow puerta sala de cofres")]
     // refe al doorglow q va a ser null en varias puertas 
@@ -35,7 +37,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] SoundData _SoundOpenDoor;
     [SerializeField] SoundData _SoundCloseDoor;
 
-    public void Initialize(RoomSpawnerManager SpawnerManager)
+    public void Initialize(RoomSpawnerManager SpawnerManager,DungeonEntryPoint entryPoint)
     {
         // busco doorglow dsp de q se añado con lo de procedural
         if (_doorGlow == null)
@@ -43,22 +45,80 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             _doorGlow = GetComponent<DoorGlow>();
             if (_doorGlow != null)
             {
-                Debug.Log("lo encontre");
+                Debug.Log("Puerta encontro DoorClow Component");
             }
         }
 
-        print("Initilializing with spawner" + SpawnerManager.name);
+        _EntryPoint = entryPoint;
+        if(_EntryPoint != null)
+        {
+            this.transform.position = entryPoint.transform.position;
+            this.transform.rotation = entryPoint.transform.rotation;
+            this.transform.SetParent(entryPoint.transform,true);
+        }
 
-        if (
-            SpawnerManager == null) return;
-            
+        if (SpawnerManager == null) { NonTriggerRoom = true; return; };
         roomSpawnerManager = SpawnerManager;
         roomSpawnerManager.OnCombatEnded += UnlockDoor;
         roomSpawnerManager.OnCombatStart += LockDoor;
 
+
+        // Paso 1) comenzamos a alinear la puerta con el punto de entrada.
+
+        this.transform.position = entryPoint.transform.position;
+        this.transform.rotation = entryPoint.transform.rotation;
+
+        // Paso 2) Alineamos el adentro usando el vector de atras del entrypoint
+        InWardAlignment = GetSnapPoint(-entryPoint.transform.forward);
+
+
+        // si el manager esta parado, no emitimos eventos
+        if (roomSpawnerManager.ManagerStopped)
+        {
+            ShouldGenerateEvents(true);
+        }
+
+        //Paso3 ) PONDERAMOS LA ROTACION DEL PREFAB EN FUNCION DEL ROOM
+
+        Vector3 SnappedLocalForward = GetSnapPoint(this.transform.forward);
+
+        // Paso 4) calculamos si hay que invertir las rotaciones del prefab.
+        if (Vector3.Dot(SnappedLocalForward, InWardAlignment) > 0)
+        {
+            _InvertAnimations = true;
+        }
+        else
+        {
+            _InvertAnimations = false;
+        }
+
+    }
+
+
+    private Vector3 GetSnapPoint(Vector3 Direction) 
+    {
+        Direction.y = 0;
+
+        if (Mathf.Abs(Direction.x) > Mathf.Abs(Direction.z))
+        {
+
+            // la direccion nueva de snap
+            return new Vector3(Mathf.Sign(Direction.x), 0, 0);
+        }
+        else
+        {
+            // la direccion en Z es mayor, por ende vamos a snappear en funcion de Z
+            return new Vector3(0, 0, Mathf.Sign(Direction.z));
+        }
+    }
+
+
+    private void FallbackAlignment(RoomSpawnerManager SpawnerManager)
+    {
+
         // alineamiento de las puertas.
         // calculamos la direccion hacia el centro de la sala
-
+        
         SpawnerManager.GetDungeonPart(out DungeonPart _DungeonPart);
 
         Vector3 DirectionToRoom;
@@ -75,7 +135,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         // 1) CALCULAMOS LOS LIMITES COMBINADOS DE TODOS LOS COLLIDERS DE LA SALA.
 
         Bounds EncapsulatedBounds = _DungeonPart._Colliders[0].bounds;
-        for(int I = 1; I < _DungeonPart._Colliders.Length; I++)
+        for (int I = 1; I < _DungeonPart._Colliders.Length; I++)
         {
             EncapsulatedBounds.Encapsulate(_DungeonPart._Colliders[I].bounds);
         }
@@ -102,7 +162,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         Vector3 SnappedLocalForward = GetSnapPoint(this.transform.forward);
 
 
-        if (Vector3.Dot(SnappedLocalForward,InWardAlignment) > 0)
+        if (Vector3.Dot(SnappedLocalForward, InWardAlignment) > 0)
         {
             _InvertAnimations = true;
         }
@@ -112,27 +172,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         }
 
 
-
     }
-
-
-    private Vector3 GetSnapPoint(Vector3 Direction) 
-    {
-        Direction.y = 0;
-
-        if (Mathf.Abs(Direction.x) > Mathf.Abs(Direction.z))
-        {
-
-            // la direccion nueva de snap
-            return new Vector3(Mathf.Sign(Direction.x), 0, 0);
-        }
-        else
-        {
-            // la direccion en Z es mayor, por ende vamos a snappear en funcion de Z
-            return new Vector3(0, 0, Mathf.Sign(Direction.z));
-        }
-    }
-
 
     public void ShouldGenerateEvents(bool value = false)
     {
@@ -204,7 +244,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     public void OnInteract(RayCastWrapper Detector)
     {
         print("DoorInteracted");
-        if (!_LockDoor && (roomSpawnerManager != null && !roomSpawnerManager.ManagerStopped) || !_LockDoor)
+        if (!_LockDoor && (roomSpawnerManager != null && !roomSpawnerManager.ManagerStopped) || !_LockDoor || NonTriggerRoom)
         {
             // CALCULO DE SENTIDO DE PUERTA 
 
@@ -279,5 +319,8 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     {
         _LockDoor = true;
     }
+
+    public void SetEntryPointReference(DungeonEntryPoint Entry) => _EntryPoint = Entry;
+
 
 }

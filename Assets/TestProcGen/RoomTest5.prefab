@@ -295,6 +295,7 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &1968729598767843945
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,6 +350,7 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &2101982348135849433
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,6 +502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsOcupied: 0
   Owner: {fileID: 0}
+  ConectedTo: {fileID: 0}
 --- !u!1 &2512547285711536614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1874,6 +1877,7 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &8442704663373044886
 GameObject:
   m_ObjectHideFlags: 0
@@ -2235,6 +2239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsOcupied: 0
   Owner: {fileID: 0}
+  ConectedTo: {fileID: 0}
 --- !u!1 &8896391458247811233
 GameObject:
   m_ObjectHideFlags: 0
@@ -2281,6 +2286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsOcupied: 0
   Owner: {fileID: 0}
+  ConectedTo: {fileID: 0}
 --- !u!1 &9090217850490974117
 GameObject:
   m_ObjectHideFlags: 0
@@ -2569,6 +2575,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FireballTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 3237444617938934885, guid: b1f3105825eaf1543961828aed65b1df,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2673,7 +2684,7 @@ PrefabInstance:
     - target: {fileID: 5654911510880204269, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2697,6 +2708,10 @@ PrefabInstance:
     - target: {fileID: 6491871016027822, guid: c1b36177c1b29d54d9b8d14a7abda75d, type: 3}
       propertyPath: m_Name
       value: Piedra
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491871016027822, guid: c1b36177c1b29d54d9b8d14a7abda75d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7589052285214008590, guid: c1b36177c1b29d54d9b8d14a7abda75d,
         type: 3}
@@ -2840,7 +2855,7 @@ PrefabInstance:
     - target: {fileID: 5654911510880204269, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2865,6 +2880,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Antorcha con base (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4133802819755238866, guid: 0a6c2505b345c0d408a5bab1201e9561,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6768639694092592882, guid: 0a6c2505b345c0d408a5bab1201e9561,
         type: 3}
@@ -3029,7 +3049,7 @@ PrefabInstance:
     - target: {fileID: 5654911510880204269, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3054,6 +3074,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Antorcha con base (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4133802819755238866, guid: 0a6c2505b345c0d408a5bab1201e9561,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6768639694092592882, guid: 0a6c2505b345c0d408a5bab1201e9561,
         type: 3}
@@ -3156,6 +3181,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trampa de pinchos fbx
       objectReference: {fileID: 0}
+    - target: {fileID: 8469102489433295712, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3229,6 +3259,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Antorcha con base (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4133802819755238866, guid: 0a6c2505b345c0d408a5bab1201e9561,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6768639694092592882, guid: 0a6c2505b345c0d408a5bab1201e9561,
         type: 3}
@@ -3390,6 +3425,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Caja1
       objectReference: {fileID: 0}
+    - target: {fileID: 7000318029030494775, guid: 9bf0c017e6f0bea44b43ab0bed97e0ee,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3413,6 +3453,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Antorcha con base (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4133802819755238866, guid: 0a6c2505b345c0d408a5bab1201e9561,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6768639694092592882, guid: 0a6c2505b345c0d408a5bab1201e9561,
         type: 3}
@@ -3514,6 +3559,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Trampa de pinchos fbx (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8469102489433295712, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
         type: 3}
@@ -3657,7 +3707,7 @@ PrefabInstance:
     - target: {fileID: 5654911510880204269, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3682,6 +3732,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Trampa de pinchos fbx (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8469102489433295712, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
         type: 3}
@@ -3757,6 +3812,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trampa de pinchos fbx (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8469102489433295712, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3830,6 +3890,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Antorcha con base (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4133802819755238866, guid: 0a6c2505b345c0d408a5bab1201e9561,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6768639694092592882, guid: 0a6c2505b345c0d408a5bab1201e9561,
         type: 3}
@@ -3924,6 +3989,10 @@ PrefabInstance:
     - target: {fileID: 6491871016027822, guid: c1b36177c1b29d54d9b8d14a7abda75d, type: 3}
       propertyPath: m_Name
       value: Piedra (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491871016027822, guid: c1b36177c1b29d54d9b8d14a7abda75d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7589052285214008590, guid: c1b36177c1b29d54d9b8d14a7abda75d,
         type: 3}
@@ -4064,6 +4133,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barril_Explosivo (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5301716528659643073, guid: 50676f109f048f64dbab93230bfc4501,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4156,7 +4230,7 @@ PrefabInstance:
     - target: {fileID: 5654911510880204269, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4250,7 +4324,7 @@ PrefabInstance:
     - target: {fileID: 5654911510880204269, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4344,7 +4418,7 @@ PrefabInstance:
     - target: {fileID: 5654911510880204269, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4369,6 +4443,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Antorcha con base
+      objectReference: {fileID: 0}
+    - target: {fileID: 4133802819755238866, guid: 0a6c2505b345c0d408a5bab1201e9561,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6768639694092592882, guid: 0a6c2505b345c0d408a5bab1201e9561,
         type: 3}
@@ -4536,6 +4615,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barril_Explosivo
       objectReference: {fileID: 0}
+    - target: {fileID: 5301716528659643073, guid: 50676f109f048f64dbab93230bfc4501,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4628,7 +4712,7 @@ PrefabInstance:
     - target: {fileID: 5654911510880204269, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4718,6 +4802,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Jarron1
+      objectReference: {fileID: 0}
+    - target: {fileID: 691357697017504039, guid: 8d3df5974868bd945b83d0fcef6de1ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4811,7 +4900,7 @@ PrefabInstance:
     - target: {fileID: 5654911510880204269, guid: 0c157397b45374447a0a4528864277ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
