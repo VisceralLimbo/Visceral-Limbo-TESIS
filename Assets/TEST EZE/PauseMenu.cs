@@ -10,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private PauseMenuUI _pauseMenuUI;
     public GameObject description;
 
+    [SerializeField] SoundData _ClickSound;
+
     private void Awake()
     {
         // fuerzo el timescale porque se rompia al cargar escena
@@ -48,6 +50,7 @@ public class PauseMenu : MonoBehaviour
     public void PauseGame()
     {
         pausePanel.SetActive(true);
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         Time.timeScale = 0f;
         isPaused = true;
 
@@ -67,7 +70,7 @@ public class PauseMenu : MonoBehaviour
         pausePanel.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
-
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 

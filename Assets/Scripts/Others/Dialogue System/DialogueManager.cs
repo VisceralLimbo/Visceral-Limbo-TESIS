@@ -42,6 +42,9 @@ public class DialogueManager : Visceral_Script
     [SerializeField] private BloodEffectController bloodController;
     [SerializeField] private DialogueShaderController vignetteController;
 
+    [SerializeField] SoundData _TypingSound;
+    [SerializeField] SoundData _SkipDialogueSound;
+
     public void Awake()
     {
         if (instance == null && instance != this) instance = this;
@@ -55,6 +58,7 @@ public class DialogueManager : Visceral_Script
         {
             if (_IsTyping)
             {
+                SoundManager.Instance.CreateSound().WithSoundData(_SkipDialogueSound).WithPosition(this.transform.position).play();
                 if (TypingCoroutine != null)
                 {
                     StopCoroutine(TypingCoroutine);
@@ -72,6 +76,7 @@ public class DialogueManager : Visceral_Script
                 {
                     AutoAdvanceTextCoroutine = StartCoroutine(AutoAdvanceDialogue(currentNodeData.TimeToAdvance));
                 }
+
             }
             else if (!OptionsPanel.activeSelf)
             {
@@ -138,17 +143,34 @@ public class DialogueManager : Visceral_Script
         DialogueText.text = "";
         currentNodeData = NodeDT;
 
+        int letterIndex = 0;
+
         foreach (char Letter in NodeDT.TextData.ToCharArray())
         {
             DialogueText.text += Letter;
+
+            // cada 2 letras por ejemplo hace "click"
+            if (letterIndex % 2 == 0)
+            {
+                SoundManager.Instance.CreateSound()
+                    .WithSoundData(_TypingSound)
+                    .WithPosition(this.transform.position)
+                    .play();
+            }
+
+            letterIndex++;
+
+            // skip si el jugador aprieta
             if (Input.GetKeyDown(KeyCode.E))
             {
                 DialogueText.text = NodeDT.TextData;
                 break;
             }
+
             yield return new WaitForSeconds(_TextSpeed);
         }
 
+        // terminó de escribir
         _IsTyping = false;
         TypingCoroutine = null;
 

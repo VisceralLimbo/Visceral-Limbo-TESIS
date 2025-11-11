@@ -16,6 +16,8 @@ public class BleedItemLogic : ItemLogic
     private SwordTest _Sword;
     private ParticleSystem swordParticles;
 
+    [SerializeField] SoundData _PickUpSound;
+
     private Player_MeleeAttack _playerMeleeAttack;
     private Player_MeleeAttack PlayerMeleeAttackComponent{get
         {
@@ -74,6 +76,7 @@ public class BleedItemLogic : ItemLogic
     public override void OnPickUp()
     {
         Inventory.AddItemStack(_ItemDefinition);
+        SoundManager.Instance.CreateSound().WithSoundData(_PickUpSound).WithPosition(this.transform.position).play();
         Destroy(this.gameObject);
     }
 

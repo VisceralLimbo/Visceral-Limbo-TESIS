@@ -9,6 +9,8 @@ public class EvasionDamageItemLogic : ItemLogic
     private Dash_Skill _playerDashSkill; // ref del dash
     // NO ESTA TOMANDO STACKS PORQUE NO SIENTO QUE TENGA QUE. el jugador no tiene ninguna penalizacion por spamear shift no tiene sentido que pueda stackar daño y hacer un x5 solo por tocar shift tampoco un x2 pero bueno :v
 
+    [SerializeField] SoundData _PickUpSound;
+
     //trigger de siempre
     private void OnTriggerEnter(Collider other)
     {
@@ -92,6 +94,7 @@ public class EvasionDamageItemLogic : ItemLogic
     public override void OnPickUp()
     {
         Inventory.AddItemStack(_ItemDefinition);
+        SoundManager.Instance.CreateSound().WithSoundData(_PickUpSound).WithPosition(this.transform.position).play();
         Destroy(this.gameObject);
     }
 

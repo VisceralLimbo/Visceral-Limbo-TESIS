@@ -13,6 +13,8 @@ public class PauseMenuUI : MonoBehaviour
     public PauseMenu ref_PauseMenu;
     [SerializeField] private ItemsPanelBehaviour itemsUI;
 
+    [SerializeField] SoundData _ClickSound;
+
     //no hace falta explicar
     public void ShowPauseMenu()
     {
@@ -20,7 +22,7 @@ public class PauseMenuUI : MonoBehaviour
         opcionesPanel.SetActive(false);
         abandonPanel.SetActive(false);
         itemsPanel.SetActive(false);
-
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         //reseteo la ui por bug en flechitas xd
         ref_PauseMenu.ResetUIState();
     }
@@ -31,7 +33,7 @@ public class PauseMenuUI : MonoBehaviour
         opcionesPanel.SetActive(true);
         abandonPanel.SetActive(false);
         itemsPanel.SetActive(false);
-
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ref_PauseMenu.ResetUIState();
     }
 
@@ -41,7 +43,7 @@ public class PauseMenuUI : MonoBehaviour
         opcionesPanel.SetActive(false);
         abandonPanel.SetActive(true);
         itemsPanel.SetActive(false);
-
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ref_PauseMenu.ResetUIState();
     }
 
@@ -51,7 +53,7 @@ public class PauseMenuUI : MonoBehaviour
         opcionesPanel.SetActive(false);
         abandonPanel.SetActive(false);
         itemsPanel.SetActive(true);
-
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ref_PauseMenu.ResetUIState();
         // redibujo ui
         itemsUI.RefreshInventoryUI();
@@ -60,10 +62,12 @@ public class PauseMenuUI : MonoBehaviour
     public void BackToPauseMenu()
     {
         ShowPauseMenu();
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
     }
 
     public void Abandonn()
     {
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         SceneManager.LoadScene("MainMenu");
     }
 }

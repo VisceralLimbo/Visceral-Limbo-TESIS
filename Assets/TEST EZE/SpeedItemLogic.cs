@@ -17,6 +17,8 @@ public class SpeedItemLogic : ItemLogic
     private float currentAlpha;
     private float targetAlpha;
 
+    [SerializeField] SoundData _PickUpSound;
+
     [Header("Transición del efecto")]
     [SerializeField] private float fadeSpeed = 3f;
 
@@ -74,6 +76,7 @@ public class SpeedItemLogic : ItemLogic
     public override void OnPickUp()
     {
         Inventory.AddItemStack(_ItemDefinition);
+        SoundManager.Instance.CreateSound().WithSoundData(_PickUpSound).WithPosition(this.transform.position).play();
         Destroy(this.gameObject);
     }
 

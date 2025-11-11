@@ -9,6 +9,7 @@ public class ShopNexus : MonoBehaviour
     public TMP_Text StatusText;
     public Button BuyButton;
 
+    [SerializeField] SoundData _ClickSound;
     void Start()
     {
         BuyButton.onClick.AddListener(OnBuyClicked);
@@ -43,6 +44,7 @@ public class ShopNexus : MonoBehaviour
         {
             // compre bien
             UpdateUI();
+            SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         }
         else
         {
