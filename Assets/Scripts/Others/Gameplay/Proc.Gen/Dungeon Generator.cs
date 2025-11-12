@@ -207,7 +207,7 @@ public class DungeonGenerator : MonoBehaviour
     IEnumerator GenerateDungeon()
     {
         
-            print("Generating dungeon...");
+         
 
             // ponemos la sala inicial
             if (RegularRoomCount > 0)
@@ -257,7 +257,7 @@ public class DungeonGenerator : MonoBehaviour
 
                     if (!sourceRoom.HasAvailableEntryPoint(out DungeonEntryPoint sourceEntryPoint))
                     {
-                        Debug.Log("room has no entry points" + sourceRoom.name );
+                        Debug.LogWarning("room has no entry points" + sourceRoom.name );
                         //SourcePool.Remove(sourceRoom);
                         continue; // esta sala no tiene puntos abiertos, probemos otro lugar
                     }
@@ -280,7 +280,7 @@ public class DungeonGenerator : MonoBehaviour
                                                        ||!partToPlace.HasAvailableEntryPoint
                                                       (out DungeonEntryPoint newPartEntryPoint))
                     {
-                        Debug.Log("We failed to place a room" + sourceRoom.name);
+                        Debug.LogWarning("We failed to place a room" + sourceRoom.name);
                         Destroy(newPartObject); // destruimos la pieza ERRONEA
 
                         sourceEntryPoint.SetOccupied(null,false);
@@ -902,7 +902,7 @@ public class DungeonGenerator : MonoBehaviour
         var FullRoomTarget = RegularRoomCount + SpecialRoomCount + 1f;
         var TotalRooms = generatedRooms.Count + SpecialRoomCount;
 
-        GenerationValue?.Invoke((int)(TotalRooms / FullRoomTarget));
+        GenerationValue?.Invoke((TotalRooms / FullRoomTarget));
 
         if (IsGenerated)
         {

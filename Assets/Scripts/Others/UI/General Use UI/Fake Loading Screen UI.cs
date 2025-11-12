@@ -13,6 +13,8 @@ public class FakeLoadingScreenUI : MonoBehaviour
     public Slider progressBar;
     public TMP_Text progressText;
 
+    [SerializeField] private float LastValue;
+
     private void Start()
     {
         // panel true cuando inicio escena (para q se vea la carga, texto, etc)
@@ -25,6 +27,7 @@ public class FakeLoadingScreenUI : MonoBehaviour
         {
             Dungeon.GenerationValue += AddProgressBar;
             Dungeon.OnSuccessfulGeneration += HideLoadingScreen;
+            Dungeon.OnUnSuccessfulGeneration += ResetProgressBar;
         }
 
     }
@@ -42,21 +45,28 @@ public class FakeLoadingScreenUI : MonoBehaviour
 
     public void AddProgressBar(float AddProgress)
     {
-        var Current = progressBar.value;
+        // como queda feo que la barra vuelva para atras.
+        // decidi poner un  cacheo / chequeo de cual fue el ultimo valor de generacion
+        // si el valor entrante es menor que el del cache. entonces no actualizamos nada
+        if(LastValue > AddProgress)
+        {
+            return;
+        }
+        LastValue = AddProgress;
 
-        var Extra = Mathf.Clamp01(AddProgress);
+        progressBar.value = AddProgress;
 
-        progressBar.value = Current + Extra;
-
-        var data = progressBar.value * 100;
+        int data = (int)(AddProgress * 100);
 
         progressText.text = data.ToString() + " %";
+
+        print("loading value: " + AddProgress + " Total " + data);
     }
 
     public void ResetProgressBar()
     {
-        progressBar.value = 0;
-        progressText.text+= "0 %";
+        LastValue = progressBar.value;
+
     }
 
     public void HideLoadingScreen()

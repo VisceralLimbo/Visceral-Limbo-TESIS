@@ -13,8 +13,12 @@ public class MainMenu : MonoBehaviour
     {
         optionsPanel.SetActive(false);
         buttonsHide.SetActive(true);
-        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
+    }
+
+    public void Start()
+    {
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
     }
 
     public void MainMenuPlayGame()
