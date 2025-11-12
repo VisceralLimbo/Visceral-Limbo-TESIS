@@ -198,6 +198,8 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &2931787100814140882
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,6 +496,8 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &3650775386995653326
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,6 +553,8 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &3970383089837219507
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,9 +965,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lightsToControl:
-  - {fileID: 2194832474048656597}
   - {fileID: 5212188290215759537}
-  spawnerManager: {fileID: 0}
+  - {fileID: 1014155215393365806}
+  - {fileID: 2194832474048656597}
+  - {fileID: 6355693877026497866}
+  spawnerManager: {fileID: 8828895978554980365}
 --- !u!1 &6456861922914537247
 GameObject:
   m_ObjectHideFlags: 0
@@ -4308,6 +4316,12 @@ PrefabInstance:
 --- !u!108 &2194832474048656597 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 1372771118090657053, guid: ebb008cdc6027914f9cabb5882619952,
+    type: 3}
+  m_PrefabInstance: {fileID: 970680264006887880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &6355693877026497866 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 6146139599360412802, guid: ebb008cdc6027914f9cabb5882619952,
     type: 3}
   m_PrefabInstance: {fileID: 970680264006887880}
   m_PrefabAsset: {fileID: 0}
@@ -16660,6 +16674,12 @@ PrefabInstance:
 --- !u!4 &915862850484999468 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6335920110864549504, guid: ebb008cdc6027914f9cabb5882619952,
+    type: 3}
+  m_PrefabInstance: {fileID: 6582144641342591916}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &1014155215393365806 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 6146139599360412802, guid: ebb008cdc6027914f9cabb5882619952,
     type: 3}
   m_PrefabInstance: {fileID: 6582144641342591916}
   m_PrefabAsset: {fileID: 0}

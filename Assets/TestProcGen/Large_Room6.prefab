@@ -562,6 +562,8 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &3375609515396389346
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,6 +666,8 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &6909984736595085833
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,7 +872,9 @@ MonoBehaviour:
   lightsToControl:
   - {fileID: 5935618530117819901}
   - {fileID: 1448440488536656994}
-  spawnerManager: {fileID: 0}
+  - {fileID: 6348652944993005287}
+  - {fileID: 2187794348650332024}
+  spawnerManager: {fileID: 3095383463517199256}
 --- !u!1 &7480727926153128055
 GameObject:
   m_ObjectHideFlags: 0
@@ -924,6 +930,8 @@ MonoBehaviour:
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &7493543575854238781
 GameObject:
   m_ObjectHideFlags: 0
@@ -7915,6 +7923,18 @@ PrefabInstance:
 --- !u!4 &2088078121552835962 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6335920110864549504, guid: ebb008cdc6027914f9cabb5882619952,
+    type: 3}
+  m_PrefabInstance: {fileID: 5411042209723986938}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &2187794348650332024 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 6146139599360412802, guid: ebb008cdc6027914f9cabb5882619952,
+    type: 3}
+  m_PrefabInstance: {fileID: 5411042209723986938}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &6348652944993005287 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 1372771118090657053, guid: ebb008cdc6027914f9cabb5882619952,
     type: 3}
   m_PrefabInstance: {fileID: 5411042209723986938}
   m_PrefabAsset: {fileID: 0}
