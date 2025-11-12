@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 4616380364518688757}
   - component: {fileID: 5480121978322433914}
   - component: {fileID: 5081794324909463561}
-  - component: {fileID: 3717472049046155214}
+  - component: {fileID: 4341898696971776908}
   m_Layer: 0
   m_Name: BossModel
   m_TagString: Untagged
@@ -448,7 +448,7 @@ MonoBehaviour:
   _KnockbackDecay: 0
   _KnockbackVelocity: {x: 0, y: 0, z: 0}
   _KnockbackResistance: 0
---- !u!114 &3717472049046155214
+--- !u!114 &4341898696971776908
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -457,23 +457,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 4498811984456590778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 472673f96eb08914996d06c926556dcc, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c96f3741bd2a094aa2843656cfb1820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   soundData:
-    Clip: {fileID: 8300000, guid: 7be4d6739cc99064b8e7e358c93c403e, type: 3}
+    Clip: {fileID: 0}
     mixerGroup: {fileID: 0}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
     IsFrequent: 0
-  CurrentHealth: 100
-  MaxHealth: 100
+  CurrentHealth: 200
+  MaxHealth: 200
   _RB: {fileID: 0}
   DestroyOnDeath: 0
   DesactivateOnDeath: 1
   Died: 0
   _Context: {fileID: 4503892774817222897}
+  bossUIHandler: {fileID: 0}
+  BossName: CORPUS
 --- !u!1 &5060095149654849359
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,7 +554,7 @@ MonoBehaviour:
   - ConditionName: Attack_Pilar
     Value: 0
     IsResetAfterSwitch: 1
-  _HPComp: {fileID: 3717472049046155214}
+  _HPComp: {fileID: 4341898696971776908}
 --- !u!114 &4503892774817222897
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -48,6 +48,14 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
         DrawWireframe = true;
         _Main_State.DeactivateEnergy(true);
 
+        // refe del boss
+        Boss_HealthComp attackerHP = CTX.transform.root.GetComponentInChildren<Boss_HealthComp>();
+
+        if (attackerHP == null)
+        {
+            return; // al boss no
+        }
+
         // debug purposes
         hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
 
@@ -55,11 +63,11 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
         {
             foreach(Collider collider in hits)
             {
-                if(collider.TryGetComponent(out Health_Component Hp))
+                // busca solo player healthcomp
+                if(collider.TryGetComponent(out Player_HealthComp playerHp))
                 {
-                    Hp.SimpleDamage(AttackDamage);
+                    playerHp.SimpleDamage(AttackDamage);
                 }
-
             }
         }
     }
