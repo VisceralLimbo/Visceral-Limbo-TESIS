@@ -286,7 +286,8 @@ GameObject:
   - component: {fileID: 5480121978322433914}
   - component: {fileID: 5081794324909463561}
   - component: {fileID: 4341898696971776908}
-  m_Layer: 0
+  - component: {fileID: 2549169445402206431}
+  m_Layer: 7
   m_Name: BossModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -437,7 +438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _KCC: {fileID: 5480121978322433914}
   _Model: {fileID: 4498811984456590778}
-  _RB: {fileID: 0}
+  _RB: {fileID: 2549169445402206431}
   _TargetVelocity: {x: 0, y: 0, z: 0}
   _IsActive: 1
   _KillAllMovement: 0
@@ -445,9 +446,9 @@ MonoBehaviour:
   _MovementAccel: 10
   _MaxRotationSpeed: 360
   GotKnockbacked: 0
-  _KnockbackDecay: 0
+  _KnockbackDecay: 10
   _KnockbackVelocity: {x: 0, y: 0, z: 0}
-  _KnockbackResistance: 0
+  _KnockbackResistance: 10
 --- !u!114 &4341898696971776908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,15 +468,42 @@ MonoBehaviour:
     PlayOnAwake: 0
     SpatialBlend: 1
     IsFrequent: 0
-  CurrentHealth: 200
-  MaxHealth: 200
-  _RB: {fileID: 0}
+  CurrentHealth: 500
+  MaxHealth: 500
+  _RB: {fileID: 2549169445402206431}
   DestroyOnDeath: 0
   DesactivateOnDeath: 1
   Died: 0
   _Context: {fileID: 4503892774817222897}
   bossUIHandler: {fileID: 0}
   BossName: CORPUS
+--- !u!54 &2549169445402206431
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4498811984456590778}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5060095149654849359
 GameObject:
   m_ObjectHideFlags: 0
@@ -793,6 +821,7 @@ MonoBehaviour:
   _MinStateLifetime: 0
   Target: {fileID: 0}
   Model: {fileID: 4498811984456590778}
+  _PlayerContext: {fileID: 0}
   _MinimumAttackRange: 6
   Energy: 0
   MaxEnergy: 6

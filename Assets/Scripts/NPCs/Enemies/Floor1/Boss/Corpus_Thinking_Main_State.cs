@@ -11,6 +11,9 @@ public class Corpus_Thinking_Main_State : BaseState
     [SerializeField] IMovementStrategy _MovementStrategy;
     Coroutine _EnergyCoroutine;
 
+    [SerializeField] PlayerContext _PlayerContext;
+    public PlayerContext playerContext { get { return _PlayerContext; } }
+
     [Header("Variables")]
     [Tooltip("Distancia minima para realizar un ataque, recubre tanto melee como rango")]
     [SerializeField] float _MinimumAttackRange;
@@ -102,6 +105,10 @@ public class Corpus_Thinking_Main_State : BaseState
             }
         }
 
+        if(_PlayerContext== null) 
+        {
+            _PlayerContext = this.GetComponentInParent<PlayerContext>();
+        }
         _MovementStrategy = transform.parent.GetComponentInChildren<IMovementStrategy>();
     }
 

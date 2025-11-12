@@ -66,6 +66,10 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
                 // busca solo player healthcomp
                 if(collider.TryGetComponent(out Player_HealthComp playerHp))
                 {
+                    if(playerHp.Context == _Main_State.playerContext)
+                    {
+                        return;
+                    }
                     playerHp.SimpleDamage(AttackDamage);
                 }
             }
