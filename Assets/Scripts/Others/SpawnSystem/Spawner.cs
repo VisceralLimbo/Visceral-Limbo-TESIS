@@ -23,6 +23,9 @@ public class Spawner : MonoBehaviour
     [Header("References")]
     [SerializeField] RoomSpawnerManager _SpawnManager;
 
+    [Header("boss ui references")]
+    public BossHealthBarUI bossUIManagerReference; //panel
+
     [Header("Boss References")]
     public GameObject playerTarget; // player aca ahre  
 
@@ -53,7 +56,7 @@ public class Spawner : MonoBehaviour
             Debug.LogError("<Color = blue> Visceral Error: Spawner has no assigned Enemies </color>");
             return;
         }
-      
+
         if (HasMinion || IsSpent)
         {
             return;
@@ -80,6 +83,16 @@ public class Spawner : MonoBehaviour
             {
                 bossAbilityScript.playerTarget = playerTarget;
                 Debug.Log("aca ta el jefe y le asigno el player");
+            }
+
+            // conecto las cosas del boss
+            Boss_HealthComp bossHealthComp = InstantiatedEnemy.GetComponent<Boss_HealthComp>();
+            if (bossHealthComp == null) bossHealthComp = InstantiatedEnemy.GetComponentInChildren<Boss_HealthComp>();
+
+            if (bossHealthComp != null && bossUIManagerReference != null)
+            {
+                // boss a la ui
+                bossHealthComp.ConnectBossUI(bossUIManagerReference);
             }
 
             EnemySpawnedHP = InstantiatedEnemy.GetComponent<Health_Component>();
