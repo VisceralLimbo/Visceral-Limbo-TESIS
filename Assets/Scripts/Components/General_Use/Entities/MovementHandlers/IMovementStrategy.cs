@@ -17,4 +17,11 @@ public interface IMovementStrategy
     public void ApplyExternalForce(Vector3 targetDirection,float Force);
     public void ApplyExternalRotation(Quaternion RotationDirection, float Force);
 
+    public void SetMovementSpeed(float Speed);
+    public void ResetMovementSpeed();
+
+    public void ForceUngroundSelf(float Time);
+
+
+
 }

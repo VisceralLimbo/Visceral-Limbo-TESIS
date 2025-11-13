@@ -154,7 +154,7 @@ MeshCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 5
   m_Convex: 1
@@ -10318,6 +10318,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomSpawnerManager: {fileID: 0}
   _AnimHandler: {fileID: 8652782461937287741}
+  _EntryPoint: {fileID: 0}
   DoorThreshold: 0.536
   PlayerEnteredRoom: 0
   NonTriggerRoom: 0
@@ -10325,6 +10326,7 @@ MonoBehaviour:
   _IsOpen: 0
   _OpenDoorInside: 0
   _InvertAnimations: 0
+  _Initialized: 0
   _SoundOpenDoor:
     Clip: {fileID: 8300000, guid: c3183545df8e3624b836aa7520ebdfee, type: 3}
     mixerGroup: {fileID: 0}

@@ -12,8 +12,18 @@ public class Corpus_MovementState : BaseState
     [SerializeField] Corpus_Thinking_Main_State thinkingMain;
 
     [SerializeField] IMovementStrategy MovementStrategy;
+
+    float pulse = 0;
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
+        if(_MinStateLifetime > pulse)
+        {
+            pulse = pulse + (Time.deltaTime * TimeDilationManager.GlobalTimeScale);
+            TO = null;
+            return false;
+        }
+
+        pulse = 0;
         return base.EvaluateTransitions(GlobalParams, out TO);
     }
 
@@ -64,8 +74,6 @@ public class Corpus_MovementState : BaseState
         MovementStrategy.UpdateVelocity(Dir);
 
         float DistanceToPlayer = Vector3.Distance(Target.transform.position, Model.transform.position);
-
-
 
         if (DistanceToPlayer <= thinkingMain.MinimumAttackRange)
         {
