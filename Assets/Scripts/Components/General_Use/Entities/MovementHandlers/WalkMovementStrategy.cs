@@ -15,6 +15,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [SerializeField] Vector3? _TargetRotation;
     [SerializeField] bool _IsActive,_KillAllMovement;
     [SerializeField] float _MovementSpeed;
+    [SerializeField] float _BaseMovementSpeed;
     [SerializeField] float _MovementAccel;
     [SerializeField] float _MaxRotationSpeed;
 
@@ -67,6 +68,8 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
                 print("death subscription");
             }
         }
+
+        _BaseMovementSpeed = _MovementSpeed;
     }
 
     private void OnDeath()
@@ -105,6 +108,16 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     public void ApplyExternalRotation(Quaternion RotationDirection, float Force)
     {
 
+    }
+
+    public void SetMovementSpeed(float Speed)
+    {
+        _MovementSpeed = Speed;
+    }
+
+    public void ResetMovementSpeed()
+    {
+        _MovementSpeed = _BaseMovementSpeed;
     }
 
 
@@ -293,6 +306,14 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         _KnockbackVelocity = KnockbackDir * FinalFloat;
         GotKnockbacked = true;
     }
+
+    public void ForceUngroundSelf(float time)
+    {
+        _KCC.ForceUnground(time);
+
+    }
+
+
 
 
 
