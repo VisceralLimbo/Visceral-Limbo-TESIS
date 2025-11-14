@@ -9,6 +9,16 @@ using Random = UnityEngine.Random;
 public class DungeonGenerator : MonoBehaviour
 {
     /// <summary>
+    /// Diccionario que almacena todas las coordenadas lógicas ocupadas (X, Z).
+    /// </summary>
+    private Dictionary<Vector2Int, DungeonPart> occupiedMapGrid = new Dictionary<Vector2Int, DungeonPart>();
+
+    /// <summary>
+    /// Devuelve la sala de inicio.
+    /// </summary>
+    public DungeonPart GetStartingRoom() => StartingRoom; // Asumiendo que 'StartingRoom' es una variable privada
+
+    /// <summary>
     /// Instancia ACTUAL del generador, NO SE MANTIENE ENTRE ESCENAS, OSEA NO ES SINGLETON
     /// </summary>
     public static DungeonGenerator Instance { get; private set; }
@@ -141,12 +151,12 @@ public class DungeonGenerator : MonoBehaviour
     private void Update()
     {
         if (Regen)
-        { 
+        {
             Regen = false;
             StartCoroutine(Regenerate());
             OnUnSuccessfulGeneration?.Invoke();
         }
-  
+
     }
 
     private IEnumerator Regenerate()
@@ -156,33 +166,42 @@ public class DungeonGenerator : MonoBehaviour
             yield break;
         }
 
-        IsRegenerating= true;
+        IsRegenerating = true;
+
+        // LLAMADA DE LIMPIEZA DEL MINIMAPA
+        if (MinimapManager.Instance != null)
+        {
+            MinimapManager.Instance.ClearMap();
+        }
+
+        // ** LIMPIEZA DE LA CUADRÍCULA LÓGICA **
+        occupiedMapGrid.Clear(); // <--- NUEVO
 
         foreach (DungeonPart room in generatedRooms)
         {
-            if(room !=null) Destroy(room.gameObject);
+            if (room != null) Destroy(room.gameObject);
         }
         generatedRooms.Clear();
 
         foreach (DungeonPart hall in generatedHallways)
         {
-            if(hall != null)Destroy(hall.gameObject);
+            if (hall != null) Destroy(hall.gameObject);
         }
         generatedHallways.Clear();
 
         foreach (DungeonPart special in generatedSpecialRooms)
         {
-            if(special != null)Destroy(special.gameObject);
+            if (special != null) Destroy(special.gameObject);
         }
         generatedSpecialRooms.Clear();
 
-        if(BossRoom != null) 
+        if (BossRoom != null)
         {
             Destroy(BossRoom.gameObject);
             GeneratedBossRoom = false;
-            BossRoom= null;
+            BossRoom = null;
         }
-   
+
 
         AllParts.Clear();
 
@@ -201,207 +220,245 @@ public class DungeonGenerator : MonoBehaviour
     {
         StartCoroutine(GenerateDungeon());
         //generateSpecials
-        
+
     }
 
     IEnumerator GenerateDungeon()
     {
-        
-         
 
-            // ponemos la sala inicial
-            if (RegularRoomCount > 0)
+
+
+        // ponemos la sala inicial
+        if (RegularRoomCount > 0)
+        {
+            GameObject entranceObj = Instantiate(Entrance, this.transform.position, this.transform.rotation);
+            if (entranceObj.TryGetComponent(out DungeonPart part))
             {
-                GameObject entranceObj = Instantiate(Entrance, this.transform.position, this.transform.rotation);
-                if (entranceObj.TryGetComponent(out DungeonPart part))
-                {
-                    
-                    generatedRooms.Add(part);
-                    GenerateHallway = true;
-                    StartingRoom = part;
-                }
+
+                generatedRooms.Add(part);
+                GenerateHallway = true;
+                StartingRoom = part;
+
+                // ** REGISTRO DE CUADRÍCULA Y MAPA **
+                part.MapCoords = Vector2Int.zero;
+                occupiedMapGrid.Add(part.MapCoords, part); // <--- NUEVO
+                MinimapManager.Instance.RegisterNewPart(part);
             }
+        }
 
-            // usamos un while loop para garantizar que tenemos la cantidad de salas correctas
-            while (generatedRooms.Count < RegularRoomCount)
+        // usamos un while loop para garantizar que tenemos la cantidad de salas correctas
+        while (generatedRooms.Count < RegularRoomCount)
+        {
+            bool placementSuccessful = false;
+            DungeonPart partToPlace = null; // la nueva pieza a colocar
+
+
+            // Watchdog de cantidad de veces que PUEDE tratar de poner una pieza
+            for (int i = 0; i < TotalTriesPerRoomGeneration; i++)
             {
-                bool placementSuccessful = false;
-                DungeonPart partToPlace = null; // la nueva pieza a colocar
 
-               
-                // Watchdog de cantidad de veces que PUEDE tratar de poner una pieza
-                for (int i = 0; i < TotalTriesPerRoomGeneration; i++)
-                {
+                // 1. DECLARACIÓN DE VARIABLES FUERA DE LOS BLOQUES IF
+                // Esto soluciona "No se puede usar la variable local 'sourceEntryPoint' antes de declararla"
+                DungeonPart sourceRoom = null;
+                DungeonEntryPoint sourceEntryPoint = null;
+                Vector2Int newMapCoords = Vector2Int.zero; // <-- Declarada aquí
+
+
                 // 1. SELECCIONAMOS UNA PIEZA EXISTENTE PARA COLOCARLE LA NUEVA
                 // ===================================================
-                    List<DungeonPart> SourcePool;
-                    
+                List<DungeonPart> SourcePool;
 
-                    if (GenerateHallway)
-                    {
-                       SourcePool = generatedRooms.FindAll(x=> x.HasAvailableEntryPoint(out _));
-                    }
-                    else
-                    {
-                       SourcePool = generatedHallways.FindAll(x => x.HasAvailableEntryPoint(out _));
-                    }
 
-                    // CATCH! evitamos referenciar un pool nulo
-                    if(SourcePool.Count == 0)
-                    {
-                       continue;
-                    }
+                if (GenerateHallway)
+                {
+                    SourcePool = generatedRooms.FindAll(x => x.HasAvailableEntryPoint(out _));
+                }
+                else
+                {
+                    SourcePool = generatedHallways.FindAll(x => x.HasAvailableEntryPoint(out _));
+                }
 
-                    int randomLinkRoomIndex = UnityEngine.Random.Range(0,SourcePool.Count);
-                    DungeonPart sourceRoom = SourcePool[randomLinkRoomIndex];
+                // CATCH! evitamos referenciar un pool nulo
+                if (SourcePool.Count == 0)
+                {
+                    continue;
+                }
 
-                    if (!sourceRoom.HasAvailableEntryPoint(out DungeonEntryPoint sourceEntryPoint))
-                    {
-                        Debug.LogWarning("room has no entry points" + sourceRoom.name );
-                        //SourcePool.Remove(sourceRoom);
-                        continue; // esta sala no tiene puntos abiertos, probemos otro lugar
-                    }
+                int randomLinkRoomIndex = UnityEngine.Random.Range(0, SourcePool.Count);
+                sourceRoom = SourcePool[randomLinkRoomIndex]; // <-- ASIGNACIÓN AQUÍ
 
-                    // 2. CREAMOS LA PIEZA NUEVA Y LA COLOCAMOS
+                if (!sourceRoom.HasAvailableEntryPoint(out sourceEntryPoint))
+                {
+                    Debug.LogWarning("room has no entry points" + sourceRoom.name);
+                    //SourcePool.Remove(sourceRoom);
+                    continue; // esta sala no tiene puntos abiertos, probemos otro lugar
+                }
+
+                // 1.5. CHEQUEO DE COORDENADA LÓGICA (NUEVO BLOQUE DE VERIFICACIÓN)
+                // Soluciona el problema de superposición del minimapa.
+                Vector2Int sourceCoords = sourceRoom.MapCoords;
+                Vector2Int offset = GetCoordinateOffset(sourceEntryPoint);
+                newMapCoords = sourceCoords + offset; // <-- ASIGNACIÓN A LA VARIABLE DECLARADA ARRIBA
+
+                if (occupiedMapGrid.ContainsKey(newMapCoords))
+                {
+                    Debug.LogWarning($"Celda lógica {newMapCoords} ya ocupada. Reintentando.");
+                    continue; // Salta al siguiente intento (i++)
+                }
+
+
+
+                // 2. CREAMOS LA PIEZA NUEVA Y LA COLOCAMOS
+                // =====================================================
+                GameObject newPartObject;
+                if (GenerateHallway)
+                {
+                    int randomHallwayIndex = UnityEngine.Random.Range(0, HallwayPrefabs.Count);
+                    newPartObject = Instantiate(HallwayPrefabs[randomHallwayIndex]);
+                }
+                else
+                {
+                    int randomIndex = Random.Range(0, RoomPrefabs.Count);
+                    newPartObject = Instantiate(RoomPrefabs[randomIndex]);
+                }
+
+                if (!newPartObject.TryGetComponent(out partToPlace)
+                                                   || !partToPlace.HasAvailableEntryPoint
+                                                  (out DungeonEntryPoint newPartEntryPoint))
+                {
+                    Debug.LogWarning("We failed to place a room" + sourceRoom.name);
+                    Destroy(newPartObject); // destruimos la pieza ERRONEA
+
+                    sourceEntryPoint.SetOccupied(null, false);
+                    sourceRoom.UnuseEntryPoint(sourceEntryPoint);
+                    continue; // el prefab usado no era viable, por ende limpiamos lo que hicimos
+                              // y probamos de nuevo
+                }
+
+                // 3. ALINEAMIENTO Y CHEQUEO DE COLISIONES
+                // =====================================================
+                AlignRooms(sourceRoom.transform, partToPlace.transform, sourceEntryPoint.transform, newPartEntryPoint.transform);
+
+                if (HandleIntersection(partToPlace))
+                {
+                    Debug.Log("Oops, the room intersects" + sourceRoom.name);
+
+                    sourceRoom.UnuseEntryPoint(sourceEntryPoint);
+                    // LIBERAR LOS PUNTOS OCUPADOS
+                    sourceEntryPoint.SetOccupied(null, false);
+                    newPartEntryPoint.SetOccupied(null, false);
+                    partToPlace.UnuseEntryPoint(newPartEntryPoint);
+
+                    // HAY INTERSECCION! LIMPIAMOS LO HECHO Y VOLVEMOS A PROBAR
+                    Destroy(newPartObject);
+                    partToPlace = null;
+                    continue;
+                }
+                else
+                {
+
+                    // 4. GENERACION EXITOSA
                     // =====================================================
-                    GameObject newPartObject;
-                    if (GenerateHallway)
+                    placementSuccessful = true;
+
+                    // ** MAPA: ASIGNAR Y REGISTRAR COORDENADA **
+                    partToPlace.MapCoords = newMapCoords;
+                    occupiedMapGrid.Add(newMapCoords, partToPlace); // REGISTRO EN CUADRÍCULA
+
+                    // *** NUEVO LOG DE DEPURACIÓN ***
+                    Debug.Log($"[Minimap Debug] Pieza Generada: {partToPlace.name} | De Sala: {sourceRoom.name} " +
+                              $"| Offset: {offset} | Nueva Coord: {partToPlace.MapCoords}");
+
+                    // bloqueamos los puntos de accesso usados
+                    sourceEntryPoint.SetOccupied(newPartEntryPoint.GetOwner(), true);
+                    newPartEntryPoint.SetOccupied(sourceEntryPoint.GetOwner(), true);
+
+                    // creamos una puerta en el punto ocupado
+                    var Door = Instantiate(DoorOBJ);
+
+                    //Ahora le decimos a la puerta a quien le pertenece
+                    if (Door.TryGetComponent(out DoorScript DoorScript))
                     {
-                        int randomHallwayIndex = UnityEngine.Random.Range(0, HallwayPrefabs.Count);
-                        newPartObject = Instantiate(HallwayPrefabs[randomHallwayIndex]);
-                    }
-                    else
-                    {
-                        int randomIndex = Random.Range(0, RoomPrefabs.Count);
-                        newPartObject = Instantiate(RoomPrefabs[randomIndex]);
-                    }
-
-                    if (!newPartObject.TryGetComponent(out partToPlace) 
-                                                       ||!partToPlace.HasAvailableEntryPoint
-                                                      (out DungeonEntryPoint newPartEntryPoint))
-                    {
-                        Debug.LogWarning("We failed to place a room" + sourceRoom.name);
-                        Destroy(newPartObject); // destruimos la pieza ERRONEA
-
-                        sourceEntryPoint.SetOccupied(null,false);
-                        sourceRoom.UnuseEntryPoint(sourceEntryPoint);
-                        continue; // el prefab usado no era viable, por ende limpiamos lo que hicimos
-                                  // y probamos de nuevo
-                    }
-
-                    // 3. ALINEAMIENTO Y CHEQUEO DE COLISIONES
-                    // =====================================================
-                    AlignRooms(sourceRoom.transform, partToPlace.transform, sourceEntryPoint.transform, newPartEntryPoint.transform);
-
-                    if (HandleIntersection(partToPlace))
-                    {
-                        Debug.Log("Oops, the room intersects" + sourceRoom.name);
-
-                        sourceRoom.UnuseEntryPoint(sourceEntryPoint);
-                        // LIBERAR LOS PUNTOS OCUPADOS
-                        sourceEntryPoint.SetOccupied(null, false);
-                        newPartEntryPoint.SetOccupied(null, false);
-                        partToPlace.UnuseEntryPoint(newPartEntryPoint);
-
-                        // HAY INTERSECCION! LIMPIAMOS LO HECHO Y VOLVEMOS A PROBAR
-                        Destroy(newPartObject);
-                        partToPlace = null;
-                        continue;
-                    }
-                    else
-                    {
-                    
-                        // 4. GENERACION EXITOSA
-                        // =====================================================
-                        placementSuccessful = true;
-
-                        // bloqueamos los puntos de accesso usados
-                        sourceEntryPoint.SetOccupied(newPartEntryPoint.GetOwner(),true);
-                        newPartEntryPoint.SetOccupied(sourceEntryPoint.GetOwner(),true);
-
-                        // creamos una puerta en el punto ocupado
-                        var Door = Instantiate(DoorOBJ);
-
-                        //Ahora le decimos a la puerta a quien le pertenece
-                        if(Door.TryGetComponent(out DoorScript DoorScript))
-                        {
-                            //Si estamos generando un pasillo, entonces nuestra habitacion
-                            //asignada sería el Source
-                            if (GenerateHallway)
-                            {
-                                if(sourceRoom.TryGetComponent(out RoomSpawnerManager Manager))
-                                {
-                                    // como la pieza nueva es un pasillo, esta puerta estará ubicada en el
-                                    // snap point de la pieza Source
-                                    DoorScript.Initialize(Manager,sourceEntryPoint);
-                                }
-                                else 
-                                {
-                                    Debug.LogError("Visceral Limbo Proc.Gen: " + sourceRoom.name + " no tiene script de RoomManager");
-                                }
-                            }
-                            // Si no
-                            // Entonces acabamos de generar una habitacion.
-                            // por ende, nuestro partToPlace será la habitacion
-                            else if (!GenerateHallway)
-                            {
-                                if(partToPlace.TryGetComponent(out RoomSpawnerManager manager))
-                                {
-                                    // como la pieza nueva es una sala, esta puerta estará ubicada en el
-                                    // snap point de la pieza nueva
-                                    DoorScript.Initialize(manager,newPartEntryPoint);
-                                }
-                                else
-                                {
-                                    Debug.LogError("Visceral Limbo Proc.Gen: " + partToPlace.name + " no tiene script de RoomManager");
-                                }
-                            }
-                        }
-
-                        // añadimos la parte nueva al pool de salas generadas
+                        //Si estamos generando un pasillo, entonces nuestra habitacion
+                        //asignada sería el Source
                         if (GenerateHallway)
                         {
-                            generatedHallways.Add(partToPlace);
+                            if (sourceRoom.TryGetComponent(out RoomSpawnerManager Manager))
+                            {
+                                // como la pieza nueva es un pasillo, esta puerta estará ubicada en el
+                                // snap point de la pieza Source
+                                DoorScript.Initialize(Manager, sourceEntryPoint);
+                            }
+                            else
+                            {
+                                Debug.LogError("Visceral Limbo Proc.Gen: " + sourceRoom.name + " no tiene script de RoomManager");
+                            }
                         }
-                        else
+                        // Si no
+                        // Entonces acabamos de generar una habitacion.
+                        // por ende, nuestro partToPlace será la habitacion
+                        else if (!GenerateHallway)
                         {
-                            generatedRooms.Add(partToPlace);
+                            if (partToPlace.TryGetComponent(out RoomSpawnerManager manager))
+                            {
+                                // como la pieza nueva es una sala, esta puerta estará ubicada en el
+                                // snap point de la pieza nueva
+                                DoorScript.Initialize(manager, newPartEntryPoint);
+                            }
+                            else
+                            {
+                                Debug.LogError("Visceral Limbo Proc.Gen: " + partToPlace.name + " no tiene script de RoomManager");
+                            }
                         }
-
-                        GenerateHallway = !GenerateHallway; // flip flop de sala / pasillo
-
-                        newPartObject.transform.SetParent(this.transform,true);
-
-                        //levantamos los eventos de generacion
-                        GenerationEvents();
-                            
-                        break; // salimos del loop para colocar una nueva pieza
                     }
-                }
 
-                // si consumimos todos los intentos posibles y no generamos nada
-                // salimos del LOOP para evitar stack overflow
-                if (!placementSuccessful)
-                {
-                    Debug.LogWarning("Dungeon generation failed. Could not find a valid placement after " + TotalTriesPerRoomGeneration + " attempts.");
-                    if(!IsRegenerating)StartCoroutine(Regenerate());
-                    break; 
-                }
+                    // añadimos la parte nueva al pool de salas generadas
+                    if (GenerateHallway)
+                    {
+                        generatedHallways.Add(partToPlace);
+                    }
+                    else
+                    {
+                        generatedRooms.Add(partToPlace);
+                    }
 
-                if (SlowGen)
-                {
-                    yield return new WaitForSeconds(SlowGenSpeed);
+                    GenerateHallway = !GenerateHallway; // flip flop de sala / pasillo
+
+                    newPartObject.transform.SetParent(this.transform, true);
+
+                    // ** MAPA: REGISTRAR LA PIEZA NUEVA **
+                    MinimapManager.Instance.RegisterNewPart(partToPlace); // <--- NUEVO
+
+                    //levantamos los eventos de generacion
+                    GenerationEvents();
+
+                    break; // salimos del loop para colocar una nueva pieza
                 }
             }
 
-            // =====================================================
-            //
-            //  AHORA QUE FINALIZAMOS LA ESTRUCTURA BASE DE LA MAZMORRA
-            //  VAMOS A COLOCAR LAS SALAS ESPECIALES
-            //
-            // =====================================================
-            StartCoroutine(GenerateSpecialRooms());
-    
+            // si consumimos todos los intentos posibles y no generamos nada
+            // salimos del LOOP para evitar stack overflow
+            if (!placementSuccessful)
+            {
+                Debug.LogWarning("Dungeon generation failed. Could not find a valid placement after " + TotalTriesPerRoomGeneration + " attempts.");
+                if (!IsRegenerating) StartCoroutine(Regenerate());
+                break;
+            }
+
+            if (SlowGen)
+            {
+                yield return new WaitForSeconds(SlowGenSpeed);
+            }
+        }
+
+        // =====================================================
+        //
+        //  AHORA QUE FINALIZAMOS LA ESTRUCTURA BASE DE LA MAZMORRA
+        //  VAMOS A COLOCAR LAS SALAS ESPECIALES
+        //
+        // =====================================================
+        StartCoroutine(GenerateSpecialRooms());
+
     }
 
     IEnumerator GenerateSpecialRooms()
@@ -417,7 +474,7 @@ public class DungeonGenerator : MonoBehaviour
             for (int I = 0; I < TotalTriesPerRoomGeneration; I++)
             {
 
-          
+
                 // 1: CREAMOS UN NUEVO SOURCE POOL
                 // VAMOS A SALIR CON LA IDEA DE QUE NUESTRAS SALAS ESPECIALES
                 // PUEDEN CONECTARSE CON CUALQUIER OTRO TIPO DE SALA (MENOS ESPECIALES Y JEFE)
@@ -440,15 +497,15 @@ public class DungeonGenerator : MonoBehaviour
                     break;
                 }
 
-                int randomSourceSeed = Random.Range(0, SourcePool.Count-1);
-                if(randomSourceSeed < 0 || randomSourceSeed > SourcePool.Count)
+                int randomSourceSeed = Random.Range(0, SourcePool.Count - 1);
+                if (randomSourceSeed < 0 || randomSourceSeed > SourcePool.Count)
                 {
                     Debug.LogWarning("Visceral Proc.Gen : no hay posibles espacios en la mazmorra para salas especiales");
                     if (!IsRegenerating) StartCoroutine(Regenerate());
                     break;
                 }
 
-                DungeonPart SourceRoom = SourcePool[randomSourceSeed];
+                DungeonPart SourceRoom = SourcePool[randomSourceSeed]; // <-- Fuente
 
                 // source pool deberia de contener las salas y pasillos disponibles
                 if (!SourceRoom.HasAvailableEntryPoint(out DungeonEntryPoint sourceEntryPoint))
@@ -457,7 +514,17 @@ public class DungeonGenerator : MonoBehaviour
                     //SourcePool.Remove(sourceRoom);
                     continue; // esta sala no tiene puntos abiertos, probemos otro lugar
                 }
-             
+
+                // ** 1.5. CHEQUEO DE COORDENADA LÓGICA (NUEVO BLOQUE) **
+                Vector2Int sourceCoords = SourceRoom.MapCoords;
+                Vector2Int offset = GetCoordinateOffset(sourceEntryPoint);
+                Vector2Int newMapCoords = sourceCoords + offset; // <-- Cálculo de coordenada
+                if (occupiedMapGrid.ContainsKey(newMapCoords))
+                {
+                    Debug.LogWarning($"Celda lógica {newMapCoords} ya ocupada por sala especial. Reintentando.");
+                    continue;
+                }
+
 
                 // =====================================================
                 //
@@ -513,9 +580,13 @@ public class DungeonGenerator : MonoBehaviour
                     // =====================================================
                     placementSuccessful = true;
 
+                    // ** MAPA: ASIGNAR Y REGISTRAR COORDENADA **
+                    NewPart.MapCoords = newMapCoords;
+                    occupiedMapGrid.Add(newMapCoords, NewPart); // REGISTRO EN CUADRÍCULA
+
                     // bloqueamos los puntos de accesso usados
-                    sourceEntryPoint.SetOccupied(NewPartEntryPoint.GetOwner(),true);
-                    NewPartEntryPoint.SetOccupied(sourceEntryPoint.GetOwner(),true);
+                    sourceEntryPoint.SetOccupied(NewPartEntryPoint.GetOwner(), true);
+                    NewPartEntryPoint.SetOccupied(sourceEntryPoint.GetOwner(), true);
 
                     // creamos una puerta en el punto ocupado
                     var Door = Instantiate(DoorOBJ, sourceEntryPoint.transform.position, sourceEntryPoint.transform.rotation);
@@ -525,26 +596,26 @@ public class DungeonGenerator : MonoBehaviour
                     Door.AddComponent<DoorGlow>();
 
                     // TESTEAMOS SI EL SOURCE ES UNA SALA,LA INICIAMOS
-                    if(SourceRoom.RoomType == DungeonPart.DungeonPartType.Room)
+                    if (SourceRoom.RoomType == DungeonPart.DungeonPartType.Room)
                     {
-                        if(SourceRoom.TryGetComponent(out RoomSpawnerManager Manager))
+                        if (SourceRoom.TryGetComponent(out RoomSpawnerManager Manager))
                         {
                             if (Door.TryGetComponent(out DoorScript DoorSC))
                             {
-                                DoorSC.Initialize(Manager,sourceEntryPoint);
+                                DoorSC.Initialize(Manager, sourceEntryPoint);
                                 DoorSC.ShouldGenerateEvents(false);
 
                             }
                         }
                     }
-                    else if(SourceRoom.RoomType == DungeonPart.DungeonPartType.Hallway)
+                    else if (SourceRoom.RoomType == DungeonPart.DungeonPartType.Hallway)
                     {
-                        if(Door.TryGetComponent(out DoorScript DoorSC))
+                        if (Door.TryGetComponent(out DoorScript DoorSC))
                         {
                             DoorSC.ShouldGenerateEvents(false);
                         }
 
-                        
+
                     }
 
 
@@ -552,8 +623,12 @@ public class DungeonGenerator : MonoBehaviour
 
                     // añadimos la sala especial al listado de salas generadas
                     generatedSpecialRooms.Add(NewPart);
-                    NewPart.transform.SetParent(this.transform,true);
+
+                    NewPart.transform.SetParent(this.transform, true);
                     placementSuccessful = true;
+
+                    // ** MAPA: REGISTRAR LA PIEZA NUEVA **
+                    MinimapManager.Instance.RegisterNewPart(NewPart); // <--- NUEVO
 
                     //levantamos los eventos de generacion
                     GenerationEvents();
@@ -572,7 +647,7 @@ public class DungeonGenerator : MonoBehaviour
             {
                 yield return new WaitForSeconds(SlowGenSpeed);
             }
-   
+
         }
 
         // =================================================
@@ -612,16 +687,16 @@ public class DungeonGenerator : MonoBehaviour
 
         List<DungeonEntryPoint> viableEntryPoints = new List<DungeonEntryPoint>();
 
-        foreach(DungeonPart Entry in generatedHallways)
+        foreach (DungeonPart Entry in generatedHallways)
         {
-            if(Entry == null)
+            if (Entry == null)
             {
                 continue;
             }
 
             List<DungeonEntryPoint> Entrypoints = Entry.GetAvailableEntryPoints();
 
-            if(Entrypoints!= null && Entrypoints.Count > 0)
+            if (Entrypoints != null && Entrypoints.Count > 0)
             {
                 viableEntryPoints.AddRange(Entrypoints);
             }
@@ -645,20 +720,32 @@ public class DungeonGenerator : MonoBehaviour
 
         bool placementSuccessful = false;
 
-        foreach(DungeonEntryPoint SourcePoint in orderedEntryPoints)
+        foreach (DungeonEntryPoint SourcePoint in orderedEntryPoints)
         {
             int bossRoomSeed = Random.Range(0, BossRoomPrefabs.Count);
 
             //obtenemos una referencia del dueño del entrypoint
             DungeonPart SourceRoom = SourcePoint.GetOwner();
 
+            // ** 1.5. CHEQUEO DE COORDENADA LÓGICA **
+            Vector2Int sourceCoords = SourceRoom.MapCoords;
+            Vector2Int offset = GetCoordinateOffset(SourcePoint);
+            Vector2Int newMapCoords = sourceCoords + offset;
+
+            if (occupiedMapGrid.ContainsKey(newMapCoords)) // <-- NUEVA VERIFICACIÓN
+            {
+                Debug.LogWarning($"Celda lógica {newMapCoords} ya ocupada por jefe. Probando siguiente punto.");
+                continue; // Salta al siguiente punto de entrada (foreach)
+            }
+
+
             GameObject NewBossRoom = Instantiate(BossRoomPrefabs[bossRoomSeed]);
 
-            if(!NewBossRoom.TryGetComponent(out DungeonPart BossPart) ||
+            if (!NewBossRoom.TryGetComponent(out DungeonPart BossPart) ||
                 !BossPart.HasAvailableEntryPoint(out DungeonEntryPoint BossEntryPoint))
             {
                 Debug.LogError("Visceral Error: proc.Gen: " + NewBossRoom.name + " no tiene componente de DungeonPart o no tiene EntryPoints viables");
-                                    Destroy(NewBossRoom);
+                Destroy(NewBossRoom);
                 continue; // prefab invalido
             }
 
@@ -688,8 +775,12 @@ public class DungeonGenerator : MonoBehaviour
                 BossRoom = BossPart;
                 GeneratedBossRoom = true;
 
-                SourcePoint.SetOccupied(BossEntryPoint.GetOwner(),true);
-                BossEntryPoint.SetOccupied(SourcePoint.GetOwner(),true);
+                // ** MAPA: ASIGNAR Y REGISTRAR COORDENADA **
+                BossPart.MapCoords = newMapCoords;
+                occupiedMapGrid.Add(newMapCoords, BossPart); // REGISTRO EN CUADRÍCULA
+
+                SourcePoint.SetOccupied(BossEntryPoint.GetOwner(), true);
+                BossEntryPoint.SetOccupied(SourcePoint.GetOwner(), true);
 
                 // =======================================================
                 //
@@ -697,14 +788,14 @@ public class DungeonGenerator : MonoBehaviour
                 //
                 // =======================================================
 
-                GameObject Door = Instantiate(DoorOBJ,SourcePoint.transform.position,SourcePoint.transform.rotation);
-                Door.transform.SetParent(SourcePoint.transform,true);
+                GameObject Door = Instantiate(DoorOBJ, SourcePoint.transform.position, SourcePoint.transform.rotation);
+                Door.transform.SetParent(SourcePoint.transform, true);
 
                 Door.TryGetComponent(out DoorScript DoorSC);
 
-                if(BossPart.gameObject.TryGetComponent(out RoomSpawnerManager RoomMan))
+                if (BossPart.gameObject.TryGetComponent(out RoomSpawnerManager RoomMan))
                 {
-                    DoorSC.Initialize(RoomMan,BossEntryPoint);
+                    DoorSC.Initialize(RoomMan, BossEntryPoint);
                 }
                 else
                 {
@@ -716,6 +807,9 @@ public class DungeonGenerator : MonoBehaviour
                 BossPart.transform.SetParent(this.transform, true);
 
                 AllParts.Add(BossPart);
+
+                // ** MAPA: REGISTRAR LA PIEZA NUEVA **
+                MinimapManager.Instance.RegisterNewPart(BossPart); // <--- NUEVO
 
                 //levantamos los eventos de generacion
                 GenerationEvents();
@@ -732,7 +826,7 @@ public class DungeonGenerator : MonoBehaviour
         //
         // ==================================================================
 
-        if(placementSuccessful == false)
+        if (placementSuccessful == false)
         {
             Debug.LogWarning("Visceral Warning: error al poner la sala del jefe, no hay lugar posible. regenerando");
             if (!IsRegenerating) StartCoroutine(Regenerate());
@@ -803,7 +897,7 @@ public class DungeonGenerator : MonoBehaviour
         AllParts.AddRange(generatedHallways);
         AllParts.AddRange(generatedSpecialRooms);
 
-        foreach(var ExistingPart in AllParts)
+        foreach (var ExistingPart in AllParts)
         {
             if (ExistingPart == Part)
             {
@@ -811,10 +905,10 @@ public class DungeonGenerator : MonoBehaviour
             }
 
             // por cada collider en la pieza a poner
-            foreach(var partCol in Part._Colliders)
+            foreach (var partCol in Part._Colliders)
             {
                 //por cada colider en TODAS las piezas existentes
-                foreach(var otherCol in ExistingPart._Colliders)
+                foreach (var otherCol in ExistingPart._Colliders)
                 {
                     // si la pieza a colocar intersecta con collider existente
                     if (partCol.bounds.Intersects(otherCol.bounds))
@@ -838,7 +932,7 @@ public class DungeonGenerator : MonoBehaviour
     /// </summary>
     /// <param name="ItemToPlace"> la habitacion a correr</param>
     /// <param name="DoorToPlace"> La puerta a reubicar</param>
-    private void RetryPlacement(DungeonPart ItemToPlace,GameObject DoorToPlace)
+    private void RetryPlacement(DungeonPart ItemToPlace, GameObject DoorToPlace)
     {
         // la sala que vamos a usar para generar un vecino
         DungeonPart RandomGeneratedRoom = null;
@@ -848,14 +942,14 @@ public class DungeonGenerator : MonoBehaviour
         int RetryIndex = 0;
 
 
-        while(RandomGeneratedRoom == null && RetryIndex < TotalTries) 
+        while (RandomGeneratedRoom == null && RetryIndex < TotalTries)
         {
             //seleccionamos una sala a testear.
             int RandomLinkRoomIndex = UnityEngine.Random.Range(0, generatedRooms.Count - 1);
             DungeonPart RoomToTest = generatedRooms[RandomLinkRoomIndex];
 
             //chequeamos si la sala tiene espacios abiertos de coneccion
-            if(RoomToTest.HasAvailableEntryPoint(out EntryPoint1))
+            if (RoomToTest.HasAvailableEntryPoint(out EntryPoint1))
             {
                 RandomGeneratedRoom = RoomToTest;
                 break;
@@ -910,5 +1004,36 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    private Vector2Int GetCoordinateOffset(DungeonEntryPoint entryPoint)
+    {
+        // El vector de dirección del punto de conexión en el mundo
+        Vector3 forward = entryPoint.transform.forward;
+        // Un umbral más alto para asegurar que el vector esté alineado con un eje
+        float threshold = 0.8f;
 
+        // El minimapa usa X (Horizontal) e Y (Vertical), que corresponden a los ejes X y Z del mundo 3D.
+
+        // 1. CHEQUEAR EJE Z DEL MUNDO (Corresponde al eje Y del mapa)
+        if (Mathf.Abs(forward.z) > threshold)
+        {
+            // Si forward.z es positivo (hacia adelante en 3D), movemos el mapa +1 en Y.
+            // Si forward.z es negativo (hacia atrás en 3D), movemos el mapa -1 en Y.
+            // Usamos Mathf.Sign() para obtener 1 o -1 de forma segura.
+            int yOffset = (int)Mathf.Sign(forward.z);
+            return new Vector2Int(0, yOffset);
+        }
+
+        // 2. CHEQUEAR EJE X DEL MUNDO (Corresponde al eje X del mapa)
+        if (Mathf.Abs(forward.x) > threshold)
+        {
+            // Si forward.x es positivo (hacia la derecha en 3D), movemos el mapa +1 en X.
+            // Si forward.x es negativo (hacia la izquierda en 3D), movemos el mapa -1 en X.
+            int xOffset = (int)Mathf.Sign(forward.x);
+            return new Vector2Int(xOffset, 0);
+        }
+
+        // Si la dirección no está alineada (lo cual no debería ocurrir con mazmorras de cuadrícula)
+        Debug.LogError($"Punto de entrada con orientación ambigua: {forward}");
+        return Vector2Int.zero;
+    }
 }

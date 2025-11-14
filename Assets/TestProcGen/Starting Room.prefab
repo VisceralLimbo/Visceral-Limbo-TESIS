@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 795982220874406599}
   - component: {fileID: 99656899668429247}
   - component: {fileID: -3061069721555589586}
+  - component: {fileID: 6386942959750047791}
   m_Layer: 11
   m_Name: Starting Room
   m_TagString: Untagged
@@ -457,10 +458,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f859cea3513d773469a1c6ec762c9561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugMapCoords: {x: 0, y: 0}
   _RoomLayerMask:
     serializedVersion: 2
     m_Bits: 2048
-  _RoomType: 0
+  _RoomType: 2
   _WallFill: {fileID: 0}
   EntryPoints:
   - {fileID: 813987951511375477}
@@ -549,6 +551,18 @@ MonoBehaviour:
   _lowVisibilityLightIntensity: 0.1
   blackFog: {fileID: 0}
   fireParticles: []
+--- !u!114 &6386942959750047791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632024677991339040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2251039364116941494
 GameObject:
   m_ObjectHideFlags: 0
