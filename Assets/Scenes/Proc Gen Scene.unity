@@ -2692,13 +2692,13 @@ MonoBehaviour:
   generatedRooms: []
   generatedHallways: []
   generatedSpecialRooms: []
-  RegularRoomCount: 12
-  SpecialRoomCount: 5
+  RegularRoomCount: 8
+  SpecialRoomCount: 2
   RoomMask:
     serializedVersion: 2
     m_Bits: 2048
   IsGenerated: 0
-  TotalTriesPerRoomGeneration: 150
+  TotalTriesPerRoomGeneration: 50
   SlowGen: 1
   SlowGenSpeed: 0.1
   Regen: 0
@@ -3866,6 +3866,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _SkipDialogueSound:
     Clip: {fileID: 8300000, guid: 55be233b1e1ebf04fb2553a03c370d3d, type: 3}
@@ -3873,6 +3875,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
 --- !u!4 &1024403217
 Transform:
@@ -4846,6 +4850,8 @@ MonoBehaviour:
   Damage: 1000
   KnockBack: 0
   CanDealDamage: 1
+  _Context: {fileID: 0}
+  DealKnockback: 0
 --- !u!65 &1804869223
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5144,6 +5150,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
 --- !u!4 &1896895760
 Transform:
@@ -5196,6 +5204,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
 --- !u!4 &1916515939
 Transform:

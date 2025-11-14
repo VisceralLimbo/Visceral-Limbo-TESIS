@@ -47,4 +47,19 @@ public class Boss_HealthComp : Health_Component
             OnDeath -= HideBossUI;
         }
     }
+
+    private void Start()
+    {
+        if(bossUIHandler == null)
+        {
+            bossUIHandler = FindObjectOfType<Combat_UI_Manager>().GetComponentInChildren<BossHealthBarUI>(true);
+        }
+
+
+        if (bossUIHandler != null)
+        {
+            ConnectBossUI(bossUIHandler);
+        }
+    
+    }
 }
