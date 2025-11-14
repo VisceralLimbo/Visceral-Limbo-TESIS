@@ -9,7 +9,7 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] GameObject[] EnemySpawns; // listado de spawns
     [SerializeField] int Index = 0;
-    [SerializeField] bool RandomizedTime;
+    [SerializeField] bool RandomizedTime,BossSpawnSystem;
     [SerializeField] float RandomTimeSeed;
     private IEnumerator<GameObject> EnemyGenerator;
 
@@ -70,31 +70,35 @@ public class Spawner : MonoBehaviour
             var InstantiatedEnemy = Instantiate(NextEnemy,transform.position,transform.rotation);
             //var DumbEnemySC = InstantiatedEnemy.GetComponent<DumbEnemy>();
 
-            // agarro scripts
-            BossAbility bossAbilityScript = InstantiatedEnemy.GetComponent<BossAbility>();
-
-            if (bossAbilityScript == null)
+            if (BossSpawnSystem)
             {
-                bossAbilityScript = InstantiatedEnemy.GetComponentInChildren<BossAbility>();
+                // agarro scripts
+                BossAbility bossAbilityScript = InstantiatedEnemy.GetComponent<BossAbility>();
+
+                if (bossAbilityScript == null)
+                {
+                    bossAbilityScript = InstantiatedEnemy.GetComponentInChildren<BossAbility>();
+                }
+
+                // si lo encuentro asigno el player
+                if (bossAbilityScript != null && playerTarget != null)
+                {
+                    bossAbilityScript.playerTarget = playerTarget;
+                    Debug.Log("aca ta el jefe y le asigno el player");
+                }
+
+                // conecto las cosas del boss
+                Boss_HealthComp bossHealthComp = InstantiatedEnemy.GetComponent<Boss_HealthComp>();
+                if (bossHealthComp == null) bossHealthComp = InstantiatedEnemy.GetComponentInChildren<Boss_HealthComp>();
+
+                if (bossHealthComp != null && bossUIManagerReference != null)
+                {
+                    // boss a la ui
+                    bossHealthComp.ConnectBossUI(bossUIManagerReference);
+                }
+
             }
-
-            // si lo encuentro asigno el player
-            if (bossAbilityScript != null && playerTarget != null)
-            {
-                bossAbilityScript.playerTarget = playerTarget;
-                Debug.Log("aca ta el jefe y le asigno el player");
-            }
-
-            // conecto las cosas del boss
-            Boss_HealthComp bossHealthComp = InstantiatedEnemy.GetComponent<Boss_HealthComp>();
-            if (bossHealthComp == null) bossHealthComp = InstantiatedEnemy.GetComponentInChildren<Boss_HealthComp>();
-
-            if (bossHealthComp != null && bossUIManagerReference != null)
-            {
-                // boss a la ui
-                bossHealthComp.ConnectBossUI(bossUIManagerReference);
-            }
-
+          
             EnemySpawnedHP = InstantiatedEnemy.GetComponent<Health_Component>();
             if (EnemySpawnedHP == null) EnemySpawnedHP = InstantiatedEnemy.GetComponentInChildren<Health_Component>();
             EnemySpawnedHP.OnDeath += MyMinionDied;

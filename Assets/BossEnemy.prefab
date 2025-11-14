@@ -176,9 +176,41 @@ MonoBehaviour:
   CanExit: 0
   _MainState: {fileID: 1390840764624858655}
   _Target: {fileID: 0}
+  _Col: {fileID: 965406275870247876}
+  _PlayerContext: {fileID: 4503892774817222897}
   _LockAngle: 0
   _TackleSpeed: 15
   pulse: 0
+  OnTackleStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8143984794519001086}
+        m_TargetAssemblyTypeName: DamageCollisionTrigger, Assembly-CSharp
+        m_MethodName: Activate
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnTackleEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8143984794519001086}
+        m_TargetAssemblyTypeName: DamageCollisionTrigger, Assembly-CSharp
+        m_MethodName: Activate
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4355568668477518156
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,7 +338,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4448077876684399416}
   m_Father: {fileID: 7333673483843639958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3082159653087347912
@@ -468,6 +501,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   CurrentHealth: 500
   MaxHealth: 500
@@ -732,7 +767,14 @@ MonoBehaviour:
   _KCC: {fileID: 5480121978322433914}
   _JumpStrenght: 15
   _JumpDuration: 2
+  _FinishedAttack: 0
+  attackradius: 6
+  AttackDamage: 50
+  AttackKnockback: 6
+  DrawWireframe: 1
+  _Model: {fileID: 5871233309053035945}
   _Windup: 0.2
+  hits: []
 --- !u!1 &6548380599138473957
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,4 +1022,83 @@ MonoBehaviour:
   _KCC: {fileID: 5480121978322433914}
   _JumpStrenght: 15
   _JumpDuration: 2
+  _FinishedAttack: 0
+  attackradius: 6
+  AttackDamage: 50
+  AttackKnockback: 6
+  DrawWireframe: 1
+  _Model: {fileID: 5871233309053035945}
   _Windup: 0.2
+  hits: []
+--- !u!1 &8218591002988278101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4448077876684399416}
+  - component: {fileID: 965406275870247876}
+  - component: {fileID: 8143984794519001086}
+  m_Layer: 7
+  m_Name: Hit_Box_Tackle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4448077876684399416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8218591002988278101}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5871233309053035945}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &965406275870247876
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8218591002988278101}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8143984794519001086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8218591002988278101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 202b5bfe7fac7cb4e93c3725342fadf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Collider: {fileID: 965406275870247876}
+  Damage: 20
+  KnockBack: 5
+  CanDealDamage: 0
+  _Context: {fileID: 4503892774817222897}
+  DealKnockback: 1

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
 {
@@ -25,12 +26,14 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
     [SerializeField] bool _LockAngle;
     [SerializeField] float _TackleSpeed;
 
-    [SerializeField] float damage;
-    [SerializeField] float _knockback;
     Vector3 _Direction;
 
 
     [SerializeField]float pulse = 0;
+
+    [Header("Events")]
+    [SerializeField] UnityEvent OnTackleStart;
+    [SerializeField] UnityEvent OnTackleEnd;
 
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
@@ -78,7 +81,8 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
         pulse = 0;
         _movementStrategy.SetActiveState(true);
         _movementStrategy.SetMovementSpeed(_TackleSpeed);
-        _Col.enabled = true;
+
+        OnTackleStart?.Invoke();
 
         _Main_State.DeactivateEnergy(true);
         _movementStrategy.KillAllMovement();        
@@ -95,7 +99,9 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
         _movementStrategy.UpdateVelocity(Vector3.zero);
 
         CTX.SetGlobalCondition(TransitionKey,false);
-        _Col.enabled = false;
+
+        OnTackleEnd?.Invoke();
+
         base.OnExit(CTX);
     }
 
@@ -147,30 +153,4 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
         EnergyCost = (int)NewCost;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.transform.parent == this.transform.parent) return;
-        if (other.gameObject == this.gameObject) return;
-
-        if(other.TryGetComponent(out Health_Component HPComp))
-        {
-            if(HPComp.Context != null && HPComp.Context != _PlayerContext)
-            {
-                DamageScore dmscore = new DamageScore();
-                dmscore.Attacker = _PlayerContext;
-                dmscore.ElementalDamage = ElementType.Physical;
-                dmscore.DamageAmount = damage;
-                dmscore.FactionID = _PlayerContext.faction;
-
-
-                Vector3 Dir = HPComp.transform.position - _PlayerContext.PlayerTransform.position;
-                Dir.Normalize();
-
-                HPComp.TakeDamageWithKnockback(Dir, _knockback, dmscore);
-            }
-
-        }
-
-
-    }
 }

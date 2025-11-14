@@ -37,7 +37,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
         print("ButtSlam finished " + _FinishedAttack);
-        if(_FinishedAttack || _KCC.GroundingStatus.IsStableOnGround && _ExecutingAttack)
+        if(_KCC.GroundingStatus.IsStableOnGround && _FinishedAttack)
         {
             return base.EvaluateTransitions(GlobalParams, out TO);
         }
@@ -66,7 +66,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         _Main_State.DeactivateEnergy(false);
         _ExecutingAttack = false;
         _FinishedAttack = false;
-        StopCoroutine(AttackCoroutine());
+
 
         CTX.SetGlobalCondition(TransitionKey, false);
     }
@@ -125,9 +125,49 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         }
         else
         {
-            if(_ExecutingAttack == true && _FinishedAttack != false && _KCC.GroundingStatus.IsStableOnGround)
+         
+            if(_ExecutingAttack == true && _FinishedAttack == false && _KCC.GroundingStatus.IsStableOnGround)
             {
-                StartCoroutine(AttackCoroutine());
+             
+                hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
+
+                if (hits.Length > 0)
+                {
+                    foreach (Collider collider in hits)
+                    {
+                        // busca solo player healthcomp
+                        if (collider.TryGetComponent(out Health_Component playerHp))
+                        {
+                            if (playerHp == null || playerHp.Context == null)
+                            {
+                                continue;
+                            }
+
+                            if (playerHp.Context == _Main_State.playerContext)
+                            {
+                                continue;
+                            }
+
+                            DamageScore DMScore = new DamageScore();
+
+                            DMScore.Attacker = _Main_State.playerContext;
+                            DMScore.FactionID = _Main_State.playerContext.faction;
+                            DMScore.DamageAmount = AttackDamage;
+                            DMScore.ElementalDamage = ElementType.Physical;
+
+
+
+                            Vector3 Dir = playerHp.Context.PlayerTransform.position - _Model.transform.position;
+                            Dir.Normalize();
+
+                            playerHp.TakeDamageWithKnockback(Dir, AttackKnockback, DMScore);
+
+
+                        }
+                    }
+                }
+
+                _FinishedAttack = true;
             }
 
             return;
@@ -135,47 +175,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     }
 
     [SerializeField] Collider[] hits;
-    IEnumerator AttackCoroutine()
-    {
-        hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
 
-        if (hits.Length > 0)
-        {
-            foreach (Collider collider in hits)
-            {
-                // busca solo player healthcomp
-                if (collider.TryGetComponent(out Health_Component playerHp))
-                {
-                    if(playerHp == null || playerHp.Context == null)
-                    {
-                        continue;
-                    }
-
-                    if (playerHp.Context == _Main_State.playerContext)
-                    {
-                        continue;
-                    }
-
-                    DamageScore DMScore = new DamageScore();
-
-                    DMScore.Attacker = _Main_State.playerContext;
-                    DMScore.FactionID = _Main_State.playerContext.faction;
-                    DMScore.DamageAmount = AttackDamage;
-                    DMScore.ElementalDamage = ElementType.Physical;
-
-
-
-                    Vector3 Dir = playerHp.Context.PlayerTransform.position - _Model.transform.position;
-                    Dir.Normalize();
-
-                    playerHp.TakeDamageWithKnockback(Dir, AttackKnockback, DMScore);
-                }
-            }
-        }
-
-        _FinishedAttack = true;
-        yield return null;
-    }
 
     private void OnDrawGizmos()
     {
