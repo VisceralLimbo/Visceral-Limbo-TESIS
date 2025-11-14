@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 2626800126297481834}
   - component: {fileID: 3674524395671256024}
   - component: {fileID: 687168708131931142}
+  - component: {fileID: -669595907724726131}
   m_Layer: 11
   m_Name: BossFightArena
   m_TagString: Untagged
@@ -328,10 +329,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f859cea3513d773469a1c6ec762c9561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugMapCoords: {x: 0, y: 0}
   _RoomLayerMask:
     serializedVersion: 2
     m_Bits: 2048
-  _RoomType: 0
+  _RoomType: 4
   _WallFill: {fileID: 823108249745540647, guid: 1bafe71bf5444a740a7722d390a2c777,
     type: 3}
   EntryPoints:
@@ -437,6 +439,18 @@ MonoBehaviour:
   - {fileID: 7203576640462342628}
   - {fileID: 1380409412837550845}
   - {fileID: 1426800877234930043}
+--- !u!114 &-669595907724726131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2249799605738969831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2482202964278115542
 GameObject:
   m_ObjectHideFlags: 0

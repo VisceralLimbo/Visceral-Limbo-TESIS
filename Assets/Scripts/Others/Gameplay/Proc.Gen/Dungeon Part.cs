@@ -11,8 +11,23 @@ public class DungeonPart : MonoBehaviour
     public enum DungeonPartType
     {
         Room,
-        Hallway
+        Hallway,
+        Entrance,   // La sala de inicio (usa esto para el Entrance Prefab)
+        Special,    // Habitaciones especiales
+        Boss        // Habitaciones de jefe
     }
+
+    [HideInInspector] // Oculta esto en el Inspector de Unity si no quieres verlo
+                      // Modifica el setter de MapCoords para actualizar la variable debug
+    public Vector2Int MapCoords
+    {
+        get { return _debugMapCoords; }
+        set { _debugMapCoords = value; }
+    }
+
+    [Header("Minimap Debug")]
+    [SerializeField]
+    private Vector2Int _debugMapCoords;
 
     [Header("Variables & SetUp")]
     /// <summary>
@@ -25,7 +40,7 @@ public class DungeonPart : MonoBehaviour
     /// <summary>
     /// El tipo de parte de mazmorra, usado para generar los pools de habitaciones
     /// </summary>
-    [SerializeField]    
+    [SerializeField]
     private DungeonPartType _RoomType;
     public DungeonPartType RoomType { get { return _RoomType; } }
 
@@ -42,7 +57,7 @@ public class DungeonPart : MonoBehaviour
 
     public new Collider collider;
 
-    public Collider[] _Colliders ;
+    public Collider[] _Colliders;
 
     [Space]
     [Header("Debug")]
@@ -51,13 +66,13 @@ public class DungeonPart : MonoBehaviour
 
     public void Awake()
     {
-        foreach(var entryPoint in EntryPoints)
+        foreach (var entryPoint in EntryPoints)
         {
             entryPoint.SetOwner(this);
         }
     }
 
-    public bool HasAvailableEntryPoint( out DungeonEntryPoint EntryPoint)
+    public bool HasAvailableEntryPoint(out DungeonEntryPoint EntryPoint)
     {
         DungeonEntryPoint ResultingPoint = null; // punto resultante que esta disponible
         bool Result = false; // si hay un punto disponible
@@ -66,7 +81,7 @@ public class DungeonPart : MonoBehaviour
         int RetryIndex = 0;
 
         // solo tenemos 1 entrada
-        if(EntryPoints.Count == 1)
+        if (EntryPoints.Count == 1)
         {
             DungeonEntryPoint Entry = EntryPoints[0];
 
@@ -80,7 +95,7 @@ public class DungeonPart : MonoBehaviour
             {
                 // Guardamos el punto libre
                 ResultingPoint = Entry;
-                Result = true; 
+                Result = true;
             }
 
             EntryPoint = ResultingPoint;
@@ -89,23 +104,23 @@ public class DungeonPart : MonoBehaviour
         }
 
         // hay multiples puntos de ingreso
-        while(ResultingPoint == null && RetryIndex < totalTries)
+        while (ResultingPoint == null && RetryIndex < totalTries)
         {
-            int randomEntryIndex = Random.Range(0,EntryPoints.Count);
+            int randomEntryIndex = Random.Range(0, EntryPoints.Count);
 
             // agarro un punto vacio
-            DungeonEntryPoint Entry = EntryPoints[randomEntryIndex]; 
+            DungeonEntryPoint Entry = EntryPoints[randomEntryIndex];
 
             // si el punto chequeado no esta ocupado
             if (!Entry.IsOccupied())
             {
                 ResultingPoint = Entry;
                 Result = true;
-                
+
             }
             RetryIndex++;
         }
-         
+
         //retorno punto elegido
         EntryPoint = ResultingPoint;
         return Result;
@@ -124,7 +139,7 @@ public class DungeonPart : MonoBehaviour
     {
         List<DungeonEntryPoint> AvailableEntryPoints = new List<DungeonEntryPoint>();
 
-        foreach(DungeonEntryPoint Entry in EntryPoints)
+        foreach (DungeonEntryPoint Entry in EntryPoints)
         {
             if (Entry.IsOccupied())
             {
@@ -142,12 +157,12 @@ public class DungeonPart : MonoBehaviour
 
     public void FillEmptyPoints()
     {
-        foreach(DungeonEntryPoint Entry in EntryPoints)
+        foreach (DungeonEntryPoint Entry in EntryPoints)
         {
             if (!Entry.IsOccupied())
             {
-                var wall = Instantiate(_WallFill,Entry.transform.position,Entry.transform.rotation);
-                wall.transform.SetParent(Entry.transform,true);
+                var wall = Instantiate(_WallFill, Entry.transform.position, Entry.transform.rotation);
+                wall.transform.SetParent(Entry.transform, true);
             }
         }
     }
@@ -157,26 +172,26 @@ public class DungeonPart : MonoBehaviour
     {
         if (DrawRoomCollider)
         {
-            foreach(var _Col in _Colliders)
+            foreach (var _Col in _Colliders)
             {
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawWireCube(_Col.bounds.center, _Col.bounds.size);
             }
-          
+
         }
 
         if (DrawEntryPoints)
         {
-            foreach(DungeonEntryPoint entryPoint in EntryPoints)
+            foreach (DungeonEntryPoint entryPoint in EntryPoints)
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(entryPoint.transform.position,0.3f);
+                Gizmos.DrawWireSphere(entryPoint.transform.position, 0.3f);
 
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(entryPoint.transform.position
                     , entryPoint.transform.position + entryPoint.transform.forward);
             }
-            
+
         }
 
     }
