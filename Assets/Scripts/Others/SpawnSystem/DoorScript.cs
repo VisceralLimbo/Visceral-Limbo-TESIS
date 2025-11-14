@@ -37,6 +37,25 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] SoundData _SoundOpenDoor;
     [SerializeField] SoundData _SoundCloseDoor;
 
+    [Header("Door Lights")]
+    [SerializeField] List<Light> doorLights = new List<Light>();
+    [SerializeField] float lightFadeTime = 0.5f;
+    private float[] originalIntensities;
+
+
+    private void Start()
+    {
+        originalIntensities = new float[doorLights.Count];
+
+        for (int i = 0; i < doorLights.Count; i++)
+        {
+            if (doorLights[i] != null)
+                originalIntensities[i] = doorLights[i].intensity;
+            else
+                originalIntensities[i] = 1f;
+        }
+
+    }
     public void Initialize(RoomSpawnerManager SpawnerManager,DungeonEntryPoint entryPoint)
     {
         // busco doorglow dsp de q se añado con lo de procedural
@@ -93,6 +112,71 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         }
 
     }
+
+    private Coroutine lightFadeCoroutine;
+
+    private void SetDoorLightsSmooth(bool on)
+    {
+        if (lightFadeCoroutine != null)
+            StopCoroutine(lightFadeCoroutine);
+
+        lightFadeCoroutine = StartCoroutine(LerpLights(on));
+    }
+
+    private IEnumerator LerpLights(bool turnOn)
+    {
+        if (doorLights == null || doorLights.Count == 0)
+            yield break;
+
+        float[] startIntensities = originalIntensities;
+
+
+        float timer = 0f;
+
+        // Si se apagan, usamos la intensidad actual como punto de partida
+        float[] fromIntensity = new float[doorLights.Count];
+        float[] toIntensity = new float[doorLights.Count];
+
+        for (int i = 0; i < doorLights.Count; i++)
+        {
+            if (doorLights[i] == null)
+                continue;
+
+            fromIntensity[i] = doorLights[i].intensity;
+            toIntensity[i] = turnOn ? startIntensities[i] : 0f;
+
+            // Para fade in queremos que estén activadas desde el inicio
+            if (turnOn)
+                doorLights[i].enabled = true;
+        }
+
+        while (timer < lightFadeTime)
+        {
+            timer += Time.deltaTime;
+            float t = timer / lightFadeTime;
+
+            for (int i = 0; i < doorLights.Count; i++)
+            {
+                if (doorLights[i] == null)
+                    continue;
+
+                doorLights[i].intensity = Mathf.Lerp(fromIntensity[i], toIntensity[i], t);
+            }
+
+            yield return null;
+        }
+
+        // Apagar la luz cuando terminó el fade out
+        if (!turnOn)
+        {
+            for (int i = 0; i < doorLights.Count; i++)
+            {
+                if (doorLights[i] != null)
+                    doorLights[i].enabled = false;
+            }
+        }
+    }
+
 
 
     private Vector3 GetSnapPoint(Vector3 Direction) 
@@ -283,6 +367,8 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
                 SoundManager.Instance.CreateSound().WithSoundData(_SoundOpenDoor).WithRandomPitch(true).WithPosition(this.transform.position).play();
             }
             _IsOpen = true;
+            SetDoorLightsSmooth(false);
+
 
             // las apago si no son de la sala de cfores
 
@@ -313,11 +399,15 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     private void UnlockDoor()
     {
         _LockDoor = false;
+        SetDoorLightsSmooth(true);
+
     }
 
     private void LockDoor()
     {
         _LockDoor = true;
+        SetDoorLightsSmooth(false);
+
     }
 
     public void SetEntryPointReference(DungeonEntryPoint Entry) => _EntryPoint = Entry;
