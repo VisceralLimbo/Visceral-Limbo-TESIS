@@ -31,19 +31,13 @@ public class SoundManager : MonoBehaviour
         if(Instance == null && Instance != this)
         {
             Instance = this;
+            InitializePool();
             DontDestroyOnLoad(this.gameObject);
         }
         else
         {
             Destroy(this.gameObject);
         }
-    }
-
-
-
-    private void Start()
-    {
-        InitializePool();
     }
 
     public SoundBuilder CreateSound() => new SoundBuilder(this);

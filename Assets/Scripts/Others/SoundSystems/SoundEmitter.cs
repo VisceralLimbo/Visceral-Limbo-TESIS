@@ -83,6 +83,8 @@ public class SoundEmitter : MonoBehaviour
         _audioSource.loop = Data.Loop;
         _audioSource.playOnAwake = Data.PlayOnAwake;
         _audioSource.spatialBlend = Data.SpatialBlend;
+        _audioSource.minDistance = Data.MinimunSoundDistance;
+        _audioSource.maxDistance= Data.MaximunSoundDistance;
 
     }
 
@@ -92,8 +94,10 @@ public class SoundEmitter : MonoBehaviour
         _audioSource.pitch += Random.Range(min, max);
     }
 
-    public void OnSpatialBlended(float blended)
+    public void OnSpatialBlended(float blended,float minimum,float maximum)
     {
         _audioSource.spatialBlend = blended;
+        _audioSource.minDistance = minimum;
+        _audioSource.maxDistance= maximum;
     }
 }

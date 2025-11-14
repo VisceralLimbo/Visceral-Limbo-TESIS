@@ -33,7 +33,13 @@ public class SoundData
     /// </summary>
     /// 
     [Range(0,1f)]
-    public int SpatialBlend= 1;
+    public float SpatialBlend= 1;
+
+    [Tooltip("Distancia minima de sonido")]
+    public float MinimunSoundDistance;
+
+    [Tooltip("Distancia maxima de sonido")]
+    public float MaximunSoundDistance;
 
     /// <summary>
     /// Este booleano es para que este sonido este sujeto al limite maximo de sonidos similares

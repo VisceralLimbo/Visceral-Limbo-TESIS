@@ -129,7 +129,7 @@ public class ParticleImpactDecal : MonoBehaviour
                                 .WithSoundData(S_Data)//cargamos el clip que queremos escuchar
                                 .WithPosition(health.transform.position) // en la posicion del objeto
                                 .WithRandomPitch(true) // con pitch randomizado
-                                .WithSpatialBlend(1) // con blendeo espacial / 3D
+                                .WithSpatialBlend(1,S_Data.MinimunSoundDistance,S_Data.MaximunSoundDistance) // con blendeo espacial / 3D
                                 .play(); //enviamos el audio final al manager para tocar
         print("Sound off");
     }

@@ -316,7 +316,7 @@ public class Player_MeleeAttack : Visceral_Script
             SoundManager.Instance.CreateSound() //creamos sonido
                         .WithSoundData(soundData[0]) //con data de audio (variable setteada)
                         .WithPosition(this.transform.position) //con posicion en custom (si no es 0,0,0)
-                        .WithSpatialBlend(soundData[0].SpatialBlend) // con blendeo espacial
+                        .WithSpatialBlend(soundData[0].SpatialBlend, soundData[0].MinimunSoundDistance, soundData[0].MaximunSoundDistance) // con blendeo espacial
                         .WithRandomPitch(true) // con pitch de sonido (default -0.05 a 0.05)
                         .play(); // tocamos el sonido
 

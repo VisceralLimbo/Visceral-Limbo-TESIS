@@ -21,11 +21,23 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     [Header("Variables")]
     [SerializeField] float _JumpStrenght;
     [SerializeField] float _JumpDuration;
+    [SerializeField] bool _FinishedAttack;
+
+    [Space]
+
+
+    [Header("For Testing purposes")]
+    [SerializeField] float attackradius;
+    [SerializeField] float AttackDamage;
+    [SerializeField] float AttackKnockback;
+    [SerializeField] bool DrawWireframe;
+    [SerializeField] Transform _Model;
 
     float timer;
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
-        if(_KCC.GroundingStatus.IsStableOnGround && _ExecutingAttack)
+        print("ButtSlam finished " + _FinishedAttack);
+        if(_FinishedAttack || _KCC.GroundingStatus.IsStableOnGround && _ExecutingAttack)
         {
             return base.EvaluateTransitions(GlobalParams, out TO);
         }
@@ -45,6 +57,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
 
         _MoveStrategy.KillAllMovement();
         _ExecutingAttack = false;
+        _FinishedAttack = false;
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -52,6 +65,8 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         base.OnExit(CTX);
         _Main_State.DeactivateEnergy(false);
         _ExecutingAttack = false;
+        _FinishedAttack = false;
+        StopCoroutine(AttackCoroutine());
 
         CTX.SetGlobalCondition(TransitionKey, false);
     }
@@ -110,11 +125,66 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         }
         else
         {
+            if(_ExecutingAttack == true && _FinishedAttack != false && _KCC.GroundingStatus.IsStableOnGround)
+            {
+                StartCoroutine(AttackCoroutine());
+            }
+
             return;
         }
     }
 
+    [SerializeField] Collider[] hits;
+    IEnumerator AttackCoroutine()
+    {
+        hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
 
+        if (hits.Length > 0)
+        {
+            foreach (Collider collider in hits)
+            {
+                // busca solo player healthcomp
+                if (collider.TryGetComponent(out Health_Component playerHp))
+                {
+                    if(playerHp == null || playerHp.Context == null)
+                    {
+                        continue;
+                    }
+
+                    if (playerHp.Context == _Main_State.playerContext)
+                    {
+                        continue;
+                    }
+
+                    DamageScore DMScore = new DamageScore();
+
+                    DMScore.Attacker = _Main_State.playerContext;
+                    DMScore.FactionID = _Main_State.playerContext.faction;
+                    DMScore.DamageAmount = AttackDamage;
+                    DMScore.ElementalDamage = ElementType.Physical;
+
+
+
+                    Vector3 Dir = playerHp.Context.PlayerTransform.position - _Model.transform.position;
+                    Dir.Normalize();
+
+                    playerHp.TakeDamageWithKnockback(Dir, AttackKnockback, DMScore);
+                }
+            }
+        }
+
+        _FinishedAttack = true;
+        yield return null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (DrawWireframe && _FinishedAttack)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(_Model.transform.position, attackradius);
+        }
+    }
 
 
     #region EnergyInterface
