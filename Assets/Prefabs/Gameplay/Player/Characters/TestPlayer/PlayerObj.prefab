@@ -742,6 +742,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   CurrentHealth: 200
   MaxHealth: 200
@@ -1312,7 +1314,6 @@ GameObject:
   - component: {fileID: 8523669415137956118}
   - component: {fileID: 388799400367065248}
   - component: {fileID: 6517383520978276483}
-  - component: {fileID: 1600011019852541342}
   - component: {fileID: 1762061369327758656}
   - component: {fileID: 2037849703779783899}
   - component: {fileID: 822650225700030981}
@@ -1391,12 +1392,16 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 0
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   - Clip: {fileID: 8300000, guid: 557002dbb1945524e8be6d510d47c6d0, type: 3}
     mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 0
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   Left_SwordAttacks:
   - {fileID: 11400000, guid: 2c37561ec79fc03408b1c08c70381531, type: 2}
@@ -1455,6 +1460,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 0
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   SwordAttacks:
   - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
@@ -1505,14 +1512,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loadout: {fileID: 11400000, guid: 2ff53cc084cc4b84ca80d72f4c9114f6, type: 2}
---- !u!81 &1600011019852541342
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4039303074304250013}
-  m_Enabled: 1
 --- !u!114 &1762061369327758656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1569,7 +1568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851dc92e6d80dd14c931c07c2bc5cf76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuffComponentHierarchy: {fileID: 0}
+  BuffComponentHierarchy: {fileID: 119661982865036304}
   StatManager: {fileID: 2037849703779783899}
 --- !u!114 &6323216962684899046
 MonoBehaviour:
@@ -1628,6 +1627,7 @@ GameObject:
   - component: {fileID: 2719510382933356831}
   - component: {fileID: 8577399524032963587}
   - component: {fileID: 3066669182626761229}
+  - component: {fileID: 5974637098410256426}
   m_Layer: 6
   m_Name: RootCamera
   m_TagString: MainCamera
@@ -1799,6 +1799,14 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!81 &5974637098410256426
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4847287270814997606}
+  m_Enabled: 1
 --- !u!1 &5006734972074116238
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,6 +14,8 @@ public class SoundBuilder
 
     float SpatialBlend;
 
+    float MinimumSoundDistance, MaximumSoundDistance;
+
 
     public SoundBuilder(SoundManager soundManager)
     {
@@ -37,9 +39,11 @@ public class SoundBuilder
         return this;
     }
 
-    public SoundBuilder WithSpatialBlend(float blend)
+    public SoundBuilder WithSpatialBlend(float blend,float minimumDistance,float maximumDistance)
     {
         this.SpatialBlend = blend;
+        this.MinimumSoundDistance = minimumDistance;
+        this.MaximumSoundDistance = maximumDistance;
         return this;
     }
 
@@ -52,7 +56,7 @@ public class SoundBuilder
         Emitter.Initialize(data);
         Emitter.transform.position = position;
         Emitter.transform.SetParent(SoundManager.Instance.transform,true);
-        Emitter.OnSpatialBlended(SpatialBlend);
+        Emitter.OnSpatialBlended(SpatialBlend,MinimumSoundDistance,MaximumSoundDistance);
 
         if (randomPitch)
         {
@@ -78,7 +82,7 @@ public class SoundBuilder
         Emitter.Initialize(data);
         Emitter.transform.position = position;
         Emitter.transform.SetParent(SoundManager.Instance.transform, true);
-        Emitter.OnSpatialBlended(SpatialBlend);
+        Emitter.OnSpatialBlended(SpatialBlend,MinimumSoundDistance,MaximumSoundDistance);
 
         if (randomPitch)
         {

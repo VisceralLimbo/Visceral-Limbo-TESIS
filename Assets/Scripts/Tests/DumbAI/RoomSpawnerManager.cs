@@ -307,7 +307,7 @@ public class RoomSpawnerManager : MonoBehaviour
                 .WithSoundData(_spawnSound)
                 .WithPosition(item.transform.position)
                 .WithRandomPitch(true)
-                .WithSpatialBlend(1)
+                .WithSpatialBlend(1,_spawnSound.MinimunSoundDistance,_spawnSound.MaximunSoundDistance)
                 .play();
 
             if (_ShouldOffsetSpawnTime)

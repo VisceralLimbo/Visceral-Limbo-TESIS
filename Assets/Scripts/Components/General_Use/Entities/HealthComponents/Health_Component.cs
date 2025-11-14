@@ -188,7 +188,7 @@ public class Health_Component : Visceral_Component
         SoundCLip.WithSoundData(soundData);
         SoundCLip.WithRandomPitch(true);
         SoundCLip.WithPosition(Context.transform.position);
-        SoundCLip.WithSpatialBlend(1);
+        SoundCLip.WithSpatialBlend(1,0,3);
         SoundCLip.play();
     }
 
