@@ -236,26 +236,34 @@ MonoBehaviour:
   - {fileID: 6075945232179022669}
   openChestParticle: {fileID: 3846657278373205078}
   _SoundNearByChest:
-    Clip: {fileID: 8300000, guid: e052f887f0aa8fc4cad2023e55b76747, type: 3}
-    mixerGroup: {fileID: 0}
+    Clip: {fileID: 8300000, guid: cc7e1b787bce7d74fb2498a0a1c1b251, type: 3}
+    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
     Loop: 1
-    PlayOnAwake: 0
+    PlayOnAwake: 1
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 50
     IsFrequent: 1
   _SoundOpenChest:
     Clip: {fileID: 8300000, guid: 827b48120899cb44ca864dec044d2987, type: 3}
     mixerGroup: {fileID: 0}
     Loop: 0
     PlayOnAwake: 0
-    SpatialBlend: 1
+    SpatialBlend: 0
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 1
   _SoundCannotOpenChest:
     Clip: {fileID: 8300000, guid: ce7661603b870b843a46cb01c4e68e42, type: 3}
     mixerGroup: {fileID: 0}
     Loop: 0
     PlayOnAwake: 0
-    SpatialBlend: 1
+    SpatialBlend: 0
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 1
+  nearbyRange: 15
+  soundCooldown: 0
 --- !u!65 &8123005555908816331
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -421,7 +429,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3504675159828423368}
-  - {fileID: 5731805951836635262}
   - {fileID: 1577250340390859267}
   m_Father: {fileID: 2753327272160557097}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5406,13 +5413,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7161612279675950267}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.005179551, y: -0.006576041, z: 0.0024321203}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.00018293923, y: -0.0076467586, z: -0.00256226}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5376059852445001317}
-  m_Father: {fileID: 8699463219052923834}
+  m_Father: {fileID: 3504675159828423368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7668269296686102390
 MeshFilter:
@@ -10325,6 +10332,7 @@ Transform:
   m_Children:
   - {fileID: 6967172035784659953}
   - {fileID: 8953385786213736911}
+  - {fileID: 5731805951836635262}
   m_Father: {fileID: 8699463219052923834}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8248193678436357773
