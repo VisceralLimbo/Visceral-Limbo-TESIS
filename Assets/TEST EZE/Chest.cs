@@ -39,8 +39,18 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     [SerializeField] SoundData _SoundOpenChest;
     [SerializeField] SoundData _SoundCannotOpenChest;
 
+    [Header("Nearby Sound System")]
+    [SerializeField] private float nearbyRange = 6f;
+    [SerializeField] private float soundCooldown = 1.5f;
+
+    private Transform player;
+    private float soundTimer = 0f;
+
+    private SoundEmitter nearByEmitter;
+
     private void Start()
     {
+        player = GameObject.FindWithTag("Player").transform;
         // busco canvas
         GameObject combatUICanvas = GameObject.Find(COMBAT_UI_CANVAS_NAME);
         // busco el texto dentro del canvas
@@ -72,6 +82,33 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         }
     }
 
+    private void Update()
+    {
+        if (isOpened) return;
+        if (player == null) return;
+
+        float dist = Vector3.Distance(transform.position, player.position);
+
+        // si está dentro del rango
+        if (dist <= nearbyRange)
+        {
+            soundTimer -= Time.deltaTime;
+
+            if (soundTimer <= 0f)
+            {
+                PlayNearbySound();  // reproducimos
+                soundTimer = soundCooldown;
+            }
+        }
+    }
+
+    private void PlayNearbySound()
+    {
+      
+        SoundManager.Instance.CreateSound().WithSoundData(_SoundNearByChest).WithRandomPitch(true).WithPosition(this.transform.position).WithSpatialBlend(1f, 1f, 50f).play(out nearByEmitter);
+
+    }
+
 
     public void TryOpen()
     {
@@ -99,14 +136,16 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     {
         isOpened = true;
 
+        soundTimer = float.MaxValue;
+
         SoundManager.Instance.CreateSound().WithSoundData(_SoundOpenChest).WithRandomPitch(true).WithPosition(this.transform.position).play();
+
+        SoundManager.Instance.ReturnToPool(nearByEmitter);
 
         if (chestAnimator != null)
             chestAnimator.SetBool("isOpen", true);
 
         DisableVisuals();
-
-       
 
         StartCoroutine(SpawnLootDelayed(0.5f)); 
     }
@@ -136,7 +175,6 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     {
         if (isOpened || interactTextObject == null || interactText == null) return;
         UpdateInteractText(true);
-       // SoundManager.Instance.CreateSound().WithSoundData(_SoundNearByChest).WithRandomPitch(true).WithPosition(this.transform.position).play(); 
         PlayerEvents.InteractSeeing();
     }
 
@@ -255,4 +293,3 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         openChestParticle.Play();
     }
 }
-    
