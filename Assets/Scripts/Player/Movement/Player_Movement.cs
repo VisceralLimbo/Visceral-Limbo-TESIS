@@ -222,8 +222,8 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
         TimeDilationManager.OnTimeScaleChanged += changedTimeScale;
 
-        // ** MINIMAP: Obtener la referencia al manager al inicio **
-        _MinimapManager = MinimapManager.Instance; // <-- ASIGNACIÓN
+        //// ** MINIMAP: Obtener la referencia al manager al inicio **
+        //_MinimapManager = MinimapManager.Instance; // <-- ASIGNACIÓN
     }
 
     /// <summary>
