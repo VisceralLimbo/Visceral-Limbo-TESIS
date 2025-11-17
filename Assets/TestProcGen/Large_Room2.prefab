@@ -177,7 +177,6 @@ GameObject:
   - component: {fileID: 4229559706458826373}
   - component: {fileID: 8567890171333176731}
   - component: {fileID: 7918549456334325288}
-  - component: {fileID: 6295145136742234312}
   m_Layer: 11
   m_Name: Large_Room2
   m_TagString: Untagged
@@ -198,6 +197,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7067014325766980434}
   - {fileID: 1401587010683057274}
   - {fileID: 7160351083984963248}
   - {fileID: 714502223473294799}
@@ -258,6 +258,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 1
   _rewardSound:
     Clip: {fileID: 8300000, guid: aa4881152af6b5d45baea459ea9e7ed0, type: 3}
@@ -265,6 +267,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _FinishWaveSound:
     Clip: {fileID: 0}
@@ -272,6 +276,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _reward: {fileID: 6793646747186521611, guid: 1a5c165768663ca4da9c92a0410adea7, type: 3}
   _DungeonPart: {fileID: 0}
@@ -324,18 +330,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 21.161438, y: 6.029663, z: 24.328735}
   m_Center: {x: 1.945343, y: 0.42218018, z: -3.8240356}
---- !u!114 &6295145136742234312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141801636737990633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2405209484787830669
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,6 +380,7 @@ MonoBehaviour:
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0
@@ -576,6 +571,7 @@ MonoBehaviour:
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0
@@ -701,6 +697,7 @@ MonoBehaviour:
   - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0
@@ -708,6 +705,72 @@ MonoBehaviour:
   _SpawnManager: {fileID: 0}
   bossUIManagerReference: {fileID: 0}
   playerTarget: {fileID: 0}
+--- !u!1 &5487702709296597481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7067014325766980434}
+  - component: {fileID: 3624756262220777237}
+  - component: {fileID: 3631770277752262270}
+  m_Layer: 12
+  m_Name: MiniMapTrgier
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7067014325766980434
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487702709296597481}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2170740823120004901}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3624756262220777237
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487702709296597481}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 21.161438, y: 6.029663, z: 24.328735}
+  m_Center: {x: 1.945343, y: 0.42218018, z: -3.8240356}
+--- !u!114 &3631770277752262270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487702709296597481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6183766137844725628
 GameObject:
   m_ObjectHideFlags: 0

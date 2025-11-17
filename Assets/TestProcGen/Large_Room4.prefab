@@ -469,6 +469,7 @@ MonoBehaviour:
   - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0
@@ -706,6 +707,72 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1829381914677722523
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 606857077920970029}
+  - component: {fileID: 945892111916204167}
+  - component: {fileID: 7622935580255263692}
+  m_Layer: 12
+  m_Name: MiniMapTrgier
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &606857077920970029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829381914677722523}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3837431858576400903}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &945892111916204167
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829381914677722523}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 113.68591, y: 21.981367, z: 45.839012}
+  m_Center: {x: -16.929626, y: 4.3393164, z: -7.3195076}
+--- !u!114 &7622935580255263692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829381914677722523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1832903081509383552
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,6 +963,7 @@ MonoBehaviour:
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0
@@ -2436,6 +2504,7 @@ MonoBehaviour:
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0
@@ -2736,6 +2805,7 @@ MonoBehaviour:
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0
@@ -3697,6 +3767,7 @@ MonoBehaviour:
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0
@@ -4041,7 +4112,6 @@ GameObject:
   - component: {fileID: 1103917107371723701}
   - component: {fileID: 8670085992592870277}
   - component: {fileID: 1451597294118033265}
-  - component: {fileID: -3213189338300863441}
   m_Layer: 11
   m_Name: Large_Room4
   m_TagString: Untagged
@@ -4062,6 +4132,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 606857077920970029}
   - {fileID: 9201687407755588039}
   - {fileID: 7835917349769046146}
   - {fileID: 4537925773219142295}
@@ -4114,6 +4185,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 1
   _rewardSound:
     Clip: {fileID: 8300000, guid: aa4881152af6b5d45baea459ea9e7ed0, type: 3}
@@ -4121,6 +4194,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _FinishWaveSound:
     Clip: {fileID: 0}
@@ -4128,6 +4203,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _reward: {fileID: 6793646747186521611, guid: 1a5c165768663ca4da9c92a0410adea7, type: 3}
   _DungeonPart: {fileID: 0}
@@ -4322,18 +4399,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 113.68591, y: 21.981367, z: 45.839012}
   m_Center: {x: -16.929626, y: 4.3393164, z: -7.3195076}
---- !u!114 &-3213189338300863441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6129193342713621542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6256245280853462728
 GameObject:
   m_ObjectHideFlags: 0
@@ -5325,6 +5390,7 @@ MonoBehaviour:
   - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0

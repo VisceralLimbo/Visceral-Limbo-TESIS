@@ -57,10 +57,22 @@ public class MinimapManager : MonoBehaviour
         cachedPlayer = GameObject.FindGameObjectWithTag("Player");
 
         // Instanciamos el icono.
-        if (cachedPlayer != null && playerIcon == null && PlayerIconPrefab != null && MapContainer != null)
+        // Si MinimapPanel está disponible, lo usamos como padre del ícono
+        Transform parentTransform = (MinimapPanel != null) ? MinimapPanel.transform : MapContainer.transform.parent;
+
+        if (cachedPlayer != null && playerIcon == null && PlayerIconPrefab != null && parentTransform != null)
         {
-            playerIcon = Instantiate(PlayerIconPrefab, MapContainer.transform);
+            // Instancia como hijo del contenedor estático (MinimapPanel o su padre)
+            playerIcon = Instantiate(PlayerIconPrefab, parentTransform);
             playerIcon.SetActive(true);
+
+            // ANCLAJE CLAVE: Fijar el ícono en el centro de su contenedor estático
+            RectTransform rt = playerIcon.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.one * 0.5f;
+            rt.anchorMax = Vector2.one * 0.5f;
+            rt.pivot = Vector2.one * 0.5f;
+            rt.anchoredPosition = Vector2.zero; // <--- POSICIÓN FIJA EN EL CENTRO
+
             playerIcon.transform.SetAsLastSibling();
         }
     }
@@ -254,40 +266,36 @@ public class MinimapManager : MonoBehaviour
         currentTrackedRoom = part;
     }
 
-    // FUNCIÓN NUEVA: Implementa la lógica de rastreo relativo.
+    // FUNCIÓN MODIFICADA: Implementa la lógica de rastreo relativo (SOLO CUADRÍCULA).
     private void UpdatePlayerIconRelative(Vector3 worldPosition, Vector3 roomCenter3D, Vector2Int roomCoords2D)
     {
+        if (MapContainer == null || playerIcon == null) return;
+
         float mapScale = 100f;
-        float roomSize = 50f; // <--- AUMENTAR el divisor para frenar el movimiento
-        float worldToMapRatio = mapScale / roomSize;
 
-        // 1. Calcular la posición relativa del jugador DENTRO de la sala actual
-        Vector3 relativeToRoom = worldPosition - roomCenter3D;
+        // --- CAMBIO CLAVE: IGNORAR EL MOVIMIENTO FINO ---
+        // La posición del jugador en el mapa es simplemente el centro de la celda de la sala actual.
+        // Ya no necesitamos 'relativeToRoom' ni 'fineMovement'.
 
-        // 2. Calcular el desplazamiento del ícono DENTRO de la celda (rastreo fino)
-        Vector2 fineMovement = new Vector2(
-            relativeToRoom.x * worldToMapRatio,
-            relativeToRoom.z * worldToMapRatio
+        // 1. Calcular la Posición Lógica (la coordenada central de la sala actual en el minimapa).
+        Vector2 playerMapPosition = new Vector2(
+            roomCoords2D.x * mapScale,
+            roomCoords2D.y * mapScale
         );
 
-        // 3. Calcular la Posición Final: Coordenada Lógica + Desfase Fino
-        Vector2 mapPosition = new Vector2(
-            roomCoords2D.x * mapScale + fineMovement.x,
-            roomCoords2D.y * mapScale + fineMovement.y
-        );
+        // 2. Mover el MapContainer: Para que el jugador quede estático en el centro (0,0), 
+        // el contenedor debe moverse al negativo de la posición lógica del jugador.
+        Vector2 targetContainerPosition = -playerMapPosition;
 
-        float smoothSpeed = 10f; // Controla la rapidez del suavizado
-
-        playerIcon.GetComponent<RectTransform>().anchoredPosition =
+        // 3. Mover el MapContainer usando Lerp para un "salto" suave de una sala a otra.
+        MapContainer.anchoredPosition =
             Vector2.Lerp(
-                playerIcon.GetComponent<RectTransform>().anchoredPosition, // Posición actual
-                mapPosition, // Posición objetivo (calculada)
-                Time.deltaTime * smoothSpeed
+                MapContainer.anchoredPosition, // Posición actual del contenedor
+                targetContainerPosition,       // Posición objetivo (el centro de la sala actual)
+                Time.deltaTime * 10f // Velocidad de movimiento del mapa
             );
 
-        playerIcon.transform.SetAsLastSibling();
-        playerIcon.GetComponent<RectTransform>().anchoredPosition = mapPosition;
+        // El playerIcon debe permanecer en el centro del MinimapPanel (generalmente Vector2.zero) 
+        // para estar fijo. Su posición no se toca aquí.
     }
-
-
 }

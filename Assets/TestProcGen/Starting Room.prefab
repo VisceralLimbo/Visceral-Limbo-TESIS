@@ -407,6 +407,72 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 7723092658378424158}
   m_maskType: 0
+--- !u!1 &1466888351270285814
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6912691579668930378}
+  - component: {fileID: 3417456393139927649}
+  - component: {fileID: 413059631617789497}
+  m_Layer: 12
+  m_Name: MiniMapTrgier
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6912691579668930378
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466888351270285814}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6998802248324664258}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3417456393139927649
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466888351270285814}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 47.361572, y: 10.237793, z: 37.85901}
+  m_Center: {x: -5.0231323, y: 0.4979248, z: -5.045227}
+--- !u!114 &413059631617789497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466888351270285814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1632024677991339040
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,7 +485,6 @@ GameObject:
   - component: {fileID: 795982220874406599}
   - component: {fileID: 99656899668429247}
   - component: {fileID: -3061069721555589586}
-  - component: {fileID: 6386942959750047791}
   m_Layer: 11
   m_Name: Starting Room
   m_TagString: Untagged
@@ -440,6 +505,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6912691579668930378}
   - {fileID: 7930862923532002752}
   - {fileID: 8383930615158913003}
   - {fileID: 205291368021075423}
@@ -515,6 +581,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _rewardSound:
     Clip: {fileID: 0}
@@ -522,6 +590,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _FinishWaveSound:
     Clip: {fileID: 0}
@@ -529,6 +599,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _reward: {fileID: 6356117999051576394, guid: 5244e3d3ebae0cf4db60fcccad9caa5a, type: 3}
   _DungeonPart: {fileID: 0}
@@ -551,18 +623,6 @@ MonoBehaviour:
   _lowVisibilityLightIntensity: 0.1
   blackFog: {fileID: 0}
   fireParticles: []
---- !u!114 &6386942959750047791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1632024677991339040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2251039364116941494
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,6 +710,7 @@ MonoBehaviour:
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0
@@ -1693,6 +1754,7 @@ MonoBehaviour:
   - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
   Index: 0
   RandomizedTime: 0
+  BossSpawnSystem: 0
   RandomTimeSeed: 0
   IsSpent: 0
   HasMinion: 0

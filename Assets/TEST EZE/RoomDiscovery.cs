@@ -10,7 +10,13 @@ public class RoomDiscovery : MonoBehaviour
     private void Start()
     {
         // Obtiene la referencia a la información de la pieza
-        part = GetComponent<DungeonPart>();
+        // Ahora busca el componente en el objeto padre (DungeonPart)
+        part = GetComponentInParent<DungeonPart>();
+
+        if (part == null)
+        {
+            Debug.LogError("RoomDiscovery no encontró DungeonPart en el objeto padre.");
+        }
     }
 
     private void OnTriggerEnter(Collider other)

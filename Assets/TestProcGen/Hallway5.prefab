@@ -1111,6 +1111,72 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.9999998, y: 1.5438665, z: 1}
   m_Center: {x: 0, y: -0.2719328, z: 0}
+--- !u!1 &5496878422777184119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2740061471509967218}
+  - component: {fileID: 1943769434225144623}
+  - component: {fileID: 8029573184503100602}
+  m_Layer: 12
+  m_Name: MiniMapTrgier
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2740061471509967218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5496878422777184119}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2637786474617827785}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1943769434225144623
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5496878422777184119}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 22.482117, y: 14.214722, z: 47.16223}
+  m_Center: {x: 3.0608215, y: 0.08502197, z: 2.5424194}
+--- !u!114 &8029573184503100602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5496878422777184119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5776549083731455082
 GameObject:
   m_ObjectHideFlags: 0
@@ -1701,7 +1767,6 @@ GameObject:
   - component: {fileID: 2637786474617827785}
   - component: {fileID: 6655887826873840726}
   - component: {fileID: 3434644999623119336}
-  - component: {fileID: -5395878339045518721}
   m_Layer: 11
   m_Name: Hallway5
   m_TagString: Untagged
@@ -1722,6 +1787,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2740061471509967218}
   - {fileID: 3774730696050268708}
   - {fileID: 5155257984111392570}
   - {fileID: 7275819976966803612}
@@ -1809,18 +1875,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 22.482117, y: 14.214722, z: 47.16223}
   m_Center: {x: 3.0608215, y: 0.08502197, z: 2.5424194}
---- !u!114 &-5395878339045518721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8377683946521146136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8963679800605455158
 GameObject:
   m_ObjectHideFlags: 0
