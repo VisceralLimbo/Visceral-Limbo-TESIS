@@ -28,6 +28,18 @@ public class BossAbility : BaseState,IStateEnergyCost
         base.OnInitialize(CTX);
         Thinker = GetComponentInParent<Corpus_Thinking_Main_State>();
 
+        // busco por la etiqueta
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObject != null)
+        {
+            playerTarget = playerObject;
+        }
+        else
+        {
+            Debug.LogError("no lo encontre je");
+        }
+
     }
 
     public override void OnEnter(VisceralStateMachine CTX)
