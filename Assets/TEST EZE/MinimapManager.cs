@@ -28,15 +28,12 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] private GameObject MinimapPanel;
     private bool isMapVisible = false;
 
-    [Header("Centrado de Cámara")]
-    [SerializeField] private float mapFollowSpeed = 5f; // Velocidad de seguimiento 
-
     private Vector3 mapWorldOrigin = Vector3.zero;
 
     // --- DATOS INTERNOS ---
     private Dictionary<DungeonPart, GameObject> mapIcons = new Dictionary<DungeonPart, GameObject>();
     private GameObject cachedPlayer; // Referencia al objeto del jugador
-    private bool _mapNeedsSnap = false; // ¡NUEVA VARIABLE!
+
     // --- MÉTODOS DE INICIO ---
 
     // Mover la lógica de ocultación inicial al Awake()
@@ -173,80 +170,23 @@ public class MinimapManager : MonoBehaviour
         }
     }
 
+    // CORREGIR Y USAR ESTA FUNCIÓN:
     public void UpdatePlayerIcon(Vector3 worldPosition)
     {
         if (playerIcon == null) return;
 
-        // --- 1. OBTENER PARÁMETROS DE RASTREO Y CALCULAR EL ORIGEN ---
-
-        // Obtenemos el centro 3D de la sala rastreada (currentTrackedRoom)
-        Vector3 roomCenter3D = mapWorldOrigin;
-        Vector2Int roomCoords2D = Vector2Int.zero;
-
-        // Si la sala rastreada no está seteada (currentTrackedRoom), el rastreo es inútil
+        // Si la sala rastreada no está configurada, salimos, o usamos el origen del mundo
         if (currentTrackedRoom == null)
         {
-            // En este caso, el jugador solo se queda en el origen. No hay desfase fino.
-            roomCenter3D = mapWorldOrigin;
-            roomCoords2D = Vector2Int.zero;
-        }
-        else
-        {
-            roomCenter3D = currentTrackedRoom.transform.position;
-            roomCoords2D = currentTrackedRoom.MapCoords;
+            // Esto solo debería ocurrir al inicio. En ese caso, usa el origen del mundo.
+            UpdatePlayerIconRelative(worldPosition, mapWorldOrigin, Vector2Int.zero);
+            return;
         }
 
-
-        // --- 2. CÁLCULO DE POSICIÓN RELATIVA Y ESCALA ---
-        float mapScale = 100f;
-        float roomSize = 50f; // Usar el valor que mejor funcionó
-        float worldToMapRatio = mapScale / roomSize;
-        float smoothSpeed = mapFollowSpeed;
-
-
-        // a) Posición relativa: ¿Dónde está el jugador DENTRO del área de la sala?
-        Vector3 relativeToRoom = worldPosition - roomCenter3D;
-
-        // b) Desplazamiento fino: (Movimiento escalado dentro de la celda, centrado en 0)
-        Vector2 fineMovement = new Vector2(
-            relativeToRoom.x * worldToMapRatio,
-            relativeToRoom.z * worldToMapRatio
-        );
-
-        // c) Posición de la Cuadrícula: Punto central de la celda lógica (ej: 100, 0)
-        Vector2 gridCenterPosition = new Vector2(
-            roomCoords2D.x * mapScale,
-            roomCoords2D.y * mapScale
-        );
-
-        // d) Posición Absoluta: Dónde estaría el icono si no moviéramos la cámara
-        Vector2 absoluteMapPosition = gridCenterPosition + fineMovement;
-
-
-        // --- 3. APLICAR CENTRADO Y SMOOTHING ---
-
-        // 1. Target de la CÁMARA (MapContainer): La inversa de la posición absoluta del mapa
-        Vector2 targetMapPosition = -absoluteMapPosition;
-
-        // 2. Target del ICONO: El movimiento fino DENTRO de la celda
-        Vector2 targetIconPosition = fineMovement;
-
-
-        // Suavizar el MapContainer (Cámara)
-        RectTransform mapRect = MapContainer.GetComponent<RectTransform>();
-        mapRect.anchoredPosition = Vector2.Lerp(
-            mapRect.anchoredPosition,
-            targetMapPosition,
-            Time.deltaTime * smoothSpeed
-        );
-
-        // Mover el Ícono del Jugador (Rastreo fino)
-        playerIcon.transform.SetAsLastSibling();
-        playerIcon.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(
-            playerIcon.GetComponent<RectTransform>().anchoredPosition,
-            targetIconPosition,
-            Time.deltaTime * smoothSpeed
-        );
+        // Si tenemos una sala, usamos su centro 3D y su coordenada lógica
+        UpdatePlayerIconRelative(worldPosition,
+                                 currentTrackedRoom.transform.position,
+                                 currentTrackedRoom.MapCoords);
     }
 
     /// <summary>
@@ -306,62 +246,48 @@ public class MinimapManager : MonoBehaviour
                 cachedPlayer = GameObject.FindGameObjectWithTag("Player");
             }
         }
-
-        // ** NUEVO: ANCLAJE AL INICIO **
-        // Si el jugador está activo, forzamos el rastreo a la Sala de Inicio.
-        if (DungeonGenerator.Instance != null && DungeonGenerator.Instance.GetStartingRoom() != null)
-        {
-            DungeonPart startingRoom = DungeonGenerator.Instance.GetStartingRoom();
-            StartRoomTracking(startingRoom);
-            DiscoverPart(startingRoom); // También revelamos la sala
-        }
-
     }
 
     // NUEVO MÉTODO (Ya deberías tenerlo): Llamado desde RoomDiscovery.cs
-    // Modificar StartRoomTracking:
     public void StartRoomTracking(DungeonPart part)
     {
-        if (currentTrackedRoom != part)
-        {
-            currentTrackedRoom = part;
-            _mapNeedsSnap = true; //  Activa el SNAP/Mini TP
-            Debug.Log("Cambiando ancla del minimapa a: " + part.MapCoords);
-        }
+        currentTrackedRoom = part;
     }
 
-    //// FUNCIÓN NUEVA: Implementa la lógica de rastreo relativo.
-    //private void UpdatePlayerIconRelative(Vector3 worldPosition, Vector3 roomCenter3D, Vector2Int roomCoords2D)
-    //{
-    //    float mapScale = 100f;
-    //    float roomSize = 50f; // <--- AUMENTAR el divisor para frenar el movimiento
-    //    float worldToMapRatio = mapScale / roomSize;
+    // FUNCIÓN NUEVA: Implementa la lógica de rastreo relativo.
+    private void UpdatePlayerIconRelative(Vector3 worldPosition, Vector3 roomCenter3D, Vector2Int roomCoords2D)
+    {
+        float mapScale = 100f;
+        float roomSize = 50f; // <--- AUMENTAR el divisor para frenar el movimiento
+        float worldToMapRatio = mapScale / roomSize;
 
-    //    // 1. Calcular la posición relativa del jugador DENTRO de la sala actual
-    //    Vector3 relativeToRoom = worldPosition - roomCenter3D;
+        // 1. Calcular la posición relativa del jugador DENTRO de la sala actual
+        Vector3 relativeToRoom = worldPosition - roomCenter3D;
 
-    //    // 2. Calcular el desplazamiento del ícono DENTRO de la celda (rastreo fino)
-    //    Vector2 fineMovement = new Vector2(
-    //        relativeToRoom.x * worldToMapRatio,
-    //        relativeToRoom.z * worldToMapRatio
-    //    );
+        // 2. Calcular el desplazamiento del ícono DENTRO de la celda (rastreo fino)
+        Vector2 fineMovement = new Vector2(
+            relativeToRoom.x * worldToMapRatio,
+            relativeToRoom.z * worldToMapRatio
+        );
 
-    //    // 3. Calcular la Posición Final: Coordenada Lógica + Desfase Fino
-    //    Vector2 mapPosition = new Vector2(
-    //        roomCoords2D.x * mapScale + fineMovement.x,
-    //        roomCoords2D.y * mapScale + fineMovement.y
-    //    );
+        // 3. Calcular la Posición Final: Coordenada Lógica + Desfase Fino
+        Vector2 mapPosition = new Vector2(
+            roomCoords2D.x * mapScale + fineMovement.x,
+            roomCoords2D.y * mapScale + fineMovement.y
+        );
 
-    //    float smoothSpeed = 10f; // Controla la rapidez del suavizado
+        float smoothSpeed = 10f; // Controla la rapidez del suavizado
 
-    //    playerIcon.GetComponent<RectTransform>().anchoredPosition =
-    //        Vector2.Lerp(
-    //            playerIcon.GetComponent<RectTransform>().anchoredPosition, // Posición actual
-    //            mapPosition, // Posición objetivo (calculada)
-    //            Time.deltaTime * smoothSpeed
-    //        );
+        playerIcon.GetComponent<RectTransform>().anchoredPosition =
+            Vector2.Lerp(
+                playerIcon.GetComponent<RectTransform>().anchoredPosition, // Posición actual
+                mapPosition, // Posición objetivo (calculada)
+                Time.deltaTime * smoothSpeed
+            );
 
-    //    playerIcon.transform.SetAsLastSibling();
-    //    playerIcon.GetComponent<RectTransform>().anchoredPosition = mapPosition;
-    //}
+        playerIcon.transform.SetAsLastSibling();
+        playerIcon.GetComponent<RectTransform>().anchoredPosition = mapPosition;
+    }
+
+
 }
