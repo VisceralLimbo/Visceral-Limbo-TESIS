@@ -6,6 +6,9 @@ using System;
 
 public class Dash_Skill : Visceral_SkillLogic
 {
+    // evento para el rastro del dash q va a hacer daño y no tocar el otro xd
+    public event Action<Vector3> OnDashTraced;
+
     // necesito un evento al activar el dash para el item de evasion
     public event Action OnDashActivated;
 
@@ -30,6 +33,9 @@ public class Dash_Skill : Visceral_SkillLogic
         _KCCMotorMovement.AddExternalVelocity(FinalDashMovement, true);
 
         _AnimHandler.SetParameter("PlayerWeapon", "Exe_Support", AnimatorControllerParameterType.Trigger);
+
+        // invoke al nuevo
+        OnDashTraced?.Invoke(FinalDashMovement);
 
         // termina la logica del dash y activo el doubledamage
         OnDashActivated?.Invoke();
