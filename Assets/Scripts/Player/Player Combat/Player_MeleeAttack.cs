@@ -83,6 +83,9 @@ public class Player_MeleeAttack : Visceral_Script
     // variable para la dir del ataque (como hacian con el cs antes)
     private Vector3 _AttackDir = Vector3.zero;
 
+    //evento nuevo
+    public event Action OnMeleeAttackCompleted;
+
     public override void VS_Initialize()
     {
         if(DialogueManager.instance != null)
@@ -302,6 +305,8 @@ public class Player_MeleeAttack : Visceral_Script
         //
         //indicamos al arma que comienze a realizar daño
         _Weapon.Attacking();
+
+        OnMeleeAttackCompleted?.Invoke(); // llamo al nuevoe evento para activar el ataque de rango
 
         // trails
         float trailDeactivateTime = Mathf.Max(currentAttack.AnimationLenght - 1f, 0.45f); //cuando se desactiva el trail antes del final de la animacion
