@@ -184,8 +184,7 @@ public class MinimapManager : MonoBehaviour
                 originalIconColors.Add(icon, image.color);
             }
 
-            // 2. Aplicar la Niebla de Guerra (cambiar a gris oscuro)
-            image.color = UnityEngine.Color.gray; // Usamos el prefijo por seguridad
+            
         }
 
         //// **CAMBIO TEMPORAL PARA TESTEO:** Activar todos los iconos:
