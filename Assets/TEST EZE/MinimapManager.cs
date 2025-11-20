@@ -172,8 +172,7 @@ public class MinimapManager : MonoBehaviour
         // 3. Posiciona el icono en el Canvas usando las coordenadas lógicas (MapCoords)
         icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(newPart.MapCoords.x * mapScale, newPart.MapCoords.y * mapScale);
 
-        // 4. Inicializa el estado (Niebla de Guerra)
-        icon.SetActive(true); // <--- DEBEN ESTAR ACTIVOS PARA VERSE EN GRIS/NEGRO
+        icon.SetActive(false); // <--- CAMBIO CLAVE: Empezar invisible
 
         // Fusionamos los dos bloques TryGetComponent para declarar 'image' solo una vez
         if (icon.TryGetComponent(out Image image))
@@ -235,10 +234,10 @@ public class MinimapManager : MonoBehaviour
         {
             GameObject icon = mapIcons[part];
 
-            if (icon != null && icon.TryGetComponent(out Image image) && originalIconColors.ContainsKey(icon))
+            if (icon != null)
             {
-                // Restaura el color original. Si por alguna razón el diccionario falla, usa UnityEngine.Color.white
-                image.color = originalIconColors[icon];
+                // CAMBIO CLAVE: Activar el GameObject
+                icon.SetActive(true);
             }
         }
     }
