@@ -21,20 +21,19 @@ public class RoomDiscovery : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Solo si el jugador entra
         if (other.CompareTag("Player"))
         {
             if (part != null && MinimapManager.Instance != null)
             {
-                // La visibilidad solo se activa la primera vez
+                // *** Descubrimos la parte (Ahora le da color, no activa el GameObject) ***
                 if (!isDiscovered)
                 {
-                    MinimapManager.Instance.DiscoverPart(part);
+                    MinimapManager.Instance.DiscoverPart(part); // <--- Llama a la nueva lógica de color
                     isDiscovered = true;
                 }
 
                 // EL ANCLAJE OCURRE SIEMPRE QUE EL JUGADOR ESTÉ DENTRO
-                // (Esto corrige la desincronización al volver a entrar)
+                // Esta llamada ya no tiene efecto de movimiento, pero asegura que currentTrackedRoom se actualice
                 MinimapManager.Instance.StartRoomTracking(part);
             }
         }

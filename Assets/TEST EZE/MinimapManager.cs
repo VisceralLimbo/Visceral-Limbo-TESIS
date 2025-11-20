@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI; // Necesario para componentes de UI (Image, RectTransform)
 
@@ -33,6 +34,16 @@ public class MinimapManager : MonoBehaviour
     // --- DATOS INTERNOS ---
     private Dictionary<DungeonPart, GameObject> mapIcons = new Dictionary<DungeonPart, GameObject>();
     private GameObject cachedPlayer; // Referencia al objeto del jugador
+                                     // Diccionario para almacenar el color original de cada ícono de pieza
+    private Dictionary<GameObject, UnityEngine.Color> originalIconColors = new Dictionary<GameObject, UnityEngine.Color>();
+
+    [Header("Iconos de Conexión")]
+    [SerializeField] private GameObject ConnectionIconPrefab; // Prefab de UI (una línea o cuadrado pequeño)
+    [SerializeField] private float ConnectionLineLength = 20f; // Longitud de la línea de conexión (ej. 20 unidades)
+    [SerializeField] private float ConnectionLineWidth = 5f; // Grosor de la línea
+    [SerializeField] private UnityEngine.Color ConnectedColor = UnityEngine.Color.yellow; // Color de la conexión
+
+    private Dictionary<DungeonPart, List<GameObject>> partConnections = new Dictionary<DungeonPart, List<GameObject>>();
 
     // --- MÉTODOS DE INICIO ---
 
@@ -46,9 +57,18 @@ public class MinimapManager : MonoBehaviour
 
         if (MinimapPanel != null)
         {
+            // 1. Aseguramos que el panel visible (el marco/padre del mapa) esté inactivo
             MinimapPanel.SetActive(false);
-            isMapVisible = false;
         }
+
+        if (MapContainer != null)
+        {
+            // 2. Por si acaso, apagamos el contenedor de los íconos también
+            MapContainer.gameObject.SetActive(false);
+        }
+
+        // 3. Establecemos el estado lógico inicial
+        isMapVisible = false;
     }
 
     private void Start()
@@ -57,39 +77,60 @@ public class MinimapManager : MonoBehaviour
         cachedPlayer = GameObject.FindGameObjectWithTag("Player");
 
         // Instanciamos el icono.
-        // Si MinimapPanel está disponible, lo usamos como padre del ícono
-        Transform parentTransform = (MinimapPanel != null) ? MinimapPanel.transform : MapContainer.transform.parent;
+        // parentTransform AHORA DEBE SER EL MAPCONTAINER para que el ícono se mueva con las coordenadas de la cuadrícula.
+        Transform parentTransform = MapContainer.transform;
 
         if (cachedPlayer != null && playerIcon == null && PlayerIconPrefab != null && parentTransform != null)
         {
-            // Instancia como hijo del contenedor estático (MinimapPanel o su padre)
+            // Instancia como hijo del CONTENEDOR DEL MAPA (MapContainer)
             playerIcon = Instantiate(PlayerIconPrefab, parentTransform);
             playerIcon.SetActive(true);
 
-            // ANCLAJE CLAVE: Fijar el ícono en el centro de su contenedor estático
+            // El Player Icon ahora empieza en (0, 0) y su posición será actualizada por MovePlayerIconToRoomCenter.
             RectTransform rt = playerIcon.GetComponent<RectTransform>();
             rt.anchorMin = Vector2.one * 0.5f;
             rt.anchorMax = Vector2.one * 0.5f;
             rt.pivot = Vector2.one * 0.5f;
-            rt.anchoredPosition = Vector2.zero; // <--- POSICIÓN FIJA EN EL CENTRO
+            rt.anchoredPosition = Vector2.zero; // Comienza en 0,0 (sala de entrada)
 
             playerIcon.transform.SetAsLastSibling();
+        }
+
+        // *** NUEVO: ENLACE DEL EVENTO DE GENERACIÓN ***
+        if (DungeonGenerator.Instance != null)
+        {
+            DungeonGenerator.Instance.OnSuccessfulGeneration += CenterMapInitial;
         }
     }
 
     void Update()
     {
-        // *** DEBUG DE EJECUCIÓN DEL SCRIPT ***
-        Debug.Log("MinimapManager está activo.");
-
         // --- CONTROL DE TECLADO (TAB) ---
-        if (Input.GetKey(KeyCode.Tab))
+        // Usamos GetKey() para mantenerlo abierto mientras se presiona.
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (!isMapVisible) SetMapVisibility(true);
+            // Abrir el mapa (si está cerrado)
+            SetMapVisibility(true);
         }
         else if (Input.GetKeyUp(KeyCode.Tab))
         {
-            if (isMapVisible) SetMapVisibility(false);
+            // Cerrar el mapa (al soltar la tecla)
+            SetMapVisibility(false);
+        }
+
+        // --- LÓGICA DE ROTACIÓN DEL PLAYER ICON (SOLO SI ES VISIBLE) ---
+        if (cachedPlayer != null && playerIcon != null && isMapVisible)
+        {
+            float playerYRotation = cachedPlayer.transform.rotation.eulerAngles.y;
+
+            RectTransform playerIconRect = playerIcon.GetComponent<RectTransform>();
+
+            // Aplicar la rotación del jugador
+            playerIconRect.localRotation = Quaternion.Slerp(
+                playerIconRect.localRotation,
+                Quaternion.Euler(0, 0, -playerYRotation),
+                Time.deltaTime * 10f
+            );
         }
     }
 
@@ -129,22 +170,25 @@ public class MinimapManager : MonoBehaviour
         GameObject icon = Instantiate(prefabToUse, MapContainer);
 
         // 3. Posiciona el icono en el Canvas usando las coordenadas lógicas (MapCoords)
-        // Coordenada (X, Y) = (MapCoords.x * escala, MapCoords.y * escala)
-        icon.GetComponent<RectTransform>().anchoredPosition =
-            new Vector2(newPart.MapCoords.x * mapScale, newPart.MapCoords.y * mapScale);
+        icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(newPart.MapCoords.x * mapScale, newPart.MapCoords.y * mapScale);
 
         // 4. Inicializa el estado (Niebla de Guerra)
-        if (newPart.RoomType != DungeonPart.DungeonPartType.Entrance)
+        icon.SetActive(true); // <--- DEBEN ESTAR ACTIVOS PARA VERSE EN GRIS/NEGRO
+
+        // Fusionamos los dos bloques TryGetComponent para declarar 'image' solo una vez
+        if (icon.TryGetComponent(out Image image))
         {
-            // Oculta/Oscurece todas las piezas excepto la inicial
-            icon.SetActive(false);
+            // 1. **GUARDAR EL COLOR ORIGINAL**
+            // (Asegúrate de que originalIconColors usa UnityEngine.Color para evitar el error CS0104)
+            if (!originalIconColors.ContainsKey(icon))
+            {
+                originalIconColors.Add(icon, image.color);
+            }
+
+            // 2. Aplicar la Niebla de Guerra (cambiar a gris oscuro)
+            image.color = UnityEngine.Color.gray; // Usamos el prefijo por seguridad
         }
-        else
-        {
-            icon.SetActive(true); // Asegura que la sala inicial esté visible
-                                  // *** GUARDAR EL PUNTO DE ORIGEN DE LA MAZMORRA EN EL MUNDO 3D ***
-            mapWorldOrigin = newPart.transform.position;
-        }
+
         //// **CAMBIO TEMPORAL PARA TESTEO:** Activar todos los iconos:
         //icon.SetActive(true);
         // 5. Guarda la referencia
@@ -158,6 +202,9 @@ public class MinimapManager : MonoBehaviour
             Destroy(icon);
         }
 
+        // *** NUEVO: DIBUJAR LAS CONEXIONES ***
+        DrawConnectionsForPart(newPart);
+
         // ** NUEVO: ORDENAR EL DIBUJO **
         // Las salas regulares, especiales y de jefe deben dibujarse DESPUÉS de los pasillos
         if (newPart.RoomType == DungeonPart.DungeonPartType.Room ||
@@ -167,6 +214,14 @@ public class MinimapManager : MonoBehaviour
             // Mueve el icono al final de la lista de hermanos (se dibuja encima)
             icon.transform.SetAsLastSibling();
         }
+
+        // Si es la sala de entrada, la descubrimos inmediatamente.
+        if (newPart.RoomType == DungeonPart.DungeonPartType.Entrance)
+        {
+            DiscoverPart(newPart); // Llama a DiscoverPart para darle color a la primera sala
+            mapWorldOrigin = newPart.transform.position;
+        }
+
     }
 
     // --- DESCUBRIMIENTO DE MAPA (Niebla de Guerra) ---
@@ -178,28 +233,24 @@ public class MinimapManager : MonoBehaviour
     {
         if (mapIcons.ContainsKey(part))
         {
-            mapIcons[part].SetActive(true); // <-- Hace visible el GameObject del minimapa.
+            GameObject icon = mapIcons[part];
+
+            if (icon != null && icon.TryGetComponent(out Image image) && originalIconColors.ContainsKey(icon))
+            {
+                // Restaura el color original. Si por alguna razón el diccionario falla, usa UnityEngine.Color.white
+                image.color = originalIconColors[icon];
+            }
         }
     }
 
-    // CORREGIR Y USAR ESTA FUNCIÓN:
     public void UpdatePlayerIcon(Vector3 worldPosition)
     {
-        if (playerIcon == null) return;
-
-        // Si la sala rastreada no está configurada, salimos, o usamos el origen del mundo
-        if (currentTrackedRoom == null)
-        {
-            // Esto solo debería ocurrir al inicio. En ese caso, usa el origen del mundo.
-            UpdatePlayerIconRelative(worldPosition, mapWorldOrigin, Vector2Int.zero);
-            return;
-        }
-
-        // Si tenemos una sala, usamos su centro 3D y su coordenada lógica
-        UpdatePlayerIconRelative(worldPosition,
-                                 currentTrackedRoom.transform.position,
-                                 currentTrackedRoom.MapCoords);
+        // Esta función ahora solo existe para llamarse desde el Player/RoomDiscovery si es necesario,
+        // pero ya no mueve nada. Su llamado ya no es necesario en Update.
+        // Dejarla así evita errores de compilación si otras clases la llaman, pero su cuerpo está vacío.
     }
+    // FUNCIÓN REVERTIDA/ELIMINADA: La lógica de centrado del mapa por sala ya no es necesaria.
+    // El MapContainer se centrará una sola vez.
 
     /// <summary>
     /// Elimina todos los iconos de pieza generados en el minimapa.
@@ -216,6 +267,19 @@ public class MinimapManager : MonoBehaviour
         }
         mapIcons.Clear();
 
+        // *** NUEVO: LIMPIAR ICONOS DE CONEXIÓN ***
+        foreach (var connectionList in partConnections.Values)
+        {
+            foreach (var icon in connectionList)
+            {
+                if (icon != null)
+                {
+                    Destroy(icon);
+                }
+            }
+        }
+        partConnections.Clear();
+
         // Opcional: También eliminamos el icono del jugador si lo hemos instanciado
         if (playerIcon != null)
         {
@@ -227,14 +291,26 @@ public class MinimapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Establece la visibilidad del panel y actualiza el estado lógico.
+    /// Establece la visibilidad del panel del minimapa.
     /// </summary>
     public void SetMapVisibility(bool visible)
     {
         if (MinimapPanel == null) return;
 
+        // Si el estado no cambia, salir
+        if (isMapVisible == visible) return;
+
         isMapVisible = visible;
+
+        // ACTIVAR/DESACTIVAR AMBOS OBJETOS
         MinimapPanel.SetActive(visible);
+
+        // Si MapContainer es un hijo de MinimapPanel, esta línea puede ser redundante, 
+        // pero asegura que la visibilidad se controle explícitamente.
+        if (MapContainer != null)
+        {
+            MapContainer.gameObject.SetActive(visible);
+        }
     }
 
     /// <summary>
@@ -260,42 +336,185 @@ public class MinimapManager : MonoBehaviour
         }
     }
 
-    // NUEVO MÉTODO (Ya deberías tenerlo): Llamado desde RoomDiscovery.cs
+    // Localice y reemplace el método StartRoomTracking:
     public void StartRoomTracking(DungeonPart part)
     {
         currentTrackedRoom = part;
+
+        // *** NUEVO ***
+        // Mueve el ícono del jugador a la coordenada de la nueva sala.
+        MovePlayerIconToRoomCenter(part.MapCoords);
     }
 
-    // FUNCIÓN MODIFICADA: Implementa la lógica de rastreo relativo (SOLO CUADRÍCULA).
+    // MANTENEMOS ESTE MÉTODO VACÍO PARA EVITAR ERRORES SI OTRAS CLASES LO LLAMAN:
     private void UpdatePlayerIconRelative(Vector3 worldPosition, Vector3 roomCenter3D, Vector2Int roomCoords2D)
     {
-        if (MapContainer == null || playerIcon == null) return;
+        // Esta función no hace nada, el mapa es estático.
+    }
 
-        float mapScale = 100f;
+    // Este método ahora asegura que el mapa esté en la posición inicial (centrado).
+    public void CenterMapInitial()
+    {
+        if (MapContainer == null || DungeonGenerator.Instance == null) return;
 
-        // --- CAMBIO CLAVE: IGNORAR EL MOVIMIENTO FINO ---
-        // La posición del jugador en el mapa es simplemente el centro de la celda de la sala actual.
-        // Ya no necesitamos 'relativeToRoom' ni 'fineMovement'.
+        // 1. Calcular el centro geométrico de la mazmorra.
+        // Usaremos el centro de la mazmorra para posicionar el MapContainer de forma estática.
+        Vector2 minCoords = new Vector2(float.MaxValue, float.MaxValue);
+        Vector2 maxCoords = new Vector2(float.MinValue, float.MinValue);
+
+        // Asumimos que todas las piezas ya están registradas en el diccionario mapIcons
+        foreach (var partIcon in mapIcons)
+        {
+            Vector2 coords = partIcon.Key.MapCoords;
+            minCoords.x = Mathf.Min(minCoords.x, coords.x);
+            minCoords.y = Mathf.Min(minCoords.y, coords.y);
+            maxCoords.x = Mathf.Max(maxCoords.x, coords.x);
+            maxCoords.y = Mathf.Max(maxCoords.y, coords.y);
+        }
+
+        // 2. Calcular la posición central para el MapContainer
+        Vector2 centerMapCoords = (minCoords + maxCoords) / 2f;
+        Vector2 centerMapPosition = centerMapCoords * mapScale;
+
+        // 3. Posicionar el MapContainer para centrar todo el mapa visiblemente
+        MapContainer.anchoredPosition = -centerMapPosition;
+
+        // 4. Aseguramos que el contenedor del mapa no rote.
+        MapContainer.localRotation = Quaternion.identity;
+    }
+
+    private void OnDestroy()
+    {
+        // *** IMPORTANTE: DESENLACE PARA EVITAR ERRORES ***
+        if (DungeonGenerator.Instance != null)
+        {
+            DungeonGenerator.Instance.OnSuccessfulGeneration -= CenterMapInitial;
+        }
+    }
+
+    /// <summary>
+    /// Mueve el MapContainer para centrar la sala actual en la pantalla.
+    /// Se llama cuando el jugador entra en una nueva sala (tepeo).
+    /// </summary>
+    private void CenterMapOnRoom(Vector2Int roomCoords2D)
+    {
+        if (MapContainer == null) return;
 
         // 1. Calcular la Posición Lógica (la coordenada central de la sala actual en el minimapa).
-        Vector2 playerMapPosition = new Vector2(
+        Vector2 roomMapPosition = new Vector2(
             roomCoords2D.x * mapScale,
             roomCoords2D.y * mapScale
         );
 
-        // 2. Mover el MapContainer: Para que el jugador quede estático en el centro (0,0), 
-        // el contenedor debe moverse al negativo de la posición lógica del jugador.
-        Vector2 targetContainerPosition = -playerMapPosition;
+        // 2. Mover el MapContainer al negativo de la posición lógica del centro de la sala.
+        // Esto hace que el ícono (fijo en 0,0) parezca estar DENTRO de la sala.
+        Vector2 targetContainerPosition = -roomMapPosition;
 
-        // 3. Mover el MapContainer usando Lerp para un "salto" suave de una sala a otra.
-        MapContainer.anchoredPosition =
-            Vector2.Lerp(
-                MapContainer.anchoredPosition, // Posición actual del contenedor
-                targetContainerPosition,       // Posición objetivo (el centro de la sala actual)
-                Time.deltaTime * 10f // Velocidad de movimiento del mapa
-            );
+        // 3. Aplicar la posición instantáneamente (sin Lerp) para el efecto de "tepeo".
+        MapContainer.anchoredPosition = targetContainerPosition;
+    }
 
-        // El playerIcon debe permanecer en el centro del MinimapPanel (generalmente Vector2.zero) 
-        // para estar fijo. Su posición no se toca aquí.
+    /// <summary>
+    /// Mueve el ícono del jugador al centro de la nueva sala.
+    /// EL MAPA NO SE MUEVE.
+    /// </summary>
+    private void MovePlayerIconToRoomCenter(Vector2Int roomCoords2D)
+    {
+        if (playerIcon == null) return;
+
+        // 1. Calcular la Posición Lógica (la coordenada central de la sala actual en el minimapa).
+        Vector2 roomMapPosition = new Vector2(
+            roomCoords2D.x * mapScale,
+            roomCoords2D.y * mapScale
+        );
+
+        // 2. Aplicar la posición a un objeto de UI.
+        // ¡El jugador ahora debe moverse!
+        RectTransform playerIconRect = playerIcon.GetComponent<RectTransform>();
+
+        // 3. Aplicar la posición instantáneamente (sin Lerp) al ícono del jugador.
+        // OJO: La posición del ícono se calcula relativa a su padre estático (MinimapPanel) 
+        // y debe compensarse por la posición de MapContainer (que se ajustó en CenterMapInitial).
+        // Para simplificar, si el ícono del jugador es hijo del MapContainer, la posición es simplemente:
+
+        // *****************************************************************************************
+        // IMPORTANTE: PARA QUE ESTO FUNCIONE, EL PLAYER ICON DEBE SER HIJO DEL MAPCONTAINER.
+        // *****************************************************************************************
+
+        // Revertiremos la jerarquía del ícono del jugador para que sea hijo del MapContainer:
+
+        // AHORA: El MapContainer está estáticamente centrado.
+        // El ícono del jugador (que es hijo del MapContainer) se mueve a la coordenada de la sala.
+        playerIconRect.anchoredPosition = roomMapPosition;
+    }
+
+    /// <summary>
+    /// Dibuja indicadores de conexión (puertas) alrededor del icono de la pieza.
+    /// </summary>
+    private void DrawConnectionsForPart(DungeonPart part)
+    {
+        if (ConnectionIconPrefab == null || !mapIcons.ContainsKey(part)) return;
+
+        // Obtener el icono de la sala en el minimapa (donde se dibujarán las líneas)
+        GameObject partIcon = mapIcons[part];
+        RectTransform partRect = partIcon.GetComponent<RectTransform>();
+
+        List<GameObject> drawnIcons = new List<GameObject>();
+
+        // 1. Iterar sobre todos los puntos de entrada/salida de la pieza
+        foreach (var entryPoint in part.EntryPoints)
+        {
+            // 2. Solo dibujamos la conexión si la puerta está realmente ocupada (conectada)
+            if (entryPoint.IsOccupied())
+            {
+                // 3. Calcular la dirección de la puerta en el mundo (X/Z)
+                Vector3 forward = entryPoint.transform.forward;
+                Vector2 connectionDirection = Vector2.zero;
+                float threshold = 0.8f;
+
+                // Mapeo de 3D a 2D (X->X, Z->Y)
+                if (Mathf.Abs(forward.z) > threshold)
+                {
+                    connectionDirection.y = Mathf.Sign(forward.z); // Arriba (+Y) o Abajo (-Y)
+                }
+                else if (Mathf.Abs(forward.x) > threshold)
+                {
+                    connectionDirection.x = Mathf.Sign(forward.x); // Derecha (+X) o Izquierda (-X)
+                }
+
+                if (connectionDirection != Vector2.zero)
+                {
+                    // 4. Instanciar y posicionar el icono de conexión
+                    GameObject connectionIcon = Instantiate(ConnectionIconPrefab, partRect);
+                    Image image = connectionIcon.GetComponent<Image>();
+                    RectTransform connRect = connectionIcon.GetComponent<RectTransform>();
+
+                    // 5. Configurar el color y la posición (temporalmente usando color amarillo)
+                    image.color = ConnectedColor;
+
+                    // Posición: Desplazarlo ligeramente hacia el borde del icono
+                    float offsetDistance = mapScale / 2f;
+                    connRect.anchoredPosition = new Vector2(
+                        connectionDirection.x * offsetDistance,
+                        connectionDirection.y * offsetDistance
+                    );
+
+                    // Rotación: Rotar el icono para que apunte en la dirección de la conexión
+                    float angle = Mathf.Atan2(connectionDirection.y, connectionDirection.x) * Mathf.Rad2Deg;
+                    connRect.localRotation = Quaternion.Euler(0, 0, angle - 90f); // -90 para que el eje Y apunte al forward
+
+                    // Tamaño: Escalar para simular una línea o un punto
+                    connRect.sizeDelta = new Vector2(ConnectionLineWidth, ConnectionLineLength);
+
+                    drawnIcons.Add(connectionIcon);
+                }
+            }
+        }
+
+        // Guardar la lista de iconos de conexión para limpieza futura
+        if (drawnIcons.Count > 0)
+        {
+            partConnections.Add(part, drawnIcons);
+        }
     }
 }
