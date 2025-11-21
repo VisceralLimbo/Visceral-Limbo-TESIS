@@ -9,6 +9,7 @@ public class Corpus_Thinking_Main_State : BaseState
     [SerializeField] Transform Target;
     [SerializeField] GameObject Model;
     [SerializeField] IMovementStrategy _MovementStrategy;
+    [SerializeField] AnimatorHandler _Anim;
     Coroutine _EnergyCoroutine;
 
     [SerializeField] PlayerContext _PlayerContext;
@@ -159,6 +160,8 @@ public class Corpus_Thinking_Main_State : BaseState
 
                 if (NextAttack != null)
                 {
+                    _Anim.SetParameter("Corpus_Anim", "SideWalk", AnimatorControllerParameterType.Bool, false);
+                    _Anim.SetParameter("Corpus_Anim", "Walk", AnimatorControllerParameterType.Bool, false);
                     stateMachine.SetGlobalCondition("ShouldMove", false);
                     stateMachine.SetGlobalCondition("ShouldMoveAround", false);
 
@@ -171,36 +174,38 @@ public class Corpus_Thinking_Main_State : BaseState
                     return;
                 }
             }
-            else if (DistanceToPlayer <= MinimumAttackRange)
+
+            // PASO 2: MOVERNOS
+            else if (DistanceToPlayer < MinimumAttackRange)
             {
+                // MUY CERCA DEL PLAYER, ERGO ROTAMOS 
                 stateMachine.SetGlobalCondition("ShouldMove", false);
 
                 stateMachine.SetGlobalCondition("ShouldMoveAround", true);
                 _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
                                           // vamos a idle
-
-
-                return;
-            }
-
-            // PASO 3: Determinar si vamos a Idle o movernos
-            if (Target != null)
-            {
-
-                stateMachine.SetGlobalCondition("ShouldMove", true);
-                stateMachine.SetGlobalCondition("ShouldMoveAround", false);
-                _CanMakeDecision = false; // Bloqueamos la decisión mientras se ejecuta el movimiento
                 return;
             }
             else
+            {
+                // THAT MADAFAKA GOT THEM FAKE Js!!!
+                stateMachine.SetGlobalCondition("ShouldMove", true);
+
+                stateMachine.SetGlobalCondition("ShouldMoveAround", false);
+                _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
+                                          // vamos a idle
+                return;
+            }
+
+            // PASO 3: Determinar si vamos a Idle
+            if (Target != null)
             {
 
                 stateMachine.SetGlobalCondition("ShouldMove", false);
                 stateMachine.SetGlobalCondition("ShouldMoveAround", false);
                 _CanMakeDecision = false; // Bloqueamos la decisión para esperar el cooldown/pensamiento
                                           // idle
-                return;
-            }
+            } 
         }
     }
 

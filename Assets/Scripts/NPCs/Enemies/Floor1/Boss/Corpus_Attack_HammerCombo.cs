@@ -5,11 +5,18 @@ using UnityEngine;
 public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
 {
 
-    [SerializeField] string TransitionKey;
+    [Header("References")]
+    [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Corpus_Thinking_Main_State _Main_State;
+    [Space]
+
+    [Header("Variables")]
+
+    [SerializeField] string TransitionKey;
     [SerializeField] int EnergyCost;
     [SerializeField] float TimingDuration;
     [SerializeField] bool CanExit = false;
+
 
 
     [Header("For Testing purposes")]
@@ -47,6 +54,8 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
         pulse = 0;
         DrawWireframe = true;
         _Main_State.DeactivateEnergy(true);
+
+        _AnimHandler.SetParameter("Corpus_Anim", "HammerCombo", AnimatorControllerParameterType.Trigger);
 
         // refe del boss
         Boss_HealthComp attackerHP = CTX.transform.root.GetComponentInChildren<Boss_HealthComp>();

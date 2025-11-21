@@ -18,6 +18,7 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
     [SerializeField] Corpus_Thinking_Main_State _MainState;
     [SerializeField] Transform _Target;
     [SerializeField] Collider _Col;
+    [SerializeField] AnimatorHandler _AnimatorHandler;
 
     [SerializeField] PlayerContext _PlayerContext;
     [Space]
@@ -85,7 +86,8 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
         OnTackleStart?.Invoke();
 
         _Main_State.DeactivateEnergy(true);
-        _movementStrategy.KillAllMovement();        
+        _movementStrategy.KillAllMovement();
+        _AnimatorHandler.SetParameter("Corpus_Anim", "Running", AnimatorControllerParameterType.Bool,true);
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -101,6 +103,7 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
         CTX.SetGlobalCondition(TransitionKey,false);
 
         OnTackleEnd?.Invoke();
+        _AnimatorHandler.SetParameter("Corpus_Anim", "Running", AnimatorControllerParameterType.Bool, false);
 
         base.OnExit(CTX);
     }
