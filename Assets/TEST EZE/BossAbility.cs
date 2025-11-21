@@ -23,6 +23,8 @@ public class BossAbility : BaseState,IStateEnergyCost
 
     [SerializeField] Corpus_Thinking_Main_State Thinker;
 
+    [SerializeField] AnimatorHandler _AnimHandler;
+
     public override void OnInitialize(VisceralStateMachine CTX)
     {
         base.OnInitialize(CTX);
@@ -49,11 +51,14 @@ public class BossAbility : BaseState,IStateEnergyCost
         Thinker.KillMovement();
 
         Thinker.DeactivateEnergy(true);
+        _AnimHandler.SetParameter("Corpus_Anim", "PilarAttack", AnimatorControllerParameterType.Bool, true);
+
         StartPillarAttack();
     }
 
     public override void OnExit(VisceralStateMachine CTX)
     {
+        _AnimHandler.SetParameter("Corpus_Anim", "PilarAttack", AnimatorControllerParameterType.Bool, false);
         base.OnExit(CTX);
     }
 

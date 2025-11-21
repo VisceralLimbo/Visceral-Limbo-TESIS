@@ -96,11 +96,7 @@ public class VisceralStateMachine : MonoBehaviour
 
             _HPComp.OnDeath += OnDisable;
         }
-
-
     }
-
-
 
     public void Update()
     {

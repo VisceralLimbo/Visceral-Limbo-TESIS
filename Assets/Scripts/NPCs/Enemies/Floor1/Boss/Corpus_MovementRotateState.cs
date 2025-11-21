@@ -5,8 +5,14 @@ using KinematicCharacterController;
 
 public class Corpus_MovementRotateState : BaseState
 {
+    [Header("References")]
     [SerializeField] Transform Model;
     [SerializeField] Transform Target;
+    [SerializeField] Corpus_Thinking_Main_State thinkingMain;
+
+    [SerializeField] IMovementStrategy MovementStrategy;
+    [SerializeField] AnimatorHandler _AnimHandler;
+    [Space]
 
     [Header("Variables")]
     [SerializeField] float movementSpeed;
@@ -15,9 +21,7 @@ public class Corpus_MovementRotateState : BaseState
     [Tooltip("Como es un movimiento radial con aceleracion, lentamente el personaje se va a ir alejando por fuerza centrifugal, para evitar eso se le aplica una correccion determinada por este valor")]
     [SerializeField] float SpiralDriftCorrection;
 
-    [SerializeField] Corpus_Thinking_Main_State thinkingMain;
-
-    [SerializeField] IMovementStrategy MovementStrategy;
+   
 
     [SerializeField] float Statepulse = 0;
 
@@ -52,11 +56,17 @@ public class Corpus_MovementRotateState : BaseState
         Statepulse = 0;
         thinkingMain.DeactivateEnergy(false);
 
+        _AnimHandler.SetParameter("Corpus_Anim", "SideWalk", AnimatorControllerParameterType.Bool, true);
+
         FlipFlopDirection = !FlipFlopDirection;
     }
 
     public override void OnExit(VisceralStateMachine CTX)
     {
+        if(thinkingMain.GetCurrentEnergy > 3)
+        {
+            _AnimHandler.SetParameter("Corpus_Anim", "SideWalk", AnimatorControllerParameterType.Bool, false);
+        }
         base.OnExit(CTX);
         Statepulse = 0;
     }

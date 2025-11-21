@@ -15,6 +15,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     [SerializeField] Corpus_Thinking_Main_State _Main_State;
     IMovementStrategy _MoveStrategy;
     [SerializeField] KinematicCharacterMotor _KCC;
+    [SerializeField] AnimatorHandler _AnimatorHandler;
     
     [Space]
 
@@ -53,6 +54,8 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     {
         base.OnEnter(CTX);
 
+        _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlam", AnimatorControllerParameterType.Bool,true);
+
         _Main_State.DeactivateEnergy(true);
 
         _MoveStrategy.KillAllMovement();
@@ -67,7 +70,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         _ExecutingAttack = false;
         _FinishedAttack = false;
 
-
+        _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlam", AnimatorControllerParameterType.Bool, false);
         CTX.SetGlobalCondition(TransitionKey, false);
     }
 

@@ -5,13 +5,19 @@ using KinematicCharacterController;
 
 public class Corpus_MovementState : BaseState
 {
+
+    [Header("References")]
     [SerializeField] Transform Model;
     [SerializeField] Transform Target;
-    [SerializeField] float movementSpeed;
 
     [SerializeField] Corpus_Thinking_Main_State thinkingMain;
+    [SerializeField] AnimatorHandler _AnimHandler;
 
     [SerializeField] IMovementStrategy MovementStrategy;
+
+    [Space]
+    [Header("Variables")]
+    [SerializeField] float movementSpeed;
 
     float pulse = 0;
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
@@ -42,10 +48,15 @@ public class Corpus_MovementState : BaseState
 
         thinkingMain.DeactivateEnergy(false);
         CTX.SetGlobalCondition("ShouldMove", false);
+        _AnimHandler.SetParameter("Corpus_Anim", "Walk", AnimatorControllerParameterType.Bool, true);
     }
 
     public override void OnExit(VisceralStateMachine CTX)
     {
+        if(thinkingMain.GetCurrentEnergy > 3)
+        {
+            _AnimHandler.SetParameter("Corpus_Anim", "Walk", AnimatorControllerParameterType.Bool, false);
+        }
         base.OnExit(CTX);
     }
 
