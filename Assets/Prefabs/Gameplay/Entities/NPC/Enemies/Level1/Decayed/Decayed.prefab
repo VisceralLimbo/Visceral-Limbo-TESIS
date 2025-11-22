@@ -5249,6 +5249,7 @@ MonoBehaviour:
   _IsActive: 0
   _KillAllMovement: 0
   _MovementSpeed: 6
+  _BaseMovementSpeed: 0
   _MovementAccel: 10
   _MaxRotationSpeed: 160
   GotKnockbacked: 0
@@ -5295,11 +5296,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundData:
-    Clip: {fileID: 8300000, guid: 7be4d6739cc99064b8e7e358c93c403e, type: 3}
+  - Clip: {fileID: 8300000, guid: ec521ed801a31ce45b7b967f1390425c, type: 3}
     mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 1
+    MaximunSoundDistance: 10
+    IsFrequent: 1
+  - Clip: {fileID: 8300000, guid: fb24e127368feaf409b2458781b5d44f, type: 3}
+    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 1
+    MaximunSoundDistance: 10
     IsFrequent: 1
   CurrentHealth: 30
   MaxHealth: 30

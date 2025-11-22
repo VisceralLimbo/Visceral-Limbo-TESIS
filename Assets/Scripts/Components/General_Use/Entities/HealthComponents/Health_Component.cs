@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
+
 
 public class Health_Component : Visceral_Component
 {
-    [SerializeField] protected SoundData soundData;
+    [SerializeField] protected SoundData[] soundData;
 
     public float CurrentHealth, MaxHealth;
     public Rigidbody _RB;
@@ -90,7 +92,7 @@ public class Health_Component : Visceral_Component
         CurrentHealth -= damage;
         OnDamaged?.Invoke();
 
-        if (soundData != null)
+        if (soundData.Length > 0)
         {
             PlaySounds(); // feedback de sonidos
         }
@@ -183,12 +185,24 @@ public class Health_Component : Visceral_Component
 
     protected void PlaySounds()
     {
+        print("Sonido entrado");
         if (soundData == null || Context == null) return;
+        print("no hay sonidos");
+        if (soundData.Length == 0) { return; }
+
+        int Sneed;
+        print("eligiendo sonidos");
+        if (soundData.Length == 1) Sneed = 0;
+        else
+        {
+            Sneed = Random.Range(0, soundData.Length);
+        }
+
         var SoundCLip = SoundManager.Instance.CreateSound();
-        SoundCLip.WithSoundData(soundData);
+        SoundCLip.WithSoundData(soundData[Sneed]);
         SoundCLip.WithRandomPitch(true);
         SoundCLip.WithPosition(Context.transform.position);
-        SoundCLip.WithSpatialBlend(1,0,3);
+        SoundCLip.WithSpatialBlend(soundData[Sneed].SpatialBlend, soundData[Sneed].MinimunSoundDistance, soundData[Sneed].MaximunSoundDistance);
         SoundCLip.play();
     }
 

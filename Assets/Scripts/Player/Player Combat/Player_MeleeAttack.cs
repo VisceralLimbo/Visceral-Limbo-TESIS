@@ -468,6 +468,12 @@ public class Player_MeleeAttack : Visceral_Script
             _SwordMeshRenderer.material = _NormalMaterial;
         }
     }
+
+    private void PlaySound(bool HitTarget)
+    {
+
+    }
+
     #region Misc
     void sheateWeapon()
     {
