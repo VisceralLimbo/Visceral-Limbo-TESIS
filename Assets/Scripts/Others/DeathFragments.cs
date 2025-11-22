@@ -9,6 +9,8 @@ public class DeathFragments : MonoBehaviour
 
     private Health_Component healthComponent;
 
+    [SerializeField] private SoundData breakingSound;
+
     private void Awake()
     {
         healthComponent = GetComponent<Health_Component>();
@@ -27,6 +29,7 @@ public class DeathFragments : MonoBehaviour
         if (healthComponent != null)
         {
             healthComponent.OnDeath -= SpawnFragments;
+           
         }
     }
 
@@ -34,8 +37,19 @@ public class DeathFragments : MonoBehaviour
     {
         if (fracturedBoxPrefab == null) return;
 
+        if (breakingSound != null && SoundManager.Instance != null)
+        {
+            SoundManager.Instance.CreateSound()
+                .WithSoundData(breakingSound)
+                .WithRandomPitch(true)
+                .WithPosition(transform.position)
+                .WithSpatialBlend(1f, 1f, 50f)
+                .play();
+        }
+
         GameObject fragments = Instantiate(fracturedBoxPrefab, transform.position, transform.rotation);
 
+        SoundManager.Instance.CreateSound().WithSoundData(breakingSound).WithRandomPitch(true).WithPosition(this.transform.position).WithSpatialBlend(1f, 1f, 50f).play();
         foreach (Rigidbody rb in fragments.GetComponentsInChildren<Rigidbody>())
         {
             Vector3 randomDir = (rb.transform.position - transform.position).normalized + Vector3.up * 0.3f;

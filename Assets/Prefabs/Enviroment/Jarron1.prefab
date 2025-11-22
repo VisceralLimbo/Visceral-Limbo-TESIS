@@ -99,6 +99,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 400034805773766576}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a989ed65f974879458b036d7aca69240,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5665537377979296451}
   m_SourcePrefab: {fileID: 100100000, guid: a989ed65f974879458b036d7aca69240, type: 3}
 --- !u!1 &691357697017504039 stripped
 GameObject:
@@ -166,6 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 472673f96eb08914996d06c926556dcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundData: []
   CurrentHealth: 2
   MaxHealth: 2
   _RB: {fileID: 6099034192322848511}
@@ -173,3 +178,28 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
+--- !u!114 &5665537377979296451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691357697017504039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f86b2657d05ec1f478ff1c56335e444d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fracturedBoxPrefab: {fileID: 4784538817816623133, guid: a68c2ee51dcd1fd46a5b3ad21e705932,
+    type: 3}
+  destroyFragmentsAfter: 5
+  explosionForce: 4
+  breakingSound:
+    Clip: {fileID: 8300000, guid: 9c8a380d51002504c9f01522af455eb2, type: 3}
+    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 1
+    MaximunSoundDistance: 20
+    IsFrequent: 1
