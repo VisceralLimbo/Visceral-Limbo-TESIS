@@ -9,6 +9,7 @@ public class BossHealthBarUI : MonoBehaviour
     [SerializeField] private Image currentHealthFillImage;
     [SerializeField] private TextMeshProUGUI bossNameText;
     [SerializeField] private TextMeshProUGUI healthValueText;
+    
 
     [Header("smooth health")]
     // velocidad a la q quieren q baje el daño amarillo de la barra de vida del boss
@@ -83,4 +84,5 @@ public class BossHealthBarUI : MonoBehaviour
             bossHealthComponent.OnDeath -= HideBossBar;
         }
     }
+
 }
