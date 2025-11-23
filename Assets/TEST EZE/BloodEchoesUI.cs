@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using System;
 
 public class BloodEchoesUI : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class BloodEchoesUI : MonoBehaviour
     private Coroutine animateCoroutine;
     private const float AnimationDuration = 0.5f; // lo q dura la anim
     private const float TotalVisibilityTime = 2f; // tiempo del aumento o disminucion
-
+    [SerializeField] SoundData _soundAddCoins;
     private void Awake()
     {
         // apago texto
@@ -43,6 +44,8 @@ public class BloodEchoesUI : MonoBehaviour
     {
         if (bloodEchoesText != null && deltaAmount != 0) // se anima si hay cambio
         {
+            if (deltaAmount > 0)
+                SoundAddCoins();
             //activo
             bloodEchoesText.gameObject.SetActive(true);
 
@@ -60,6 +63,11 @@ public class BloodEchoesUI : MonoBehaviour
             // si no hay se actualiza de una
             bloodEchoesText.text = currentValue.ToString("F0");
         }
+    }
+
+    private void SoundAddCoins()
+    {
+        SoundManager.Instance.CreateSound().WithSoundData(_soundAddCoins).play();
     }
 
     // ahora para refreshear el valor actual

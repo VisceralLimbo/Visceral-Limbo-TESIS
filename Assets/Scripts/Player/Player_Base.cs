@@ -55,6 +55,7 @@ public class Player_Base : Visceral_Script
 
     [SerializeField] private bool IsPlayerActive = true;
 
+    [SerializeField] SoundData _walkSound;
 
     void Start()
     {
@@ -130,7 +131,6 @@ public class Player_Base : Visceral_Script
         _Player_CameraController.UpdateRotation(cameraInput);
 
         //logica de movimiento
-
         //recibo movement inputs y actualizo 
         //creo struct
         var movementInput = new InputMovement
@@ -158,6 +158,10 @@ public class Player_Base : Visceral_Script
             Kick = Input.Kick.WasPressedThisFrame(),
            
         };
+        if(movementInput.Movement.sqrMagnitude > 0.1f)
+        {
+           // SoundManager.Instance.CreateSound().WithSoundData(_walkSound)..play();
+        }
         // guardo el input para llamar en speedlogic
         CurrentMovementInput = movementInput;
         _Player_Movement.UpdateBodyPositions(Time.deltaTime);
