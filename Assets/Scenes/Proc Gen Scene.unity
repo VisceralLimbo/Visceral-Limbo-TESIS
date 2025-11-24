@@ -2744,6 +2744,8 @@ MonoBehaviour:
   Regen: 0
   IsRegenerating: 0
   AllParts: []
+  SpecialRoomGlowColor: {r: 1, g: 0, b: 1, a: 1}
+  BossRoomGlowColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &603922288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3026,6 +3028,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5015822479824164142, guid: f398a81406717624ab3f343db06588dd,
+        type: 3}
+      propertyPath: _soundAddCoins.mixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+        type: 2}
     - target: {fileID: 5347187617301836353, guid: f398a81406717624ab3f343db06588dd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3914,7 +3922,7 @@ MonoBehaviour:
   vignetteController: {fileID: 2024511163}
   _TypingSound:
     Clip: {fileID: 8300000, guid: 9519450a4e97a984f96c0f979db001a7, type: 3}
-    mixerGroup: {fileID: 0}
+    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
