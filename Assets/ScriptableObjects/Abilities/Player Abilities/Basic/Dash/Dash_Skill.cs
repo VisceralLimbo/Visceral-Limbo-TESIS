@@ -16,7 +16,7 @@ public class Dash_Skill : Visceral_SkillLogic
     [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Player_Base _Base;
     [SerializeField] private float _DashStrenght;
-
+    [SerializeField] SoundData _abiltySound;
     public override void ActivateSkill()
     {
         var Input = _Base._Player_InputActions.Gameplay.Movement.ReadValue<Vector2>();
@@ -39,6 +39,7 @@ public class Dash_Skill : Visceral_SkillLogic
 
         // termina la logica del dash y activo el doubledamage
         OnDashActivated?.Invoke();
+        SoundManager.Instance.CreateSound().WithSoundData(_abiltySound).play();
     }
 
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
