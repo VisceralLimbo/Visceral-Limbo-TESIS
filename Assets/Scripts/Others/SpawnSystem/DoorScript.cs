@@ -42,6 +42,9 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] float lightFadeTime = 0.5f;
     private float[] originalIntensities;
 
+    // bool para saber si se abrio
+    [SerializeField] bool _HasBeenOpenedOnce = false;
+
 
     private void Start()
     {
@@ -369,6 +372,9 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             _IsOpen = true;
             SetDoorLightsSmooth(false);
 
+            // apago perma las luces de la puerta q abri
+            _HasBeenOpenedOnce = true;
+            SetDoorLightsSmooth(false);
 
             // las apago si no son de la sala de cfores
 
@@ -399,14 +405,22 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     private void UnlockDoor()
     {
         _LockDoor = false;
-        SetDoorLightsSmooth(true);
+        // solo se encienden si NUNCA se abrio la peurta
+        if (!_HasBeenOpenedOnce)
+        {
+            SetDoorLightsSmooth(true);
+        }
 
     }
 
     private void LockDoor()
     {
         _LockDoor = true;
-        SetDoorLightsSmooth(false);
+        // se apaga si NUNCA fue abierta, si ya la abri queda apagada y el booleano hace q se ignore
+        if (!_HasBeenOpenedOnce)
+        {
+            SetDoorLightsSmooth(false);
+        }
 
     }
 

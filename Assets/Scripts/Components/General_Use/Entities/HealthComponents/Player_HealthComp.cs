@@ -64,7 +64,9 @@ public class Player_HealthComp : Health_Component
             if (CurrentHealth <= 0)
             {
                 Combat_UI_Manager._Instance.DisplayLose(true);
-            }
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     private void UpdateStatValues(string statID, float values)

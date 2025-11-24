@@ -127,6 +127,11 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] bool IsRegenerating;
     public List<DungeonPart> AllParts = new List<DungeonPart>();
 
+    [Space]
+    [Header("Door Glow Colors")]
+    [SerializeField] private Color SpecialRoomGlowColor = Color.magenta; //violetaxd
+    [SerializeField] private Color BossRoomGlowColor = Color.red; // rojoxd
+
 
     public Action<float> GenerationValue;
 
@@ -605,6 +610,11 @@ public class DungeonGenerator : MonoBehaviour
                                 DoorSC.Initialize(Manager, sourceEntryPoint);
                                 DoorSC.ShouldGenerateEvents(false);
 
+                                // color de la puerta de cofres
+                                if (Door.TryGetComponent(out DoorGlow glowSC))
+                                {
+                                    glowSC.SetGlowColor(SpecialRoomGlowColor);
+                                }
                             }
                         }
                     }
@@ -791,6 +801,8 @@ public class DungeonGenerator : MonoBehaviour
                 GameObject Door = Instantiate(DoorOBJ, SourcePoint.transform.position, SourcePoint.transform.rotation);
                 Door.transform.SetParent(SourcePoint.transform, true);
 
+                Door.AddComponent<DoorGlow>();
+
                 Door.TryGetComponent(out DoorScript DoorSC);
 
                 if (BossPart.gameObject.TryGetComponent(out RoomSpawnerManager RoomMan))
@@ -800,6 +812,12 @@ public class DungeonGenerator : MonoBehaviour
                 else
                 {
                     Debug.LogWarning("Visceral Warning: BossPart no reporta RoomManager para asignar a la puerta");
+                }
+
+                // color puerta jefe
+                if (Door.TryGetComponent(out DoorGlow glowSC))
+                {
+                    glowSC.SetGlowColor(BossRoomGlowColor);
                 }
 
                 // hacemos que la sala del jefe sea hijo del dungeonGenerator
