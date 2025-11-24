@@ -119,6 +119,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
             pulse = 0;
             CanExit = true;
         }
+      
     }
 
     public void SetCost(float newCost)
