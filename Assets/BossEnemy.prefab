@@ -59,6 +59,78 @@ MonoBehaviour:
   OrbitRadius: 2
   SpiralDriftCorrection: 1
   Statepulse: 0
+--- !u!1 &1640711995996675159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8253449906431182495}
+  - component: {fileID: 2696773006517339164}
+  - component: {fileID: 5325189599110393801}
+  m_Layer: 7
+  m_Name: Hit_Box_Buttslam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8253449906431182495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640711995996675159}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5871233309053035945}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2696773006517339164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640711995996675159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 202b5bfe7fac7cb4e93c3725342fadf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Collider: {fileID: 5325189599110393801}
+  Damage: 0
+  KnockBack: 30
+  CanDealDamage: 0
+  _Context: {fileID: 4503892774817222897}
+  DealKnockback: 1
+--- !u!135 &5325189599110393801
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640711995996675159}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 3
+  m_Center: {x: 0, y: 3, z: 0}
 --- !u!1 &3605147469828259737
 GameObject:
   m_ObjectHideFlags: 0
@@ -116,6 +188,7 @@ MonoBehaviour:
   EnergyCost: 2
   TimingDuration: 0.08
   CanExit: 0
+  _KnockbackValue: 30
   attackradius: 3
   AttackDamage: 30
   DrawWireframe: 0
@@ -345,6 +418,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4448077876684399416}
+  - {fileID: 8253449906431182495}
   - {fileID: 3236788851928935081}
   m_Father: {fileID: 7333673483843639958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -621,6 +695,7 @@ MonoBehaviour:
   AnimatorsData:
   - AnimatorController: {fileID: 2814493992033784489}
     ID: Corpus_Anim
+  IgnoreSlowdown: 0
 --- !u!1 &5060095149654849359
 GameObject:
   m_ObjectHideFlags: 0
@@ -848,6 +923,7 @@ MonoBehaviour:
   _Main_State: {fileID: 1390840764624858655}
   _KCC: {fileID: 5480121978322433914}
   _AnimatorHandler: {fileID: 107750596267011980}
+  _KnockbackTrigger: {fileID: 2696773006517339164}
   _JumpStrenght: 15
   _JumpDuration: 2
   _FinishedAttack: 0
@@ -915,6 +991,7 @@ MonoBehaviour:
   EnergyCost: 2
   TimingDuration: 0.08
   CanExit: 0
+  _KnockbackValue: 30
   attackradius: 0
   AttackDamage: 0
   DrawWireframe: 0
@@ -1106,6 +1183,7 @@ MonoBehaviour:
   _Main_State: {fileID: 1390840764624858655}
   _KCC: {fileID: 5480121978322433914}
   _AnimatorHandler: {fileID: 107750596267011980}
+  _KnockbackTrigger: {fileID: 2696773006517339164}
   _JumpStrenght: 15
   _JumpDuration: 2
   _FinishedAttack: 0

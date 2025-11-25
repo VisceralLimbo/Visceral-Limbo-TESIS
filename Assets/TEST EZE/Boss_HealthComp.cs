@@ -77,7 +77,20 @@ public class Boss_HealthComp : Health_Component
 
     protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
     {
-        if(CurrentHealth - damage < MaxHealth / 0.5f)
+
+        if (CurrentHealth - damage <= 0)
+        {
+            // frenar spawners
+            if (_EventBus != null)
+            {
+                Debug.LogWarning("Mori,desactivando EnemySpawners");
+                _EventBus.TriggerEvent(_EndEnemyEvent);
+                _EventBus.TriggerEvent("KillEnemies");
+
+            }
+        }
+
+        else if (CurrentHealth - damage < MaxHealth * 0.5f)
         {
             // iniciar spawners
             if(_EventBus != null)
@@ -86,16 +99,7 @@ public class Boss_HealthComp : Health_Component
 
             }
         }
-        else if (CurrentHealth - damage <= 0)
-        {
-            // frenar spawners
-            if(_EventBus != null)
-            {
-                _EventBus.TriggerEvent(_EndEnemyEvent);
-
-            }
-        }
-
+        
 
         base.InternalDamage(damage, KnockbarDir, force, Score);
 

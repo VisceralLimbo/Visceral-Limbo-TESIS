@@ -14,7 +14,7 @@ public class InfiniteSpawner : MonoBehaviour
     [SerializeField] bool _CanKeepMultipleInstances;
 
     [Tooltip("ID de Eventos a suscribirse")]
-    [SerializeField] string _StartEventName,_EndEventName;
+    [SerializeField] string _StartEventName,_EndEventName,_KillEnemy;
 
     private void Start()
     {
@@ -22,6 +22,8 @@ public class InfiniteSpawner : MonoBehaviour
          {
             EventBus.SubscribeToEvent(_StartEventName, StartSpawning);
             EventBus.SubscribeToEvent(_EndEventName, StopSpawning);
+            EventBus.SubscribeToEvent(_KillEnemy, KillEnemy);    
+            
          }
     }
 
@@ -89,5 +91,13 @@ public class InfiniteSpawner : MonoBehaviour
         _CanSpawn = false;
         this.gameObject.SetActive(false);
 
+    }
+
+    private void KillEnemy()
+    {
+        if(_EnemyComponent != null)
+        {
+            _EnemyComponent.SimpleDamage(10000);
+        }
     }
 }

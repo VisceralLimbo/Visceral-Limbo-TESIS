@@ -5381,13 +5381,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _EnemyPrefab: {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40,
     type: 3}
-  _CurrentEnemy: {fileID: 0}
+  _EnemyComponent: {fileID: 0}
   EventBus: {fileID: 662230415}
   _TimeToSpawn: 1
   _CanSpawn: 0
   _CanKeepMultipleInstances: 0
   _StartEventName: StartSpawner
   _EndEventName: StopSpawner
+  _KillEnemy: 
 --- !u!1 &1312632013
 GameObject:
   m_ObjectHideFlags: 0
@@ -9898,7 +9899,7 @@ PrefabInstance:
     - target: {fileID: 5060095149654849359, guid: 9ac0e9f70b0ffa34d97d23b8f42c922c,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6919963657826848723, guid: 9ac0e9f70b0ffa34d97d23b8f42c922c,
         type: 3}
