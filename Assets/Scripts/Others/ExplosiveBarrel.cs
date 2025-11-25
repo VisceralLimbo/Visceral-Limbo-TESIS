@@ -67,7 +67,7 @@ public class ExplosiveBarrel : MonoBehaviour
         Kaboom();
 
         //multiplico el shakesize por la intensidad
-        CameraShake.instance.ShakeCamera(0.75f, 1f * CameraShakeIntensity.currentIntensity, ShakeType.AllDirections);
+        CameraShake.instance?.ShakeCamera(0.75f, 1f * CameraShakeIntensity.currentIntensity, ShakeType.AllDirections);
     }
 
     private void Kaboom()

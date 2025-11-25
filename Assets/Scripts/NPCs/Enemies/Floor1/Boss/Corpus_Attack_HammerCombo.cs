@@ -16,12 +16,13 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     [SerializeField] int EnergyCost;
     [SerializeField] float TimingDuration;
     [SerializeField] bool CanExit = false;
-
+    [SerializeField] float _KnockbackValue;
+    [SerializeField] float attackradius;
+    [SerializeField] float AttackDamage;
 
 
     [Header("For Testing purposes")]
-    [SerializeField] float attackradius;
-    [SerializeField] float AttackDamage;
+  
     [SerializeField] bool DrawWireframe;
     [SerializeField] Transform _Model;
 
@@ -57,32 +58,6 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
 
         _AnimHandler.SetParameter("Corpus_Anim", "HammerCombo", AnimatorControllerParameterType.Trigger);
 
-        // refe del boss
-        Boss_HealthComp attackerHP = CTX.transform.root.GetComponentInChildren<Boss_HealthComp>();
-
-        if (attackerHP == null)
-        {
-            return; // al boss no
-        }
-
-        // debug purposes
-        hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
-
-        if(hits.Length > 0)
-        {
-            foreach(Collider collider in hits)
-            {
-                // busca solo player healthcomp
-                if(collider.TryGetComponent(out Player_HealthComp playerHp))
-                {
-                    if(playerHp.Context == _Main_State.playerContext)
-                    {
-                        return;
-                    }
-                    playerHp.SimpleDamage(AttackDamage);
-                }
-            }
-        }
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -114,9 +89,49 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
         }
         else
         {
+
+            // refe del boss
+            Boss_HealthComp attackerHP = CTX.transform.root.GetComponentInChildren<Boss_HealthComp>();
+
+            if (attackerHP == null)
+            {
+                return; // al boss no
+            }
+
+            // debug purposes
+            hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
+
+            if (hits.Length > 0)
+            {
+                foreach (Collider collider in hits)
+                {
+                    // busca solo player healthcomp
+                    if (collider.TryGetComponent(out Player_HealthComp playerHp))
+                    {
+                        if (playerHp.Context == _Main_State.playerContext)
+                        {
+                            return;
+                        }
+
+                        var DamageScore = new DamageScore();
+                        DamageScore.Attacker = _Main_State.playerContext;
+                        DamageScore.Victim = playerHp.Context;
+                        DamageScore.DamageAmount = AttackDamage;
+                        DamageScore.ElementalDamage = ElementType.Physical;
+                        DamageScore.FactionID = _Main_State.playerContext.faction;
+
+                        Vector3 Dir = playerHp.Context.PlayerTransform.position - _Main_State.playerContext.PlayerTransform.position;
+                        Dir.Normalize();
+
+                        playerHp.TakeDamageWithKnockback(Dir,_KnockbackValue,DamageScore);
+                    }
+                }
+            }
+
             pulse = 0;
             CanExit = true;
         }
+      
     }
 
     public void SetCost(float newCost)

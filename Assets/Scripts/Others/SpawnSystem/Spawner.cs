@@ -69,6 +69,7 @@ public class Spawner : MonoBehaviour
 
             var InstantiatedEnemy = Instantiate(NextEnemy,transform.position,transform.rotation);
             //var DumbEnemySC = InstantiatedEnemy.GetComponent<DumbEnemy>();
+            InstantiatedEnemy.transform.SetParent(this.transform,true);
 
             if (BossSpawnSystem)
             {

@@ -11,6 +11,8 @@ public class AnimatorHandler : MonoBehaviour
 
     Dictionary<string,AnimatorEntry> AnimatorDictionary= new Dictionary<string,AnimatorEntry>();
 
+    [SerializeField] bool IgnoreSlowdown;
+
     private void Awake()
     {
         foreach (var entry in AnimatorsData)
@@ -37,7 +39,10 @@ public class AnimatorHandler : MonoBehaviour
             print("added animator to dictionary" + entry.ToString() + entry.ID);
         }
 
-        TimeDilationManager.OnTimeScaleChanged += ChangeAnimTime;
+        if (!IgnoreSlowdown)
+        {
+            TimeDilationManager.OnTimeScaleChanged += ChangeAnimTime;
+        }
     }
     
     private void ChangeAnimTime(float time)

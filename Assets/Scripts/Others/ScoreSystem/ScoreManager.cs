@@ -138,7 +138,7 @@ public class ScoreManager : MonoBehaviour
             }
         }
 
-        //Combat_UI_Manager._Instance.AddNewScoreEntry(DamageData);
+        Combat_UI_Manager._Instance.AddNewScoreEntry(DamageData);
         BloodEchoesManager.AddBloodEchoes(FinalScore);
     }
 
