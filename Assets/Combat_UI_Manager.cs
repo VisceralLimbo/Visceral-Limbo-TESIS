@@ -24,6 +24,8 @@ public class Combat_UI_Manager : MonoBehaviour
     [SerializeField] Slider _PlayerHealthSlider;
     [SerializeField] GameObject _WinWindow;
     [SerializeField] GameObject _LoseWindow;
+    [SerializeField] Button _Restart;
+    [SerializeField] Button _Menu;
     [Space]
 
     [Header("ScoreSystem")]

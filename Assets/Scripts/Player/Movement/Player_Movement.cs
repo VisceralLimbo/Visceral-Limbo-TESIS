@@ -224,6 +224,11 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
         // ** MINIMAP: Obtener la referencia al manager al inicio **
         _MinimapManager = MinimapManager.Instance; // <-- ASIGNACIÓN
+
+        if(TryGetComponent(out Health_Component HP))
+        {
+            HP.OnKnockbackTaken += ApplyKnockBack;
+        }
     }
 
     /// <summary>
@@ -677,8 +682,43 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
     public void ApplyKnockBack(Vector3 KnockbackDir, float Force)
     {
-        print("ApplyKnockback!");
-        AddExternalForce(KnockbackDir * Force, true);
+        print("Player Knockback: " + KnockbackDir + " Force: " + Force);
+
+        #region Depreciated    
+        /*
+        // por las dudas normalizamos el vector
+        KnockbackDir.Normalize();
+
+        //queremos que el empuje horizontal depenga de la force.
+        // pero el empuje vertical es mucho más delicado.
+
+        // proyectamos el empuje al plano
+        Vector3 HorizontalPush = Vector3.ProjectOnPlane(KnockbackDir, Vector3.up).normalized;
+
+        // definimos un levantamiento fijo
+        float FixedLift = 2.5f;
+
+        Vector3 FinalKnockbackVel = (HorizontalPush * Force) + (Vector3.up * FixedLift);
+
+        print("Player Final Knockback: " + FinalKnockbackVel);
+
+        
+        AddExternalForce(FinalKnockbackVel, true);*/
+
+        #endregion
+        KnockbackDir.Normalize();
+
+
+        if(KnockbackDir.y < 0.5f)
+        {
+            KnockbackDir.y += 0.5f;
+            KnockbackDir.Normalize();
+        }
+
+        Vector3 FinalDir = KnockbackDir * Force;
+
+        AddExternalVelocity(FinalDir,true);
+
     }
 
 
@@ -755,7 +795,16 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
     public bool IsColliderValidForCollisions(Collider coll)
     {
+       if(coll.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+       {
+            // ignoramos el collider del enemigo
+            return false;
+       }
+
+
+
         return true;
+
     }
 
     public void OnDiscreteCollisionDetected(Collider hitCollider)

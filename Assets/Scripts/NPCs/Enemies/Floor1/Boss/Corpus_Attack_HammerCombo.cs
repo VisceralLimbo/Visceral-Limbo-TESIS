@@ -16,12 +16,13 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     [SerializeField] int EnergyCost;
     [SerializeField] float TimingDuration;
     [SerializeField] bool CanExit = false;
-
+    [SerializeField] float _KnockbackValue;
+    [SerializeField] float attackradius;
+    [SerializeField] float AttackDamage;
 
 
     [Header("For Testing purposes")]
-    [SerializeField] float attackradius;
-    [SerializeField] float AttackDamage;
+  
     [SerializeField] bool DrawWireframe;
     [SerializeField] Transform _Model;
 
@@ -111,7 +112,18 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
                         {
                             return;
                         }
-                        playerHp.SimpleDamage(AttackDamage);
+
+                        var DamageScore = new DamageScore();
+                        DamageScore.Attacker = _Main_State.playerContext;
+                        DamageScore.Victim = playerHp.Context;
+                        DamageScore.DamageAmount = AttackDamage;
+                        DamageScore.ElementalDamage = ElementType.Physical;
+                        DamageScore.FactionID = _Main_State.playerContext.faction;
+
+                        Vector3 Dir = playerHp.Context.PlayerTransform.position - _Main_State.playerContext.PlayerTransform.position;
+                        Dir.Normalize();
+
+                        playerHp.TakeDamageWithKnockback(Dir,_KnockbackValue,DamageScore);
                     }
                 }
             }
@@ -119,6 +131,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
             pulse = 0;
             CanExit = true;
         }
+      
     }
 
     public void SetCost(float newCost)

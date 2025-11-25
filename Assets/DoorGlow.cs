@@ -11,6 +11,13 @@ public class DoorGlow : MonoBehaviour
     public float fadeDuration = 1.5f;
     private bool IsRunning = false;
 
+    // color de inicio
+    [SerializeField] private Color _InitialColor = Color.white;
+
+    // movi el diccionario q tenia en la corutina del fade
+    private Dictionary<ParticleSystem, Color> _startColors = new Dictionary<ParticleSystem, Color>();
+    private Dictionary<ParticleSystem, float> _startEmissions = new Dictionary<ParticleSystem, float>();
+
     void Awake()
     {
         // relleno la lista con los hijos
@@ -24,17 +31,24 @@ public class DoorGlow : MonoBehaviour
             // debug por las dudas
             Debug.LogError("no esta el particlesystem xd");
             enabled = false;
+            return;
         }
 
-        if (particleSystems.Count > 0)
+        // aplico aca si hay color
+        if (_InitialColor != Color.white)
         {
-            // inicio las particulas en las puertas especiales (solo esas tienen el script)
-            foreach (var ps in particleSystems)
+            ApplyInitialColor(_InitialColor);
+        }
+
+        // guardo dsp de aplicar el color
+        CacheInitialValues();
+
+        // play a las prticulas
+        foreach (var ps in particleSystems)
+        {
+            if (!ps.isPlaying)
             {
-                if (!ps.isPlaying)
-                {
-                    ps.Play();
-                }
+                ps.Play();
             }
         }
 
@@ -63,38 +77,30 @@ public class DoorGlow : MonoBehaviour
         IsRunning = true;
         float elapsedTime = 0f;
 
-        // guardo los valores dafult de color y emision
-        Dictionary<ParticleSystem, Color> startColors = new Dictionary<ParticleSystem, Color>();
-        Dictionary<ParticleSystem, float> startEmissions = new Dictionary<ParticleSystem, float>();
-
-        // guardo iniciales
-        foreach (var ps in particleSystems)
+        // si no se guardaroin los guardo ahora para evitar errores mas q nada (me pasaba q no se prendian idk)
+        if (_startColors.Count == 0)
         {
-            // .main para el color main
-            startColors.Add(ps, ps.main.startColor.color);
-            // .emsion para la emision xd
-            startEmissions.Add(ps, ps.emission.rateOverTime.constant);
+            CacheInitialValues();
         }
 
         while (elapsedTime < fadeDuration)
         {
             elapsedTime += Time.deltaTime;
-            // el float t iria de 0 a 1 lento
             float t = Mathf.Clamp01(elapsedTime / fadeDuration);
 
             foreach (var ps in particleSystems)
             {
-                Color startColor = startColors[ps];
-                float startEmission = startEmissions[ps];
+                Color startColor = _startColors[ps];
+                float startEmission = _startEmissions[ps];
 
-                // el alpha va de 1 a 0
+                // chau alpha
                 Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
                 Color newColor = Color.Lerp(startColor, endColor, t);
 
                 var mainModule = ps.main;
                 mainModule.startColor = new ParticleSystem.MinMaxGradient(newColor);
 
-                // del valor inicial del rate pasa a 0
+                // bajo la emision
                 float newEmission = Mathf.Lerp(startEmission, 0f, t);
 
                 var emissionModule = ps.emission;
@@ -104,22 +110,51 @@ public class DoorGlow : MonoBehaviour
             yield return null;
         }
 
-        // me aseguro de q se apague
+        // fuerzo por las dudas q se apgue
         foreach (var ps in particleSystems)
         {
-            // alpha 0
-            Color finalColor = new Color(startColors[ps].r, startColors[ps].g, startColors[ps].b, 0f);
+            // alpha y emision me aseguro q queden 0
+            Color finalColor = new Color(_startColors[ps].r, _startColors[ps].g, _startColors[ps].b, 0f);
             var mainModule = ps.main;
             mainModule.startColor = new ParticleSystem.MinMaxGradient(finalColor);
 
-            // emision 0
             var emissionModule = ps.emission;
             emissionModule.rateOverTime = 0f;
-
-            // paro emision y limpio
-            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ps.Stop(false, ParticleSystemStopBehavior.StopEmitting);
         }
-
         IsRunning = false;
+    }
+
+    // para el dungeon
+    public void SetGlowColor(Color color)
+    {
+        _InitialColor = color;
+        if (_startColors.Count > 0)
+        {
+            ApplyInitialColor(color);
+        }
+    }
+
+    // aplico a las partiuclas
+    private void ApplyInitialColor(Color color)
+    {
+        foreach (var ps in particleSystems)
+        {
+            var mainModule = ps.main;
+            Color fullAlphaColor = new Color(color.r, color.g, color.b, 1f);
+            mainModule.startColor = new ParticleSystem.MinMaxGradient(fullAlphaColor);
+        }
+    }
+
+    // guardo las cosas para el fade
+    private void CacheInitialValues()
+    {
+        _startColors.Clear();
+        _startEmissions.Clear();
+        foreach (var ps in particleSystems)
+        {
+            _startColors.Add(ps, ps.main.startColor.color);
+            _startEmissions.Add(ps, ps.emission.rateOverTime.constant);
+        }
     }
 }

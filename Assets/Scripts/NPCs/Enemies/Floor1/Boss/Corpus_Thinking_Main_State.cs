@@ -131,6 +131,7 @@ public class Corpus_Thinking_Main_State : BaseState
             {
                 print("puedo hacer algo");
                 _CanMakeDecision = true;
+                DeactivateEnergy(false);
             }
         }
 

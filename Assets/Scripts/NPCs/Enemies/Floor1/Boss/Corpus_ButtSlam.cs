@@ -16,6 +16,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     IMovementStrategy _MoveStrategy;
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] AnimatorHandler _AnimatorHandler;
+    [SerializeField] DamageCollisionTrigger _KnockbackTrigger;
     
     [Space]
 
@@ -116,6 +117,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
                 _MoveStrategy.ForceUngroundSelf(0.1f);
 
                 _MoveStrategy.ApplyExternalForce(Vector3.up, _JumpStrenght);
+                _KnockbackTrigger.Activate(true);
 
             }
             else
@@ -128,10 +130,13 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         }
         else
         {
-         
-            if(_ExecutingAttack == true && _FinishedAttack == false && _KCC.GroundingStatus.IsStableOnGround)
+
+
+
+            if (_ExecutingAttack == true && _FinishedAttack == false && _KCC.GroundingStatus.IsStableOnGround)
             {
-             
+
+                _KnockbackTrigger.Activate(false);
                 hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
 
                 if (hits.Length > 0)

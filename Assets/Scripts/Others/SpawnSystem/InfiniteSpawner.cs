@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class InfiniteSpawner : MonoBehaviour
 {
-    [SerializeField] GameObject _EnemyPrefab,_CurrentEnemy;
+    [SerializeField] GameObject _EnemyPrefab;
+    [SerializeField] Health_Component _EnemyComponent;
     [SerializeField] LocalEventBusComponent EventBus;
     [SerializeField] float _TimeToSpawn;
     [SerializeField] bool _CanSpawn;
@@ -13,7 +14,7 @@ public class InfiniteSpawner : MonoBehaviour
     [SerializeField] bool _CanKeepMultipleInstances;
 
     [Tooltip("ID de Eventos a suscribirse")]
-    [SerializeField] string _StartEventName,_EndEventName;
+    [SerializeField] string _StartEventName,_EndEventName,_KillEnemy;
 
     private void Start()
     {
@@ -21,6 +22,8 @@ public class InfiniteSpawner : MonoBehaviour
          {
             EventBus.SubscribeToEvent(_StartEventName, StartSpawning);
             EventBus.SubscribeToEvent(_EndEventName, StopSpawning);
+            EventBus.SubscribeToEvent(_KillEnemy, KillEnemy);    
+            
          }
     }
 
@@ -47,7 +50,7 @@ public class InfiniteSpawner : MonoBehaviour
     {
         if(Pulse < _TimeToSpawn)
         {
-            Pulse = Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+            Pulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
             return;
         }
         else
@@ -60,20 +63,21 @@ public class InfiniteSpawner : MonoBehaviour
 
     private void SingleSpawnerLogic()
     {
-        if(_CurrentEnemy != null) return;
-
-        if (Pulse < _TimeToSpawn)
+        if(_EnemyComponent == null ||_EnemyComponent.isActiveAndEnabled == false || _EnemyComponent.CurrentHealth <= 0)
         {
-            Pulse = Time.deltaTime * TimeDilationManager.GlobalTimeScale;
-            return;
+            if (Pulse < _TimeToSpawn)
+            {
+                Pulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+                return;
+            }
+            else
+            {
+                Pulse = 0;
+                GameObject Enemy = Instantiate(_EnemyPrefab, this.transform.position, this.transform.rotation);
+                _EnemyComponent = Enemy.GetComponentInChildren<Health_Component>();
+            }
         }
-        else
-        {
-            Pulse = 0;
-            GameObject Enemy = Instantiate(_EnemyPrefab, this.transform.position, this.transform.rotation);
-
-        }
-
+      
     }
 
     private void StartSpawning() 
@@ -87,5 +91,13 @@ public class InfiniteSpawner : MonoBehaviour
         _CanSpawn = false;
         this.gameObject.SetActive(false);
 
+    }
+
+    private void KillEnemy()
+    {
+        if(_EnemyComponent != null)
+        {
+            _EnemyComponent.SimpleDamage(10000);
+        }
     }
 }

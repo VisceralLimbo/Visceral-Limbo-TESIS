@@ -107,7 +107,7 @@ public class Charge_Collider : Visceral_Script
             DamageDT.FactionID = FactionID.LimboMonster1;
 
             if (HPComp.Context == null) { HPComp.SimpleDamage(Damage);return; }
-            HPComp.TakeDamageWithKnockback(dir.normalized, 30, DamageDT);
+            HPComp.TakeDamageWithKnockback(dir.normalized, _knockback, DamageDT);
 
             //el camerashake solo se activa cuando el player recibe un hit (esta puesto para todas direcciones)
             CameraShake.instance.ShakeCamera(0.5f, 0.5f * CameraShakeIntensity.currentIntensity, ShakeType.AllDirections);

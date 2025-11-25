@@ -2862,6 +2862,112 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &662230414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 662230418}
+  - component: {fileID: 662230417}
+  - component: {fileID: 662230415}
+  - component: {fileID: 662230416}
+  m_Layer: 0
+  m_Name: TriggerEvent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &662230415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662230414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db7731db6c9a6b4b8783d4b906abc75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UnityEventList: []
+  EventList:
+  - EventID: StartSpawner
+    _IsTriggered: 0
+    _Reusable: 0
+  - EventID: StopSpawner
+    _IsTriggered: 0
+    _Reusable: 0
+--- !u!65 &662230416
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662230414}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &662230417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662230414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8f6f85a1d6f964dba185fa3eb03047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerEventList:
+  - TargetTag: Player
+    TriggerEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 662230415}
+          m_TargetAssemblyTypeName: LocalEventBusComponent, Assembly-CSharp
+          m_MethodName: TriggerEvent
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: StartSpawner
+            m_BoolArgument: 0
+          m_CallState: 2
+    _IsTriggered: 0
+  _Reusable: 0
+--- !u!4 &662230418
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662230414}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 391.182, y: 52.43, z: 210.86}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &671472943
 GameObject:
   m_ObjectHideFlags: 0
@@ -5238,10 +5344,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1290939611}
+  - component: {fileID: 1290939612}
   m_Layer: 0
   m_Name: InfiniteSpawner
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -5253,13 +5360,35 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290939610}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 890.14685, y: 664.228, z: -1598.6823}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 391.182, y: 52.43, z: 210.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1290939612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290939610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d570d84aed3cc1458c8fe4f4c75e12f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _EnemyPrefab: {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40,
+    type: 3}
+  _EnemyComponent: {fileID: 0}
+  EventBus: {fileID: 662230415}
+  _TimeToSpawn: 1
+  _CanSpawn: 0
+  _CanKeepMultipleInstances: 0
+  _StartEventName: StartSpawner
+  _EndEventName: StopSpawner
+  _KillEnemy: 
 --- !u!1 &1312632013
 GameObject:
   m_ObjectHideFlags: 0
@@ -9767,6 +9896,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: BossEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 5060095149654849359, guid: 9ac0e9f70b0ffa34d97d23b8f42c922c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6919963657826848723, guid: 9ac0e9f70b0ffa34d97d23b8f42c922c,
+        type: 3}
+      propertyPath: TimingDuration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7333673483843639958, guid: 9ac0e9f70b0ffa34d97d23b8f42c922c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9845,6 +9984,8 @@ SceneRoots:
   - {fileID: 601183472}
   - {fileID: 1960896791}
   - {fileID: 562416701}
+  - {fileID: 662230418}
+  - {fileID: 1290939611}
   - {fileID: 4315462256000770453}
   - {fileID: 3041372335533568910}
   - {fileID: 1120607139}
@@ -9855,4 +9996,3 @@ SceneRoots:
   - {fileID: 164861268}
   - {fileID: 945451967}
   - {fileID: 8117245155859556467}
-  - {fileID: 1290939611}
