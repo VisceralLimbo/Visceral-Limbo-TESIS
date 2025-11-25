@@ -182,14 +182,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
+      propertyPath: OnDialogue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
       propertyPath: _walkSound.Clip
       value: 
-      objectReference: {fileID: 8300000, guid: 4cbcca359418a0842b13fb58582ec91a, type: 3}
+      objectReference: {fileID: 8300000, guid: 4f27af8c557e2fa49bf5f6379e916169, type: 3}
     - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: _uiElementToMove
       value: 
       objectReference: {fileID: 399239621}
+    - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _uiTabSound.Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8808f3a12053d5748a1e2ef6032548c7, type: 3}
+    - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _walkSound.IsFrequent
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: _walkSound.mixerGroup
@@ -208,7 +223,23 @@ PrefabInstance:
       objectReference: {fileID: 1082420340}
     - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
+      propertyPath: _uiTabSound.IsFrequent
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _uiTabSound.mixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+        type: 2}
+    - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
       propertyPath: _walkSound.SpatialBlend
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _uiTabSound.SpatialBlend
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4039303074304250013, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
@@ -216,11 +247,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerObj
       objectReference: {fileID: 0}
+    - target: {fileID: 4039303074304250013, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: soundData.Array.data[0].Clip
       value: 
       objectReference: {fileID: 8300000, guid: 0ccfacef29984b74c87b2252f6dfb4ac, type: 3}
+    - target: {fileID: 6169110343639384151, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6323216962684899046, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: volume
@@ -2723,6 +2764,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ColumnaCircular (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8836f641c84c6dd47a74d7ab771fb1b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3566390031902043909, guid: 8836f641c84c6dd47a74d7ab771fb1b7,
         type: 3}
@@ -26572,6 +26618,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ColumnaCircular (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8836f641c84c6dd47a74d7ab771fb1b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3566390031902043909, guid: 8836f641c84c6dd47a74d7ab771fb1b7,
         type: 3}
@@ -66089,6 +66140,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tunel
       objectReference: {fileID: 0}
+    - target: {fileID: 1125471018037613057, guid: 4076266abe0fa1d41b3683f351bc7aba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6082472967202574984, guid: 4076266abe0fa1d41b3683f351bc7aba,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -67725,6 +67781,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ColumnaCircular (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8836f641c84c6dd47a74d7ab771fb1b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3566390031902043909, guid: 8836f641c84c6dd47a74d7ab771fb1b7,
         type: 3}
@@ -71605,6 +71666,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ColumnaCircular
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8836f641c84c6dd47a74d7ab771fb1b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3566390031902043909, guid: 8836f641c84c6dd47a74d7ab771fb1b7,
         type: 3}
@@ -103096,6 +103162,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tunel (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1125471018037613057, guid: 4076266abe0fa1d41b3683f351bc7aba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1705009478589037497, guid: 4076266abe0fa1d41b3683f351bc7aba,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -103204,6 +103275,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tunel (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125471018037613057, guid: 4076266abe0fa1d41b3683f351bc7aba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6082472967202574984, guid: 4076266abe0fa1d41b3683f351bc7aba,
         type: 3}
@@ -122081,6 +122157,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tunel (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1125471018037613057, guid: 4076266abe0fa1d41b3683f351bc7aba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6082472967202574984, guid: 4076266abe0fa1d41b3683f351bc7aba,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -123328,6 +123409,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Large_Room
+      objectReference: {fileID: 0}
+    - target: {fileID: 5770821680437157684, guid: 410fc3dc09f10494f90ce73758fbd6c8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8490839803484146033, guid: 410fc3dc09f10494f90ce73758fbd6c8,
         type: 3}
@@ -124819,6 +124905,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ParryEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 1378541391207174919, guid: 2d501986fb38c124f914dd6a126f2f3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

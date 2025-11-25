@@ -50,6 +50,8 @@ public class Player_Base : Visceral_Script
     private Vector2 _originalUIRight1Pos;
     private Vector2 _originalUIRight2Pos;
 
+    private bool previousTabState = false;
+    [SerializeField] SoundData _uiTabSound;
     // bool para el control de las habilidades
     public bool IsSkillActive { get; private set; } = false;
 
@@ -114,8 +116,15 @@ public class Player_Base : Visceral_Script
 
         var Input = _Player_InputActions.Gameplay;
 
-        _isTabPressed = Input.Inventory.IsPressed(); 
+        _isTabPressed = Input.Inventory.IsPressed();
 
+        // Detectar apertura del inventario
+        if (_isTabPressed && !previousTabState)
+        {
+            SoundManager.Instance.CreateSound().WithSoundData(_uiTabSound).play();
+        }
+        // Actualizar estado
+        previousTabState = _isTabPressed;
 
         //logica de camara
         //
@@ -153,14 +162,15 @@ public class Player_Base : Visceral_Script
             SustainedLeftMouseClick = Input.Mouse1.IsPressed(),
             ReleasedLeftMouseClick = Input.Mouse1.WasReleasedThisFrame(),
             Ability_1 = Input.Ability_1.WasPressedThisFrame(),
-            Ability_2= Input.Ability_2.WasPressedThisFrame(),
+            Ability_2 = Input.Ability_2.WasPressedThisFrame(),
             Ultimate = Input.Ultimate.WasPressedThisFrame(),
             Kick = Input.Kick.WasPressedThisFrame(),
-           
+
         };
+
         if(movementInput.Movement.sqrMagnitude > 0.1f)
         {
-           // SoundManager.Instance.CreateSound().WithSoundData(_walkSound)..play();
+            //SoundManager.Instance.CreateSound().WithSoundData(_walkSound).play();
         }
         // guardo el input para llamar en speedlogic
         CurrentMovementInput = movementInput;
