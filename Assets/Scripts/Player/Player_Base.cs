@@ -38,8 +38,8 @@ public class Player_Base : Visceral_Script
     public Action OnPlayerSkillUse;
 
     [SerializeField] private RectTransform _uiElementToMove;
-    [SerializeField] private float moveAmount; 
-    [SerializeField] private float moveSpeed = 5f; 
+    [SerializeField] private float moveAmount;
+    [SerializeField] private float moveSpeed = 5f;
     private Vector2 _originalUIPosition;
     private bool _isTabPressed;
     [SerializeField] private float moveAmountRight;
@@ -58,6 +58,8 @@ public class Player_Base : Visceral_Script
     [SerializeField] private bool IsPlayerActive = true;
 
     [SerializeField] SoundData _walkSound;
+    bool isWalking = false;
+
 
     void Start()
     {
@@ -84,7 +86,7 @@ public class Player_Base : Visceral_Script
         DialogueManager.instance.OnDialogueStart += DialogueStart;
         DialogueManager.instance.OnDialogueEnd += DialogueEnd;
 
-        if(uiElementToMoveRight1!= null && uiElementToMoveRight2 != null && _uiElementToMove != null)
+        if (uiElementToMoveRight1 != null && uiElementToMoveRight2 != null && _uiElementToMove != null)
         {
             _originalUIPosition = _uiElementToMove.anchoredPosition;
 
@@ -96,7 +98,7 @@ public class Player_Base : Visceral_Script
         }
 
         DungeonGenerator Generator = FindObjectOfType<DungeonGenerator>();
-        if(Generator != null)
+        if (Generator != null)
         {
             SetPlayerInactive();
             Generator.OnSuccessfulGeneration += SetPlayerActive;
@@ -111,7 +113,7 @@ public class Player_Base : Visceral_Script
 
     private void Update()
     {
-        if (!IsAlive|| !IsPlayerActive) return;
+        if (!IsAlive || !IsPlayerActive) return;
 
 
         var Input = _Player_InputActions.Gameplay;
@@ -168,22 +170,30 @@ public class Player_Base : Visceral_Script
 
         };
 
-        if(movementInput.Movement.sqrMagnitude > 0.1f)
+        if (movementInput.Movement.sqrMagnitude > 0.1f)
         {
-            //SoundManager.Instance.CreateSound().WithSoundData(_walkSound).play();
+            if (!isWalking)
+            {
+                isWalking = true;
+                SoundManager.Instance.CreateSound().WithSoundData(_walkSound).play();
+            }
+        }
+        else
+        {
+            isWalking = false;
         }
         // guardo el input para llamar en speedlogic
         CurrentMovementInput = movementInput;
         _Player_Movement.UpdateBodyPositions(Time.deltaTime);
         _Player_Movement.UpdateInput(movementInput);
         //_DashTest.PerformDash(movementInput);
-     
+
 
         if (!OnDialogue)
         {
             //_MeleeAttack.RunData(movementInput);
             //_ChargedMeleeCombat.VS_Runlogic(movementInput);
-            
+
             if (!IsSkillActive)
             {
                 // si no tengo una hablidad activa puedo hacer el melee 
@@ -197,7 +207,7 @@ public class Player_Base : Visceral_Script
                 }
             }
 
-            if(!movementInput.SustainedLeftMouseClick && !movementInput.LeftMouseClick)
+            if (!movementInput.SustainedLeftMouseClick && !movementInput.LeftMouseClick)
             {
                 ActivateSkills(movementInput);
             }
@@ -269,7 +279,7 @@ public class Player_Base : Visceral_Script
             _SkillManager.TryUseSkill("Ult");
             OnPlayerSkillUse?.Invoke();
         }
-        if(Inputs.Kick)
+        if (Inputs.Kick)
         {
             _SkillManager.TryUseSkill("Kick");
             OnPlayerSkillUse?.Invoke();
@@ -291,7 +301,7 @@ public class Player_Base : Visceral_Script
     private void DeathEventFlag()
     {
         IsAlive = false;
-        _PlayerHealth.OnDeath -= DeathEventFlag; 
+        _PlayerHealth.OnDeath -= DeathEventFlag;
     }
 
 
