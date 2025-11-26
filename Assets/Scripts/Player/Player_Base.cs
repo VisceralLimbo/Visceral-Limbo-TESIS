@@ -59,7 +59,8 @@ public class Player_Base : Visceral_Script
 
     [SerializeField] SoundData _walkSound;
     bool isWalking = false;
-
+    [SerializeField] private float footstepInterval = 0.4f;  // tiempo entre pasos
+    private float footstepTimer = 0f;
 
     void Start()
     {
@@ -170,17 +171,19 @@ public class Player_Base : Visceral_Script
 
         };
 
-        if (movementInput.Movement.sqrMagnitude > 0.1f)
+        if (movementInput.Movement.sqrMagnitude > 0.1f) // estás moviéndote?
         {
-            if (!isWalking)
+            footstepTimer -= Time.deltaTime;
+
+            if (footstepTimer <= 0f)
             {
-                isWalking = true;
                 SoundManager.Instance.CreateSound().WithSoundData(_walkSound).play();
+                footstepTimer = footstepInterval;  // resetea el interval
             }
         }
         else
         {
-            isWalking = false;
+            footstepTimer = 0f; // resetea si deja de caminar
         }
         // guardo el input para llamar en speedlogic
         CurrentMovementInput = movementInput;
