@@ -1635,6 +1635,16 @@ MonoBehaviour:
   _MaxRotationSpeed: 2400
   _MinDistance: 5
   _MaxDistance: 20
+  _SoundDownTime: 5
+  _SoundData:
+    Clip: {fileID: 8300000, guid: c690250527dbf1348ab1db59061e8fc3, type: 3}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 8
+    IsFrequent: 1
 --- !u!1 &3912112279300530452
 GameObject:
   m_ObjectHideFlags: 0
@@ -4319,6 +4329,7 @@ MonoBehaviour:
   AnimatorsData:
   - AnimatorController: {fileID: 8803262148333724239}
     ID: Wretched
+  IgnoreSlowdown: 0
 --- !u!54 &3048824881661905011
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4406,6 +4417,7 @@ MonoBehaviour:
     MinimunSoundDistance: 1
     MaximunSoundDistance: 10
     IsFrequent: 1
+  HealingSoundData: []
   CurrentHealth: 50
   MaxHealth: 50
   _RB: {fileID: 3048824881661905011}

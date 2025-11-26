@@ -37,17 +37,15 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         //activo bloqueo
         _PlayerBase.SetSkillActiveState(true);
 
-        StartCoroutine(LockSkill());
-
-
         //sonidos
         SoundManager.Instance.CreateSound()
         .WithSoundData(_SoundDataList[0])
         .WithRandomPitch(true)
         .WithPosition(_UserContext.PlayerTransform.position)
         .play(out SoundEmitter emitter);
-
         _SoundEmit = emitter;
+
+        StartCoroutine(LockSkill());
     }
 
     IEnumerator LockSkill()
@@ -61,7 +59,13 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         yield return new WaitForSeconds(SkillDuration);
         _Anim.speed = 1.0f;
         //Weapon.StopAttacking();
-        SoundManager.Instance.ReturnToPool(_SoundEmit);
+
+        if(_SoundEmit != null && _SoundEmit.isActiveAndEnabled)
+        {
+            SoundManager.Instance.ReturnToPool(_SoundEmit);
+            _SoundEmit = null;
+        }
+   
         _col.enabled = false;
         // desactivo bloqueo
         _PlayerBase.SetSkillActiveState(false);

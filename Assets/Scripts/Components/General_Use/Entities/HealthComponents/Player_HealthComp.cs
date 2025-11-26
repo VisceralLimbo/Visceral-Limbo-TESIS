@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player_HealthComp : Health_Component
 {
+    [SerializeField] SoundData _LowHP;
 
     private void Start()
     {
@@ -27,6 +28,15 @@ public class Player_HealthComp : Health_Component
     public override void HealHP(float ExtraHP, bool OverHeal = false)
     {
         base.HealHP(ExtraHP, OverHeal);
+
+        if (CurrentHealth > MaxHealth * 0.3F && Emit != null && Emit.isActiveAndEnabled)
+        {
+            SoundManager.Instance?.ReturnToPool(Emit);
+            Emit = null;
+            return;
+        }
+
+
 
         //esto es mas facil y te evitas el evento si no lo queres (es lo que haces en updatestatvalue) lo hice para seguir tu logica pero hace la q pinte 
         //updateHealthBar();
@@ -52,9 +62,25 @@ public class Player_HealthComp : Health_Component
         base.TakeDamageWithKnockback(Direction, knockback, DamageDT);
     }
 
+    SoundEmitter Emit;
     protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
     {
+        if (CurrentHealth - damage < MaxHealth * 0.3f && SoundManager.Instance != null)
+        {
+            if (Emit == null || !Emit.isActiveAndEnabled)
+            {
+                SoundManager.Instance.CreateSound()
+                    .WithSoundData(_LowHP)
+                    .WithRandomPitch(true)
+                    .WithPosition(_Context.PlayerTransform.position)
+                    .play(out SoundEmitter Emitter);
+                Emit = Emitter;
+                return;
+            }
+        }
         base.InternalDamage(damage, KnockbarDir, force, Score);
+
+       
     }
 
 

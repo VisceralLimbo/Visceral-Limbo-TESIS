@@ -11,6 +11,7 @@ public class StateMove : BaseState
     [SerializeField] Transform _Target;
     IMovementStrategy _MovementStrategy;
 
+
     [Space]
 
     [Header("variables")]
@@ -19,6 +20,12 @@ public class StateMove : BaseState
     [SerializeField] float _MaxRotationSpeed;
     [SerializeField] float _MinDistance;
     [SerializeField] float _MaxDistance;
+
+    [Header("Sounds")]
+    [SerializeField] float _SoundDownTime;
+    [SerializeField] float _RandomSoundOffset;
+    [SerializeField] SoundData _SoundData;
+
 
     Vector3 targetdirection;
     public override void OnInitialize(VisceralStateMachine CTX)
@@ -63,6 +70,7 @@ public class StateMove : BaseState
 
     public override void OnEnter(VisceralStateMachine CTX)
     {
+        base.OnEnter(CTX);
         _MovementStrategy.SetActiveState(true);
     }
 
@@ -84,7 +92,7 @@ public class StateMove : BaseState
 
         _MovementStrategy.UpdateVelocity(TargetDirection);
 
-        if(_AnimatorHandler != null)
+        if (_AnimatorHandler != null)
         {
             _AnimatorHandler.SetParameter("Wretched", "IsMoving"
                 , AnimatorControllerParameterType.Trigger);
@@ -95,7 +103,7 @@ public class StateMove : BaseState
         //CALCULO DE SITUACION
         var Distance = Vector3.Distance(_KCC.Capsule.transform.position, _Target.transform.position);
         if (Distance <= _MinDistance)
-        {      
+        {
             stateMachine.SetGlobalCondition("Melee", true);
 
         }
@@ -108,6 +116,11 @@ public class StateMove : BaseState
             stateMachine.SetGlobalCondition("Moving", true);
         }
 
+        if(_SoundData != null && _SoundData.Clip != null)
+        {
+            EmitSounds();
+        }
+      
     }
 
     float pulseLifeTime;
@@ -142,5 +155,45 @@ public class StateMove : BaseState
         //NO SE PUDO TRANSICIONAR
         TO = null;
         return false;
+    }
+
+
+    float SoundPulse = 0;
+
+    private SoundEmitter emitter;
+    private void EmitSounds()
+    {
+        if (SoundManager.Instance == null) return;
+
+        if( emitter != null && emitter.isActiveAndEnabled)
+        {
+            emitter.transform.position = _KCC.Capsule.transform.position;
+            return;
+        }
+
+
+        if (SoundPulse < _SoundDownTime + _RandomSoundOffset)
+        {
+            SoundPulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+            return;
+        }
+        else
+        {
+            _RandomSoundOffset = Random.Range(-_RandomSoundOffset, _RandomSoundOffset + 0.1f);
+
+            SoundPulse = 0;
+
+            SoundManager.Instance.CreateSound()
+            .WithSoundData(_SoundData)
+            .WithRandomPitch(true)
+            .WithPosition(_KCC.Capsule.transform.position)
+            .WithSpatialBlend(_SoundData.SpatialBlend, _SoundData.MinimunSoundDistance, _SoundData.MaximunSoundDistance)
+            .play(out SoundEmitter Emit);
+
+            emitter = Emit;
+
+        }
+    
+
     }
 }
