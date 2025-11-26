@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class Health_Component : Visceral_Component
 {
     [SerializeField] protected SoundData[] soundData;
+    [SerializeField] protected SoundData[] HealingSoundData;    
 
     public float CurrentHealth, MaxHealth;
     public Rigidbody _RB;
@@ -181,6 +182,29 @@ public class Health_Component : Visceral_Component
         {
             OnHealed?.Invoke();
         }
+
+        if(HealingSoundData.Length > 0)
+        {
+            if(HealingSoundData.Length > 1)
+            {
+                int Sneed = Random.Range(0, HealingSoundData.Length);
+
+                SoundManager.Instance?.CreateSound()
+                .WithSoundData(HealingSoundData[Sneed])
+                .WithPosition(this.transform.position)
+                .WithRandomPitch(true)
+                .play();
+            }
+            else
+            {
+                SoundManager.Instance?.CreateSound()
+               .WithSoundData(HealingSoundData[0])
+               .WithPosition(this.transform.position)
+               .WithRandomPitch(true)
+               .play();
+            }
+        }
+
     }
 
     protected void PlaySounds()

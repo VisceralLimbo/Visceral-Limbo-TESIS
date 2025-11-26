@@ -738,7 +738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundData:
-    Clip: {fileID: 0}
+  - Clip: {fileID: 0}
     mixerGroup: {fileID: 0}
     Loop: 0
     PlayOnAwake: 0
@@ -746,6 +746,71 @@ MonoBehaviour:
     MinimunSoundDistance: 0
     MaximunSoundDistance: 0
     IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  HealingSoundData:
+  - Clip: {fileID: 8300000, guid: 1a60a2e5b6f434c43bfeca14bb7157bf, type: 3}
+    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 0
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 1
   CurrentHealth: 200
   MaxHealth: 200
   _RB: {fileID: 103244012193870917}
@@ -753,6 +818,15 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 388799400367065248}
+  _LowHP:
+    Clip: {fileID: 8300000, guid: e9b946ae8a342bf4ab261fbc23f4a1f9, type: 3}
+    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    Loop: 1
+    PlayOnAwake: 0
+    SpatialBlend: 0
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
 --- !u!114 &3388075606135687695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1372,7 +1446,25 @@ MonoBehaviour:
   moveAmountRight: 475
   uiElementToMoveRight1: {fileID: 0}
   uiElementToMoveRight2: {fileID: 0}
+  _uiTabSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
   IsPlayerActive: 1
+  _walkSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
 --- !u!114 &4522773646099621157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1557,6 +1649,7 @@ MonoBehaviour:
   AnimatorsData:
   - AnimatorController: {fileID: 6214072858761965791}
     ID: PlayerWeapon
+  IgnoreSlowdown: 0
 --- !u!114 &858683521827146833
 MonoBehaviour:
   m_ObjectHideFlags: 0
