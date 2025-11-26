@@ -9,6 +9,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] RoomSpawnerManager roomSpawnerManager;
     [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] DungeonEntryPoint _EntryPoint;
+    [SerializeField] Collider _Col,_StopperCol;
 
     private Vector3 InWardAlignment;
 
@@ -16,7 +17,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [Header("Variables")]
 
 
-    [Range(-1, 1)]
+    [Range(0, 3)]
     [Tooltip("El limite a partir de que se considera adentro de la habitacion" +
         " 1 = el jugador esta frente de la puerta, -1 = el jugador esta detras de la puerta")]
     [SerializeField] float DoorThreshold; // el limite a partir de que se considera adentro de la habitacion
@@ -29,6 +30,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] bool _OpenDoorInside;
     [SerializeField] bool _InvertAnimations;
     [SerializeField] bool _Initialized;
+    [SerializeField] Coroutine _PlayerTracking;
 
     [Header("Glow puerta sala de cofres")]
     // refe al doorglow q va a ser null en varias puertas 
@@ -268,37 +270,48 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     private void OnTriggerEnter(Collider other)
     {
+        print("Something Entered");
         CheckPlayerEnteredRoom(other);
-
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerExit(Collider other)
     {
-
+        print("Something Exited");
         CheckPlayerEnteredRoom(other);
-
     }
 
     private void CheckPlayerEnteredRoom(Collider other)
     {
         if (PlayerEnteredRoom || _LockDoor || NonTriggerRoom|| roomSpawnerManager.ManagerStopped)
         {
+            print("First Fail");
             return;
         }
 
         if (!other.gameObject.CompareTag("Player")
            || roomSpawnerManager == null)
         {
+            print("No existe RoomSpawner o no es el player");
             return;
         }
 
-        if (other.gameObject.TryGetComponent(out PlayerContext Pcontext))
+        var PContext = other.GetComponentInParent<PlayerContext>();
+
+        if (PContext != null)
         {
-            if (Pcontext.faction != FactionID.Player) return;
+            print("detectado player ingresando a sala");
+            if (PContext.faction != FactionID.Player) return;
+
+            if (_PlayerTracking != null) return;
+
+            print("detectado player ingresando a sala");
+            _PlayerTracking = StartCoroutine(TrackPlayerEntry(other.transform,PContext));
+            return;
         }
 
+        print("Llegue al final y paso nada?");
+        /*
         var DirectionToPlayer = other.transform.position - this.transform.position;
-        DirectionToPlayer.Normalize();
 
         //usamos el valor de InwardAlignment para calcular la direccion del player
         float DotProduct = Vector3.Dot(InWardAlignment, DirectionToPlayer);
@@ -309,7 +322,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, false);
             return;
         }
-
+        
         // calculamos si el jugador cruzo la puerta
         if (DotProduct > DoorThreshold && !NonTriggerRoom && _IsOpen == true)
         {
@@ -318,14 +331,92 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, false);
             // correr animacion de puerta cerrandose
             _AnimHandler.SetParameter("DoorAnim", "AbrirAdentro", AnimatorControllerParameterType.Bool, false);
+
+            StartCoroutine(DoorCollision());
+
             roomSpawnerManager.AssignPlayerContext(Pcontext);
             roomSpawnerManager.StartRoomCombat();
             roomSpawnerManager.NotifyMinionDeath();
             _LockDoor = true;
-            
             SoundManager.Instance.CreateSound().WithSoundData(_SoundCloseDoor).WithRandomPitch(true).WithPosition(this.transform.position).play();
         }
+        */
 
+
+
+    }
+
+    /// <summary>
+    /// Enumerador para traquear a que distancia se encuentra el jugador de la puerta
+    /// </summary>
+    /// <param name="PlayerTransform"></param>
+    /// <param name="Pcontext"></param>
+    /// <returns></returns>
+    IEnumerator TrackPlayerEntry(Transform PlayerTransform,PlayerContext Pcontext)
+    {
+        bool StopTracking = false;
+
+        while(!StopTracking) 
+        {
+
+
+            // paso 1: Calculamos la distancia proyectada al jugador 
+            Vector3 VectorToPlayer = PlayerTransform.position - this.transform.position;
+            float DistanceInside = Vector3.Dot(InWardAlignment,VectorToPlayer);
+
+            print("traqueando al player " + DistanceInside);
+            // paso 2: vamos a analizar dos casos.
+            // CASO A) el jugador entro a la puerta.
+            if (DistanceInside > DoorThreshold)
+            {
+                StartCombat(Pcontext);
+                StopTracking = true;
+            }
+
+            //CASO B) El jugador es una gallina y salio de la puerta
+            else if(DistanceInside < -1.0f) 
+            {
+                StopTracking = true;
+            }
+
+            if (_LockDoor || !_IsOpen) StopTracking = true;
+
+            yield return null;
+        }
+
+        _PlayerTracking = null;
+    }
+
+    private void StartCombat(PlayerContext PContext)
+    {
+        _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, false);
+        _AnimHandler.SetParameter("DoorAnim", "AbrirAdentro", AnimatorControllerParameterType.Bool, false);
+
+        StartCoroutine(DoorCollision());
+
+        roomSpawnerManager.AssignPlayerContext(PContext);
+        roomSpawnerManager.StartRoomCombat();
+        roomSpawnerManager.NotifyMinionDeath();
+
+        _LockDoor = true;
+        PlayerEnteredRoom = true; // Importante marcar esto para que no vuelva a triggerear
+
+        SoundManager.Instance.CreateSound().WithSoundData(_SoundCloseDoor).WithRandomPitch(true).WithPosition(this.transform.position).play();
+    }
+
+
+    IEnumerator DoorCollision()
+    {
+        _Col.enabled = false;
+        _Col.isTrigger = true;
+
+        _StopperCol.isTrigger = false;
+        yield return new WaitForSeconds(1.5f);
+
+       
+        _Col.enabled = true;
+        _Col.isTrigger = false;
+        yield return null;
     }
 
     public void OnInteract(RayCastWrapper Detector)
@@ -384,6 +475,8 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
                 Debug.Log("apagando las particulas");
             }
 
+            _StopperCol.isTrigger = true;
+
             PlayerEvents.Interact();
         }
     }
@@ -411,6 +504,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             SetDoorLightsSmooth(true);
         }
 
+        _StopperCol.isTrigger = true;
     }
 
     private void LockDoor()
@@ -422,6 +516,7 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             SetDoorLightsSmooth(false);
         }
 
+        _StopperCol.isTrigger = false;
     }
 
     public void SetEntryPointReference(DungeonEntryPoint Entry) => _EntryPoint = Entry;
