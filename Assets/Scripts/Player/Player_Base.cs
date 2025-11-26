@@ -58,9 +58,7 @@ public class Player_Base : Visceral_Script
     [SerializeField] private bool IsPlayerActive = true;
 
     [SerializeField] SoundData _walkSound;
-    bool isWalking = false;
-    [SerializeField] private float footstepInterval = 0.4f;  // tiempo entre pasos
-    private float footstepTimer = 0f;
+    private SoundEmitter currentWalkSound;
     [SerializeField] SoundData _jumpSound;
 
 
@@ -173,20 +171,26 @@ public class Player_Base : Visceral_Script
 
         };
 
-        if (movementInput.Movement.sqrMagnitude > 0.1f) // estás moviéndote?
-        {
-            footstepTimer -= Time.deltaTime;
+        bool isMoving = movementInput.Movement.sqrMagnitude > 0.1f;
 
-            if (footstepTimer <= 0f)
+        if (isMoving)
+        {
+            if (currentWalkSound == null || !currentWalkSound.gameObject.activeInHierarchy)
             {
-                SoundManager.Instance.CreateSound().WithSoundData(_walkSound).play();
-                footstepTimer = footstepInterval;  // resetea el interval
+                SoundManager.Instance.CreateSound()
+                    .WithSoundData(_walkSound)
+                    .play(out currentWalkSound);
             }
         }
         else
         {
-            footstepTimer = 0f; // resetea si deja de caminar
+            if (currentWalkSound != null && currentWalkSound.gameObject.activeInHierarchy)
+            {
+                currentWalkSound.Stop();
+                currentWalkSound = null;
+            }
         }
+
         if (movementInput.Jumping)
         {
             SoundManager.Instance.CreateSound().WithSoundData(_jumpSound).play();
