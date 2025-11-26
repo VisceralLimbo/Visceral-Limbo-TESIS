@@ -84,7 +84,12 @@ public class SoundManager : MonoBehaviour
     /// Devolver un emisor al pool de emisores
     /// </summary>
     /// <param name="sound"> la referencia del emisor para devolver al pool</param>
-    public void ReturnToPool(SoundEmitter sound) { SoundPool.Release(sound); }
+    public void ReturnToPool(SoundEmitter sound) 
+    {
+        if(sound == null) return;
+        SoundPool.Release(sound); 
+    
+    }
 
 
     void InitializePool()
