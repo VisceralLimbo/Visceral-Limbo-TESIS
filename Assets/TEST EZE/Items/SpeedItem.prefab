@@ -128,6 +128,16 @@ MonoBehaviour:
   walkSpeedBoost: 2
   crouchSpeedBoost: 3
   airSpeedBoost: 4
+  _PickUpSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  fadeSpeed: 3
 --- !u!114 &4164428264058503910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +220,7 @@ PrefabInstance:
     - target: {fileID: 6323091282886904373, guid: 959ce57a1b7abd44c99a854110281a88,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
