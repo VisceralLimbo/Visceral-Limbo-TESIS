@@ -14,6 +14,8 @@ public class Boss_HealthComp : Health_Component
 
     [SerializeField] LocalEventBusComponent _EventBus;
 
+    private Combat_UI_Manager Ref_CombatUI;
+
     // llamo desde el sppawner dsp de q se instancia el boss para conectar vida con la ui
     public void ConnectBossUI(BossHealthBarUI uiHandler)
     {
@@ -53,6 +55,13 @@ public class Boss_HealthComp : Health_Component
             OnDamaged -= UpdateBossHealthUI;
             OnHealed -= UpdateBossHealthUI;
             OnDeath -= HideBossUI;
+
+            if (Combat_UI_Manager._Instance != null)
+            {
+                Combat_UI_Manager._Instance.DisplayWin(true);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
     }
 
@@ -72,6 +81,11 @@ public class Boss_HealthComp : Health_Component
         if(_EventBus == null)
         {
             _EventBus = GetComponentInParent<LocalEventBusComponent>();
+        }
+
+        if (Ref_CombatUI == null)
+        {
+            Ref_CombatUI = Combat_UI_Manager._Instance;
         }
     }
 
