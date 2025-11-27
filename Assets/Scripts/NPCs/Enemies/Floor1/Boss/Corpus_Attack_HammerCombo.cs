@@ -8,6 +8,8 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     [Header("References")]
     [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Corpus_Thinking_Main_State _Main_State;
+    [SerializeField] WalkMovementStrategy _MoveStrat;
+    [SerializeField] Transform _Target;
     [Space]
 
     [Header("Variables")]
@@ -47,6 +49,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     Collider[] hits;
     public override void OnEnter(VisceralStateMachine CTX)
     {
+
         CTX.SetGlobalCondition(TransitionKey, false);
         print("Performing hammer swings, woosh!" + this.name); // el print estaba en cada tick lo pase aca
         base.OnEnter(CTX);
@@ -55,8 +58,10 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
         pulse = 0;
         DrawWireframe = true;
         _Main_State.DeactivateEnergy(true);
+        _Target = _Main_State.GetTargetTransform;
 
         _AnimHandler.SetParameter("Corpus_Anim", "HammerCombo", AnimatorControllerParameterType.Trigger);
+
 
     }
 
@@ -70,6 +75,8 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     {
         base.OnInitialize(CTX);
         _Main_State = GetComponentInParent<Corpus_Thinking_Main_State>();
+
+
     }
 
     float pulse = 0;
@@ -77,6 +84,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
   
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
+       
         if(pulse < TimingDuration) 
         {
             pulse += Time.deltaTime;
@@ -86,19 +94,15 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
                 DrawWireframe = false;
             }
 
+            //rotar hacia player
+            if (_Target != null)
+            {
+                Vector3 Dir = _MoveStrat.GetKCC().Capsule.transform.position - _Target.transform.position;
+                _MoveStrat.UpdateRotation(Dir);
+            }
         }
         else
         {
-
-            // refe del boss
-            Boss_HealthComp attackerHP = CTX.transform.root.GetComponentInChildren<Boss_HealthComp>();
-
-            if (attackerHP == null)
-            {
-                return; // al boss no
-            }
-
-            // debug purposes
             hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
 
             if (hits.Length > 0)
@@ -110,7 +114,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
                     {
                         if (playerHp.Context == _Main_State.playerContext)
                         {
-                            return;
+                            continue;
                         }
 
                         var DamageScore = new DamageScore();

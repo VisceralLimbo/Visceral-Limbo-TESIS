@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
 
-public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacterController,IKnockback
+public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacterController, IKnockback
 {
     [Header("References")]
     [SerializeField] KinematicCharacterMotor _KCC;
@@ -13,7 +13,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [Header("Variables")]
     [SerializeField] Vector3 _TargetVelocity;
     [SerializeField] Vector3? _TargetRotation;
-    [SerializeField] bool _IsActive,_KillAllMovement;
+    [SerializeField] bool _IsActive, _KillAllMovement;
     [SerializeField] float _MovementSpeed;
     [SerializeField] float _BaseMovementSpeed;
     [SerializeField] float _MovementAccel;
@@ -30,13 +30,13 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     public void Initialize(KinematicCharacterMotor _kcc, GameObject Model)
     {
-        
-        _KCC= _kcc;
-        _Model= Model;
+
+        _KCC = _kcc;
+        _Model = Model;
         _KCC.CharacterController = this;
-        if(_RB == null)
+        if (_RB == null)
         {
-            if(Model.TryGetComponent<Rigidbody>(out Rigidbody Comp))
+            if (Model.TryGetComponent<Rigidbody>(out Rigidbody Comp))
             {
                 _RB = Comp;
                 _KCC.AttachedRigidbodyOverride = _RB;
@@ -52,7 +52,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
             }
         }
 
-        if(Model.TryGetComponent(out Health_Component HP))
+        if (Model.TryGetComponent(out Health_Component HP))
         {
 
             HP.OnDeath += OnDeath;
@@ -61,7 +61,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         }
         else
         {
-           if(this.TryGetComponent(out Health_Component _HP))
+            if (this.TryGetComponent(out Health_Component _HP))
             {
                 _HP.OnDeath += OnDeath;
                 _HP.OnKnockbackTaken += ApplyKnockBack;
@@ -77,13 +77,13 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         print("walk death");
         _KCC.CharacterController = null;
         _KCC.Capsule.enabled = false;
-        _KCC.enabled = false;  
+        _KCC.enabled = false;
         this.enabled = false;
     }
 
     public void UpdateVelocity(Vector3 Target)
     {
-       _TargetVelocity = Target;
+        _TargetVelocity = Target;
     }
     public void UpdateRotation(Vector3 Target)
     {
@@ -91,12 +91,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     }
     public void KillAllMovement()
     {
-        _KillAllMovement = true; 
+        _KillAllMovement = true;
     }
 
     public void SetActiveState(bool setActive)
     {
-       _IsActive = setActive;
+        _IsActive = setActive;
     }
 
 
@@ -139,7 +139,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         }
 
         //Si tenemos un knockback aplicado, lo aplicamos y cancelamos movimiento
-        if(_KnockbackVelocity.sqrMagnitude > 0.1f)
+        if (_KnockbackVelocity.sqrMagnitude > 0.1f)
         {
             currentVelocity = _KnockbackVelocity;
 
@@ -159,7 +159,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         // we are on stable ground
         else if (_KCC.GroundingStatus.IsStableOnGround)
         {
-            
+
 
             var groundedMovement = _KCC.GetDirectionTangentToSurface(
                 direction: _TargetVelocity,
@@ -189,7 +189,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
 
         // we applied external velocity
-        if(_AddExternalVelocity.sqrMagnitude > 0.1f)
+        if (_AddExternalVelocity.sqrMagnitude > 0.1f)
         {
             if (GotKnockbacked)
             {
@@ -206,31 +206,35 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     void ICharacterController.UpdateRotation(ref Quaternion currentRotation, float deltaTime)
     {
+        // CASO 1: Tenemos una rotación forzada (El Target)
         if (_TargetRotation.HasValue)
         {
-            var Calculatedforward = Vector3.ProjectOnPlane(
-                   vector: _TargetRotation.Value,
-                   _KCC.CharacterUp
+            // 1. Tomamos el valor directamente (Asumimos que el State ya nos manda la DIRECCIÓN, no la posición)
+            Vector3 lookDirection = _TargetRotation.Value;
 
+            // 2. Aplanamos el vector para que no mire hacia arriba/abajo (evita inclinaciones raras)
+            lookDirection.y = 0;
 
-               );
+            // 3. Normalizamos para asegurar que la magnitud sea 1 (vital para evitar jitter en math)
+            lookDirection.Normalize();
 
-            //limite minimo de rotacion abs.
-          if(Calculatedforward.sqrMagnitude > 0.001f)
-          {
+            // 4. Si la dirección es válida, rotamos
+            if (lookDirection.sqrMagnitude > 0.001f)
+            {
+                var targetRotation = Quaternion.LookRotation(lookDirection, _KCC.CharacterUp);
 
-                var rotation = Quaternion.LookRotation(Calculatedforward, _KCC.CharacterUp);
-                currentRotation = Quaternion.RotateTowards
-                    (
-                        from:currentRotation,
-                        to:rotation,
-                        maxDegreesDelta:_MaxRotationSpeed * (TimeDilationManager.GlobalTimeScale * deltaTime)
-                    );
-          }
+                currentRotation = Quaternion.RotateTowards(
+                    from: currentRotation,
+                    to: targetRotation,
+                    maxDegreesDelta: _MaxRotationSpeed * (TimeDilationManager.GlobalTimeScale * deltaTime)
+                );
+            }
             return;
         }
-            //sentido adelante
-            var forward = Vector3.ProjectOnPlane(
+
+        //
+        //CASO 2: sentido adelante
+        var forward = Vector3.ProjectOnPlane(
                     vector: _TargetVelocity,
                     _KCC.CharacterUp
 
@@ -243,9 +247,9 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
             var calculatedRotation = Quaternion.LookRotation(forward, _KCC.CharacterUp);
             // También es buena idea suavizar esta rotación
             currentRotation = Quaternion.RotateTowards(
-                 from:currentRotation
+                 from: currentRotation
                 , to: calculatedRotation
-                , maxDegreesDelta: _MaxRotationSpeed *(TimeDilationManager.GlobalTimeScale * deltaTime));
+                , maxDegreesDelta: _MaxRotationSpeed * (TimeDilationManager.GlobalTimeScale * deltaTime));
         }
 
     }
@@ -261,12 +265,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     void ICharacterController.BeforeCharacterUpdate(float deltaTime)
     {
-        
+
     }
 
     bool ICharacterController.IsColliderValidForCollisions(Collider coll)
     {
-        if(coll.gameObject.layer == 10)
+        if (coll.gameObject.layer == 10)
         {
             return false;
         }
@@ -276,12 +280,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     void ICharacterController.OnDiscreteCollisionDetected(Collider hitCollider)
     {
-        
+
     }
 
     void ICharacterController.OnGroundHit(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, ref HitStabilityReport hitStabilityReport)
     {
-        
+
     }
 
     void ICharacterController.OnMovementHit(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, ref HitStabilityReport hitStabilityReport)
@@ -291,12 +295,12 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     void ICharacterController.PostGroundingUpdate(float deltaTime)
     {
-       
+
     }
 
     void ICharacterController.ProcessHitStabilityReport(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, Vector3 atCharacterPosition, Quaternion atCharacterRotation, ref HitStabilityReport hitStabilityReport)
     {
-       
+
     }
 
     public void ApplyKnockBack(Vector3 KnockbackDir, float Force)
@@ -313,9 +317,25 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
     }
 
+    public KinematicCharacterMotor GetKCC()
+    {
+        return _KCC;
+    }
+
 
 
 
 
     #endregion
+
+
+    private void OnDrawGizmos()
+    {
+        if (_TargetRotation.HasValue && _KCC != null)
+        {
+            Gizmos.color = Color.red;
+            // Dibuja una linea desde el personaje hacia donde la IA le dice que mire
+            Gizmos.DrawRay(_KCC.transform.position, _TargetRotation.Value * 5f);
+        }
+    }
 }
