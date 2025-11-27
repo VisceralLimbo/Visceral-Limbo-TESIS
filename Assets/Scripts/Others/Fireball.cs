@@ -66,6 +66,8 @@ public class Fireball : MonoBehaviour, IParriable
         if (collision.gameObject == Owner) return;
         if (collision.gameObject.GetComponent<PlayerContext>() == OwnerContext) return;
         if (collision.gameObject.GetComponent<Visceral_SkillLogic>()) return;
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Traps")) return;
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Proyectiles")) return;
 
         if (collision.gameObject.TryGetComponent(out Health_Component HPComp))
         {

@@ -8,6 +8,7 @@ public class Decayed_Attack : BaseState
     [Header("References")]
     [SerializeField] IMovementStrategy _MovementStrategy;
     [SerializeField] AnimatorHandler _AnimHandler;
+    [SerializeField] Animator _Anim;
     [SerializeField] GameObject _BulletPrefab;
     [SerializeField] Transform _BulletSpawnPoint;
     [SerializeField] Transform _Target;
@@ -22,6 +23,7 @@ public class Decayed_Attack : BaseState
 
     [SerializeField] private AudioSource _AudioSource;
     [SerializeField] private AudioClip flashSound;
+    Coroutine _FlashingCoroutine;
 
     bool isFlashing = false;
 
@@ -64,6 +66,8 @@ public class Decayed_Attack : BaseState
         _KCC = CTX.GetComponentInChildren<KinematicCharacterMotor>();
         _AnimHandler = CTX.GetComponentInChildren<AnimatorHandler>();
         _MovementStrategy = stateMachine.GetComponentInChildren<IMovementStrategy>();
+        _AnimHandler.TryGetAnimator("Decayed", out Animator _Anime);
+        _Anim = _Anime;
     }
 
     float pulse = 0;
@@ -82,7 +86,7 @@ public class Decayed_Attack : BaseState
         //check! el enemigo esta muy cerca
         if(_SafeSpace > targetDistance)
         {
-            print("Target too close");
+    
             // salir del estado
             _TargetIsTooClose = true;
             return;
@@ -91,7 +95,7 @@ public class Decayed_Attack : BaseState
         // segundo check, el enemigo esta muy lejos
         else if(_FarAway < targetDistance)
         {
-            print("Target too Far");
+
             _TargetIsTooFar = true;
             return;
         }
@@ -110,15 +114,31 @@ public class Decayed_Attack : BaseState
         }
 
         // Si no está haciendo flash, iniciarlo
-        if (!isFlashing)
+        if (!isFlashing && _FlashingCoroutine == null)
         {
-            CTX.StartCoroutine(FlashThenShoot());
+            _FlashingCoroutine = StartCoroutine(FlashThenShoot());
         }
     }
 
     private IEnumerator FlashThenShoot()
     {
         isFlashing = true;
+        // Animación y disparo de bala
+        _AnimHandler.SetParameter("Decayed", "Attack", AnimatorControllerParameterType.Trigger);
+
+        //esperamos a que estemos oficialment en el estado de ataque
+        yield return new WaitUntil(() => _Anim.GetCurrentAnimatorStateInfo(0).IsName("Decayed AttackAnim"));
+
+        // esperamos a estar en el frame de ataque
+        yield return new WaitUntil(() => _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1.0f >= 0.7f); 
+
+        //como estaba lo anterior
+        var correctTarget = _Target.position + Vector3.up;
+        _BulletSpawnPoint.LookAt(correctTarget, _KCC.CharacterUp);
+
+        var bullet = Instantiate(_BulletPrefab, _BulletSpawnPoint.position, _BulletSpawnPoint.rotation);
+        bullet.GetComponent<BulletDumb>().SetOwner(stateMachine.gameObject, stateMachine.GetComponent<PlayerContext>());
+
 
         // prefab de la paritucla
         if (flashAttackParticle != null)
@@ -132,25 +152,15 @@ public class Decayed_Attack : BaseState
             Destroy(flashGO, flashPS.main.duration); ;
         }
 
+
         if (_AudioSource != null && flashSound != null)
         {
             _AudioSource.PlayOneShot(flashSound);
         }
 
-        // espero 1 seg para disparar (ver de bajar subir etc)
-        yield return new WaitForSeconds(1f);
-
-        // Animación y disparo de bala
-        _AnimHandler.SetParameter("Decayed", "Attack", AnimatorControllerParameterType.Trigger);
-
-        //como estaba lo anterior
-        var correctTarget = _Target.position + Vector3.up;
-        _BulletSpawnPoint.LookAt(correctTarget, _KCC.CharacterUp);
-
-        var bullet = Instantiate(_BulletPrefab, _BulletSpawnPoint.position, _BulletSpawnPoint.rotation);
-        bullet.GetComponent<BulletDumb>().SetOwner(stateMachine.gameObject, stateMachine.GetComponent<PlayerContext>());
 
         pulse = 0;
         isFlashing = false;
+        _FlashingCoroutine = null;
     }
 }
