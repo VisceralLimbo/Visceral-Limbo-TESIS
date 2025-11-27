@@ -122,6 +122,21 @@ public class BossAbility : BaseState,IStateEnergyCost
             // se instancia el indicador usando la pos q se calculo con el raycast
             GameObject indicator = Instantiate(indicatorPrefab, finalSpawnPosition, flatRotation);
 
+            // reproduzco particulas
+            if (indicator != null)
+            {
+                // agarro todas
+                ParticleSystem[] particleSystems = indicator.GetComponentsInChildren<ParticleSystem>();
+
+                foreach (ParticleSystem ps in particleSystems)
+                {
+                    if (!ps.isPlaying)
+                    {
+                        ps.Play();
+                    }
+                }
+            }
+
             // paso las cosas al indicador
             FlamePillarIndicator pillarScript = indicator.GetComponent<FlamePillarIndicator>();
             if (pillarScript != null)
