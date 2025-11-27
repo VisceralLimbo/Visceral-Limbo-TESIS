@@ -17,20 +17,17 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] AnimatorHandler _AnimatorHandler;
     [SerializeField] DamageCollisionTrigger _KnockbackTrigger;
-
-    [Header("VFX")]
-    [SerializeField] GameObject _GroundSlamVFX;
-    [SerializeField] LayerMask _GroundLayer; // capa para el raycast
-    [SerializeField] float _RaycastDistance; // distancia del raytcast
-    [SerializeField] float _VFXGroundOffset = 0.1f; // lo subo un toque
+    [SerializeField] ParticleSystem _ButtSlamParticles;
 
     [Space]
 
     [Header("Variables")]
     [SerializeField] float _JumpStrenght;
-    [SerializeField] float _JumpDuration;
+    [SerializeField] float _JumpDuration; // Nota: Esto no se usa actualmente en la lógica, solo el físico
     [SerializeField] bool _FinishedAttack;
 
+    float _AirTimer;
+    [SerializeField] float _MinAirTime = 0.2f;
     [Space]
 
 
@@ -41,11 +38,12 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     [SerializeField] bool DrawWireframe;
     [SerializeField] Transform _Model;
 
-    float timer;
+    [SerializeField] Collider[] hits;
+
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
-        print("ButtSlam finished " + _FinishedAttack);
-        if(_KCC.GroundingStatus.IsStableOnGround && _FinishedAttack)
+        // Solo intentamos transicionar si el ataque terminó Y estamos en el suelo
+        if (_FinishedAttack && _KCC.GroundingStatus.IsStableOnGround)
         {
             return base.EvaluateTransitions(GlobalParams, out TO);
         }
@@ -61,13 +59,15 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     {
         base.OnEnter(CTX);
 
-        _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlam", AnimatorControllerParameterType.Bool,true);
-
+        _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlam", AnimatorControllerParameterType.Bool, true);
         _Main_State.DeactivateEnergy(true);
-
         _MoveStrategy.KillAllMovement();
+
+        // Reset de variables
         _ExecutingAttack = false;
         _FinishedAttack = false;
+        _WindupPulse = 0;
+        _AirTimer = 0;
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -85,153 +85,111 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     {
         base.OnInitialize(CTX);
 
-        if(_Target == null)
-        {
-
-            _Target = FindObjectOfType<Player_Movement>().transform;
-
-        }
-
-        if(_Main_State == null)
-        {
-            _Main_State = GetComponentInParent<Corpus_Thinking_Main_State>();
-        }
-
-        if(_MoveStrategy == null)
-        {
-            _MoveStrategy = CTX.GetComponentInChildren<IMovementStrategy>();
-        }
-
-        if(_KCC == null)
-        {
-            _KCC = CTX.GetComponentInChildren<KinematicCharacterMotor>();
-        }
+        if (_Target == null) _Target = FindObjectOfType<Player_Movement>().transform;
+        if (_Main_State == null) _Main_State = GetComponentInParent<Corpus_Thinking_Main_State>();
+        if (_MoveStrategy == null) _MoveStrategy = CTX.GetComponentInChildren<IMovementStrategy>();
+        if (_KCC == null) _KCC = CTX.GetComponentInChildren<KinematicCharacterMotor>();
     }
 
     [SerializeField] float _Windup;
-    float _WindupPulse;
-    bool _ExecutingAttack;
+    [SerializeField] float _WindupPulse;
+    [SerializeField] bool _ExecutingAttack;
+
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
-        base.OnTick(CTX, TickRate);
+       
+        if (_FinishedAttack) return;
 
+        // PASO 1: WINDUP
         if (!_ExecutingAttack)
         {
-            if (_Windup > _WindupPulse)
+            _WindupPulse += (Time.deltaTime * TimeDilationManager.GlobalTimeScale);
+
+            if (_Windup <= _WindupPulse)
             {
+                // INICIAMOS EL SALTO
                 _ExecutingAttack = true;
+                _AirTimer = 0; 
+
                 _MoveStrategy.ForceUngroundSelf(0.1f);
-
-                _MoveStrategy.ApplyExternalForce(Vector3.up, _JumpStrenght);
+                _MoveStrategy.ApplyExternalForce(Vector3.up, _JumpStrenght); 
                 _KnockbackTrigger.Activate(true);
-
             }
             else
             {
+                // matamos movimiento
                 _MoveStrategy.UpdateVelocity(Vector3.zero);
                 _MoveStrategy.KillAllMovement();
-
-                _WindupPulse = _Windup + (Time.deltaTime * TimeDilationManager.GlobalTimeScale);
             }
         }
+        // PASO 2: Estamos en el aire, así que a mantenernos
         else
         {
+            _AirTimer += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
 
-
-
-            if (_ExecutingAttack == true && _FinishedAttack == false && _KCC.GroundingStatus.IsStableOnGround)
+            if(_AirTimer < _MinAirTime && _KCC.GroundingStatus.IsStableOnGround)
             {
-
-                _KnockbackTrigger.Activate(false);
-
-                // pos
-                Vector3 vfxPosition;
-                Vector3 rayStartPoint = _Model.transform.position + Vector3.up * 0.5f;
-                RaycastHit hit;
-
-                // raycast al suelo
-                if (Physics.Raycast(rayStartPoint, Vector3.down, out hit, _RaycastDistance, _GroundLayer))
-                {
-                    // si choca le doy el offset para q no se entierre el efecto
-                    vfxPosition = hit.point;
-                    vfxPosition.y += _VFXGroundOffset;
-                }
-                else
-                {
-                    // si no encuentra uso la pos del boss
-                    vfxPosition = _Model.transform.position;
-                }
-                // instancio el vfx
-                if (_GroundSlamVFX != null)
-                {
-                    GameObject instantiatedVFX = Instantiate(_GroundSlamVFX, vfxPosition, Quaternion.identity);
-
-                    // reproduzco las particulas
-                    ParticleSystem[] particleSystems = instantiatedVFX.GetComponentsInChildren<ParticleSystem>();
-
-                    foreach (ParticleSystem ps in particleSystems)
-                    {
-                        if (!ps.isPlaying)
-                        {
-                            ps.Play();
-                        }
-                    }
-                }
-
-                hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
-
-                if (hits.Length > 0)
-                {
-                    foreach (Collider collider in hits)
-                    {
-                        // busca solo player healthcomp
-                        if (collider.TryGetComponent(out Health_Component playerHp))
-                        {
-                            if (playerHp == null || playerHp.Context == null)
-                            {
-                                continue;
-                            }
-
-                            if (playerHp.Context == _Main_State.playerContext)
-                            {
-                                continue;
-                            }
-
-                            DamageScore DMScore = new DamageScore();
-
-                            DMScore.Attacker = _Main_State.playerContext;
-                            DMScore.FactionID = _Main_State.playerContext.faction;
-                            DMScore.DamageAmount = AttackDamage;
-                            DMScore.ElementalDamage = ElementType.Physical;
-
-
-
-                            Vector3 Dir = playerHp.Context.PlayerTransform.position - _Model.transform.position;
-                            Dir.Normalize();
-
-                            playerHp.TakeDamageWithKnockback(Dir, AttackKnockback, DMScore);
-
-
-                        }
-                    }
-                }
-
-                _FinishedAttack = true;
+                _MoveStrategy.ForceUngroundSelf(0.1f);
+                _MoveStrategy.ApplyExternalForce(Vector3.up, _JumpStrenght);
             }
 
-            return;
+
+            // Solo chequeamos si aterrizó si YA pasamos el tiempo mínimo de aire (_MinAirTime).
+            // Esto evita que detecte el suelo en el mismo frame que saltó.
+            if (_AirTimer > _MinAirTime && _KCC.GroundingStatus.IsStableOnGround)
+            {
+                LandingLogic();
+            }
         }
     }
 
-    [SerializeField] Collider[] hits;
+    void LandingLogic()
+    {
+        _KnockbackTrigger.Activate(false);
+        hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
+
+        if (hits.Length > 0)
+        {
+            // Lista para evitar doble daño a la misma entidad con multiples colliders
+            List<Health_Component> damagedTargets = new List<Health_Component>();
+
+            foreach (Collider collider in hits)
+            {
+                if (collider.TryGetComponent(out Health_Component playerHp))
+                {
+                    if (playerHp == null || playerHp.Context == null) continue;
+
+                    // Ignorar self y duplicados
+                    if (playerHp.Context == _Main_State.playerContext) continue;
+                    if (damagedTargets.Contains(playerHp)) continue;
+
+                    DamageScore DMScore = new DamageScore();
+                    DMScore.Attacker = _Main_State.playerContext;
+                    DMScore.FactionID = _Main_State.playerContext.faction;
+                    DMScore.DamageAmount = AttackDamage;
+                    DMScore.ElementalDamage = ElementType.Physical;
+
+                    Vector3 Dir = playerHp.Context.PlayerTransform.position - _Model.transform.position;
+                    Dir.Normalize();
+
+                    playerHp.TakeDamageWithKnockback(Dir, AttackKnockback, DMScore);
+
+                    damagedTargets.Add(playerHp);
+                }
+            }
+        }
+
+        _ButtSlamParticles?.Play();
+        _FinishedAttack = true;
+    }
 
 
     private void OnDrawGizmos()
     {
-        if (DrawWireframe && _FinishedAttack)
+        if (DrawWireframe) 
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(_Model.transform.position, attackradius);
+            Gizmos.DrawWireSphere(_Model.transform.position, attackradius);
         }
     }
 
@@ -252,10 +210,11 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         return TransitionKey;
     }
 
-   
+
     public void SetCost(float NewCost)
     {
         EnergyCost = (int)NewCost;
     }
     #endregion
+
 }

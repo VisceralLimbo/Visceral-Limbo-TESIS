@@ -22,6 +22,6 @@ public interface IMovementStrategy
 
     public void ForceUngroundSelf(float Time);
 
-
+    public KinematicCharacterMotor GetKCC();
 
 }

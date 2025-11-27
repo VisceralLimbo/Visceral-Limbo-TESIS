@@ -159,7 +159,15 @@ public class Corpus_MovementRotateState : BaseState
         // Paso 5 ) calcular desplazamiento final
 
         Vector3 FinalDirection = TangentDirection + (CorrectionVector * SpiralDriftCorrection);
+       
+        MovementStrategy.UpdateRotation(-VectorRadius.normalized);
 
         MovementStrategy.UpdateVelocity(FinalDirection.normalized);
+
+        // rotar hacia el player
+
+
+
     }
+
 }
