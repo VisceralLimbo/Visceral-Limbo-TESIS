@@ -191,7 +191,7 @@ public class Player_Base : Visceral_Script
             }
         }
 
-        if (movementInput.Jumping)
+        if (movementInput.Jumping && !OnDialogue)
         {
             SoundManager.Instance.CreateSound().WithSoundData(_jumpSound).play();
         }
