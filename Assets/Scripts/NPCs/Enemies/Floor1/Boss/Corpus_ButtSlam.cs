@@ -17,7 +17,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] AnimatorHandler _AnimatorHandler;
     [SerializeField] DamageCollisionTrigger _KnockbackTrigger;
-    [SerializeField] ParticleSystem _ButtSlamParticles;
+    [SerializeField] VFXPlayer _ButtSlamParticles;
 
     [Space]
 
@@ -40,12 +40,22 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
 
     [SerializeField] Collider[] hits;
 
+    [SerializeField] float _SlamToIdleTimer;
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
         // Solo intentamos transicionar si el ataque terminó Y estamos en el suelo
         if (_FinishedAttack && _KCC.GroundingStatus.IsStableOnGround)
         {
-            return base.EvaluateTransitions(GlobalParams, out TO);
+            if(_MinStateLifetime>= _SlamToIdleTimer)
+            {
+                return base.EvaluateTransitions(GlobalParams, out TO);
+            }
+            else
+            {
+                _MinStateLifetime += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+                TO = null;
+                return false;
+            }
         }
         else
         {
@@ -59,7 +69,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     {
         base.OnEnter(CTX);
 
-        _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlam", AnimatorControllerParameterType.Bool, true);
+        _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlam", AnimatorControllerParameterType.Trigger);
         _Main_State.DeactivateEnergy(true);
         _MoveStrategy.KillAllMovement();
 
@@ -68,6 +78,8 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         _FinishedAttack = false;
         _WindupPulse = 0;
         _AirTimer = 0;
+
+        _MinStateLifetime = 0;
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -76,8 +88,6 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         _Main_State.DeactivateEnergy(false);
         _ExecutingAttack = false;
         _FinishedAttack = false;
-
-        _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlam", AnimatorControllerParameterType.Bool, false);
         CTX.SetGlobalCondition(TransitionKey, false);
     }
 
@@ -109,14 +119,16 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
             {
                 // INICIAMOS EL SALTO
                 _ExecutingAttack = true;
-                _AirTimer = 0; 
+                _AirTimer = 0;
 
+                _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlamAir", AnimatorControllerParameterType.Trigger);
                 _MoveStrategy.ForceUngroundSelf(0.1f);
                 _MoveStrategy.ApplyExternalForce(Vector3.up, _JumpStrenght); 
                 _KnockbackTrigger.Activate(true);
             }
             else
             {
+                
                 // matamos movimiento
                 _MoveStrategy.UpdateVelocity(Vector3.zero);
                 _MoveStrategy.KillAllMovement();
@@ -179,7 +191,8 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
             }
         }
 
-        _ButtSlamParticles?.Play();
+        _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlamToIdle", AnimatorControllerParameterType.Trigger);
+        if (_ButtSlamParticles != null) _ButtSlamParticles.PlayAllParticles();
         _FinishedAttack = true;
     }
 
