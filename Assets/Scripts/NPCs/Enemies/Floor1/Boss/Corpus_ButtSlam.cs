@@ -17,7 +17,13 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] AnimatorHandler _AnimatorHandler;
     [SerializeField] DamageCollisionTrigger _KnockbackTrigger;
-    
+
+    [Header("VFX")]
+    [SerializeField] GameObject _GroundSlamVFX;
+    [SerializeField] LayerMask _GroundLayer; // capa para el raycast
+    [SerializeField] float _RaycastDistance; // distancia del raytcast
+    [SerializeField] float _VFXGroundOffset = 0.1f; // lo subo un toque
+
     [Space]
 
     [Header("Variables")]
@@ -137,6 +143,41 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
             {
 
                 _KnockbackTrigger.Activate(false);
+
+                // pos
+                Vector3 vfxPosition;
+                Vector3 rayStartPoint = _Model.transform.position + Vector3.up * 0.5f;
+                RaycastHit hit;
+
+                // raycast al suelo
+                if (Physics.Raycast(rayStartPoint, Vector3.down, out hit, _RaycastDistance, _GroundLayer))
+                {
+                    // si choca le doy el offset para q no se entierre el efecto
+                    vfxPosition = hit.point;
+                    vfxPosition.y += _VFXGroundOffset;
+                }
+                else
+                {
+                    // si no encuentra uso la pos del boss
+                    vfxPosition = _Model.transform.position;
+                }
+                // instancio el vfx
+                if (_GroundSlamVFX != null)
+                {
+                    GameObject instantiatedVFX = Instantiate(_GroundSlamVFX, vfxPosition, Quaternion.identity);
+
+                    // reproduzco las particulas
+                    ParticleSystem[] particleSystems = instantiatedVFX.GetComponentsInChildren<ParticleSystem>();
+
+                    foreach (ParticleSystem ps in particleSystems)
+                    {
+                        if (!ps.isPlaying)
+                        {
+                            ps.Play();
+                        }
+                    }
+                }
+
                 hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
 
                 if (hits.Length > 0)
