@@ -57,6 +57,8 @@ public class Decayed_Attack : BaseState
     public override void OnExit(VisceralStateMachine CTX)
     {
         stateMachine.SetGlobalCondition("Attack", false);
+        StopAllCoroutines();
+        _FlashingCoroutine = null;
     }
 
     public override void OnInitialize(VisceralStateMachine CTX)
@@ -81,7 +83,7 @@ public class Decayed_Attack : BaseState
 
         float targetDistance = Vector3.Distance(_Target.position, _KCC.Capsule.transform.position);
 
-        _MovementStrategy.UpdateRotation(TargetDirection);
+        _MovementStrategy.UpdateRotation(TargetDirection.normalized);
 
         //check! el enemigo esta muy cerca
         if(_SafeSpace > targetDistance)
@@ -123,14 +125,22 @@ public class Decayed_Attack : BaseState
     private IEnumerator FlashThenShoot()
     {
         isFlashing = true;
+
+
+
         // Animación y disparo de bala
-        _AnimHandler.SetParameter("Decayed", "Attack", AnimatorControllerParameterType.Trigger);
+        _AnimHandler?.SetParameter("Decayed", "Attack", AnimatorControllerParameterType.Trigger);
 
         //esperamos a que estemos oficialment en el estado de ataque
-        yield return new WaitUntil(() => _Anim.GetCurrentAnimatorStateInfo(0).IsName("Decayed AttackAnim"));
+        yield return new WaitUntil(() => _Anim !=  null || _Anim.GetCurrentAnimatorStateInfo(0).IsName("Decayed AttackAnim"));
 
         // esperamos a estar en el frame de ataque
-        yield return new WaitUntil(() => _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1.0f >= 0.7f); 
+        yield return new WaitUntil(() =>_Anim != null || _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1.0f >= 0.7f);
+
+        if (_Anim == null || _AnimHandler == null)
+        {
+            yield break;
+        }
 
         //como estaba lo anterior
         var correctTarget = _Target.position + Vector3.up;
