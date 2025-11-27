@@ -139,6 +139,11 @@ public class DungeonGenerator : MonoBehaviour
 
     public Action OnUnSuccessfulGeneration;
 
+    [Header("Hack")]
+    [SerializeField] private KeyCode SkipToBossKey = KeyCode.B; // b para el tp
+
+    private GameObject BossDoorObject; // guardo la puerta del boss
+
     private void Awake()
     {
         // no hago un singleton porque la idea es que se muera el dungeon generator al 
@@ -162,6 +167,11 @@ public class DungeonGenerator : MonoBehaviour
             OnUnSuccessfulGeneration?.Invoke();
         }
 
+        // b para el tp
+        if (Input.GetKeyDown(SkipToBossKey) && IsGenerated)
+        {
+            TeleportToBossDoor();
+        }
     }
 
     private IEnumerator Regenerate()
@@ -799,6 +809,8 @@ public class DungeonGenerator : MonoBehaviour
                 // =======================================================
 
                 GameObject Door = Instantiate(DoorOBJ, SourcePoint.transform.position, SourcePoint.transform.rotation);
+                BossDoorObject = Door; // guardo la refe aca
+
                 Door.transform.SetParent(SourcePoint.transform, true);
 
                 Door.AddComponent<DoorGlow>();
@@ -1053,5 +1065,29 @@ public class DungeonGenerator : MonoBehaviour
         // Si la dirección no está alineada (lo cual no debería ocurrir con mazmorras de cuadrícula)
         Debug.LogError($"Punto de entrada con orientación ambigua: {forward}");
         return Vector2Int.zero;
+    }
+
+    private void TeleportToBossDoor()
+    {
+        if (BossDoorObject == null)
+        {
+            Debug.LogError("no agarre la refe de la puerta");
+            return;
+        }
+
+        // busco playermovent
+        Player_Movement playerMovement = FindObjectOfType<Player_Movement>();
+
+        if (playerMovement != null)
+        {
+            // pos
+            Vector3 targetPos = BossDoorObject.transform.position + (BossDoorObject.transform.forward * 2f) + Vector3.up;
+
+            // tp del kcc usando al funcion q ya esta ahi
+            playerMovement.SetCharacterPosition(targetPos, true);
+
+            // roto q el player vea a la puerta
+            playerMovement.transform.LookAt(BossDoorObject.transform.position);
+        }
     }
 }
