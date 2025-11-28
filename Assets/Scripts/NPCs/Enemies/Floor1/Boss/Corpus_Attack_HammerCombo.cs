@@ -76,7 +76,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
         base.OnInitialize(CTX);
         _Main_State = GetComponentInParent<Corpus_Thinking_Main_State>();
 
-
+        if (_MoveStrat == null) CTX.GetComponentInChildren<IMovementStrategy>(); 
     }
 
     float pulse = 0;

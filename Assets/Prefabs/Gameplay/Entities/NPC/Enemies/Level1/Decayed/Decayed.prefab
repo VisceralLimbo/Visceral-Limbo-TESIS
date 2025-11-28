@@ -5251,7 +5251,7 @@ MonoBehaviour:
   _MovementSpeed: 6
   _BaseMovementSpeed: 0
   _MovementAccel: 10
-  _MaxRotationSpeed: 160
+  _MaxRotationSpeed: 360
   GotKnockbacked: 0
   _KnockbackDecay: 10
   _KnockbackVelocity: {x: 0, y: 0, z: 0}
@@ -5312,6 +5312,7 @@ MonoBehaviour:
     MinimunSoundDistance: 1
     MaximunSoundDistance: 10
     IsFrequent: 1
+  HealingSoundData: []
   CurrentHealth: 30
   MaxHealth: 30
   _RB: {fileID: 0}
@@ -5502,6 +5503,7 @@ MonoBehaviour:
     _ShouldTransitionWithNoConditions: 0
   _MinStateLifetime: 5
   _AnimHandler: {fileID: 0}
+  _Anim: {fileID: 0}
   _BulletPrefab: {fileID: 2454136147042372353, guid: bc0f572b4ddbb564d872d42601a416fd,
     type: 3}
   _BulletSpawnPoint: {fileID: 3019179451065391839}
@@ -6566,6 +6568,7 @@ MonoBehaviour:
   AnimatorsData:
   - AnimatorController: {fileID: 2065031101127850324}
     ID: Decayed
+  IgnoreSlowdown: 0
 --- !u!114 &4931502303470382893
 MonoBehaviour:
   m_ObjectHideFlags: 0
