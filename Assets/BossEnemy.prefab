@@ -55,7 +55,7 @@ MonoBehaviour:
   Target: {fileID: 0}
   thinkingMain: {fileID: 1390840764624858655}
   _AnimHandler: {fileID: 107750596267011980}
-  movementSpeed: 12
+  movementSpeed: 9
   OrbitRadius: 2
   SpiralDriftCorrection: 1
   Statepulse: 0
@@ -183,8 +183,8 @@ MonoBehaviour:
     _ShouldTransitionWithNoConditions: 1
   _MinStateLifetime: 0
   _AnimHandler: {fileID: 107750596267011980}
-  _Main_State: {fileID: 0}
-  _MoveStrat: {fileID: 0}
+  _Main_State: {fileID: 1390840764624858655}
+  _MoveStrat: {fileID: 5081794324909463561}
   _Target: {fileID: 0}
   TransitionKey: Attack_Melee1
   EnergyCost: 2
@@ -377,7 +377,7 @@ MonoBehaviour:
     _ToGO: {fileID: 7195207331811232290}
     _ShouldTransitionWithNoConditions: 1
   _MinStateLifetime: 1
-  Model: {fileID: 0}
+  Model: {fileID: 5871233309053035945}
   Target: {fileID: 0}
   thinkingMain: {fileID: 1390840764624858655}
   _AnimHandler: {fileID: 107750596267011980}
@@ -717,7 +717,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7333673483843639958
 Transform:
   m_ObjectHideFlags: 0
@@ -918,7 +918,7 @@ MonoBehaviour:
   raycastDistance: 100
   TransitionKey: Attack_Pilar
   EnergyCost: 3
-  Thinker: {fileID: 0}
+  Thinker: {fileID: 1390840764624858655}
   _AnimHandler: {fileID: 107750596267011980}
 --- !u!1 &5449153354456122023
 GameObject:
@@ -989,6 +989,7 @@ MonoBehaviour:
   DrawWireframe: 1
   _Model: {fileID: 5871233309053035945}
   hits: []
+  _SlamToIdleTimer: 0
   _Windup: 0.2
   _WindupPulse: 0
   _ExecutingAttack: 0
@@ -1044,18 +1045,18 @@ MonoBehaviour:
     _ShouldTransitionWithNoConditions: 1
   _MinStateLifetime: 1
   _AnimHandler: {fileID: 107750596267011980}
-  _Main_State: {fileID: 0}
-  _MoveStrat: {fileID: 0}
+  _Main_State: {fileID: 1390840764624858655}
+  _MoveStrat: {fileID: 5081794324909463561}
   _Target: {fileID: 0}
   TransitionKey: Attack_Melee2
   EnergyCost: 2
   TimingDuration: 0.08
   CanExit: 0
-  _KnockbackValue: 30
-  attackradius: 0
-  AttackDamage: 0
+  _KnockbackValue: 50
+  attackradius: 2
+  AttackDamage: 20
   DrawWireframe: 0
-  _Model: {fileID: 0}
+  _Model: {fileID: 5871233309053035945}
 --- !u!1 &7195207331811232290
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,6 +1256,7 @@ MonoBehaviour:
   DrawWireframe: 1
   _Model: {fileID: 5871233309053035945}
   hits: []
+  _SlamToIdleTimer: 0
   _Windup: 0.2
   _WindupPulse: 0
   _ExecutingAttack: 0
