@@ -230,42 +230,5 @@ public class Health_Component : Visceral_Component
         SoundCLip.play();
     }
 
-    // efecto de bleed
-    public void ApplyBleed(float damagePerTick, float duration, float tickRate, PlayerContext attacker)
-    {
-        // si ya esta con el bleed se reinicia el tiempo
-        if (bleedCoroutine != null)
-        {
-            StopCoroutine(bleedCoroutine);
-        }
-
-        // empieza corrutina
-        bleedCoroutine = StartCoroutine(BleedEffect(damagePerTick, duration, tickRate, attacker));
-    }
-
-    // aplico danio del bleed
-    private IEnumerator BleedEffect(float damagePerTick, float duration, float tickRate, PlayerContext attacker)
-    {
-        float endTime = Time.time + duration;
-        WaitForSeconds wait = new WaitForSeconds(tickRate);
-
-        DamageScore bleedScore = new DamageScore()
-        {
-            DamageAmount = damagePerTick,
-            Attacker = attacker,
-            ElementalDamage = ElementType.Physical,
-            IsAirBorneKill = false,
-            FactionID = attacker.faction,
-        };
-
-        // hago el bleed por la cantidad de tiempo q setie
-        while (Time.time < endTime && !Died)
-        {
-            // simple y dmg score del bleed
-            InternalDamage(damagePerTick, null, 0, bleedScore);
-            yield return wait;
-        }
-
-        bleedCoroutine = null; // limpo al terminar
-    }
+  
 }

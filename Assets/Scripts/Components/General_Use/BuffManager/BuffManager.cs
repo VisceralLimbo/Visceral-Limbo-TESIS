@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,9 +25,22 @@ public class BuffManager : MonoBehaviour
 
     [Tooltip("StatManager de la entidad")]
     [SerializeField] StatsManager StatManager;
+
+    [Tooltip("HealthComponent de la entidad")]
+    Health_Component _HPComponent;
+    public Health_Component HPComponent { get { return _HPComponent; } }
     private void Start()
     {
         if(BuffComponentHierarchy == null) BuffComponentHierarchy = this.transform;
+
+        if(_HPComponent == null)
+        {
+            _HPComponent = GetComponent<Health_Component>();
+            if(_HPComponent == null)
+            {
+                _HPComponent = GetComponentInChildren<Health_Component>();
+            }
+        }
     }
 
     /// <summary>
@@ -35,7 +49,7 @@ public class BuffManager : MonoBehaviour
     /// <param name="BuffID"> ID del buff</param>
     /// <param name="NewBuff"> El scriptableObject del buff </param>
     /// <param name="_Buffpotency">la potencia a aplicar del buff </param>
-    public void AddNewBuff(string BuffID, BuffSO NewBuff,int _Buffpotency)
+    public void AddNewBuff(string BuffID, BuffSO NewBuff,int _Buffpotency,PlayerContext Inflictor = null)
     {
 
         // definimos el data del buffSO para saber que vamos a instanciar.
@@ -87,6 +101,12 @@ public class BuffManager : MonoBehaviour
 
                 //7) hack?: como el componente no conoce el SO, se lo enviamos. para solucionar problemas futuros
                 finalBuff.SetSO(NewBuff);
+
+                // 8) hack?: Como el componente no sabe su origen, se lo enviamos.
+                if(Inflictor != null)
+                {
+                    finalBuff.SetOrigin(Inflictor);
+                }
             }
 
             //si el nuevo buffo a aplicar debería en su lugar potenciar al buff viejo.
@@ -103,7 +123,7 @@ public class BuffManager : MonoBehaviour
                         //reiniciamos duracion
                         buffDurationDictionary[targetdictionary[BuffID]] = NewBuff.BuffDuration;
                     }
-                 
+                  
                 }
                 else
                 {
@@ -146,6 +166,12 @@ public class BuffManager : MonoBehaviour
             }
             //6) le enviamos la referencia del scriptableObject al script.
             finalbuff.SetSO(NewBuff);
+
+            // 7) hack?: Como el componente no sabe su origen, se lo enviamos.
+            if (Inflictor != null)
+            {
+                finalbuff.SetOrigin(Inflictor);
+            }
         }
 
         print("buffo aplicado correctamente " + NewBuff.BuffName);

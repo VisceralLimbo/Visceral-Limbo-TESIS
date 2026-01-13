@@ -10,6 +10,8 @@ public abstract class BuffBehavior : MonoBehaviour
     [SerializeField] protected int _BuffPotency = 0;
     [SerializeField] protected BuffSO _BuffSO;
 
+    [SerializeField] protected PlayerContext Origin;
+
     /// <summary>
     /// Update method del buff
     /// </summary>
@@ -42,4 +44,7 @@ public abstract class BuffBehavior : MonoBehaviour
 
     public void SetSO(BuffSO SO) { _BuffSO = SO; }
     public BuffSO GetSO() { return _BuffSO; }
+
+    public void SetOrigin(PlayerContext inflictor) { Origin = inflictor; }
+    public PlayerContext GetOrigin() { return Origin;}
 }

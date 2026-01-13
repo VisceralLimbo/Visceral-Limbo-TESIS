@@ -12,6 +12,9 @@ public class PlayerContext : Visceral_Script
     public StatsManager Stats;
     public InventoryManager Inventory;
 
+    [Tooltip("El manager de buffos")]
+    public BuffManager BuffManager;
+
     /// <summary>
     /// El GameObject general del usuario
     /// </summary>
@@ -36,10 +39,11 @@ public class PlayerContext : Visceral_Script
         knockback = this.transform.root.GetComponentInChildren<IKnockback>();
 
         // por las dudas de q sea null
-        if (Stats != null)
+        if (Stats != null && faction == FactionID.Player)
         {
             ApplyMetaUpgrades();
         }
+
     }
 
     /// <summary>
