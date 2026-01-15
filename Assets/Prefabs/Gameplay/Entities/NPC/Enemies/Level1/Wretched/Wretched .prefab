@@ -2057,6 +2057,8 @@ GameObject:
   - component: {fileID: 4746130255494018027}
   - component: {fileID: 4654570009590822600}
   - component: {fileID: 8734160248357180579}
+  - component: {fileID: 211252748068485804}
+  - component: {fileID: 1932132607407447805}
   m_Layer: 7
   m_Name: 'Wretched '
   m_TagString: Untagged
@@ -2079,6 +2081,7 @@ Transform:
   m_Children:
   - {fileID: 1031295680299478082}
   - {fileID: 8493371771134585519}
+  - {fileID: 1086446552685269146}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4746130255494018027
@@ -2122,6 +2125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Stats: {fileID: 0}
   Inventory: {fileID: 0}
+  BuffManager: {fileID: 211252748068485804}
   PlayerGameObject: {fileID: 8001548354247194868}
   PlayerTransform: {fileID: 1031295680299478082}
   KCCMotor: {fileID: 662010605306157248}
@@ -2146,6 +2150,34 @@ MonoBehaviour:
   _HurtTriggerParam: IsHurt
   _HurtDirectionX: HurtDirectionX
   _HurtDirectionY: HurtDirectionY
+--- !u!114 &211252748068485804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4271440006843977573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 851dc92e6d80dd14c931c07c2bc5cf76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuffComponentHierarchy: {fileID: 1086446552685269146}
+  StatManager: {fileID: 0}
+--- !u!114 &1932132607407447805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4271440006843977573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a333d27b3b1256b40a3586eed088edb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockData: {fileID: 0}
+  FloatStatList: []
 --- !u!1 &4300835190812701095
 GameObject:
   m_ObjectHideFlags: 0
@@ -3127,6 +3159,37 @@ Transform:
   m_Children:
   - {fileID: 3994477604433910597}
   m_Father: {fileID: 5984051708913592982}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6149434078054359344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1086446552685269146}
+  m_Layer: 0
+  m_Name: Buffs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1086446552685269146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6149434078054359344}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -34.381958, y: -25.445019, z: -14.916565}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4091262336931204975}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6180092219684756734
 GameObject:

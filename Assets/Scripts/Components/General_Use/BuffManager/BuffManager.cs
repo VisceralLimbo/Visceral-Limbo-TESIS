@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,9 +25,22 @@ public class BuffManager : MonoBehaviour
 
     [Tooltip("StatManager de la entidad")]
     [SerializeField] StatsManager StatManager;
+
+    [Tooltip("HealthComponent de la entidad")]
+    Health_Component _HPComponent;
+    public Health_Component HPComponent { get { return _HPComponent; } }
     private void Start()
     {
         if(BuffComponentHierarchy == null) BuffComponentHierarchy = this.transform;
+
+        if(_HPComponent == null)
+        {
+            _HPComponent = GetComponent<Health_Component>();
+            if(_HPComponent == null)
+            {
+                _HPComponent = GetComponentInChildren<Health_Component>();
+            }
+        }
     }
 
     /// <summary>
@@ -35,7 +49,7 @@ public class BuffManager : MonoBehaviour
     /// <param name="BuffID"> ID del buff</param>
     /// <param name="NewBuff"> El scriptableObject del buff </param>
     /// <param name="_Buffpotency">la potencia a aplicar del buff </param>
-    public void AddNewBuff(string BuffID, BuffSO NewBuff,int _Buffpotency)
+    public void AddNewBuff(string BuffID, BuffSO NewBuff,int _Buffpotency,PlayerContext Inflictor = null)
     {
 
         // definimos el data del buffSO para saber que vamos a instanciar.
@@ -44,7 +58,7 @@ public class BuffManager : MonoBehaviour
         System.Type BuffType = System.Type.GetType(NewBuff.AssemblyQualifiedName);
         if(BuffType == null)
         {
-            Debug.LogError("<Color = blue>[Visceral Error]: no se encontro la clase " + NewBuff.AssemblyQualifiedName + "corroborar el scriptable object "+ NewBuff.name + "</color>");
+            Debug.LogError("<Color = blue>[Visceral Error]: no se encontro la clase " + NewBuff.AssemblyQualifiedName + "corroborar el scriptable object "+ NewBuff.name + " se intento de encontrar: " +NewBuff.AssemblyQualifiedName +  "</color>" );
             return;
         }
 
@@ -76,17 +90,25 @@ public class BuffManager : MonoBehaviour
                 //4) ahora vamos a aplicar la potencia deseada
                 finalBuff.OnAddPotency(_Buffpotency);
 
-                //5) llamamos al OnApply
+
+                //5) como el componente no conoce el SO, se lo enviamos. para solucionar problemas futuros
+                finalBuff.SetSO(NewBuff);
+
+                // 6) Como el componente no sabe su origen, se lo enviamos.
+                if (Inflictor != null)
+                {
+                    finalBuff.SetOrigin(Inflictor);
+                }
+
+                //7) llamamos al OnApply
                 finalBuff.OnApply(this,StatManager);
 
                 if (!NewBuff.IsInfinityDuration)
                 {
-                    //6) seteamos el duration del buff  
+                    //8) seteamos el duration del buff  
                     buffDurationDictionary[finalBuff] = NewBuff.BuffDuration;
                 }
 
-                //7) hack?: como el componente no conoce el SO, se lo enviamos. para solucionar problemas futuros
-                finalBuff.SetSO(NewBuff);
             }
 
             //si el nuevo buffo a aplicar debería en su lugar potenciar al buff viejo.
@@ -103,7 +125,7 @@ public class BuffManager : MonoBehaviour
                         //reiniciamos duracion
                         buffDurationDictionary[targetdictionary[BuffID]] = NewBuff.BuffDuration;
                     }
-                 
+                  
                 }
                 else
                 {
@@ -134,6 +156,15 @@ public class BuffManager : MonoBehaviour
             //3) añadimos la potencia del buff;
             finalbuff.OnAddPotency(_Buffpotency);
 
+            //6) le enviamos la referencia del scriptableObject al script.
+            finalbuff.SetSO(NewBuff);
+
+            // 7) Como el componente no sabe su origen, se lo enviamos.
+            if (Inflictor != null)
+            {
+                finalbuff.SetOrigin(Inflictor);
+            }
+
             //4) llamamos al OnApply del nuevo buff
             finalbuff.OnApply(this,StatManager);
             
@@ -144,8 +175,7 @@ public class BuffManager : MonoBehaviour
                 buffDurationDictionary[finalbuff] = NewBuff.BuffDuration;
 
             }
-            //6) le enviamos la referencia del scriptableObject al script.
-            finalbuff.SetSO(NewBuff);
+         
         }
 
         print("buffo aplicado correctamente " + NewBuff.BuffName);
@@ -244,5 +274,24 @@ public class BuffManager : MonoBehaviour
         dic.Remove(BuffToExpire.GetSO().BuffID);
 
         Destroy(BuffToExpire);
+    }
+
+    public void ForceExpirationBuff(string BuffID)
+    {
+        if(BuffDictionary.TryGetValue(BuffID,out BuffBehavior value))
+        {
+            value.OnExpire();
+            BuffDictionary.Remove(BuffID);
+            Destroy(value);
+            return;
+        }
+
+        if (DeBuffDictionary.TryGetValue(BuffID, out BuffBehavior value2))
+        {
+            value2.OnExpire();
+            BuffDictionary.Remove(BuffID);
+            Destroy(value2);
+        }
+
     }
 }

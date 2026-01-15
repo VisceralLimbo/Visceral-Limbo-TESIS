@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public class EvasionDamageItemLogic : ItemLogic
 {
-    private Player_MeleeAttack _playerAttack;
-    private Dash_Skill _playerDashSkill; // ref del dash
-    // NO ESTA TOMANDO STACKS PORQUE NO SIENTO QUE TENGA QUE. el jugador no tiene ninguna penalizacion por spamear shift no tiene sentido que pueda stackar daño y hacer un x5 solo por tocar shift tampoco un x2 pero bueno :v
-
     [SerializeField] SoundData _PickUpSound;
+
+    [SerializeField] BuffSO _BuffSO;
+
+    [SerializeField] BuffManager _BuffManager;
 
     //trigger de siempre
     private void OnTriggerEnter(Collider other)
@@ -30,64 +30,36 @@ public class EvasionDamageItemLogic : ItemLogic
     //agarro todas las refs q neceisot
     private void GetReferences()
     {
+        print("Registering stuff");
         if (_Context == null) return;
-
-        _playerAttack = _Context.GetComponent<Player_MeleeAttack>();
-
-        if (_playerDashSkill == null)
-        {
-            _playerDashSkill = _Context.GetComponentInChildren<Dash_Skill>();
-        }
-
-        if (_playerAttack == null || _playerDashSkill == null)
-        {
-            Debug.LogError("PORQUE NO ME TOMA LOS COMPONENTES LA REPU"); //fixeado je
-        }
+        PlayerEvents.OnPlayerUsedUtilitySkill += ActivateDamageBoost;
+        _BuffManager = _Context.BuffManager;
+        print("Passed Registration");
     }
 
 
     public override void Register(InventoryManager inventory, PlayerContext context)
     {
         base.Register(inventory, context);
-        GetReferences();
-
-        if (_playerDashSkill != null)
-        {
-            // me suscribo al nuevo evento en el dash
-            _playerDashSkill.OnDashActivated += ActivateDamageBoost;
-            Debug.Log("me suscribi al evento de dash");
-        }
+        _Context = context;
+        GetReferences();  
     }
 
     public override void Unregister()
     {
-        if (_playerDashSkill != null)
-        {
-            _playerDashSkill.OnDashActivated -= ActivateDamageBoost;
-        }
 
-        if (_playerAttack != null)
-        {
-            _playerAttack.IsEvasionBoostActive = false;
-        }
-
+        PlayerEvents.OnPlayerUsedUtilitySkill -= ActivateDamageBoost;
         base.Unregister();
     }
 
     // se llama siempre q se haga un dash 
     private void ActivateDamageBoost()
     {
-        if (_playerAttack != null)
+        if (_BuffManager != null)
         {
-            if (!_playerAttack.IsEvasionBoostActive)
-            {
-                // solo registro la primera
-                _playerAttack.RegisterEvasionBoost();
-            }
+            // pasamos el buffo del Item
+            _BuffManager.AddNewBuff(_BuffSO.BuffID, _BuffSO, ItemStacks, _Context);
 
-            // activo daño para el proximo golpe
-            _playerAttack.IsEvasionBoostActive = true;
-            Debug.Log("TENGO DOUBLE DAMAGE EN EL PROXIMO ATAQUE x2");
         }
     }
 
@@ -98,7 +70,24 @@ public class EvasionDamageItemLogic : ItemLogic
         Destroy(this.gameObject);
     }
 
-    public override void AddStack(){} // no hay stacks para este me peleo con cualquiera, por ende no lo pongo en el float stat list
-    public override void RemoveStack(){} 
-    public override void OnDrop() { }
+    public override void AddStack()
+    {
+        ItemStacks++;
+    } 
+    // no hay stacks para este me peleo con cualquiera
+    // , por ende no lo pongo en el float stat list
+    //MENTIRA!!!! TE DECLARO LA GUERRA WEON!!, pato
+    public override void RemoveStack()
+    {
+        ItemStacks--;
+        if(ItemStacks <= 0 && IsInventoryMaster)
+        {
+            Unregister();
+            Destroy(this.gameObject);
+        }
+    } 
+    public override void OnDrop() 
+    {
+        RemoveStack();
+    }
 }

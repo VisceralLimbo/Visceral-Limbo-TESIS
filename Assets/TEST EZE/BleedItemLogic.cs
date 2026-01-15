@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BleedItemLogic : ItemLogic
+public class BleedItemLogic : ItemLogic, I_OnHitItem
 {
-    // danio base por tick
-    [SerializeField] private float baseBleedDamage = 2f;
-    // duracion del sangrado
-    [SerializeField] private float bleedDuration = 5f;
-    // tickrate
-    [SerializeField] private float bleedTickRate = 1f;
 
+
+
+
+    [Tooltip("Bleed Scriptable Object Data")]
+    [SerializeField] BuffSO _BleedSO;
+
+    [Space]
     // refe de la espada
     private SwordTest _Sword;
     private ParticleSystem swordParticles;
@@ -86,43 +87,19 @@ public class BleedItemLogic : ItemLogic
 
     public override void AddStack()
     {
-        if (ItemStacks == 0)
-        {
-            var statManager = _Context.Stats;
 
-            StatModifierFloat statMod = new StatModifierFloat // stat modificador de danio de sangrado
+            // pase todo el efecto a playerattack quiza deberiamos tener un manager para todos los efectos son bastantes..
+            PlayerMeleeAttackComponent?.SetBleedEffectActive(true);
+
+            // particulas ya no estan en pickup
+            if (swordParticles != null)
             {
-                ModifierValueFloat = baseBleedDamage,
-                ModType = ModifierType.flat,
-                EffectName = "BleedItemLogic",
-                Source = this
-            };
-            statManager.UpdateFloatStatValue("Bleed", statMod);
-            ItemStacks++;
-        }
-        else if (ItemStacks >= 1)
-        {
-            ItemStacks++;
-            var statManager = _Context.Stats;
-            StatModifierFloat statMod = new StatModifierFloat // stat modificador de danio de sangrado
-            {
-                ModifierValueFloat = baseBleedDamage * ItemStacks,
-                ModType = ModifierType.flat,
-                EffectName = "BleedItemLogic",
-                Source = this
-            };
-            statManager.UpdateFloatStatValue("Bleed", statMod);
-        }
+                swordParticles.gameObject.SetActive(true);
+                swordParticles.Play();
+            }
 
-        // pase todo el efecto a playerattack quiza deberiamos tener un manager para todos los efectos son bastantes..
-        PlayerMeleeAttackComponent?.SetBleedEffectActive(true);
-
-        // particulas ya no estan en pickup
-        if (swordParticles != null)
-        {
-            swordParticles.gameObject.SetActive(true);
-            swordParticles.Play();
-        }
+        ItemStacks += 1;
+     
     }
 
     public override void RemoveStack()
@@ -130,8 +107,35 @@ public class BleedItemLogic : ItemLogic
         base.RemoveStack();
     }
 
-    // func para obtener los valores del sangrado de swordtest
-    public float GetBleedDamage() => baseBleedDamage * ItemStacks;
-    public float GetBleedDuration() => bleedDuration;
-    public float GetBleedTickRate() => bleedTickRate;
+
+
+
+    public void OnProcEffect(PlayerContext Inflictor, DamageScore DMS, Health_Component VictimHP)
+    {
+        if(Inflictor == null || DMS == null || VictimHP == null)
+        {
+            Debug.Log("Couldnt inflict bleed Inflictor = " 
+                + Inflictor.name 
+                + " DamageScore " 
+                + DMS + " HealthComponent " 
+                + VictimHP.name);
+            return;
+        }
+
+        // asumimos que golpeamos a algo correcto
+
+        //1) ADQUIRIMOS EL BUFFMANAGER DE LA VICTIMA
+        if(DMS.Victim != null)
+        {
+                if (DMS.Victim.BuffManager != null)
+                {
+                    BuffManager buffManager = DMS.Victim.BuffManager;
+                    buffManager.AddNewBuff(_BleedSO.BuffID, _BleedSO, ItemStacks, Inflictor);
+                }
+        }
+   
+
+      
+
+    }
 }

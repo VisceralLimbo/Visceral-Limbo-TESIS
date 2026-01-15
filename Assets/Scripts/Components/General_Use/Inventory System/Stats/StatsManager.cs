@@ -95,6 +95,10 @@ public class StatsManager : MonoBehaviour
                 return;
             }
         }
+        else
+        {
+            Debug.LogWarning("[Visceral Error] StatManager, no stat exist called " + StatID);
+        }
     }
 
     // lo mismo que en stat no haba remover haci q lo hice 

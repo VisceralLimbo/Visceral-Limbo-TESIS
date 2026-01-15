@@ -11,6 +11,8 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] private List<I_ItemActiveItem> _ActiveItems = new List<I_ItemActiveItem>();
 
+    [SerializeField] private List<I_OnHitItem> _OnHitItems= new List<I_OnHitItem>();
+
     [SerializeField] StatsManager _StatsManager;
 
     [SerializeField] PlayerContext _Context;
@@ -59,6 +61,11 @@ public class InventoryManager : MonoBehaviour
             {
                 print("inventory: thats an active item!");
                 _ActiveItems.Add(ActiveItem);
+            }
+            
+            if(NewComponentItem is I_OnHitItem OnHitItem && OnHitItem != null)
+            {
+                _OnHitItems.Add(OnHitItem);
             }
 
         }
@@ -143,5 +150,17 @@ public class InventoryManager : MonoBehaviour
     {
         return _Inventory;
 
+    }
+
+
+    public void ProcOnHitEffects(PlayerContext Context,DamageScore DMS, Health_Component VictimHP)
+    {
+        if(_OnHitItems.Count > 0)
+        {
+            foreach(I_OnHitItem item in _OnHitItems)
+            {
+                item.OnProcEffect(Context,DMS,VictimHP);
+            }
+        }
     }
 }

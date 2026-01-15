@@ -45,9 +45,9 @@ public class BuffSO : ScriptableObject
     [Header("References")]
     [Tooltip("referencia de la clase del buffbehaviour")]
     public MonoScript BuffBehaviorScript;
-    #endif
+#endif
     // usado para assembly y getType()
-    public string AssemblyQualifiedName { get; private set; }
+    public string AssemblyQualifiedName;
 
     private void OnValidate()
     {
@@ -57,11 +57,24 @@ public class BuffSO : ScriptableObject
             ShouldScaleWithMultipleInstances = !ShouldOverrideSameBuffs;
         }
 #if UNITY_EDITOR
-        if(AssemblyQualifiedName == null && BuffBehaviorScript != null)
+        
+
+        if(BuffBehaviorScript != null)
         {
             var T = BuffBehaviorScript.GetClass();
+            if( T != null)
+            {
+                // Sobreescribimos siempre para asegurar que esté al día
+                AssemblyQualifiedName = T.AssemblyQualifiedName;
 
-            AssemblyQualifiedName= T.AssemblyQualifiedName;
+                // Forzar a Unity a saber que el archivo cambió (útil para guardar cambios)
+                EditorUtility.SetDirty(this);
+            }
+        }
+        // Si borraste el script, borramos el string para evitar errores fantasma
+        else
+        {
+            AssemblyQualifiedName = "";
         }
 
 #endif

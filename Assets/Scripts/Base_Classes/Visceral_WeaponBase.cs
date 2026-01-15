@@ -8,6 +8,7 @@ public class Visceral_WeaponBase : Visceral_Script
     public float Damage,KnockBack;
     [SerializeField] protected List<HitBox> _WeaponColliders = new List<HitBox>();
     public Player_Base PlayerData;
+    [SerializeField] PlayerContext _Context;
 
     public Action StartAttack;
     public Action EndAttack;
@@ -22,7 +23,10 @@ public class Visceral_WeaponBase : Visceral_Script
     public virtual void AddWeaponCollider(HitBox HTBox) { if (!_WeaponColliders.Contains(HTBox))
                                                                _WeaponColliders.Add(HTBox); }
 
-    public virtual void NotifyHit(Collider other,Health_Component HPComp = null) { }
+    public virtual void NotifyHit(Collider other,Health_Component HPComp = null) 
+    {
+      
+    }
 
 
 }
