@@ -67,6 +67,9 @@ public class SwordTest : Visceral_WeaponBase
    
         HPComp.TakeDamageWithKnockback(Dir,KnockBack,damageScore);
 
+        //
+        PlayerEvents.PlayerSucessfulHit();
+
         // notifico al flash sobre el bleed
         EnemyDamageFlash damageFlash = HPComp.GetComponent<EnemyDamageFlash>();
         if (damageFlash != null)
@@ -74,7 +77,11 @@ public class SwordTest : Visceral_WeaponBase
             damageFlash.SetBleedStatus(true);
         }
 
+
+
         SlowMotion.Stop(0.1f, 0.05f, false);
+
+
     }
 
 

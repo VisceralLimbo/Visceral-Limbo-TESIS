@@ -13,9 +13,9 @@ public class PlayerAnimHandler : MonoBehaviour
     private void OnEnable()
     {
         PlayerEvents.OnAttack += AttackAnim;
-        PlayerEvents.OnDash += DashAnim;
-        PlayerEvents.OnParry += ParryAnim;
-        PlayerEvents.OnWhirlwind += WhirlwindAnim;
+        PlayerEvents.OnPlayerUsedUtilitySkill += DashAnim;
+        PlayerEvents.OnPlayerUsedSkill2 += ParryAnim;
+        PlayerEvents.OnPlayerUsedSkill1 += WhirlwindAnim;
     }
     private void AttackAnim() => _anim.SetTrigger("Attack");
     private void DashAnim() => _anim.SetTrigger("Dash");
@@ -24,8 +24,8 @@ public class PlayerAnimHandler : MonoBehaviour
     private void OnDisable()
     {
         PlayerEvents.OnAttack -= AttackAnim;
-        PlayerEvents.OnDash -= DashAnim;
-        PlayerEvents.OnParry -= ParryAnim;
-        PlayerEvents.OnWhirlwind -= WhirlwindAnim;
+        PlayerEvents.OnPlayerUsedUtilitySkill -= DashAnim;
+        PlayerEvents.OnPlayerUsedSkill2 -= ParryAnim;
+        PlayerEvents.OnPlayerUsedSkill1 -= WhirlwindAnim;
     }
 }

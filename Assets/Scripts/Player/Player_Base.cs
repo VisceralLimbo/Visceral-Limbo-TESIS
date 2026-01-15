@@ -282,11 +282,13 @@ public class Player_Base : Visceral_Script
         {
             _SkillManager.TryUseSkill("Skill1");
             OnPlayerSkillUse?.Invoke();
+            PlayerEvents.PlayerUsedSkill1();
         }
         if (Inputs.Ability_2)
         {
             _SkillManager.TryUseSkill("Skill2");
             OnPlayerSkillUse?.Invoke();
+            PlayerEvents.PlayerUsedSkill2();
         }
         if (Inputs.Ultimate)
         {
@@ -302,6 +304,7 @@ public class Player_Base : Visceral_Script
         {
             _SkillManager.TryUseSkill("Support");
             OnPlayerSkillUse?.Invoke();
+            PlayerEvents.PlayerUsedUtilSkill();
         }
 
         _SkillManager.VS_RunLogic();

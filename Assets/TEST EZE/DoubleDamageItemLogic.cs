@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class DoubleDamageItemLogic : ItemLogic
 {
-    [SerializeField] private float damageMultiplierBoost = 1f;
-    private const string DAMAGE_STAT_NAME = "DamageMultiplier"; //tiene q ser igual q en el float stat list
+    [SerializeField] private float damageMultiplierBoost = 2f;
+    [SerializeField] private string DAMAGE_STAT_NAME = "BaseAttack"; //tiene q ser igual q en el float stat list
     private const string EFFECT_NAME = "DoubleDamageItemLogicBoost";
 
     // guardo el acumulado del item
@@ -93,7 +93,7 @@ public class DoubleDamageItemLogic : ItemLogic
         StatModifierFloat damageMod = new StatModifierFloat
         {
             ModifierValueFloat = value,
-            ModType = ModifierType.flat,
+            ModType = ModifierType.PercentMult,
             EffectName = EFFECT_NAME, // el nombre seria el ID
             Source = this
         };
@@ -125,8 +125,19 @@ public class DoubleDamageItemLogic : ItemLogic
     public override void AddStack()
     {
         ItemStacks++;
-        //this
-        _totalBoostValue = damageMultiplierBoost * ItemStacks;
+
+        // para que escale linealmente la potencia del boost,
+        // hago esta cuenta matematica. donde el valor inicial es multiplicado por el escalado del stack
+        // PARA CONTROLAR LA TASA DE ESCALADO, HAY QUE CAMBIAR EL 0.05F DONDE 1.05F REPRESENTA UN CRECIMIENTO DEL 105% DE POTENCIA
+        if(ItemStacks > 1)
+        {
+            //this
+            _totalBoostValue = damageMultiplierBoost * (1 * 0.05f * (ItemStacks - 1));
+        }
+        else
+        {
+            _totalBoostValue = damageMultiplierBoost;
+        }
 
         if (_Context != null)
         {

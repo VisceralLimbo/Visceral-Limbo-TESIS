@@ -67,6 +67,12 @@ public class FloatStat : Stat
     {
         var floatmod = (StatModifierFloat)mod;
 
+        if(EffectID == "")
+        {
+            Debug.LogError("Key is null" + mod.EffectName);
+            return;
+        }
+
         if(!Modifiers.ContainsKey(EffectID))
         {
             Modifiers.Add(EffectID, floatmod);

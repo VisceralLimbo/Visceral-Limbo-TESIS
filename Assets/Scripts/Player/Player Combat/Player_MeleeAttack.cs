@@ -199,26 +199,20 @@ public class Player_MeleeAttack : Visceral_Script
 
         // agarro el multiplicador desde las estadisticas
         float currentDamageMultiplier = 1f; // el default
-        float flatDamageBoost = 0f;         // nuevo para el progreso q compro
 
         if (_PlayerContext != null && _PlayerContext.Stats != null)
         {
             //DamageMultiplier es lo seteado en el float stat list 
-            currentDamageMultiplier = _PlayerContext.Stats.GetFloatStatValue("DamageMultiplier");
-
-            // el statid que el playercontext va a actualizar
-            flatDamageBoost = _PlayerContext.Stats.GetFloatStatValue("BaseDamageFlatBoost");
+            currentDamageMultiplier = _PlayerContext.Stats.GetFloatStatValue("BaseAttack");
         }
 
+        // rework!
         // aplico el dd si la evasion esta true
         if (IsEvasionBoostActive)
         {
-            // si esta en true se usa el x2 ignorando los multis que puedas llegar a tener por el otro item de 30% de vida == dd
-            currentDamageMultiplier = EVASION_MULTIPLIER;
-
             // despues del golpe queda en false
             IsEvasionBoostActive = false;
-            Debug.Log("Golpe de evasion x2 aplicado"); // test
+
             // elimino registro
             UnregisterEvasionBoost();
         }
@@ -231,8 +225,8 @@ public class Player_MeleeAttack : Visceral_Script
         //obtenemos el ataque actual
         var currentAttack = CurrentCombo[_ComboCounter];
 
-        // (dmg del so * el multiplicador del statsmanager) + el q compro
-        float finalCalculatedDamage = (currentAttack.Damage * currentDamageMultiplier) + flatDamageBoost;
+        // (daño basado en en la animacion + baseDamage)
+        float finalCalculatedDamage = (currentAttack.Damage + currentDamageMultiplier);
 
         // seteamos variables de daño y knockback
         _Weapon.Damage = finalCalculatedDamage; // uso el calculado de arriba
@@ -469,10 +463,6 @@ public class Player_MeleeAttack : Visceral_Script
         }
     }
 
-    private void PlaySound(bool HitTarget)
-    {
-
-    }
 
     #region Misc
     void sheateWeapon()
