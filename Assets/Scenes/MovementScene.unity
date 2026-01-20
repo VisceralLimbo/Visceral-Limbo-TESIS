@@ -701,6 +701,74 @@ MonoBehaviour:
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 0}
+--- !u!1001 &98717238
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8469102489433295712, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_Name
+      value: Trampa de pinchos fbx (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 391.84534
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 49.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 242.66461
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134315423225614810, guid: 515620877db14ab46bf6133e5eb09d84,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 515620877db14ab46bf6133e5eb09d84, type: 3}
 --- !u!1 &104896530
 GameObject:
   m_ObjectHideFlags: 0
@@ -3456,12 +3524,12 @@ PrefabInstance:
     - target: {fileID: 4790820727104195007, guid: 1a5c165768663ca4da9c92a0410adea7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 380.53476
+      value: 380.536
       objectReference: {fileID: 0}
     - target: {fileID: 4790820727104195007, guid: 1a5c165768663ca4da9c92a0410adea7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 50.74
+      value: 50.744
       objectReference: {fileID: 0}
     - target: {fileID: 4790820727104195007, guid: 1a5c165768663ca4da9c92a0410adea7,
         type: 3}
@@ -5921,6 +5989,7 @@ GameObject:
   - component: {fileID: 1907159823}
   - component: {fileID: 1907159822}
   - component: {fileID: 1907159826}
+  - component: {fileID: 1907159827}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -6040,6 +6109,19 @@ MonoBehaviour:
   timeBetweenSounds: 1
   withTransform: 0
   WithRandomPitch: 1
+--- !u!114 &1907159827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907159820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19e8ad2c5458f7945bd1411ca3a00ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _buffToApply: {fileID: 11400000, guid: 4d37b0c0839ef3e4b802176eca0c460a, type: 2}
 --- !u!1 &1927591963
 GameObject:
   m_ObjectHideFlags: 0
@@ -8101,6 +8183,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 2.6036864e-16
       objectReference: {fileID: 0}
+    - target: {fileID: 6500121958363365470, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: _MovementStatID
+      value: BaseSpeed
+      objectReference: {fileID: 0}
     - target: {fileID: 6575929226009768591, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -8513,6 +8600,7 @@ SceneRoots:
   - {fileID: 1023079834}
   - {fileID: 1380898204}
   - {fileID: 1786100805}
+  - {fileID: 98717238}
   - {fileID: 1627031541}
   - {fileID: 651972815}
   - {fileID: 1782187668}

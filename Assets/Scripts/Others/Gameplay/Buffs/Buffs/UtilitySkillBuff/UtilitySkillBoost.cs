@@ -27,6 +27,7 @@ public class UtilitySkillBoost : BuffBehavior
     public override void OnApply(BuffManager manager, StatsManager StatMan)
     {
         _StatMan = StatMan;
+        _buffManager = manager;
 
         if(_BuffSO == null || _StatMan== null)
         {
@@ -45,7 +46,7 @@ public class UtilitySkillBoost : BuffBehavior
         _Mod.ModifierValue = TotalPotency;
         _Mod.ModType = ModifierType.percentAdd;
         _Mod.Source = manager;
-        _Mod.EffectName = "AttackBuff";
+        _Mod.EffectName = _BuffSO.BuffID;
 
         if(_Mod == null)
         {

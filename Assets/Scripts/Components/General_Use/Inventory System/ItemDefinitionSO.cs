@@ -23,6 +23,7 @@ public class ItemDefinitionSO : ScriptableObject
 
     [SerializeField] public GameObject ItemDataPrefab;
 
+
     /// <summary>
     /// añadimos un stack de item, RECORDATORIO:
     /// esta funcion tambien añade item si no estan en el inventario
@@ -30,6 +31,7 @@ public class ItemDefinitionSO : ScriptableObject
 
     public void Awake()
     {
+        
         ItemStack = 0;
     }
 

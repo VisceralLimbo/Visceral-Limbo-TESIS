@@ -93,7 +93,7 @@ public class SpeedItemLogic : ItemLogic
                 EffectName = "SpeedItemLogicBoost",
                 Source = this
             };
-            statManager.UpdateFloatStatValue("WalkSpeed", statMod);
+            statManager.UpdateFloatStatValue("BaseSpeed", statMod);
 
             StatModifierFloat airMod = new StatModifierFloat // stat modificador de aire
             {
