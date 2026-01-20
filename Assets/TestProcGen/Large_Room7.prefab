@@ -4614,6 +4614,7 @@ GameObject:
   - component: {fileID: 8670085992592870277}
   - component: {fileID: 1451597294118033265}
   - component: {fileID: -6311793579119370717}
+  - component: {fileID: 860780284276680442}
   m_Layer: 11
   m_Name: Large_Room7
   m_TagString: Untagged
@@ -4739,7 +4740,6 @@ MonoBehaviour:
   extraLight: {fileID: 488463189652199697}
   _canHaveEnvironmentalEffect: 1
   _currentEffect: 0
-  _lowVisibilityLightIntensity: 30
   blackFog: {fileID: 874598351120750664}
   fireParticles:
   - {fileID: 4469850973309239729}
@@ -4912,6 +4912,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa80bc0e1ca2c248be11d70a2d2beeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &860780284276680442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6129193342713621542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f087946425476b84cba3e09a6275f984, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableEffects:
+  - type: 1
+    effectData: {fileID: 11400000, guid: 91cc1e0584867e04ba12b5d464191065, type: 2}
+  - type: 2
+    effectData: {fileID: 11400000, guid: 2331aa482f222ed46a264a71c6131cf6, type: 2}
 --- !u!1 &6256245280853462728
 GameObject:
   m_ObjectHideFlags: 0
