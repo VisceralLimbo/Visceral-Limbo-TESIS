@@ -48470,7 +48470,6 @@ MonoBehaviour:
   extraLight: {fileID: 409632141}
   _canHaveEnvironmentalEffect: 1
   _currentEffect: 0
-  _lowVisibilityLightIntensity: 0.05
   blackFog: {fileID: 0}
   fireParticles:
   - {fileID: 972524016}
@@ -72502,7 +72501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemySpawns:
-  - {fileID: 5060095149654849359, guid: 9ac0e9f70b0ffa34d97d23b8f42c922c, type: 3}
+  - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
@@ -89919,6 +89918,12 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 643452556585068416}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1580196210 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1528875936881860689, guid: a7dd48b78eb2a17499d8648287db64e0,
+    type: 3}
+  m_PrefabInstance: {fileID: 643452556585068416}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1588169232
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -96073,7 +96078,6 @@ MonoBehaviour:
   extraLight: {fileID: 168453187}
   _canHaveEnvironmentalEffect: 1
   _currentEffect: 0
-  _lowVisibilityLightIntensity: 0.05
   blackFog: {fileID: 0}
   fireParticles:
   - {fileID: 729918820}
@@ -96919,6 +96923,7 @@ GameObject:
   - component: {fileID: 1732943720}
   - component: {fileID: 1732943721}
   - component: {fileID: 1732943722}
+  - component: {fileID: 1732943723}
   m_Layer: 0
   m_Name: Room1
   m_TagString: Untagged
@@ -97037,6 +97042,7 @@ Transform:
   - {fileID: 1076840666}
   - {fileID: 1947264501}
   - {fileID: 1372278376}
+  - {fileID: 1580196210}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1732943720
@@ -97130,9 +97136,8 @@ MonoBehaviour:
   endWaveColor: {r: 0.1954432, g: 0.6792453, b: 0.6356082, a: 1}
   lightsChanged: 0
   extraLight: {fileID: 42560637}
-  _canHaveEnvironmentalEffect: 0
-  _currentEffect: 2
-  _lowVisibilityLightIntensity: 0.5
+  _canHaveEnvironmentalEffect: 1
+  _currentEffect: 0
   blackFog: {fileID: 1580196208}
   fireParticles:
   - {fileID: 1401498352}
@@ -97269,6 +97274,23 @@ MonoBehaviour:
   - {fileID: 1312721252}
   - {fileID: 1312721250}
   spawnerManager: {fileID: 1732943720}
+--- !u!114 &1732943723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732943718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f087946425476b84cba3e09a6275f984, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableEffects:
+  - type: 1
+    effectData: {fileID: 11400000, guid: 91cc1e0584867e04ba12b5d464191065, type: 2}
+  - type: 2
+    effectData: {fileID: 11400000, guid: 2331aa482f222ed46a264a71c6131cf6, type: 2}
 --- !u!1001 &1737919032
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105910,7 +105932,6 @@ MonoBehaviour:
   extraLight: {fileID: 875830946}
   _canHaveEnvironmentalEffect: 1
   _currentEffect: 0
-  _lowVisibilityLightIntensity: 0.05
   blackFog: {fileID: 0}
   fireParticles:
   - {fileID: 1111521125}
@@ -123024,22 +123045,37 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1732943719}
     m_Modifications:
     - target: {fileID: 1528875936881860689, guid: a7dd48b78eb2a17499d8648287db64e0,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0665071
+      objectReference: {fileID: 0}
+    - target: {fileID: 1528875936881860689, guid: a7dd48b78eb2a17499d8648287db64e0,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.78022
+      objectReference: {fileID: 0}
+    - target: {fileID: 1528875936881860689, guid: a7dd48b78eb2a17499d8648287db64e0,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.0435442
+      objectReference: {fileID: 0}
+    - target: {fileID: 1528875936881860689, guid: a7dd48b78eb2a17499d8648287db64e0,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 882
+      value: -24.6
       objectReference: {fileID: 0}
     - target: {fileID: 1528875936881860689, guid: a7dd48b78eb2a17499d8648287db64e0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 667.6
+      value: 1.614624
       objectReference: {fileID: 0}
     - target: {fileID: 1528875936881860689, guid: a7dd48b78eb2a17499d8648287db64e0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1590.72
+      value: 11.76001
       objectReference: {fileID: 0}
     - target: {fileID: 1528875936881860689, guid: a7dd48b78eb2a17499d8648287db64e0,
         type: 3}
@@ -125095,7 +125131,6 @@ SceneRoots:
   - {fileID: 453630014}
   - {fileID: 142622155}
   - {fileID: 567211849}
-  - {fileID: 643452556585068416}
   - {fileID: 2067604936}
   - {fileID: 1153828702}
   - {fileID: 1787202463}
