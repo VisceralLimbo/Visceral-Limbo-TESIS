@@ -9,6 +9,8 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] GameObject _Model;
     [SerializeField] Rigidbody _RB;
+    [SerializeField] StatsManager _StatMan;
+    [Space]
 
     [Header("Variables")]
     [SerializeField] Vector3 _TargetVelocity;
@@ -18,12 +20,18 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [SerializeField] float _BaseMovementSpeed;
     [SerializeField] float _MovementAccel;
     [SerializeField] float _MaxRotationSpeed;
+    [Space]
 
     [Header("Knockback Config")]
     [SerializeField] bool GotKnockbacked;
     [SerializeField] float _KnockbackDecay;
     [SerializeField] Vector3 _KnockbackVelocity;
     [SerializeField] float _KnockbackResistance;
+    [Space]
+
+    [Header("Stats Setup")]
+    [SerializeField] string _MovementStat;
+    [SerializeField] string _KnockbackResistanceStat;
 
     Vector3 _AddExternalVelocity;
 
@@ -68,6 +76,17 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
                 print("death subscription");
             }
         }
+        if(_StatMan == null)
+        {
+            StatsManager _stat = this.GetComponentInParent<StatsManager>();
+            if(_stat != null)
+            {
+                _StatMan = _stat;
+
+                _StatMan.OnStatChanged += UpdateStatValues;
+            }
+        }
+
 
         _BaseMovementSpeed = _MovementSpeed;
     }
@@ -118,6 +137,18 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     public void ResetMovementSpeed()
     {
         _MovementSpeed = _BaseMovementSpeed;
+    }
+
+    private void UpdateStatValues(string StatID, float Value)
+    {
+        if(StatID == _MovementStat)
+        {
+            _MovementSpeed = Value;
+        }
+        else if ( StatID == _KnockbackResistanceStat)
+        {
+            _KnockbackResistance = Value;
+        }
     }
 
 

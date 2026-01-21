@@ -16,12 +16,27 @@ public class Charge_Collider : Visceral_Script
     [SerializeField] bool _Active;
     public LayerMask _Masks;
 
+    [Space]
+    [Header("Stats")]
+    [SerializeField] StatsManager _Statman;
+    [SerializeField] string _DamageStatID;
+    [SerializeField] string _KnockbackStatID;
 
 
     public override void VS_InitializeWithParameters(params object[] a)
     {
         _OwnerContext = (PlayerContext)a[0];
         _OwnerGameObject = (GameObject)a[1];
+
+        if(_Statman == null)
+        {
+            _Statman = _OwnerContext.Stats;
+        }
+
+        if(_Statman != null)
+        {
+            _Statman.OnStatChanged += UpdateStats;
+        }
     }
 
 
@@ -138,6 +153,20 @@ public class Charge_Collider : Visceral_Script
                     CameraShake.instance.ShakeCamera(0.5f, 0.5f * CameraShakeIntensity.currentIntensity, ShakeType.AllDirections);
             }
         }
+    }
+
+    private void UpdateStats(string StatID,float Value)
+    {
+        if (StatID == _DamageStatID)
+        {
+            _ChargeDamage = Value;
+            _BiteDamage = Value / 2;
+        }
+        else if (StatID == _KnockbackStatID) _knockback = Value;
+
+
+
+
     }
 
 }

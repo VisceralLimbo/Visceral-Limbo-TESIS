@@ -16,7 +16,7 @@ public class Decayed_Attack : BaseState
     [SerializeField] GameObject flashAttackParticle;
 
     [Header("Variables")]
-    [SerializeField] float _AttackSpeed;
+    [SerializeField] float _AttackSpeed,_attack;
     [SerializeField] float _SafeSpace,_FarAway;
     Vector3 TargetDirection;
     [SerializeField] bool _TargetIsTooClose,_TargetIsTooFar;
@@ -26,6 +26,10 @@ public class Decayed_Attack : BaseState
     Coroutine _FlashingCoroutine;
 
     bool isFlashing = false;
+
+    [Space]
+    [Header("Stats")]
+    [SerializeField] string AttackStatID, AttackSpeedStatID;
 
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
@@ -70,6 +74,18 @@ public class Decayed_Attack : BaseState
         _MovementStrategy = stateMachine.GetComponentInChildren<IMovementStrategy>();
         _AnimHandler.TryGetAnimator("Decayed", out Animator _Anime);
         _Anim = _Anime;
+
+
+        StatsManager _StatMan = CTX.GetComponent<StatsManager>();
+        if(_StatMan == null)
+        {
+            _StatMan = CTX.GetComponentInChildren<StatsManager>();
+        }
+
+        if(_StatMan != null)
+        {
+            _StatMan.OnStatChanged += UpdateStats;
+        }
     }
 
     float pulse = 0;
@@ -147,8 +163,9 @@ public class Decayed_Attack : BaseState
         _BulletSpawnPoint.LookAt(correctTarget, _KCC.CharacterUp);
 
         var bullet = Instantiate(_BulletPrefab, _BulletSpawnPoint.position, _BulletSpawnPoint.rotation);
-        bullet.GetComponent<BulletDumb>().SetOwner(stateMachine.gameObject, stateMachine.GetComponent<PlayerContext>());
-
+        BulletDumb BulletScript = bullet.GetComponent<BulletDumb>();
+        BulletScript.SetOwner(stateMachine.gameObject, stateMachine.GetComponent<PlayerContext>());
+        BulletScript.SetDamage(_attack);
 
         // prefab de la paritucla
         if (flashAttackParticle != null)
@@ -172,5 +189,11 @@ public class Decayed_Attack : BaseState
         pulse = 0;
         isFlashing = false;
         _FlashingCoroutine = null;
+    }
+
+    private void UpdateStats(string StatID,float Value)
+    {
+        if (StatID == AttackSpeedStatID) _AttackSpeed = Value;
+        else if (StatID == AttackStatID) _attack = Value;
     }
 }

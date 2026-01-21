@@ -20,6 +20,11 @@ public class Decayed_MoveState : BaseState
     [SerializeField] float _MinDistance;
     [SerializeField] float _MaxDistance;
     [SerializeField] float _RunDirection = 1f; // direccion de movimiento, si es -1 signfica huir
+
+    [Space]
+    [Header("Stats")]
+    [SerializeField] string _MovementStatID;
+
     public override void OnInitialize(VisceralStateMachine CTX)
     {
         base.OnInitialize(CTX);
@@ -56,6 +61,19 @@ public class Decayed_MoveState : BaseState
                 _AnimatorHandler = CTX.gameObject.GetComponentInChildren<AnimatorHandler>();
             }
         }
+
+        StatsManager _Stats = CTX.GetComponent<StatsManager>();
+        if (_Stats == null)
+        {
+            CTX.GetComponentInChildren<StatsManager>();
+        }
+
+        if(_Stats != null)
+        {
+            _Stats.OnStatChanged += UpdateStats;
+        }
+        
+
 
         _MovementStrategy.Initialize(_KCC, CTX.gameObject);
         _Target = FindObjectOfType<Player_Movement>().transform;
@@ -166,5 +184,10 @@ public class Decayed_MoveState : BaseState
         return false;
     }
 
+
+    private void UpdateStats(string StatID,float Value)
+    {
+        if(StatID == _MovementStatID) _Speed = Value;
+    }
 
 }

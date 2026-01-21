@@ -13,13 +13,16 @@ public class State_WretchAttack : BaseState
     [SerializeField] Animator _Anim; // cache de animador
     [SerializeField] Transform _Target;
     IMovementStrategy _MovementStrategy;
+    [Space]
 
     [Header("Variables")]
     [SerializeField] bool _FinishedAttack;
     [SerializeField] float _AttackMovementStrenght;
+    [Space]
 
     [Header("Events")]
     public UnityEvent OnChargeAttackStart,OnChargeAttackEnd;
+    [Space]
 
 
     float pulse = 0;
@@ -102,6 +105,19 @@ public class State_WretchAttack : BaseState
             }
         }
 
+        if(_StatMan == null)
+        {
+            _StatMan = CTX.GetComponent<StatsManager>();
+            if(_StatMan == null)
+            {
+                CTX.GetComponentInChildren<StatsManager>();
+            }
+        }
+
+        if(_StatMan != null)
+        {
+
+        }
 
         _AnimatorHandler.TryGetAnimator("Wretched", out Animator Anim);
         _Anim = Anim;
@@ -116,4 +132,6 @@ public class State_WretchAttack : BaseState
             _FinishedAttack = true;
         }
     }
+
+
 }

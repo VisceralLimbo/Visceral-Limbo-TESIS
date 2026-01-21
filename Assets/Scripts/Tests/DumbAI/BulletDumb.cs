@@ -64,6 +64,11 @@ public class BulletDumb : MonoBehaviour, IParriable
         Physics.IgnoreCollision(this._Collider, _OwnerContext.PlayerTransform.GetComponent<Collider>());
     }
 
+    public void SetDamage(float NewDamage)
+    {
+        damage = NewDamage;
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
