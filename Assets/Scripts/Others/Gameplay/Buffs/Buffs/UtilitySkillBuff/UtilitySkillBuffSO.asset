@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: UtilitySkillBuffSO
   m_EditorClassIdentifier: 
   BuffType: 0
-  BuffID: 
-  BuffName: 
-  BuffDescription: 
-  BuffDuration: 0
+  BuffID: Util_Skill_Buff_On_Use
+  BuffName: UtilityBuff
+  BuffDescription: Increased damage after performing an utility Skill
+  BuffDuration: 10
   IsInfinityDuration: 0
-  MaxBuffPotency: 0
-  ShouldOverrideSameBuffs: 0
+  MaxBuffPotency: 1
+  ShouldOverrideSameBuffs: 1
   ShouldScaleWithMultipleInstances: 0
-  BuffBehaviorScript: {fileID: 0}
+  BuffBehaviorScript: {fileID: 11500000, guid: 5cb1b13100fd5db468e86633f44d901b, type: 3}
+  AssemblyQualifiedName: UtilitySkillBoost, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null

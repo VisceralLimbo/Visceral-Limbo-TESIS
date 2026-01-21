@@ -232,7 +232,7 @@ public class Player_MeleeAttack : Visceral_Script
         _Weapon.Damage = finalCalculatedDamage; // uso el calculado de arriba
         _Weapon.KnockBack = currentAttack.KnockBack;
 
-        //aceleramos / slowdown de animacion
+        //aceleramos / slowdown de animacion // comentario: reemplazar por statmanager
         _Anim.speed = AttackSpeedMod * TimeDilationManager.GlobalTimeScale;
 
 

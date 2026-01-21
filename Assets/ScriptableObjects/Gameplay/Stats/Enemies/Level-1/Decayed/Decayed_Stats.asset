@@ -10,57 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bcab32ead95da14d989584314c6a723, type: 3}
-  m_Name: PlayerStats
+  m_Name: Decayed_Stats
   m_EditorClassIdentifier: 
   Stats:
   - StatID: MaxHealth
     Statmanager: {fileID: 0}
-    BaseValueFloat: 300
-    FinalValueFloat: 300
+    BaseValueFloat: 0
+    FinalValueFloat: 0
     ModifiersList: []
   - StatID: BaseSpeed
     Statmanager: {fileID: 0}
-    BaseValueFloat: 12
-    FinalValueFloat: 12
-    ModifiersList: []
-  - StatID: AirSpeed
-    Statmanager: {fileID: 0}
-    BaseValueFloat: 10
-    FinalValueFloat: 10
-    ModifiersList: []
-  - StatID: CrouchSpeed
-    Statmanager: {fileID: 0}
-    BaseValueFloat: 8
-    FinalValueFloat: 8
-    ModifiersList: []
-  - StatID: BaseAttack
-    Statmanager: {fileID: 0}
-    BaseValueFloat: 10
+    BaseValueFloat: 0
     FinalValueFloat: 0
     ModifiersList: []
-  - StatID: BaseDamageFlatBoost
+  - StatID: BaseDamage
     Statmanager: {fileID: 0}
     BaseValueFloat: 0
     FinalValueFloat: 0
     ModifiersList: []
-  - StatID: Bleed
+  - StatID: BaseAttackSpeed
     Statmanager: {fileID: 0}
     BaseValueFloat: 0
-    FinalValueFloat: 0
-    ModifiersList: []
-  - StatID: DamageMultiplier
-    Statmanager: {fileID: 0}
-    BaseValueFloat: 1
-    FinalValueFloat: 0
-    ModifiersList: []
-  - StatID: DashDamageZone
-    Statmanager: {fileID: 0}
-    BaseValueFloat: 0
-    FinalValueFloat: 0
-    ModifiersList: []
-  - StatID: MagicAttack
-    Statmanager: {fileID: 0}
-    BaseValueFloat: 15
     FinalValueFloat: 0
     ModifiersList: []
   - StatID: BaseDefense
@@ -73,12 +43,22 @@ MonoBehaviour:
     BaseValueFloat: 0
     FinalValueFloat: 0
     ModifiersList: []
-  - StatID: BaseKnockbackDefense
+  - StatID: BaseKnockback
     Statmanager: {fileID: 0}
     BaseValueFloat: 0
     FinalValueFloat: 0
     ModifiersList: []
-  - StatID: BaseWindowInvulnerability
+  - StatID: BaseKnockbackResistance
+    Statmanager: {fileID: 0}
+    BaseValueFloat: 0
+    FinalValueFloat: 0
+    ModifiersList: []
+  - StatID: BaseInvulnerability
+    Statmanager: {fileID: 0}
+    BaseValueFloat: 0
+    FinalValueFloat: 0
+    ModifiersList: []
+  - StatID: ProyectileVelocity
     Statmanager: {fileID: 0}
     BaseValueFloat: 0
     FinalValueFloat: 0
