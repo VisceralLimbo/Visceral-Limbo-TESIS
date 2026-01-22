@@ -62,7 +62,13 @@ public class HostileNPC_HealthComp : Health_Component
         if(_StatMan != null)
         {
             _StatMan.OnStatChanged += UpdateStats;
+
+            MaxHealth = _StatMan.GetFloatStatValue(_MaxHPStat);
+            Defense = _StatMan.GetFloatStatValue(_DefenseStat);
+            DamageReduction = _StatMan.GetFloatStatValue(_DamageReductionStat);
         }
+
+        
     }
 
     private void UpdateStats(string StatID, float value)

@@ -223,6 +223,8 @@ MonoBehaviour:
   HealingSoundData: []
   CurrentHealth: 0
   MaxHealth: 100
+  DamageReduction: 0
+  Defense: 0
   _RB: {fileID: 0}
   DestroyOnDeath: 0
   DesactivateOnDeath: 0
@@ -696,6 +698,8 @@ MonoBehaviour:
   HealingSoundData: []
   CurrentHealth: 0
   MaxHealth: 100
+  DamageReduction: 0
+  Defense: 0
   _RB: {fileID: 0}
   DestroyOnDeath: 0
   DesactivateOnDeath: 0
@@ -1106,6 +1110,8 @@ MonoBehaviour:
   HealingSoundData: []
   CurrentHealth: 0
   MaxHealth: 100
+  DamageReduction: 0
+  Defense: 0
   _RB: {fileID: 0}
   DestroyOnDeath: 0
   DesactivateOnDeath: 0
@@ -1721,6 +1727,8 @@ MonoBehaviour:
   HealingSoundData: []
   CurrentHealth: 0
   MaxHealth: 100
+  DamageReduction: 0
+  Defense: 0
   _RB: {fileID: 0}
   DestroyOnDeath: 0
   DesactivateOnDeath: 0
@@ -2276,7 +2284,6 @@ MonoBehaviour:
   extraLight: {fileID: 0}
   _canHaveEnvironmentalEffect: 1
   _currentEffect: 0
-  _lowVisibilityLightIntensity: 0.1
   blackFog: {fileID: 0}
   fireParticles: []
 --- !u!4 &601183472
@@ -5581,6 +5588,8 @@ MonoBehaviour:
   HealingSoundData: []
   CurrentHealth: 0
   MaxHealth: 100
+  DamageReduction: 0
+  Defense: 0
   _RB: {fileID: 0}
   DestroyOnDeath: 0
   DesactivateOnDeath: 0
@@ -7638,6 +7647,21 @@ PrefabInstance:
     - target: {fileID: 662010605306157248, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086446552685269146, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086446552685269146, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086446552685269146, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1817444877513855909, guid: 12ab87a74532c144ba81cd8a88625f40,
@@ -7649,6 +7673,16 @@ PrefabInstance:
         type: 3}
       propertyPath: CurrentHealth
       value: 999
+      objectReference: {fileID: 0}
+    - target: {fileID: 2052785069324251790, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: _DamageStatID
+      value: BaseDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2052785069324251790, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: _KnockbackStatID
+      value: BaseKnockback
       objectReference: {fileID: 0}
     - target: {fileID: 3048824881661905011, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
@@ -7728,12 +7762,12 @@ PrefabInstance:
     - target: {fileID: 4746130255494018027, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5541627246095623129, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6444098374858578681, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}

@@ -71,6 +71,8 @@ public class Decayed_MoveState : BaseState
         if(_Stats != null)
         {
             _Stats.OnStatChanged += UpdateStats;
+
+            _Speed = _Stats.GetFloatStatValue(_MovementStatID);
         }
         
 

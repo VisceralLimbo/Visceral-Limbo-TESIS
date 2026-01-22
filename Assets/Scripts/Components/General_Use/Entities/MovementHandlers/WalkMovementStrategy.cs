@@ -84,6 +84,9 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
                 _StatMan = _stat;
 
                 _StatMan.OnStatChanged += UpdateStatValues;
+
+                _MovementSpeed = _StatMan.GetFloatStatValue(_MovementStat);
+                _KnockbackResistance = _StatMan.GetFloatStatValue(_KnockbackResistanceStat);
             }
         }
 

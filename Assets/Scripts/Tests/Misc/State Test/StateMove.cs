@@ -26,7 +26,6 @@ public class StateMove : BaseState
     [SerializeField] float _RandomSoundOffset;
     [SerializeField] SoundData _SoundData;
 
-
     Vector3 targetdirection;
     public override void OnInitialize(VisceralStateMachine CTX)
     {

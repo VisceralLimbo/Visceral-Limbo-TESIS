@@ -22,7 +22,6 @@ public class State_WretchAttack : BaseState
 
     [Header("Events")]
     public UnityEvent OnChargeAttackStart,OnChargeAttackEnd;
-    [Space]
 
 
     float pulse = 0;
@@ -105,20 +104,7 @@ public class State_WretchAttack : BaseState
             }
         }
 
-        if(_StatMan == null)
-        {
-            _StatMan = CTX.GetComponent<StatsManager>();
-            if(_StatMan == null)
-            {
-                CTX.GetComponentInChildren<StatsManager>();
-            }
-        }
-
-        if(_StatMan != null)
-        {
-
-        }
-
+ 
         _AnimatorHandler.TryGetAnimator("Wretched", out Animator Anim);
         _Anim = Anim;
 

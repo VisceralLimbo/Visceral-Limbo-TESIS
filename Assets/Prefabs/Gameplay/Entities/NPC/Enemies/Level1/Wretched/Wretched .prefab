@@ -4367,6 +4367,7 @@ MonoBehaviour:
   _KCC: {fileID: 0}
   _Model: {fileID: 8001548354247194868}
   _RB: {fileID: 3048824881661905011}
+  _StatMan: {fileID: 0}
   _TargetVelocity: {x: 0, y: 0, z: 0}
   _IsActive: 1
   _KillAllMovement: 0
@@ -4378,6 +4379,8 @@ MonoBehaviour:
   _KnockbackDecay: 10
   _KnockbackVelocity: {x: 0, y: 0, z: 0}
   _KnockbackResistance: 0
+  _MovementStat: BaseSpeed
+  _KnockbackResistanceStat: BaseKnockbackResistance
 --- !u!114 &790518200079803162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4484,11 +4487,18 @@ MonoBehaviour:
   HealingSoundData: []
   CurrentHealth: 50
   MaxHealth: 50
+  DamageReduction: 0
+  Defense: 0
   _RB: {fileID: 3048824881661905011}
   DestroyOnDeath: 0
   DesactivateOnDeath: 1
   Died: 0
   _Context: {fileID: 4654570009590822600}
+  _StatMan: {fileID: 0}
+  _MaxHPStat: MaxHealth
+  _DefenseStat: BaseDefense
+  _DamageReductionStat: BaseDamageReduction
+  _DamageInvulnerability: BaseInvulnerability
 --- !u!1 &8132487428885576320
 GameObject:
   m_ObjectHideFlags: 0
@@ -4873,6 +4883,9 @@ MonoBehaviour:
   _Masks:
     serializedVersion: 2
     m_Bits: 1408
+  _Statman: {fileID: 0}
+  _DamageStatID: 
+  _KnockbackStatID: 
 --- !u!1 &8947371924232652332
 GameObject:
   m_ObjectHideFlags: 0

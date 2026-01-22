@@ -12,6 +12,13 @@ public class Health_Component : Visceral_Component
     [SerializeField] protected SoundData[] HealingSoundData;    
 
     public float CurrentHealth, MaxHealth;
+
+    [Tooltip("Damage Reduction es un reductor porcentual del daño entrante que se aplica tras la reduccion directa de defensa (ej: 100 daño - (100 * 0.5f)) = 50 daño entrante")]
+    [SerializeField] protected float DamageReduction;
+
+    [Tooltip("Defense es un reductor directo al daño entrante que se aplica antes de la reduccion porcentual (ej: 100 daño entrante - 15 defensa = 85 daño total)")]
+    [SerializeField] protected float Defense;
+
     public Rigidbody _RB;
     public bool DestroyOnDeath,DesactivateOnDeath,Died;
 
@@ -90,7 +97,31 @@ public class Health_Component : Visceral_Component
     {
         if (Died) return;
 
-        CurrentHealth -= damage;
+        // primero aplicamos defensa
+        float DamageAfterDefense = damage - Defense;
+
+        // a mi parecer, la defensa no debe de ser capaz de completamente anular el daño entrante.
+        // en caso de anular daño, en su lugar el jugador va a recibir 1 de daño.
+        if (DamageAfterDefense > 1)
+        {
+            // ahora aplicamos reduccion de daño
+            float FinalDamage = DamageAfterDefense - (DamageAfterDefense * DamageReduction);
+            int FinalEffectiveDamage = (int)FinalDamage;
+
+            if(FinalDamage >= 1)
+            {
+                CurrentHealth -= FinalEffectiveDamage;
+            }
+            else
+            {
+                CurrentHealth -= 1;
+            }
+        }
+        else
+        {
+                CurrentHealth -= 1;
+        }
+
         OnDamaged?.Invoke();
 
         if (soundData.Length > 0)

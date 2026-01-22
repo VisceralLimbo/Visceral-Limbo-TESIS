@@ -85,6 +85,9 @@ public class Decayed_Attack : BaseState
         if(_StatMan != null)
         {
             _StatMan.OnStatChanged += UpdateStats;
+
+            _attack = _StatMan.GetFloatStatValue(AttackStatID);
+            _AttackSpeed = _StatMan.GetFloatStatValue(AttackSpeedStatID);
         }
     }
 

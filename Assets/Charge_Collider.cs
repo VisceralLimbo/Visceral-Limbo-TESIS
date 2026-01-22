@@ -36,7 +36,13 @@ public class Charge_Collider : Visceral_Script
         if(_Statman != null)
         {
             _Statman.OnStatChanged += UpdateStats;
+
+            _ChargeDamage = _Statman.GetFloatStatValue(_DamageStatID);
+            _BiteDamage = _Statman.GetFloatStatValue(_DamageStatID);
+            _knockback = _Statman.GetFloatStatValue(_KnockbackStatID);
         }
+
+
     }
 
 
@@ -160,7 +166,7 @@ public class Charge_Collider : Visceral_Script
         if (StatID == _DamageStatID)
         {
             _ChargeDamage = Value;
-            _BiteDamage = Value / 2;
+            _BiteDamage = Value;
         }
         else if (StatID == _KnockbackStatID) _knockback = Value;
 
