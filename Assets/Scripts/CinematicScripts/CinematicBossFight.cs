@@ -29,7 +29,12 @@ public class CinematicBossFight : MonoBehaviour
     }
     private void Start()
     {
-        if(visceralStateMachine != null)
+        if (player_Base == null)
+        {
+            player_Base = FindObjectOfType<Player_Base>();
+        }
+
+        if (visceralStateMachine != null)
         {
            visceralStateMachine.enabled = false;
         }
@@ -45,6 +50,22 @@ public class CinematicBossFight : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (!cinematicPlayed)
+            return;
+
+        if (playableDirector != null &&
+            playableDirector.state == PlayState.Playing)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SkipCinematic();
+            }
+        }
+    }
+
+
     private void OnDestroy()
     {
         playableDirector.stopped -= OnTimelineFinished;
@@ -58,7 +79,12 @@ public class CinematicBossFight : MonoBehaviour
         {
             cinematicPlayed = true;
             player_Base = other.GetComponentInParent<Player_Base>();
-            player_Base.SetPlayerInactive();
+            Player_Movement movement = player_Base.GetComponentInChildren<Player_Movement>();
+
+            if (movement != null)
+            {
+                movement.LockMovementImmediate();
+            }
             Camera.main.enabled = false;
             PlayCinematic();
         }
@@ -74,14 +100,28 @@ public class CinematicBossFight : MonoBehaviour
         playableDirector.Play();
     }
 
+    private void SkipCinematic()
+    {
+        playableDirector.Stop();
+    }
+
     private void OnTimelineFinished(PlayableDirector director)
     {
         
         cinematicRoot.SetActive(false);
-        
-        player_Base?.SetPlayerActive();
 
-        if(mainCamera != null)
+        if (player_Base != null)
+        {
+            player_Base.SetPlayerActive();
+
+            Player_Movement movement = player_Base.GetComponentInChildren<Player_Movement>();
+            if (movement != null)
+            {
+                movement.UnlockMovement();
+            }
+        }
+
+        if (mainCamera != null)
         {
             mainCamera.enabled = true;
         }

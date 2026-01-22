@@ -395,16 +395,29 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         }
     }
 
-    private void LockMovement()
+    
+
+    public void LockMovementImmediate()
     {
         IsMovementBlocked = true;
+
+        _RequestedMovement = Vector3.zero;
+        _RequestedAdditiveVelocity = Vector3.zero;
+        _RequestedAdditiveForce = Vector3.zero;
+        _RequestedJump = false;
+        _RequestedSustainJump = false;
+        _RequestedCrouch = false;
+
+        if (_KCCMotor != null)
+        {
+            _KCCMotor.BaseVelocity = Vector3.zero;
+        }
     }
 
-    private void UnlockMovement()
+    public void UnlockMovement()
     {
         IsMovementBlocked = false;
     }
-
 
 
     ///
