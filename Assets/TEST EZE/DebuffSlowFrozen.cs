@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DebuffFrozen : BuffBehavior
 {
-    [SerializeField] string StatID = "WalkSpeed"; // id del stat
+    [SerializeField] string StatID = "BaseSpeed"; // id del stat
     [SerializeField] float _slowAmount = -0.5f; // la cantidad de slow, ta en un 50% ahroa para q se note pero lo podemos ajustar obvio xd
 
     public override void OnApply(BuffManager manager, StatsManager StatMan)

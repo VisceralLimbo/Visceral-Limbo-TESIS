@@ -555,6 +555,7 @@ MonoBehaviour:
   _KCC: {fileID: 5480121978322433914}
   _Model: {fileID: 4498811984456590778}
   _RB: {fileID: 2549169445402206431}
+  _StatMan: {fileID: 0}
   _TargetVelocity: {x: 0, y: 0, z: 0}
   _IsActive: 1
   _KillAllMovement: 0
@@ -566,6 +567,8 @@ MonoBehaviour:
   _KnockbackDecay: 10
   _KnockbackVelocity: {x: 0, y: 0, z: 0}
   _KnockbackResistance: 10
+  _MovementStat: BaseSpeed
+  _KnockbackResistanceStat: KnockbackResistance
 --- !u!114 &4341898696971776908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,6 +649,8 @@ MonoBehaviour:
   HealingSoundData: []
   CurrentHealth: 500
   MaxHealth: 500
+  DamageReduction: 0
+  Defense: 0
   _RB: {fileID: 2549169445402206431}
   DestroyOnDeath: 0
   DesactivateOnDeath: 1
@@ -657,6 +662,9 @@ MonoBehaviour:
   _StartEnemyEvent: StartSpawner
   _EndEnemyEvent: StopSpawner
   _EventBus: {fileID: 0}
+  _HealthStat: MaxHealth
+  _DefenseStat: Defense
+  _DamageReductionStat: DamageReduction
 --- !u!54 &2549169445402206431
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -711,6 +719,7 @@ GameObject:
   - component: {fileID: 7333673483843639958}
   - component: {fileID: 1804251351171486122}
   - component: {fileID: 4503892774817222897}
+  - component: {fileID: 8092944925386223701}
   m_Layer: 7
   m_Name: BossEnemy
   m_TagString: Untagged
@@ -797,13 +806,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3289ddf945ef324ea0b2b94eaabb29d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Stats: {fileID: 0}
+  Stats: {fileID: 8092944925386223701}
   Inventory: {fileID: 0}
+  BuffManager: {fileID: 0}
   PlayerGameObject: {fileID: 4498811984456590778}
   PlayerTransform: {fileID: 5871233309053035945}
   KCCMotor: {fileID: 5480121978322433914}
   faction: 1
   EnemyValueScore: 1000
+--- !u!114 &8092944925386223701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5060095149654849359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a333d27b3b1256b40a3586eed088edb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockData: {fileID: 11400000, guid: 7b58aa5baea121e45896df639973422d, type: 2}
+  FloatStatList: []
 --- !u!1 &5195746678398439864
 GameObject:
   m_ObjectHideFlags: 0

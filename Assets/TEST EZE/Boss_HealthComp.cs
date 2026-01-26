@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Data;
 
 public class Boss_HealthComp : Health_Component
 {
@@ -13,6 +14,8 @@ public class Boss_HealthComp : Health_Component
     [SerializeField] private string _StartEnemyEvent, _EndEnemyEvent;
 
     [SerializeField] LocalEventBusComponent _EventBus;
+
+    [SerializeField] string _HealthStat, _DefenseStat, _DamageReductionStat;
 
     private Combat_UI_Manager Ref_CombatUI;
 
@@ -87,6 +90,30 @@ public class Boss_HealthComp : Health_Component
         {
             Ref_CombatUI = Combat_UI_Manager._Instance;
         }
+
+        StatsManager _StatMan = _Context.Stats;
+           
+
+        if (_StatMan == null)
+        {
+            _StatMan = _Context?.GetComponent<StatsManager>();
+            if (_StatMan == null)
+            {
+                _StatMan = _Context?.GetComponentInChildren<StatsManager>();
+            }
+        }
+
+
+        if (_StatMan != null)
+        {
+            _StatMan.OnStatChanged += UpdateStats;
+
+            MaxHealth = Context.Stats.GetFloatStatValue(_HealthStat);
+            Defense = _StatMan.GetFloatStatValue(_DefenseStat);
+            DamageReduction = _StatMan.GetFloatStatValue(_DamageReductionStat);
+        }
+
+
     }
 
     protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
@@ -119,4 +146,12 @@ public class Boss_HealthComp : Health_Component
 
     }
 
+
+    private void UpdateStats(string StatID, float Value)
+    {
+
+        MaxHealth = Context.Stats.GetFloatStatValue(_HealthStat);
+        Defense = Context.Stats.GetFloatStatValue(_HealthStat);
+        DamageReduction = Context.Stats.GetFloatStatValue(_HealthStat);
+    }
 }
