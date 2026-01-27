@@ -96,7 +96,7 @@ MonoBehaviour:
   _MinDistance: 3
   _MaxDistance: 15
   _RunDirection: 1
-  _MovementStatID: BaseSpeed
+  _MovementStatID: {fileID: 11400000, guid: 06a9673a0529f4d43b28676b24f0c658, type: 2}
 --- !u!1 &2357010806047519017
 GameObject:
   m_ObjectHideFlags: 0
@@ -5125,6 +5125,8 @@ MonoBehaviour:
   PlayerGameObject: {fileID: 5296925727539463049}
   PlayerTransform: {fileID: 1662371530970778147}
   KCCMotor: {fileID: 4127429350620703609}
+  _HPIdentifier: {fileID: 11400000, guid: a24223fe7a7df294d92f45d44ddcd143, type: 2}
+  _DamageIdentifier: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
   faction: 1
   EnemyValueScore: 50
 --- !u!114 &8040269376290409861
@@ -5290,8 +5292,9 @@ MonoBehaviour:
   _KnockbackDecay: 10
   _KnockbackVelocity: {x: 0, y: 0, z: 0}
   _KnockbackResistance: 0
-  _MovementStat: BaseSpeed
-  _KnockbackResistanceStat: BaseKnockback
+  _MovementStat: {fileID: 11400000, guid: 06a9673a0529f4d43b28676b24f0c658, type: 2}
+  _KnockbackResistanceStat: {fileID: 11400000, guid: 5771a42bb69cae941a261dfc753f5536,
+    type: 2}
 --- !u!54 &7459543254969404063
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5353,16 +5356,19 @@ MonoBehaviour:
   MaxHealth: 30
   DamageReduction: 0
   Defense: 0
+  DamageInvulnerability: 0
   _RB: {fileID: 0}
   DestroyOnDeath: 0
   DesactivateOnDeath: 1
   Died: 0
   _Context: {fileID: 7768544437872115800}
-  _StatMan: {fileID: 0}
-  _MaxHPStat: MaxHealth
-  _DefenseStat: BaseDefense
-  _DamageReductionStat: BaseDamageReduction
-  _DamageInvulnerability: BaseInvulnerability
+  _StatMan: {fileID: 7930016059756725658}
+  _MaxHPStat: {fileID: 11400000, guid: a24223fe7a7df294d92f45d44ddcd143, type: 2}
+  _DefenseStat: {fileID: 11400000, guid: 935a9002b9d6fe342b9677362fc8ce90, type: 2}
+  _DamageReductionStat: {fileID: 11400000, guid: 12d0d6da375907f478d82b2971a7c8a4,
+    type: 2}
+  _DamageInvulnerability: {fileID: 11400000, guid: 6d0c10123ee7983448d020fb89391831,
+    type: 2}
 --- !u!114 &2882315107161635345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5561,8 +5567,8 @@ MonoBehaviour:
   _TargetIsTooFar: 0
   _AudioSource: {fileID: 4250433918990917085}
   flashSound: {fileID: 8300000, guid: 4e946c24d2f71c94791fc5baf7298943, type: 3}
-  AttackStatID: BaseDamage
-  AttackSpeedStatID: BaseAttackSpeed
+  AttackStatID: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
+  AttackSpeedStatID: {fileID: 11400000, guid: 86d3f1b42f8a0c541a550749b16903c4, type: 2}
 --- !u!1 &7458350932667516716
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ public class MagicSwordItemLogic : ItemLogic
     [SerializeField] SoundData _PickUpSound;
 
     [Header("Stats")]
-    private StatIdentifier _BaseDamageID;
+    [SerializeField] private StatIdentifier _BaseDamageID;
 
     private void OnTriggerEnter(Collider other)
     {

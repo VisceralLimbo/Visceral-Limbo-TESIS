@@ -8,7 +8,7 @@ public class Player_HealthComp : Health_Component
     [SerializeField] SoundData _LowHP;
 
     [Header("Stats")]
-    [SerializeField] StatIdentifier _MaxHealthID;
+    [SerializeField] StatIdentifier _MaxHealthID,_BaseDefenseID,_BaseDamageReduction,_BaseDamageInvulnerability;
 
     private void Start()
     {

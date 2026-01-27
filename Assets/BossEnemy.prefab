@@ -567,8 +567,9 @@ MonoBehaviour:
   _KnockbackDecay: 10
   _KnockbackVelocity: {x: 0, y: 0, z: 0}
   _KnockbackResistance: 10
-  _MovementStat: BaseSpeed
-  _KnockbackResistanceStat: KnockbackResistance
+  _MovementStat: {fileID: 11400000, guid: 06a9673a0529f4d43b28676b24f0c658, type: 2}
+  _KnockbackResistanceStat: {fileID: 11400000, guid: 5771a42bb69cae941a261dfc753f5536,
+    type: 2}
 --- !u!114 &4341898696971776908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -651,6 +652,7 @@ MonoBehaviour:
   MaxHealth: 500
   DamageReduction: 0
   Defense: 0
+  DamageInvulnerability: 0
   _RB: {fileID: 2549169445402206431}
   DestroyOnDeath: 0
   DesactivateOnDeath: 1
@@ -662,9 +664,10 @@ MonoBehaviour:
   _StartEnemyEvent: StartSpawner
   _EndEnemyEvent: StopSpawner
   _EventBus: {fileID: 0}
-  _HealthStat: MaxHealth
-  _DefenseStat: Defense
-  _DamageReductionStat: DamageReduction
+  _HealthStat: {fileID: 11400000, guid: a24223fe7a7df294d92f45d44ddcd143, type: 2}
+  _DefenseStat: {fileID: 11400000, guid: 935a9002b9d6fe342b9677362fc8ce90, type: 2}
+  _DamageReductionStat: {fileID: 11400000, guid: 12d0d6da375907f478d82b2971a7c8a4,
+    type: 2}
 --- !u!54 &2549169445402206431
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -812,6 +815,8 @@ MonoBehaviour:
   PlayerGameObject: {fileID: 4498811984456590778}
   PlayerTransform: {fileID: 5871233309053035945}
   KCCMotor: {fileID: 5480121978322433914}
+  _HPIdentifier: {fileID: 11400000, guid: a24223fe7a7df294d92f45d44ddcd143, type: 2}
+  _DamageIdentifier: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
   faction: 1
   EnemyValueScore: 1000
 --- !u!114 &8092944925386223701
