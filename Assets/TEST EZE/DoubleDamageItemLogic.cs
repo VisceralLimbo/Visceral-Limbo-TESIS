@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class DoubleDamageItemLogic : ItemLogic
 {
     [SerializeField] private float damageMultiplierBoost = 2f;
-    [SerializeField] private string DAMAGE_STAT_NAME = "BaseAttack"; //tiene q ser igual q en el float stat list
+    [SerializeField] private StatIdentifier DAMAGE_STAT_NAME; //tiene q ser igual q en el float stat list
     private const string EFFECT_NAME = "DoubleDamageItemLogicBoost";
 
     // guardo el acumulado del item

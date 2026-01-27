@@ -29,7 +29,7 @@ public class Decayed_Attack : BaseState
 
     [Space]
     [Header("Stats")]
-    [SerializeField] string AttackStatID, AttackSpeedStatID;
+    [SerializeField] StatIdentifier AttackStatID, AttackSpeedStatID;
 
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
@@ -194,7 +194,7 @@ public class Decayed_Attack : BaseState
         _FlashingCoroutine = null;
     }
 
-    private void UpdateStats(string StatID,float Value)
+    private void UpdateStats(StatIdentifier StatID,float Value)
     {
         if (StatID == AttackSpeedStatID) _AttackSpeed = Value;
         else if (StatID == AttackStatID) _attack = Value;

@@ -10,9 +10,9 @@ public class StatsManager : MonoBehaviour
     [Tooltip("Los Stats del StatManager, estos valores son de setup, que quedan guardados internamente")]
      public List<FloatStat> FloatStatList = new List<FloatStat>();
 
-     public Dictionary<string, Stat> StatDictionary = new Dictionary<string, Stat>();
+     public Dictionary<StatIdentifier, Stat> StatDictionary = new Dictionary<StatIdentifier, Stat>();
 
-    public event Action<string,float> OnStatChanged;
+    public event Action<StatIdentifier, float> OnStatChanged;
 
     private void Awake()
     {
@@ -54,7 +54,7 @@ public class StatsManager : MonoBehaviour
         }
     }
 
-    public float GetFloatStatValue(string StatID)
+    public float GetFloatStatValue(StatIdentifier StatID)
     {
         float returningvalue = 0;
 
@@ -79,7 +79,7 @@ public class StatsManager : MonoBehaviour
         }
     }
 
-    public void UpdateFloatStatValue(string StatID,StatModifiers _Mod)
+    public void UpdateFloatStatValue(StatIdentifier StatID,StatModifiers _Mod)
     {
         if (StatDictionary.TryGetValue(StatID, out Stat value))
         {
@@ -102,7 +102,7 @@ public class StatsManager : MonoBehaviour
     }
 
     // lo mismo que en stat no haba remover haci q lo hice 
-    public void RemoveFloatStatModifier(string StatID, string EffectID)
+    public void RemoveFloatStatModifier(StatIdentifier StatID, string EffectID)
     {
         if (StatDictionary.TryGetValue(StatID, out Stat value))
         {

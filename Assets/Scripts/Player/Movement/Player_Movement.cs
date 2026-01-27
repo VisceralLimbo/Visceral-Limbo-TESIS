@@ -168,9 +168,9 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
     [Space]
     [Header("Stat ID for StatManager")]
-    [SerializeField] private string _MovementStatID; // la ID de la estadistica de movimiento
-    [SerializeField] private string _AirSpeedStatID; // la ID de la estadistica de movimiento en el aire
-    [SerializeField] private string _CrouchSpeedStatID; // la ID de la estadistica de movimiento agachado
+    [SerializeField] private StatIdentifier _MovementStatID; // la ID de la estadistica de movimiento
+    [SerializeField] private StatIdentifier _AirSpeedStatID; // la ID de la estadistica de movimiento en el aire
+    [SerializeField] private StatIdentifier _CrouchSpeedStatID; // la ID de la estadistica de movimiento agachado
 
 
 
@@ -874,7 +874,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
     //  funcionamiento, recibimos un string que comparamos con nuestros ID de stats.
     // de ser correcto, setteamos el valor de la variable a cambiar al valor
-    private void UpdateStats(string statChanged, float value)
+    private void UpdateStats(StatIdentifier statChanged, float value)
     {
         //air speed
         if (statChanged == _AirSpeedStatID) _AirSpeed = value;

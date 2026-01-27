@@ -25,7 +25,7 @@ public abstract class Stat
     /// identificador de stat
     /// </summary>
 
-    public string StatID;
+    public StatIdentifier StatID;
 
     /// <summary>
     /// modificadores activos de stat

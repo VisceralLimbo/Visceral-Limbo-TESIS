@@ -7,11 +7,14 @@ public class Player_HealthComp : Health_Component
 {
     [SerializeField] SoundData _LowHP;
 
+    [Header("Stats")]
+    [SerializeField] StatIdentifier _MaxHealthID;
+
     private void Start()
     {
        
         // setteamos que la salud máxima es la del stat system.
-        MaxHealth = _Context.Stats.GetFloatStatValue("MaxHealth");
+        MaxHealth = _Context.Stats.GetFloatStatValue(_MaxHealthID);
 
         //suscribimos a stats cuando se cambian
         _Context.Stats.OnStatChanged += UpdateStatValues;
@@ -95,9 +98,9 @@ public class Player_HealthComp : Health_Component
         }
     }
 
-    private void UpdateStatValues(string statID, float values)
+    private void UpdateStatValues(StatIdentifier statID, float values)
     {
-        if (statID == "MaxHealth")
+        if (statID == _MaxHealthID)
         {
             MaxHealth = values;
             Combat_UI_Manager._Instance.UpdatePlayerHealthBar(CurrentHealth, MaxHealth, false);

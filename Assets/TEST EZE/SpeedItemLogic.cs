@@ -22,6 +22,9 @@ public class SpeedItemLogic : ItemLogic
     [Header("Transición del efecto")]
     [SerializeField] private float fadeSpeed = 3f;
 
+    [Header("Stats")]
+    [SerializeField] private StatIdentifier _MovementSpeedID,_AirSpeedID,_CrouchSpeedID;
+
     // getter para el base
     private Player_Base PlayerBaseComponent{get
         {
@@ -93,7 +96,7 @@ public class SpeedItemLogic : ItemLogic
                 EffectName = "SpeedItemLogicBoost",
                 Source = this
             };
-            statManager.UpdateFloatStatValue("BaseSpeed", statMod);
+            statManager.UpdateFloatStatValue(_MovementSpeedID, statMod);
 
             StatModifierFloat airMod = new StatModifierFloat // stat modificador de aire
             {
@@ -102,7 +105,7 @@ public class SpeedItemLogic : ItemLogic
                 EffectName = "SpeedItemJumpLogicBoost",
                 Source = this
             };
-            statManager.UpdateFloatStatValue("AirSpeed",airMod);
+            statManager.UpdateFloatStatValue(_AirSpeedID,airMod);
 
             StatModifierFloat CrouchMod = new StatModifierFloat // stat modificador de agachado
             {
@@ -111,7 +114,7 @@ public class SpeedItemLogic : ItemLogic
                 EffectName = "SpeedItemCrouchLogicBoost",
                 Source = this
             };
-            statManager.UpdateFloatStatValue("CrouchSpeed", CrouchMod);
+            statManager.UpdateFloatStatValue(_CrouchSpeedID, CrouchMod);
             ItemStacks++;
         }
         else if (ItemStacks >= 1)
@@ -125,7 +128,7 @@ public class SpeedItemLogic : ItemLogic
                 EffectName = "SpeedItemLogicBoost",
                 Source = this
             };
-            statManager.UpdateFloatStatValue("WalkSpeed", statMod);
+            statManager.UpdateFloatStatValue(_MovementSpeedID, statMod);
 
             StatModifierFloat airMod = new StatModifierFloat // stat modificador de aire
             {
@@ -134,7 +137,7 @@ public class SpeedItemLogic : ItemLogic
                 EffectName = "SpeedItemJumpLogicBoost",
                 Source = this
             };
-            statManager.UpdateFloatStatValue("AirSpeed", airMod);
+            statManager.UpdateFloatStatValue(_AirSpeedID, airMod);
 
             StatModifierFloat CrouchMod = new StatModifierFloat // stat modificador de agachado
             {
@@ -143,7 +146,7 @@ public class SpeedItemLogic : ItemLogic
                 EffectName = "SpeedItemCrouchLogicBoost",
                 Source = this
             };
-            statManager.UpdateFloatStatValue("CrouchSpeed", CrouchMod);
+            statManager.UpdateFloatStatValue(_CrouchSpeedID, CrouchMod);
         }
     }
 

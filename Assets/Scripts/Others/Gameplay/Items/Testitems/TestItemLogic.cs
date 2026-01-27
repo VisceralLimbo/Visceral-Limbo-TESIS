@@ -10,6 +10,7 @@ public class TestItemLogic : ItemLogic
     //[SerializeField] protected ItemDefinitionSO ItemDefinition;
 
     [SerializeField] SoundData _PickUpSound;
+    [SerializeField] StatIdentifier _maxhealth;
 
     public override void OnDrop()
     {
@@ -44,7 +45,7 @@ public class TestItemLogic : ItemLogic
             StatMod.ModType = ModifierType.flat; // seteamos el tipo de suma del modificador
             StatMod.EffectName = "TestItemLogicHealthUP"; // le damos un nombre al modificador (util para saber que esta afectand)
             StatMod.Source = this; // el origen del modificador 
-            StatManager.UpdateFloatStatValue("MaxHealth", StatMod); // cambiamos el valor de la estadistica guardada en el statmanager
+            StatManager.UpdateFloatStatValue(_maxhealth, StatMod); // cambiamos el valor de la estadistica guardada en el statmanager
             ItemStacks++; // sumamos un stack
         }
         else if(ItemStacks >= 1) // sumar stat
@@ -56,7 +57,7 @@ public class TestItemLogic : ItemLogic
             StatMod.ModType = ModifierType.flat;
             StatMod.EffectName = "TestItemLogicHealthUP";
             StatMod.Source = this;
-            StatManager.UpdateFloatStatValue("MaxHealth", StatMod);
+            StatManager.UpdateFloatStatValue(_maxhealth, StatMod);
         }
 
     }

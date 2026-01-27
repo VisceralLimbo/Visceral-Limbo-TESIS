@@ -15,7 +15,7 @@ public class Boss_HealthComp : Health_Component
 
     [SerializeField] LocalEventBusComponent _EventBus;
 
-    [SerializeField] string _HealthStat, _DefenseStat, _DamageReductionStat;
+    [SerializeField] StatIdentifier _HealthStat, _DefenseStat, _DamageReductionStat;
 
     private Combat_UI_Manager Ref_CombatUI;
 
@@ -147,11 +147,10 @@ public class Boss_HealthComp : Health_Component
     }
 
 
-    private void UpdateStats(string StatID, float Value)
+    private void UpdateStats(StatIdentifier StatID, float Value)
     {
-
-        MaxHealth = Context.Stats.GetFloatStatValue(_HealthStat);
-        Defense = Context.Stats.GetFloatStatValue(_HealthStat);
-        DamageReduction = Context.Stats.GetFloatStatValue(_HealthStat);
+        if(StatID == _HealthStat) { MaxHealth = Value; return; };
+        if (StatID == _DefenseStat) { Defense = Value; return; };
+        if (StatID == _DamageReductionStat) { DamageReduction = Value; return; };
     }
 }

@@ -19,8 +19,8 @@ public class Charge_Collider : Visceral_Script
     [Space]
     [Header("Stats")]
     [SerializeField] StatsManager _Statman;
-    [SerializeField] string _DamageStatID;
-    [SerializeField] string _KnockbackStatID;
+    [SerializeField] StatIdentifier _DamageStatID;
+    [SerializeField] StatIdentifier _KnockbackStatID;
 
 
     public override void VS_InitializeWithParameters(params object[] a)
@@ -161,7 +161,7 @@ public class Charge_Collider : Visceral_Script
         }
     }
 
-    private void UpdateStats(string StatID,float Value)
+    private void UpdateStats(StatIdentifier StatID,float Value)
     {
         if (StatID == _DamageStatID)
         {
