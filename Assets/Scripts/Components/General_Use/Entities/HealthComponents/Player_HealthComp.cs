@@ -10,6 +10,10 @@ public class Player_HealthComp : Health_Component
     [Header("Stats")]
     [SerializeField] StatIdentifier _MaxHealthID,_BaseDefenseID,_BaseDamageReduction,_BaseDamageInvulnerability;
 
+    [SerializeField] private GameObject _damageIndicatorPrefab;
+
+    private Vector3 lastHitPosition;
+
     private void Start()
     {
        
@@ -26,6 +30,8 @@ public class Player_HealthComp : Health_Component
 
         OnDamaged += updateHealthBar;
         OnHealed += updateHealthBar;  //se suscribe para curación igual q arriba para el damage xdxd
+
+        OnDamaged += SpawnDamageIndicator;
     }
 
     public override void HealHP(float ExtraHP, bool OverHeal = false)
@@ -68,6 +74,11 @@ public class Player_HealthComp : Health_Component
     SoundEmitter Emit;
     protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
     {
+        if (KnockbarDir.HasValue)
+        {
+            lastHitPosition = _Context.PlayerTransform.position + KnockbarDir.Value;
+        }
+
         if (CurrentHealth - damage < MaxHealth * 0.3f && SoundManager.Instance != null)
         {
             if (Emit == null || !Emit.isActiveAndEnabled)
@@ -83,7 +94,7 @@ public class Player_HealthComp : Health_Component
         }
         base.InternalDamage(damage, KnockbarDir, force, Score);
 
-       
+
     }
 
 
@@ -107,5 +118,14 @@ public class Player_HealthComp : Health_Component
         }
     }
 
+    private void SpawnDamageIndicator()
+    {
+        if (_damageIndicatorPrefab == null) return;
+
+        GameObject indicator = Instantiate(_damageIndicatorPrefab, Combat_UI_Manager._Instance.transform);
+        indicator.SetActive(true);
+        indicator.transform.localScale = Vector3.one;
+        indicator.GetComponent<DamageIndicator>().SetDamageLocation(lastHitPosition, _Context.PlayerTransform);
+    }
 
 }
