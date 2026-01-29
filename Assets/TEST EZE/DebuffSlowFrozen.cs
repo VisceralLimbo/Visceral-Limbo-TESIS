@@ -3,7 +3,7 @@ using UnityEngine;
 public class DebuffFrozen : BuffBehavior
 {
     [SerializeField] StatIdentifier _StatID;
-    [SerializeField] float _slowAmount = -0.5f; // la cantidad de slow, ta en un 50% ahroa para q se note pero lo podemos ajustar obvio xd
+    [SerializeField] float _slowAmount = 0.5f; // la cantidad de slow, ta en un 50% ahroa para q se note pero lo podemos ajustar obvio xd
 
     public override void OnApply(BuffManager manager, StatsManager StatMan)
     {
@@ -20,7 +20,7 @@ public class DebuffFrozen : BuffBehavior
 
         _Mod.ModifierValueFloat = totalSlow;
         _Mod.ModifierValue = totalSlow;
-        _Mod.ModType = ModifierType.percentAdd;
+        _Mod.ModType = ModifierType.PercentMult;
         _Mod.Source = manager;
         _Mod.EffectName = _BuffSO.BuffID; // USO EL ID DEL SO NA BRONCA MEDIA HORA PARA ESTO
 
