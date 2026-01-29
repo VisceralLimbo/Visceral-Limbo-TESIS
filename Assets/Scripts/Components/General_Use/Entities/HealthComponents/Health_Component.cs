@@ -109,7 +109,7 @@ public class Health_Component : Visceral_Component
         if (DamageAfterDefense > 1)
         {
             // ahora aplicamos reduccion de daño
-            float FinalDamage = DamageAfterDefense - (DamageAfterDefense * DamageReduction);
+            float FinalDamage = DamageAfterDefense - (DamageAfterDefense * (DamageReduction/100));
             int FinalEffectiveDamage = (int)FinalDamage;
 
             if(FinalDamage >= 1)

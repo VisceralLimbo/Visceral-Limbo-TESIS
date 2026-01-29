@@ -8,6 +8,7 @@ public class TestBuffBehavior : BuffBehavior
     [SerializeField] Health_Component _HP;
     [SerializeField] float timer = 5;
     [SerializeField] int HPHealth = 10;
+    [SerializeField] StatIdentifier _HPIdentifier;
     public override void OnAddPotency(int ExtraPotency)
     {
         _BuffPotency += ExtraPotency;
@@ -20,6 +21,7 @@ public class TestBuffBehavior : BuffBehavior
     {
         _buffManager = manager;
         _StatMan = StatMan;
+        _HPIdentifier = _BuffSO.statIdentifiers[0];
 
         _HP = StatMan.GetComponentInChildren<Health_Component>();
         print("healing buff");
