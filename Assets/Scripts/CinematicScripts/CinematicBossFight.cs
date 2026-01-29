@@ -14,7 +14,7 @@ public class CinematicBossFight : MonoBehaviour
 
     private Player_Base player_Base;
 
-    [SerializeField] private VisceralStateMachine visceralStateMachine; 
+    [SerializeField] private VisceralStateMachine visceralStateMachine;
 
     [SerializeField] private GameObject Boss;
 
@@ -22,9 +22,12 @@ public class CinematicBossFight : MonoBehaviour
 
     private bool cinematicPlayed = false;
 
+    private GameObject gameplayUI;
+
+
     private void Awake()
     {
-        
+
         playableDirector.stopped += OnTimelineFinished;
     }
     private void Start()
@@ -36,7 +39,7 @@ public class CinematicBossFight : MonoBehaviour
 
         if (visceralStateMachine != null)
         {
-           visceralStateMachine.enabled = false;
+            visceralStateMachine.enabled = false;
         }
 
         if (Boss != null)
@@ -48,6 +51,8 @@ public class CinematicBossFight : MonoBehaviour
         {
             mainCamera = Camera.main;
         }
+
+        gameplayUI = GameObject.FindGameObjectWithTag("UICombat");
     }
 
     private void Update()
@@ -92,10 +97,12 @@ public class CinematicBossFight : MonoBehaviour
 
     private void PlayCinematic()
     {
-        
+
         cinematicRoot.SetActive(true);
 
-        
+        if (gameplayUI != null)
+            gameplayUI.SetActive(false);
+
         playableDirector.time = 0;
         playableDirector.Play();
     }
@@ -107,8 +114,11 @@ public class CinematicBossFight : MonoBehaviour
 
     private void OnTimelineFinished(PlayableDirector director)
     {
-        
+
         cinematicRoot.SetActive(false);
+
+        if (gameplayUI != null)
+            gameplayUI.SetActive(true);
 
         if (player_Base != null)
         {
