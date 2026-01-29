@@ -10,6 +10,11 @@ public class DebuffFrozen : BuffBehavior
         _buffManager = manager;
         _StatMan = StatMan;
 
+        if(_BuffSO.statIdentifiers.Count > 0)
+        {
+            _StatID = _BuffSO.statIdentifiers[0];
+        }
+
         StatModifierFloat _Mod = new StatModifierFloat();
         float totalSlow = _slowAmount * _BuffPotency;
 

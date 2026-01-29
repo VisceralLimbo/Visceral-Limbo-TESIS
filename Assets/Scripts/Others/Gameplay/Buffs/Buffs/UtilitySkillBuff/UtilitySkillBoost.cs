@@ -17,6 +17,7 @@ public class UtilitySkillBoost : BuffBehavior
     public override BuffSO GetSO()
     {
         return base.GetSO();
+
     }
 
     public override void OnAddPotency(int ExtraPotency)
@@ -28,8 +29,12 @@ public class UtilitySkillBoost : BuffBehavior
     {
         _StatMan = StatMan;
         _buffManager = manager;
+        if(_BuffSO.statIdentifiers.Count > 0)
+        {
+            StatID = _BuffSO.statIdentifiers[0];
+        }
 
-        if(_BuffSO == null || _StatMan== null)
+        if (_BuffSO == null || _StatMan== null)
         {
             print("_buffSO is null" );
         }
