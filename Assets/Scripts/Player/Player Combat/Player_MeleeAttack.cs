@@ -48,6 +48,9 @@ public class Player_MeleeAttack : Visceral_Script
     /// </summary>
     [SerializeField]private float AttackSpeedMod = 1f;
 
+    [Header("Stats")]
+    [SerializeField] private StatIdentifier _baseDamageStat;
+
     [Space] // cositas para el item de esquivar y dd
     [Header("mods de item")]
     public bool IsEvasionBoostActive = false; //booleano para saber si toco shift / esquivo
@@ -203,7 +206,7 @@ public class Player_MeleeAttack : Visceral_Script
         if (_PlayerContext != null && _PlayerContext.Stats != null)
         {
             //DamageMultiplier es lo seteado en el float stat list 
-            currentDamageMultiplier = _PlayerContext.Stats.GetFloatStatValue("BaseAttack");
+            currentDamageMultiplier = _PlayerContext.Stats.GetFloatStatValue(_baseDamageStat);
         }
 
         // rework!

@@ -7,7 +7,7 @@ public class MagicSwordItemLogic : ItemLogic
     [SerializeField] private GameObject _MagicProjectilePrefab; // prefab del proyectil
     private Transform _SpawnPoint;                              // spawn para el proyectil
     [SerializeField] private float _ProjectileSpeed = 15f;      // velocidad
-    [SerializeField] private float _BaseDamage = 20f;           // daño
+    [SerializeField] private float _BaseMagicDamage = 20f;           // daño
     [SerializeField] private float _MagicCooldownTime = 15f;    // cd del ataque
     private float _NextFireTime = 0f; // cuando se puede usar de nuevo
 
@@ -15,6 +15,9 @@ public class MagicSwordItemLogic : ItemLogic
     private Player_MeleeAttack _playerMeleeAttack;
 
     [SerializeField] SoundData _PickUpSound;
+
+    [Header("Stats")]
+    [SerializeField] private StatIdentifier _BaseDamageID;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -68,13 +71,14 @@ public class MagicSwordItemLogic : ItemLogic
     private void ShootProjectile()
     {
         // valor actualizado del stat
-        float finalDamage = _BaseDamage;
+        float finalDamage = _BaseMagicDamage;
+        float PlayerDamage = 0;
 
         if (_Context != null && _Context.Stats != null)
         {
-            finalDamage = _Context.Stats.GetFloatStatValue("MagicAttack");
-            if (finalDamage < 0) finalDamage = _BaseDamage;
+             PlayerDamage = finalDamage = _Context.Stats.GetFloatStatValue(_BaseDamageID);
         }
+        finalDamage = _BaseMagicDamage + PlayerDamage;
 
         // chequeo el cd
         if (Time.time < _NextFireTime)
@@ -119,32 +123,14 @@ public class MagicSwordItemLogic : ItemLogic
     {
         if (ItemStacks == 0)
         {
-            var statManager = _Context.Stats;
-
-            StatModifierFloat statMod = new StatModifierFloat // stat modificador de daño base del proyectil
-            {
-                ModifierValueFloat = _BaseDamage,
-                ModType = ModifierType.flat,
-                EffectName = "MagicAttackSword",
-                Source = this
-            };
-            statManager.UpdateFloatStatValue("MagicAttack", statMod);
+        
             ItemStacks++;
         }
         else if (ItemStacks >= 1)
         {
             ItemStacks++;
-            var statManager = _Context.Stats;
-            StatModifierFloat statMod = new StatModifierFloat
-            {
-                ModifierValueFloat = _BaseDamage * ItemStacks,
-                ModType = ModifierType.flat,
-                EffectName = "MagicAttackSword",
-                Source = this
-            };
-            statManager.UpdateFloatStatValue("MagicAttack", statMod);
+            _BaseMagicDamage += 5;
 
-            //quiza podria tambien mejorar el tiempo de cd xd idk
         }
     }
     public override void RemoveStack() { }

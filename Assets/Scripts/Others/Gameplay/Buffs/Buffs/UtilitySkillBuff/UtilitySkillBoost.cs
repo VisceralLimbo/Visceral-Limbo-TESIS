@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UtilitySkillBoost : BuffBehavior
 {
-    [SerializeField] string StatID = "BaseAttack";
+    [SerializeField] StatIdentifier StatID;
     [SerializeField] float _StartingDamageMultiplerValue = 1;
 
     [SerializeField] Player_MeleeAttack _MeleeAttack;
@@ -17,6 +17,7 @@ public class UtilitySkillBoost : BuffBehavior
     public override BuffSO GetSO()
     {
         return base.GetSO();
+
     }
 
     public override void OnAddPotency(int ExtraPotency)
@@ -28,8 +29,12 @@ public class UtilitySkillBoost : BuffBehavior
     {
         _StatMan = StatMan;
         _buffManager = manager;
+        if(_BuffSO.statIdentifiers.Count > 0)
+        {
+            StatID = _BuffSO.statIdentifiers[0];
+        }
 
-        if(_BuffSO == null || _StatMan== null)
+        if (_BuffSO == null || _StatMan== null)
         {
             print("_buffSO is null" );
         }
@@ -61,7 +66,7 @@ public class UtilitySkillBoost : BuffBehavior
             Debug.Log("StatMan is null");
         }
 
-        StatMan.UpdateFloatStatValue("BaseAttack", _Mod);
+        StatMan.UpdateFloatStatValue(StatID, _Mod);
 
         if(_MeleeAttack != null)
         {
@@ -71,7 +76,7 @@ public class UtilitySkillBoost : BuffBehavior
 
     public override void OnExpire()
     {
-        _StatMan.RemoveFloatStatModifier("BaseAttack", _BuffSO.BuffID);
+        _StatMan.RemoveFloatStatModifier(StatID, _BuffSO.BuffID);
 
         if (_MeleeAttack != null)
         {

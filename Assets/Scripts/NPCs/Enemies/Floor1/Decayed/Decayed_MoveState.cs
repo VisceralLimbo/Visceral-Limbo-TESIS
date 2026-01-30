@@ -23,7 +23,7 @@ public class Decayed_MoveState : BaseState
 
     [Space]
     [Header("Stats")]
-    [SerializeField] string _MovementStatID;
+    [SerializeField] StatIdentifier _MovementStatID;
 
     public override void OnInitialize(VisceralStateMachine CTX)
     {
@@ -187,7 +187,7 @@ public class Decayed_MoveState : BaseState
     }
 
 
-    private void UpdateStats(string StatID,float Value)
+    private void UpdateStats(StatIdentifier StatID,float Value)
     {
         if(StatID == _MovementStatID) _Speed = Value;
     }

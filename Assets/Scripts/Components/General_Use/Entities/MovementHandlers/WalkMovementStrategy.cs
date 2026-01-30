@@ -30,8 +30,8 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [Space]
 
     [Header("Stats Setup")]
-    [SerializeField] string _MovementStat;
-    [SerializeField] string _KnockbackResistanceStat;
+    [SerializeField] StatIdentifier _MovementStat;
+    [SerializeField] StatIdentifier _KnockbackResistanceStat;
 
     Vector3 _AddExternalVelocity;
 
@@ -142,7 +142,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         _MovementSpeed = _BaseMovementSpeed;
     }
 
-    private void UpdateStatValues(string StatID, float Value)
+    private void UpdateStatValues(StatIdentifier StatID, float Value)
     {
         if(StatID == _MovementStat)
         {

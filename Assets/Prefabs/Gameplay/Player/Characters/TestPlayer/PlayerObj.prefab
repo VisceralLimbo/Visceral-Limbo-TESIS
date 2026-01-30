@@ -616,9 +616,9 @@ MonoBehaviour:
   _CameraStandHeight: 1
   _CameraCrouchHeight: 0
   _CrouchHeightResponse: 15
-  _MovementStatID: WalkSpeed
-  _AirSpeedStatID: AirSpeed
-  _CrouchSpeedStatID: CrouchSpeed
+  _MovementStatID: {fileID: 11400000, guid: 06a9673a0529f4d43b28676b24f0c658, type: 2}
+  _AirSpeedStatID: {fileID: 11400000, guid: f3252d96338ab1f479c18fad65f9f08a, type: 2}
+  _CrouchSpeedStatID: {fileID: 11400000, guid: c16058ee25f9a6f42a5c4686b465186a, type: 2}
 --- !u!136 &2260695953341543221
 CapsuleCollider:
   m_ObjectHideFlags: 8
@@ -813,6 +813,9 @@ MonoBehaviour:
     IsFrequent: 1
   CurrentHealth: 200
   MaxHealth: 200
+  DamageReduction: 0
+  Defense: 0
+  DamageInvulnerability: 0
   _RB: {fileID: 103244012193870917}
   DestroyOnDeath: 0
   DesactivateOnDeath: 0
@@ -827,6 +830,12 @@ MonoBehaviour:
     MinimunSoundDistance: 0
     MaximunSoundDistance: 0
     IsFrequent: 0
+  _MaxHealthID: {fileID: 11400000, guid: a24223fe7a7df294d92f45d44ddcd143, type: 2}
+  _BaseDefenseID: {fileID: 11400000, guid: 935a9002b9d6fe342b9677362fc8ce90, type: 2}
+  _BaseDamageReduction: {fileID: 11400000, guid: 12d0d6da375907f478d82b2971a7c8a4,
+    type: 2}
+  _BaseDamageInvulnerability: {fileID: 11400000, guid: 6d0c10123ee7983448d020fb89391831,
+    type: 2}
 --- !u!114 &3388075606135687695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1521,6 +1530,7 @@ MonoBehaviour:
   _HasFinishedAttack: 1
   AttackDamageMod: 1
   AttackSpeedMod: 1
+  _baseDamageStat: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
   IsEvasionBoostActive: 0
   _PlayerContext: {fileID: 388799400367065248}
   _SwordMeshRenderer: {fileID: 5177286565348635834}
@@ -1600,6 +1610,8 @@ MonoBehaviour:
   PlayerGameObject: {fileID: 2740337010980209942}
   PlayerTransform: {fileID: 4609580972296786928}
   KCCMotor: {fileID: 2216195455046947952}
+  _HPIdentifier: {fileID: 11400000, guid: a24223fe7a7df294d92f45d44ddcd143, type: 2}
+  _DamageIdentifier: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
   faction: 0
   EnemyValueScore: 500
 --- !u!114 &6517383520978276483

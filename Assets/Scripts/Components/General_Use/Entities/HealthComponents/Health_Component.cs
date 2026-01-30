@@ -19,6 +19,10 @@ public class Health_Component : Visceral_Component
     [Tooltip("Defense es un reductor directo al daño entrante que se aplica antes de la reduccion porcentual (ej: 100 daño entrante - 15 defensa = 85 daño total)")]
     [SerializeField] protected float Defense;
 
+    [Tooltip("Damage Invulnerability es un damage windown donde se ignora daño recibido tras recibir daño")]
+
+    [SerializeField] protected float DamageInvulnerability;
+
     public Rigidbody _RB;
     public bool DestroyOnDeath,DesactivateOnDeath,Died;
 
@@ -105,7 +109,7 @@ public class Health_Component : Visceral_Component
         if (DamageAfterDefense > 1)
         {
             // ahora aplicamos reduccion de daño
-            float FinalDamage = DamageAfterDefense - (DamageAfterDefense * DamageReduction);
+            float FinalDamage = DamageAfterDefense - (DamageAfterDefense * (DamageReduction/100));
             int FinalEffectiveDamage = (int)FinalDamage;
 
             if(FinalDamage >= 1)

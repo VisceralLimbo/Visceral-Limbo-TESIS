@@ -8,10 +8,10 @@ public class HostileNPC_HealthComp : Health_Component
     [Space]
     [Header("Stats Setup")]
     [SerializeField] StatsManager _StatMan;
-    [SerializeField] string _MaxHPStat;
-    [SerializeField] string _DefenseStat;
-    [SerializeField] string _DamageReductionStat;
-    [SerializeField] string _DamageInvulnerability;
+    [SerializeField] StatIdentifier _MaxHPStat;
+    [SerializeField] StatIdentifier _DefenseStat;
+    [SerializeField] StatIdentifier _DamageReductionStat;
+    [SerializeField] StatIdentifier _DamageInvulnerability;
 
 
     public override void VS_Initialize()
@@ -71,12 +71,14 @@ public class HostileNPC_HealthComp : Health_Component
         
     }
 
-    private void UpdateStats(string StatID, float value)
+    private void UpdateStats(StatIdentifier StatID, float value)
     {
-        if (StatID == _MaxHPStat) MaxHealth= value;
-        if (StatID == _DefenseStat) return;
-        if (StatID == _DamageReductionStat) return;
-        if (StatID == _DamageInvulnerability) return;
+        if (StatID == _MaxHPStat){ MaxHealth = value; return; };
+        if (StatID == _DefenseStat) { Defense = value; return; };
+        if (StatID == _DamageReductionStat) { DamageReduction = value; return; }
+
+        if (StatID == _DamageInvulnerability) { DamageInvulnerability = value; return; }
+
 
 
     }

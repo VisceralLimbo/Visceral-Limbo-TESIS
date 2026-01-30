@@ -7,11 +7,18 @@ public class Player_HealthComp : Health_Component
 {
     [SerializeField] SoundData _LowHP;
 
+    [Header("Stats")]
+    [SerializeField] StatIdentifier _MaxHealthID,_BaseDefenseID,_BaseDamageReduction,_BaseDamageInvulnerability;
+
+    [SerializeField] private GameObject _damageIndicatorPrefab;
+
+    private Vector3 lastHitPosition;
+
     private void Start()
     {
        
         // setteamos que la salud máxima es la del stat system.
-        MaxHealth = _Context.Stats.GetFloatStatValue("MaxHealth");
+        MaxHealth = _Context.Stats.GetFloatStatValue(_MaxHealthID);
 
         //suscribimos a stats cuando se cambian
         _Context.Stats.OnStatChanged += UpdateStatValues;
@@ -23,6 +30,8 @@ public class Player_HealthComp : Health_Component
 
         OnDamaged += updateHealthBar;
         OnHealed += updateHealthBar;  //se suscribe para curación igual q arriba para el damage xdxd
+
+        OnDamaged += SpawnDamageIndicator;
     }
 
     public override void HealHP(float ExtraHP, bool OverHeal = false)
@@ -65,6 +74,11 @@ public class Player_HealthComp : Health_Component
     SoundEmitter Emit;
     protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
     {
+        if (KnockbarDir.HasValue)
+        {
+            lastHitPosition = _Context.PlayerTransform.position + KnockbarDir.Value;
+        }
+
         if (CurrentHealth - damage < MaxHealth * 0.3f && SoundManager.Instance != null)
         {
             if (Emit == null || !Emit.isActiveAndEnabled)
@@ -80,7 +94,7 @@ public class Player_HealthComp : Health_Component
         }
         base.InternalDamage(damage, KnockbarDir, force, Score);
 
-       
+
     }
 
 
@@ -95,14 +109,23 @@ public class Player_HealthComp : Health_Component
         }
     }
 
-    private void UpdateStatValues(string statID, float values)
+    private void UpdateStatValues(StatIdentifier statID, float values)
     {
-        if (statID == "MaxHealth")
+        if (statID == _MaxHealthID)
         {
             MaxHealth = values;
             Combat_UI_Manager._Instance.UpdatePlayerHealthBar(CurrentHealth, MaxHealth, false);
         }
     }
 
+    private void SpawnDamageIndicator()
+    {
+        if (_damageIndicatorPrefab == null) return;
+
+        GameObject indicator = Instantiate(_damageIndicatorPrefab, Combat_UI_Manager._Instance.transform);
+        indicator.SetActive(true);
+        indicator.transform.localScale = Vector3.one;
+        indicator.GetComponent<DamageIndicator>().SetDamageLocation(lastHitPosition, _Context.PlayerTransform);
+    }
 
 }

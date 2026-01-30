@@ -31,6 +31,9 @@ public class PlayerContext : Visceral_Script
 
     public IKnockback knockback;
 
+    [SerializeField] StatIdentifier _HPIdentifier;
+    [SerializeField] StatIdentifier _DamageIdentifier;
+
     public override void VS_Initialize()
     {
         //PlayerGameObject = gameObject;
@@ -75,7 +78,7 @@ public class PlayerContext : Visceral_Script
                 EffectName = "MetaHealthUpgrade_Permanent",
                 Source = metaSource
             };
-            Stats.UpdateFloatStatValue("MaxHealth", healthMod);
+            Stats.UpdateFloatStatValue(_HPIdentifier, healthMod);
         }
 
         // mejora daño base
@@ -88,13 +91,13 @@ public class PlayerContext : Visceral_Script
                 EffectName = "MetaFlatDamageUpgrade_Permanent",
                 Source = metaSource
             };
-            Stats.UpdateFloatStatValue("BaseDamageFlatBoost", damageMod);
+            Stats.UpdateFloatStatValue(_DamageIdentifier, damageMod);
         }
 
         // chequeo
-        float finalHealth = Stats.GetFloatStatValue("MaxHealth");
+        float finalHealth = Stats.GetFloatStatValue(_HPIdentifier);
         Debug.Log($"[META CHECK] Vida Máxima Final: {finalHealth}");
-        float finalDamage = Stats.GetFloatStatValue("BaseDamageFlatBoost");
+        float finalDamage = Stats.GetFloatStatValue(_DamageIdentifier);
         Debug.Log($"[META CHECK] Daño Base Final: {finalDamage}");
     }
 }

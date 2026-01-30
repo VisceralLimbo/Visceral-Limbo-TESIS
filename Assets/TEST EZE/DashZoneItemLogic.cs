@@ -21,6 +21,9 @@ public class DashZoneItemLogic : ItemLogic
 
     [SerializeField] SoundData _PickUpSound;
 
+    [Header("Stats ")]
+    [SerializeField] private StatIdentifier _StatID;
+
     private void OnTriggerEnter(Collider other)
     {
         if (IsInventoryMaster) return;
@@ -72,11 +75,11 @@ public class DashZoneItemLogic : ItemLogic
     private void PlaceDamageZone(Vector3 finalDashVector)
     {
         // valor actualizado del stat
-        float finalDamage = _DamagePerTick; // fallback
+        float finalDamage = _DamagePerTick;
 
         if (_Context != null && _Context.Stats != null)
         {
-            finalDamage = _Context.Stats.GetFloatStatValue("DashDamageZone");
+            finalDamage += (_Context.Stats.GetFloatStatValue(_StatID) / 100f);
             if (finalDamage < 0) finalDamage = _DamagePerTick;
         }
 
@@ -128,32 +131,15 @@ public class DashZoneItemLogic : ItemLogic
 
         if (ItemStacks == 0)
         {
-            var statManager = _Context.Stats;
-
-            StatModifierFloat statMod = new StatModifierFloat // stat modificador de daño base de la zona
-            {
-                ModifierValueFloat = _DamagePerTick,
-                ModType = ModifierType.flat,
-                EffectName = "DashDamageLogic",
-                Source = this
-            };
-            statManager.UpdateFloatStatValue("DashDamageZone", statMod);
             ItemStacks++;
         }
         else if (ItemStacks >= 1)
         {
             ItemStacks++;
-            var statManager = _Context.Stats;
-            StatModifierFloat statMod = new StatModifierFloat
-            {
-                ModifierValueFloat = _DamagePerTick * ItemStacks,
-                ModType = ModifierType.flat,
-                EffectName = "DashDamageLogic",
-                Source = this
-            };
-            statManager.UpdateFloatStatValue("DashDamageZone", statMod);
 
-            //quiza podria tambien mejorar el tiempo agarrar un stack pero idk
+            _DamagePerTick = _DamagePerTick + ItemStacks;
+            _ZoneDuration = _ZoneDuration + (ItemStacks * 0.25f);
+
         }
 
     }

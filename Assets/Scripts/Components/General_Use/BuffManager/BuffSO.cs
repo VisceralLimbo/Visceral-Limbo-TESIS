@@ -40,6 +40,11 @@ public class BuffSO : ScriptableObject
     [Tooltip("Si a la hora de ser reaplicado, este buffo debería de empoderar a la copia vieja.")]
     public bool ShouldScaleWithMultipleInstances;
 
+
+    [Space]
+    [Header("Stats Identifiers")]
+    public List<StatIdentifier> statIdentifiers = new List<StatIdentifier>();
+
     #if UNITY_EDITOR
     [Space]
     [Header("References")]
