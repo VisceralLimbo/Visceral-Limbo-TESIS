@@ -48,18 +48,19 @@ public class Spawner : MonoBehaviour
     }
 
     //spawn de enemigo
-    public void SpawnEnemy()
+    // lo hago gameobject para guardar y mandarlo al manager
+    public GameObject SpawnEnemy()
     {
         RandomizedTime = false;
         if (EnemySpawns == null) 
         {
             Debug.LogError("<Color = blue> Visceral Error: Spawner has no assigned Enemies </color>");
-            return;
+            return null;
         }
 
         if (HasMinion || IsSpent)
         {
-            return;
+            return null;
         }
 
         if(EnemyGenerator.MoveNext())
@@ -97,13 +98,14 @@ public class Spawner : MonoBehaviour
                     // boss a la ui
                     bossHealthComp.ConnectBossUI(bossUIManagerReference);
                 }
-
             }
           
             EnemySpawnedHP = InstantiatedEnemy.GetComponent<Health_Component>();
             if (EnemySpawnedHP == null) EnemySpawnedHP = InstantiatedEnemy.GetComponentInChildren<Health_Component>();
             EnemySpawnedHP.OnDeath += MyMinionDied;
             HasMinion = true;
+
+            return InstantiatedEnemy;
         }
         else
         {
@@ -111,6 +113,8 @@ public class Spawner : MonoBehaviour
             _SpawnManager.NotifyMinionDeath();
             print("isSpent");
         }
+
+        return null; // si no hay mas enemigos
     }
 
     /// <summary>

@@ -49,6 +49,9 @@ public class RoomSpawnerManager : MonoBehaviour
     [Header("Particles Setup")]
     [SerializeField] private List<ParticleSystem> fireParticles;
 
+    [Header("Enemy List")]
+    private List<GameObject> _activeEnemies = new List<GameObject>();
+
     private void Awake()
     {
         _DungeonPart = GetComponent<DungeonPart>();
@@ -88,7 +91,7 @@ public class RoomSpawnerManager : MonoBehaviour
 
     public void StartRoomCombat()
     {
-
+        _activeEnemies.Clear();
         lightsChanged = false;
 
         foreach (var trap in trapsInThisRoom)
@@ -111,6 +114,9 @@ public class RoomSpawnerManager : MonoBehaviour
     public void NotifyMinionDeath()
     {
         if (StopThisManager) return;
+
+        //remuevo cualquiera muerto o nulo de la lista
+        _activeEnemies.RemoveAll(e => e == null);
 
         MinionsAlive = Spawners.Any(x => x.HasMinion);
         SpawnersSpent = Spawners.All(x => x.IsSpent);
@@ -288,8 +294,16 @@ public class RoomSpawnerManager : MonoBehaviour
     {
         foreach (var item in Spawners)
         {
-         
-            item.SpawnEnemy();
+
+            GameObject newEnemy = item.SpawnEnemy(); // recibo el game obj
+
+            if (newEnemy != null)
+            {
+                _activeEnemies.Add(newEnemy);
+
+                // si hay efecto activo lo aplico cuando spawnea
+                ApplyEffectToNewEnemy(newEnemy);
+            }
 
             SoundManager.Instance.CreateSound()
                 .WithSoundData(_spawnSound)
@@ -344,4 +358,38 @@ public class RoomSpawnerManager : MonoBehaviour
     public EnvironmentalEffect GetEffect() => _currentEffect;
 
     public void GetDungeonPart(out DungeonPart Part) => Part = _DungeonPart;
+
+    // stats managers de los vivos
+    public List<StatsManager> GetActiveEnemiesStats()
+    {
+        // filtro los q siguen vivos y agarro el statsmanager
+        return _activeEnemies
+            .Where(e => e != null)
+            .Select(e => e.GetComponent<StatsManager>())
+            .Where(s => s != null)
+            .ToList();
+    }
+
+    // so encuentra enemigos
+    public List<BuffManager> GetActiveEnemyBuffManagers()
+    {
+        return _activeEnemies
+            .Where(e => e != null)
+            .Select(e => e.GetComponent<BuffManager>() ?? e.GetComponentInChildren<BuffManager>())
+            .Where(b => b != null)
+            .ToList();
+    }
+
+    private void ApplyEffectToNewEnemy(GameObject enemy)
+    {
+        // si empezo el combate de la sala y hay u efecto seleccionado, q el manager aplique el efecto al enemigo
+        if (_currentEffect != EnvironmentalEffect.None)
+        {
+            var effectManager = GetComponent<EnvironmentalEffectManager>();
+            if (effectManager != null)
+            {
+                effectManager.ApplyActiveEffectToTarget(enemy);
+            }
+        }
+    }
 }

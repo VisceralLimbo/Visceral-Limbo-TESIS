@@ -50,4 +50,22 @@ public class EnvironmentalEffectManager : MonoBehaviour
             _activeEffect = null;
         }
     }
+    public void ApplyActiveEffectToTarget(GameObject target)
+    {
+        // si murio en el frame salgo
+        if (target == null) return;
+
+        // si hay efecto de debuff activo lo pongo al target
+        if (_activeEffect != null && _activeEffect.category == EnviromentalRoomEffectSO.EffectCategory.BuffPlayer)
+        {
+            // busco el buffmanager del enemigo
+            var bManager = target.GetComponent<BuffManager>() ?? target.GetComponentInChildren<BuffManager>();
+
+            if (bManager != null)
+            {
+                // aplico
+                _activeEffect.ApplyToSingleTarget(bManager);
+            }
+        }
+    }
 }

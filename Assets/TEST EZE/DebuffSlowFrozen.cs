@@ -1,32 +1,43 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class DebuffFrozen : BuffBehavior
 {
-    [SerializeField] StatIdentifier _StatID;
+    // hago lista para menejar varios stats. ej ahora estoy tocando attackspeed y movement
+    private List<StatIdentifier> _appliedStats = new List<StatIdentifier>();
     [SerializeField] float _slowAmount = 0.5f; // la cantidad de slow, ta en un 50% ahroa para q se note pero lo podemos ajustar obvio xd
 
     public override void OnApply(BuffManager manager, StatsManager StatMan)
     {
+        if (StatMan == null || manager == null || _BuffSO == null) return;
+
         _buffManager = manager;
         _StatMan = StatMan;
 
-        if(_BuffSO.statIdentifiers.Count > 0)
-        {
-            _StatID = _BuffSO.statIdentifiers[0];
-        }
+        if (_BuffSO.statIdentifiers == null) return;
 
-        StatModifierFloat _Mod = new StatModifierFloat();
         float totalSlow = _slowAmount * _BuffPotency;
 
-        _Mod.ModifierValueFloat = totalSlow;
-        _Mod.ModifierValue = totalSlow;
-        _Mod.ModType = ModifierType.PercentMult;
-        _Mod.Source = manager;
-        _Mod.EffectName = _BuffSO.BuffID; // USO EL ID DEL SO NA BRONCA MEDIA HORA PARA ESTO
+        // foreach sobre todos los id q se pusieron en el buffso
+        foreach (var statID in _BuffSO.statIdentifiers)
+        {
+            if (statID != null && _StatMan != null)
+            {
+                StatModifierFloat _Mod = new StatModifierFloat();
+                _Mod.ModifierValueFloat = totalSlow;
+                _Mod.ModifierValue = totalSlow;
+                _Mod.ModType = ModifierType.PercentMult;
+                _Mod.Source = manager;
+                _Mod.EffectName = _BuffSO.BuffID;
 
-        _StatMan.UpdateFloatStatValue(_StatID, _Mod);
-        //si no le ponia colorcito no lo veia con la cantidad de cosas en consola q hay xd
-        Debug.Log("<Color=blue>SE APLICO EL DEBUFF INCREIBLE</Color>");
+                _StatMan.UpdateFloatStatValue(statID, _Mod);
+
+                if (!_appliedStats.Contains(statID))
+                    _appliedStats.Add(statID);
+            }
+        }
+
+        Debug.Log("se aplicaron los debufos de frozen a las stats");
     }
 
     public override void OnAddPotency(int ExtraPotency) 
@@ -38,8 +49,12 @@ public class DebuffFrozen : BuffBehavior
     {
         if (_StatMan != null)
         {
-            _StatMan.RemoveFloatStatModifier(_StatID, _BuffSO.BuffID);
-            Debug.Log("REMUEVO EL DEBUFO");
+            // remuevo el mod de cada stat q toque
+            foreach (var statID in _appliedStats)
+            {
+                _StatMan.RemoveFloatStatModifier(statID, _BuffSO.BuffID);
+            }
+            Debug.Log("removido el debuff de las stats");
         }
     }
 

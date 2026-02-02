@@ -17,14 +17,28 @@ public class EnviromentalRoomEffectSO : RoomEffectSO
 
     private List<float> _oldIntensities = new List<float>();
 
+    public void ApplyToSingleTarget(BuffManager target)
+    {
+        if (buffToApply != null)
+        {
+            target.AddNewBuff(buffToApply.BuffID, buffToApply, potency);
+        }
+    }
+
     public override void ApplyEffect(RoomSpawnerManager manager)
     {
         // logica del frozen
         if (category == EffectCategory.BuffPlayer)
         {
-            if (manager.playerContext != null && buffToApply != null)
+            // aplico al player
+            if (manager.playerContext != null)
+                ApplyToSingleTarget(manager.playerContext.BuffManager);
+
+            // aplico a enemigos
+            var enemyBuffs = manager.GetActiveEnemyBuffManagers();
+            foreach (var bManager in enemyBuffs)
             {
-                manager.playerContext.BuffManager.AddNewBuff(buffToApply.BuffID, buffToApply, potency);
+                ApplyToSingleTarget(bManager);
             }
         }
 
@@ -53,8 +67,16 @@ public class EnviromentalRoomEffectSO : RoomEffectSO
     {
         if (category == EffectCategory.BuffPlayer)
         {
+            // remuevo del palyer
             if (manager.playerContext != null && buffToApply != null)
                 manager.playerContext.BuffManager.ForceExpirationBuff(buffToApply.BuffID);
+
+            // remuevo de los enemigos
+            var enemyBuffs = manager.GetActiveEnemyBuffManagers();
+            foreach (var buffManager in enemyBuffs)
+            {
+                buffManager.ForceExpirationBuff(buffToApply.BuffID);
+            }
         }
 
         if (category == EffectCategory.VisualChange)

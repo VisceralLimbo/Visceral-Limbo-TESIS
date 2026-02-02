@@ -50,6 +50,7 @@ public class Player_MeleeAttack : Visceral_Script
 
     [Header("Stats")]
     [SerializeField] private StatIdentifier _baseDamageStat;
+    [SerializeField] private StatIdentifier _attackSpeedStat;
 
     [Space] // cositas para el item de esquivar y dd
     [Header("mods de item")]
@@ -207,6 +208,9 @@ public class Player_MeleeAttack : Visceral_Script
         {
             //DamageMultiplier es lo seteado en el float stat list 
             currentDamageMultiplier = _PlayerContext.Stats.GetFloatStatValue(_baseDamageStat);
+
+            // attackspeed ahora pide el valor de la stat de attackspeed
+            AttackSpeedMod = _PlayerContext.Stats.GetFloatStatValue(_attackSpeedStat);
         }
 
         // rework!
