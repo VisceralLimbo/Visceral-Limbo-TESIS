@@ -44,6 +44,9 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     [SerializeField] float lightFadeTime = 0.5f;
     private float[] originalIntensities;
 
+    [SerializeField] private GameObject volumetricLight;
+    [SerializeField] private GameObject volumetricLight2;
+
     // bool para saber si se abrio
     [SerializeField] bool _HasBeenOpenedOnce = false;
 
@@ -465,6 +468,8 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
             // apago perma las luces de la puerta q abri
             _HasBeenOpenedOnce = true;
+            volumetricLight.SetActive(false);
+            volumetricLight2.SetActive(false);
             SetDoorLightsSmooth(false);
 
             // las apago si no son de la sala de cfores
@@ -502,8 +507,9 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         if (!_HasBeenOpenedOnce)
         {
             SetDoorLightsSmooth(true);
+            volumetricLight.SetActive(true);
+            volumetricLight2.SetActive(true);
         }
-
         _StopperCol.isTrigger = true;
     }
 
@@ -515,7 +521,8 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
         {
             SetDoorLightsSmooth(false);
         }
-
+        volumetricLight.SetActive(false);
+        volumetricLight2.SetActive(false);
         _StopperCol.isTrigger = false;
     }
 
