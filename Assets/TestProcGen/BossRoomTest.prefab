@@ -640,6 +640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsOcupied: 0
   Owner: {fileID: 0}
+  ConectedTo: {fileID: 0}
 --- !u!1 &2844484698198436307
 GameObject:
   m_ObjectHideFlags: 0
@@ -785,11 +786,14 @@ MonoBehaviour:
   - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
   Index: 0
   RandomizedTime: 1
+  BossSpawnSystem: 0
   RandomTimeSeed: 0.3
   IsSpent: 0
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &6407442870419471506
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,11 +843,14 @@ MonoBehaviour:
   - {fileID: 4271440006843977573, guid: 12ab87a74532c144ba81cd8a88625f40, type: 3}
   Index: 0
   RandomizedTime: 1
+  BossSpawnSystem: 0
   RandomTimeSeed: 0.3
   IsSpent: 0
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &6461426039974458429
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,11 +900,14 @@ MonoBehaviour:
   - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
   Index: 0
   RandomizedTime: 1
+  BossSpawnSystem: 0
   RandomTimeSeed: 0.3
   IsSpent: 0
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &6734757117971030282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1157,11 +1167,14 @@ MonoBehaviour:
   - {fileID: 3539597587299121411, guid: 7a8c6894813388d41a6a89a68658eb68, type: 3}
   Index: 0
   RandomizedTime: 1
+  BossSpawnSystem: 0
   RandomTimeSeed: 0.3
   IsSpent: 0
   HasMinion: 0
   EnemySpawnedHP: {fileID: 0}
   _SpawnManager: {fileID: 0}
+  bossUIManagerReference: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &8805848675969245270
 GameObject:
   m_ObjectHideFlags: 0
@@ -1281,6 +1294,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _rewardSound:
     Clip: {fileID: 0}
@@ -1288,6 +1303,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _FinishWaveSound:
     Clip: {fileID: 0}
@@ -1295,6 +1312,8 @@ MonoBehaviour:
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
   _reward: {fileID: 0}
   _DungeonPart: {fileID: 0}
@@ -1316,7 +1335,6 @@ MonoBehaviour:
   extraLight: {fileID: 0}
   _canHaveEnvironmentalEffect: 1
   _currentEffect: 0
-  _lowVisibilityLightIntensity: 0.1
   blackFog: {fileID: 0}
   fireParticles:
   - {fileID: 5945409201105036611}
@@ -1333,7 +1351,7 @@ GameObject:
   - component: {fileID: 836070492382842832}
   - component: {fileID: 669757892202817824}
   - component: {fileID: 8902873087300231049}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

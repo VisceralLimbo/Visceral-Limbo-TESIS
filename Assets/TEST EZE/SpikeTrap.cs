@@ -10,49 +10,45 @@ public class SpikeTrap : MonoBehaviour
     [Header("up and down")]
     [SerializeField] private float moveHeight = 1f;   // cuanto suben y bajan
     [SerializeField] private float moveSpeed = 1f;      // velocidad del movimiento
-    [SerializeField] private bool freezeMovement = false; // booleano para congelarlos (a modo de test, lo activan en el inspector)
 
     [Header("player")]
     [SerializeField] private PlayerContext playerContext; // el contexto del player
 
-    [SerializeField] private List<Transform> spikes;
+    [SerializeField] private List<Transform> spikes = new List<Transform>();
 
-    private List<Vector3> startPositions = new List<Vector3>();
+    private Vector3[] startPositions;
+
     //diccionario que respeta cada nextdamage de cada collider que entra, ahora se conectan entre si para que cuando juntemos las trampas no se haga daño haciendo adadad
     private static Dictionary<Health_Component, float> lastDamageTime = new Dictionary<Health_Component, float>();
 
     private void Start()
     {
-        // guardo la pos de cada pincho
-        foreach (Transform spike in spikes)
-        {
-            if (spike != null) startPositions.Add(spike.localPosition);
-        }
+        InitializeSpikes();
     }
 
     private void Update()
     {
-        if (freezeMovement || spikes.Count == 0) return; // bool on se congelan donde estan 
+        if (spikes.Count == 0 || startPositions == null || startPositions.Length != spikes.Count) return;
 
-        // calculo el movimiento
         float offsetY = Mathf.Sin(Time.time * moveSpeed) * moveHeight;
 
         for (int i = 0; i < spikes.Count; i++)
         {
             if (spikes[i] == null) continue;
-            // muevo cada pincho
             spikes[i].localPosition = new Vector3(startPositions[i].x, startPositions[i].y + offsetY, startPositions[i].z);
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        // se hace daño si los pinchos cambiaron la pos osea etnan por encima
-        if (spikes.Count > 0 && spikes[0].localPosition.y <= startPositions[0].y) return;
+        // chequeo q se hayan guardado las pos
+        if (spikes.Count == 0 || startPositions == null || startPositions.Length == 0) return;
+
+        // si estan bajo tierra no hacen daño
+        if (spikes[0].localPosition.y <= startPositions[0].y) return;
 
         if (other.TryGetComponent(out Health_Component HPComp))
         {
-            // todas preguntan por el ultimo tick de daño para q no se overlapeen entre si
             if (lastDamageTime.TryGetValue(HPComp, out float lastTime))
             {
                 if (Time.time < lastTime + damageInterval) return;
@@ -80,6 +76,22 @@ public class SpikeTrap : MonoBehaviour
         else
         {
             HPComp.SimpleDamage(damage);
+        }
+    }
+
+    private void InitializeSpikes()
+    {
+        if (spikes.Count == 0) return;
+
+        // array del tamaño de los pinches
+        startPositions = new Vector3[spikes.Count];
+
+        for (int i = 0; i < spikes.Count; i++)
+        {
+            if (spikes[i] != null)
+            {
+                startPositions[i] = spikes[i].localPosition;
+            }
         }
     }
 }

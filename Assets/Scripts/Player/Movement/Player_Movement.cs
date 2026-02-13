@@ -201,8 +201,6 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
     private float _LastGlobalTimeScale = 1f;
 
-    private MinimapManager _MinimapManager;
-
     //start del player
     public override void VS_Initialize()
     {
@@ -221,9 +219,6 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         _StatMan.OnStatChanged += UpdateStats; // nos suscribimos al evento de actualizacion de stats
 
         TimeDilationManager.OnTimeScaleChanged += changedTimeScale;
-
-        // ** MINIMAP: Obtener la referencia al manager al inicio **
-        _MinimapManager = MinimapManager.Instance; // <-- ASIGNACIÓN
 
         if(TryGetComponent(out Health_Component HP))
         {
@@ -769,20 +764,6 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
             {
                 _RequestedAdditiveForce = Vector3.zero;
             }
-        }
-        // ** MINIMAP: RESTAURAR LLAMADA SIMPLE **
-        if (_MinimapManager == null)
-        {
-            _MinimapManager = MinimapManager.Instance; // Reintenta obtener el manager
-        }
-
-        if (_MinimapManager != null)
-        {
-            // 1. Aseguramos que el ícono exista (necesario por el timing del KCC)
-            _MinimapManager.EnsurePlayerIconIsInstantiated();
-
-            // 2. Rastreamos usando la posición absoluta del mundo (TransientPosition)
-            _MinimapManager.UpdatePlayerIcon(_KCCMotor.TransientPosition);
         }
 
         //actualizar el estado del CHT para reflejar lo que ocurrio en este frame y el pasado

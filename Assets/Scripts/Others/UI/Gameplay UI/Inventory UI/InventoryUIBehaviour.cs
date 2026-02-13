@@ -15,6 +15,11 @@ public class InventoryUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject ItemPrefab;
     [SerializeField] private Transform _Layout;
 
+    [Header("Minimap Settings")]
+    [SerializeField] private GameObject MinimapPanel; // ui obj
+    [SerializeField] private Camera MinimapCamera;   // camara
+    [SerializeField] private KeyCode MapKey = KeyCode.Tab;
+
     [SerializeField] private GameObject[] PLAYEROBJ;
     private void Awake()
     {
@@ -43,6 +48,30 @@ public class InventoryUIBehaviour : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        ToggleMinimap(false);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(MapKey))
+        {
+            ToggleMinimap(true);
+        }
+
+        if (Input.GetKeyUp(MapKey))
+        {
+            ToggleMinimap(false);
+        }
+    }
+
+    private void ToggleMinimap(bool state)
+    {
+        if (MinimapPanel != null) MinimapPanel.SetActive(state);
+        if (MinimapCamera != null) MinimapCamera.enabled = state;
+    }
+
     public void UpdateUIInventory(ItemDefinitionSO Definition)
     {
         if (InventoryDic.ContainsKey(Definition))
@@ -69,11 +98,5 @@ public class InventoryUIBehaviour : MonoBehaviour
             
             InventoryDic.Add(Definition, GMIDPrefab);
         }
-
-
-
     }
-
-
-
 }

@@ -50,9 +50,16 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
     // bool para saber si se abrio
     [SerializeField] bool _HasBeenOpenedOnce = false;
 
+    [Header("Minimap Door Feedback")]
+    [SerializeField] private GameObject minimapGlowIcon;
+    [SerializeField] private MeshRenderer minimapIconRenderer;
+    [SerializeField] private Color lockedMinimapColor = Color.red;
+    [SerializeField] private Color openedMinimapColor = new Color(0.2f, 0.2f, 0.2f, 0.5f); //gris
+
 
     private void Start()
     {
+
         originalIntensities = new float[doorLights.Count];
 
         for (int i = 0; i < doorLights.Count; i++)
@@ -63,7 +70,9 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
                 originalIntensities[i] = 1f;
         }
 
+        UpdateMinimapVisuals();
     }
+
     public void Initialize(RoomSpawnerManager SpawnerManager,DungeonEntryPoint entryPoint)
     {
         // busco doorglow dsp de q se añado con lo de procedural
@@ -464,10 +473,11 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
                 SoundManager.Instance.CreateSound().WithSoundData(_SoundOpenDoor).WithRandomPitch(true).WithPosition(this.transform.position).play();
             }
             _IsOpen = true;
-            SetDoorLightsSmooth(false);
+            _HasBeenOpenedOnce = true; // Marcamos que ya se abrió
 
-            // apago perma las luces de la puerta q abri
-            _HasBeenOpenedOnce = true;
+            // Actualizamos el minimapa al abrir
+            UpdateMinimapVisuals();
+
             volumetricLight.SetActive(false);
             volumetricLight2.SetActive(false);
             SetDoorLightsSmooth(false);
@@ -511,6 +521,8 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             volumetricLight2.SetActive(true);
         }
         _StopperCol.isTrigger = true;
+
+        UpdateMinimapVisuals();
     }
 
     private void LockDoor()
@@ -528,5 +540,19 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     public void SetEntryPointReference(DungeonEntryPoint Entry) => _EntryPoint = Entry;
 
+    // actualizo puertas bloq
+    private void UpdateMinimapVisuals()
+    {
+        if (minimapIconRenderer != null)
+        {
+            // si abrio cambio el color
+            minimapIconRenderer.material.color = _HasBeenOpenedOnce ? openedMinimapColor : lockedMinimapColor;
 
+            // emision
+            if (minimapIconRenderer.material.HasProperty("_EmissionColor"))
+            {
+                minimapIconRenderer.material.SetColor("_EmissionColor", _HasBeenOpenedOnce ? Color.black : lockedMinimapColor * 2f);
+            }
+        }
+    }
 }

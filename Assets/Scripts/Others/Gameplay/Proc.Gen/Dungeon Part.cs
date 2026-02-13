@@ -17,18 +17,6 @@ public class DungeonPart : MonoBehaviour
         Boss        // Habitaciones de jefe
     }
 
-    [HideInInspector] // Oculta esto en el Inspector de Unity si no quieres verlo
-                      // Modifica el setter de MapCoords para actualizar la variable debug
-    public Vector2Int MapCoords
-    {
-        get { return _debugMapCoords; }
-        set { _debugMapCoords = value; }
-    }
-
-    [Header("Minimap Debug")]
-    [SerializeField]
-    private Vector2Int _debugMapCoords;
-
     [Header("Variables & SetUp")]
     /// <summary>
     /// El layer mask de las habitaciones, usado para detectar colisiones

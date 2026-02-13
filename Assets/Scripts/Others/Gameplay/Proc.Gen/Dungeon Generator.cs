@@ -9,11 +9,6 @@ using Random = UnityEngine.Random;
 public class DungeonGenerator : MonoBehaviour
 {
     /// <summary>
-    /// Diccionario que almacena todas las coordenadas lógicas ocupadas (X, Z).
-    /// </summary>
-    private Dictionary<Vector2Int, DungeonPart> occupiedMapGrid = new Dictionary<Vector2Int, DungeonPart>();
-
-    /// <summary>
     /// Devuelve la sala de inicio.
     /// </summary>
     public DungeonPart GetStartingRoom() => StartingRoom; // Asumiendo que 'StartingRoom' es una variable privada
@@ -183,15 +178,6 @@ public class DungeonGenerator : MonoBehaviour
 
         IsRegenerating = true;
 
-        // LLAMADA DE LIMPIEZA DEL MINIMAPA
-        if (MinimapManager.Instance != null)
-        {
-            MinimapManager.Instance.ClearMap();
-        }
-
-        // ** LIMPIEZA DE LA CUADRÍCULA LÓGICA **
-        occupiedMapGrid.Clear(); // <--- NUEVO
-
         foreach (DungeonPart room in generatedRooms)
         {
             if (room != null) Destroy(room.gameObject);
@@ -253,11 +239,6 @@ public class DungeonGenerator : MonoBehaviour
                 generatedRooms.Add(part);
                 GenerateHallway = true;
                 StartingRoom = part;
-
-                // ** REGISTRO DE CUADRÍCULA Y MAPA **
-                part.MapCoords = Vector2Int.zero;
-                occupiedMapGrid.Add(part.MapCoords, part); // <--- NUEVO
-                MinimapManager.Instance.RegisterNewPart(part);
             }
         }
 
@@ -308,20 +289,6 @@ public class DungeonGenerator : MonoBehaviour
                     //SourcePool.Remove(sourceRoom);
                     continue; // esta sala no tiene puntos abiertos, probemos otro lugar
                 }
-
-                // 1.5. CHEQUEO DE COORDENADA LÓGICA (NUEVO BLOQUE DE VERIFICACIÓN)
-                // Soluciona el problema de superposición del minimapa.
-                Vector2Int sourceCoords = sourceRoom.MapCoords;
-                Vector2Int offset = GetCoordinateOffset(sourceEntryPoint);
-                newMapCoords = sourceCoords + offset; // <-- ASIGNACIÓN A LA VARIABLE DECLARADA ARRIBA
-
-                if (occupiedMapGrid.ContainsKey(newMapCoords))
-                {
-                    Debug.LogWarning($"Celda lógica {newMapCoords} ya ocupada. Reintentando.");
-                    continue; // Salta al siguiente intento (i++)
-                }
-
-
 
                 // 2. CREAMOS LA PIEZA NUEVA Y LA COLOCAMOS
                 // =====================================================
@@ -375,14 +342,6 @@ public class DungeonGenerator : MonoBehaviour
                     // 4. GENERACION EXITOSA
                     // =====================================================
                     placementSuccessful = true;
-
-                    // ** MAPA: ASIGNAR Y REGISTRAR COORDENADA **
-                    partToPlace.MapCoords = newMapCoords;
-                    occupiedMapGrid.Add(newMapCoords, partToPlace); // REGISTRO EN CUADRÍCULA
-
-                    // *** NUEVO LOG DE DEPURACIÓN ***
-                    Debug.Log($"[Minimap Debug] Pieza Generada: {partToPlace.name} | De Sala: {sourceRoom.name} " +
-                              $"| Offset: {offset} | Nueva Coord: {partToPlace.MapCoords}");
 
                     // bloqueamos los puntos de accesso usados
                     sourceEntryPoint.SetOccupied(newPartEntryPoint.GetOwner(), true);
@@ -440,9 +399,6 @@ public class DungeonGenerator : MonoBehaviour
                     GenerateHallway = !GenerateHallway; // flip flop de sala / pasillo
 
                     newPartObject.transform.SetParent(this.transform, true);
-
-                    // ** MAPA: REGISTRAR LA PIEZA NUEVA **
-                    MinimapManager.Instance.RegisterNewPart(partToPlace); // <--- NUEVO
 
                     //levantamos los eventos de generacion
                     GenerationEvents();
@@ -530,17 +486,6 @@ public class DungeonGenerator : MonoBehaviour
                     continue; // esta sala no tiene puntos abiertos, probemos otro lugar
                 }
 
-                // ** 1.5. CHEQUEO DE COORDENADA LÓGICA (NUEVO BLOQUE) **
-                Vector2Int sourceCoords = SourceRoom.MapCoords;
-                Vector2Int offset = GetCoordinateOffset(sourceEntryPoint);
-                Vector2Int newMapCoords = sourceCoords + offset; // <-- Cálculo de coordenada
-                if (occupiedMapGrid.ContainsKey(newMapCoords))
-                {
-                    Debug.LogWarning($"Celda lógica {newMapCoords} ya ocupada por sala especial. Reintentando.");
-                    continue;
-                }
-
-
                 // =====================================================
                 //
                 // 2. CREAMOS LA PIEZA NUEVA Y LA COLOCAMOS
@@ -595,10 +540,6 @@ public class DungeonGenerator : MonoBehaviour
                     // =====================================================
                     placementSuccessful = true;
 
-                    // ** MAPA: ASIGNAR Y REGISTRAR COORDENADA **
-                    NewPart.MapCoords = newMapCoords;
-                    occupiedMapGrid.Add(newMapCoords, NewPart); // REGISTRO EN CUADRÍCULA
-
                     // bloqueamos los puntos de accesso usados
                     sourceEntryPoint.SetOccupied(NewPartEntryPoint.GetOwner(), true);
                     NewPartEntryPoint.SetOccupied(sourceEntryPoint.GetOwner(), true);
@@ -646,9 +587,6 @@ public class DungeonGenerator : MonoBehaviour
 
                     NewPart.transform.SetParent(this.transform, true);
                     placementSuccessful = true;
-
-                    // ** MAPA: REGISTRAR LA PIEZA NUEVA **
-                    MinimapManager.Instance.RegisterNewPart(NewPart); // <--- NUEVO
 
                     //levantamos los eventos de generacion
                     GenerationEvents();
@@ -747,18 +685,6 @@ public class DungeonGenerator : MonoBehaviour
             //obtenemos una referencia del dueño del entrypoint
             DungeonPart SourceRoom = SourcePoint.GetOwner();
 
-            // ** 1.5. CHEQUEO DE COORDENADA LÓGICA **
-            Vector2Int sourceCoords = SourceRoom.MapCoords;
-            Vector2Int offset = GetCoordinateOffset(SourcePoint);
-            Vector2Int newMapCoords = sourceCoords + offset;
-
-            if (occupiedMapGrid.ContainsKey(newMapCoords)) // <-- NUEVA VERIFICACIÓN
-            {
-                Debug.LogWarning($"Celda lógica {newMapCoords} ya ocupada por jefe. Probando siguiente punto.");
-                continue; // Salta al siguiente punto de entrada (foreach)
-            }
-
-
             GameObject NewBossRoom = Instantiate(BossRoomPrefabs[bossRoomSeed]);
 
             if (!NewBossRoom.TryGetComponent(out DungeonPart BossPart) ||
@@ -794,10 +720,6 @@ public class DungeonGenerator : MonoBehaviour
                 placementSuccessful = true;
                 BossRoom = BossPart;
                 GeneratedBossRoom = true;
-
-                // ** MAPA: ASIGNAR Y REGISTRAR COORDENADA **
-                BossPart.MapCoords = newMapCoords;
-                occupiedMapGrid.Add(newMapCoords, BossPart); // REGISTRO EN CUADRÍCULA
 
                 SourcePoint.SetOccupied(BossEntryPoint.GetOwner(), true);
                 BossEntryPoint.SetOccupied(SourcePoint.GetOwner(), true);
@@ -837,9 +759,6 @@ public class DungeonGenerator : MonoBehaviour
                 BossPart.transform.SetParent(this.transform, true);
 
                 AllParts.Add(BossPart);
-
-                // ** MAPA: REGISTRAR LA PIEZA NUEVA **
-                MinimapManager.Instance.RegisterNewPart(BossPart); // <--- NUEVO
 
                 //levantamos los eventos de generacion
                 GenerationEvents();
