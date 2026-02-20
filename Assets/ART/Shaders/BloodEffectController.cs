@@ -19,6 +19,7 @@ public class BloodEffectController : MonoBehaviour
 
     private Bloom bloom;
     private Coroutine bloomCoroutine;
+    [SerializeField] private float bloomTransitionDuration = 0.01f; // MÁS rápido que el shader
 
     private void Awake()
     {
@@ -104,10 +105,10 @@ public class BloodEffectController : MonoBehaviour
         float startValue = bloom.clamp.value;
         float elapsed = 0f;
 
-        while (elapsed < transitionDuration)
+        while (elapsed < bloomTransitionDuration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / transitionDuration);
+            float t = Mathf.Clamp01(elapsed / bloomTransitionDuration);
             float newValue = Mathf.Lerp(startValue, targetValue, t);
 
             bloom.clamp.value = newValue;
