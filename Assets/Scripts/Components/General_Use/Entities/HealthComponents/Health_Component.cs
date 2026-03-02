@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 
-public class Health_Component : Visceral_Component
+public class Health_Component : Visceral_Component, IDamageable
 {
     [SerializeField] protected SoundData[] soundData;
     [SerializeField] protected SoundData[] HealingSoundData;    
@@ -266,4 +266,14 @@ public class Health_Component : Visceral_Component
     }
 
   
+
+    void IDamageable.TakeDamageWithKnockback(UnityEngine.Vector3 KnockbackDir, float KnockbackForce, DamageScore DamageDT)
+    {
+        TakeDamageWithKnockback(KnockbackDir,KnockbackForce, DamageDT);
+    }
+
+    void IDamageable.TakeDamage(DamageScore DamageDT)
+    {
+        TakeDamage(DamageDT);
+    }
 }

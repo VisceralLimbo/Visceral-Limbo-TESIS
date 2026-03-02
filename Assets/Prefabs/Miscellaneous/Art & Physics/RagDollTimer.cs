@@ -9,6 +9,8 @@ public class RagDollTimer : MonoBehaviour
     [SerializeField] float _RagDollDuration;
     [SerializeField] Rigidbody _RootRigid;
     [SerializeField] RagdollBoneRetarget[] _ragdollBoneRetargeters;
+    [SerializeField]
+    LimbDesmemberComponent[] _limbDesmemberComponents;
     [SerializeField] string AnimatorKey;
 
     public Rigidbody RootRigid { get { return _RootRigid; } }
@@ -37,6 +39,11 @@ public class RagDollTimer : MonoBehaviour
         {
             _Hp.OnDeath += StartRagdolling;
         }
+
+        if(_limbDesmemberComponents.Length <= 0)
+        {
+            _limbDesmemberComponents = GetComponentsInChildren<LimbDesmemberComponent>();
+        }
     }
 
     private void StartRagdolling()
@@ -53,6 +60,14 @@ public class RagDollTimer : MonoBehaviour
             foreach (var rag in _ragdollBoneRetargeters)
             {
                 rag.ActivateRagDoll();
+            }
+        }
+
+        if(_limbDesmemberComponents.Length > 0)
+        {
+            foreach(var Limb in _limbDesmemberComponents)
+            {
+                Limb.DismemberLimb();
             }
         }
     }
