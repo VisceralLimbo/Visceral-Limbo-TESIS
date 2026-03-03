@@ -68,6 +68,8 @@ public class MagicSwordItemLogic : ItemLogic
         base.Unregister();
     }
 
+
+
     private void ShootProjectile()
     {
         // valor actualizado del stat
