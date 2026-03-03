@@ -28,6 +28,11 @@ public class Visceral_WeaponBase : Visceral_Script
       
     }
 
+    public virtual void NotifyHit(Collider other, IDamageable IDamage = null)
+    {
+
+    }
+
 
 }
 

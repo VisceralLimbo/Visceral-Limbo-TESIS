@@ -19,55 +19,66 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
     [Tooltip("La salud de la extremidad, al llegar a cero, es desmembrada")]
     [SerializeField] float _LimbHealth;
 
-    [Tooltip("Modificador de daño de la extremidad, reduce el daño entrante, NOTA: POSIBLEMENTE SERÁ CONECTADO AL HEALTHComponent")]
-    [SerializeField] float _LimbDamageReduction;
+    [Tooltip("Modificador de daño de la extremidad, es un multiplicador al daño entrante ANTES DE APLICAR DEFENSAS")]
+    [Range(0,5)]
+    [SerializeField] float _LimbDamageReduction = 1.0f;
 
     [Tooltip("El CharacterJoint del Limb")]
-    [SerializeField] CharacterJoint _joint;
+    [SerializeField] CharacterJoint[] _joint;
 
     [Tooltip("El rigidbody del Limb")]
-    [SerializeField] Rigidbody _Rb;
+    [SerializeField] Rigidbody[] _Rb;
 
     [Tooltip("El Collider del Limb")]
-    [SerializeField] Collider _Col;
+    [SerializeField] Collider[] _Col;
 
 
     private void Start()
     {
-        if (_joint == null) _joint = GetComponent<CharacterJoint>();
-        if (_Rb == null) _Rb = GetComponent<Rigidbody>();
-        if(_Col == null) _Col= GetComponent<Collider>();
+        if (_joint.Length <= 0) _joint = GetComponentsInChildren<CharacterJoint>();
+        if (_Rb.Length <= 0) _Rb = GetComponentsInChildren<Rigidbody>();
+        if(_Col.Length <= 0) _Col= GetComponentsInChildren<Collider>();
     }
     public void DismemberLimb()
     {
         if (_LimbHealth > 0) return;
 
         // 1. Destruir las uniones (CharacterJoint) para que el hueso quede libre
-        if (_joint != null)
+        if (_joint.Length > 0)
         {
-            Destroy(_joint);
+            foreach(var Joint in _joint)
+            {
+                Destroy(Joint);
+            }
         }
 
         // 2. Destruir el Rigidbody para quitarle la masa y la gravedad
-        if (_Rb != null)
+        if (_Rb.Length > 0)
         {
-            Destroy(_Rb);
+            foreach (var Rb in _Rb)
+            {
+                Destroy(Rb);
+            }
         }
 
         // 3. Destruir el Collider para que no choque con otras partes del cuerpo al encogerse
-     
-        if (_Col != null)
+
+        if (_Col.Length > 0)
         {
-            Destroy(_Col);
+            foreach (var Col in _Col)
+            {
+                Destroy(Col);
+            }
         }
 
         // 4. Aplicar el "Cero Seguro" (prácticamente invisible pero matemáticamente estable)
         this.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
 
-        GameObject Gibbedlimb =Instantiate
-            (_LimbDismemberPrefab,this.transform.position,this.transform.rotation);
-
-       
+        if(_LimbDismemberPrefab != null)
+        {
+            GameObject Gibbedlimb = Instantiate
+            (_LimbDismemberPrefab, this.transform.position, this.transform.rotation);
+        }
     }
 
 
@@ -75,16 +86,37 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
 
     void IDamageable.SimpleDamage(float Damage)
     {
-        throw new System.NotImplementedException();
+        _LimbHealth -= Damage;
+        Damage *= _LimbDamageReduction;
+ 
+        _HPComp.SimpleDamage(Damage);
     }
 
     void IDamageable.TakeDamage(DamageScore DamageDT)
     {
-        throw new System.NotImplementedException();
+        _LimbHealth -= DamageDT.DamageAmount;
+        DamageDT.DamageAmount *= _LimbDamageReduction;
+
+        _HPComp.TakeDamage(DamageDT);
     }
 
     void IDamageable.TakeDamageWithKnockback(Vector3 KnockbackDir, float KnockbackForce, DamageScore DamageDT)
     {
-        throw new System.NotImplementedException();
+        _LimbHealth -= DamageDT.DamageAmount;
+        DamageDT.DamageAmount *= _LimbDamageReduction;
+
+        _HPComp.TakeDamageWithKnockback(KnockbackDir, KnockbackForce, DamageDT);
+    }
+
+    public bool GetHealthComponent(out Health_Component HPComp)
+    {
+
+        if(_HPComp == null)
+        {
+            HPComp = null;
+            return false;
+        }
+        HPComp = _HPComp;
+        return true;
     }
 }

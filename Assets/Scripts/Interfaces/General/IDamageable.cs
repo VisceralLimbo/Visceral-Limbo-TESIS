@@ -9,7 +9,7 @@ public interface IDamageable
 
     public void SimpleDamage(float Damage);
 
-
+    public bool GetHealthComponent(out Health_Component HPComp);
 
 
 }

@@ -276,4 +276,10 @@ public class Health_Component : Visceral_Component, IDamageable
     {
         TakeDamage(DamageDT);
     }
+
+    public bool GetHealthComponent(out Health_Component HPComp)
+    {
+        HPComp = this;
+        return true;
+    }
 }

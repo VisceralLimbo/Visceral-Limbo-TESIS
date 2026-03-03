@@ -46,6 +46,11 @@ public class SwordTest : Visceral_WeaponBase
 
     }
 
+    /// <summary>
+    /// Funcion de notificar que se realizo un golpe exitoso, aplica daño directo al HPComponent
+    /// </summary>
+    /// <param name="other"></param>
+    /// <param name="HPComp"></param>
     public override void NotifyHit(Collider other, Health_Component HPComp)
     {
         //hitting user
@@ -76,14 +81,51 @@ public class SwordTest : Visceral_WeaponBase
         {
             damageFlash.SetBleedStatus(true);
         }
+        SlowMotion.Stop(0.1f, 0.05f, false);
+    }
 
+    /// <summary>
+    /// Funcion de notificar que se realizo un golpe exitoso, aplica daño al IDamageable.
+    /// sirve principalmente en casos de que tengamos Logica especial de daño.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <param name="IDamage"></param>
+    public override void NotifyHit(Collider other, IDamageable IDamage = null)
+    {
+        if (IDamage == null) return;
 
+        if (IDamage.GetHealthComponent(out Health_Component HPComp) == false) return;
 
+        DamageScore damageScore = new DamageScore()
+        {
+            DamageAmount = Damage,
+            Attacker = _UserContext,
+            Victim = HPComp.Context,
+            ElementalDamage = ElementType.Physical,
+            IsAirBorneKill = _UserContext.KCCMotor.GroundingStatus.IsStableOnGround,
+            FactionID = _UserContext.faction = FactionID.Player,
+        };
+
+        var Dir = playerRay.transform.forward;
+
+        _UserContext.Inventory.ProcOnHitEffects(_UserContext, damageScore, HPComp);
+
+        IDamage.TakeDamageWithKnockback(Dir, KnockBack, damageScore);
+
+        //
+        PlayerEvents.PlayerSucessfulHit();
+
+        // notifico al flash sobre el bleed
+        EnemyDamageFlash damageFlash = HPComp.GetComponent<EnemyDamageFlash>();
+        if (damageFlash != null)
+        {
+            damageFlash.SetBleedStatus(true);
+        }
         SlowMotion.Stop(0.1f, 0.05f, false);
 
 
-    }
 
+    }
 
 
 
