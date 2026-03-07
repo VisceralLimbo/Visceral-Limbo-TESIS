@@ -42,8 +42,7 @@ public class HitBox : Visceral_Script
             // vamos a priorizar la Interfaz Damageable,
             // porque significa que implementa algo especial
             // a la hora de recibir daño
-            if (Idamage != null
-                                     && !TaggedColliders.Contains(other))
+            if (Idamage != null && !TaggedColliders.Contains(other))
             {
                 if(Idamage.GetHealthComponent(out Health_Component HPComp) == true 
                                               && !TaggedHealth.Contains(HPComp))

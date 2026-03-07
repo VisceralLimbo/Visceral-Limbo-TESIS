@@ -19,6 +19,9 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
     [Tooltip("La salud de la extremidad, al llegar a cero, es desmembrada")]
     [SerializeField] float _LimbHealth;
 
+    [Tooltip("whether the limb can be dismembered or not")]
+    [SerializeField] bool _IsDismemberable;
+
     [Tooltip("Modificador de daño de la extremidad, es un multiplicador al daño entrante ANTES DE APLICAR DEFENSAS")]
     [Range(0,5)]
     [SerializeField] float _LimbDamageReduction = 1.0f;
@@ -32,6 +35,8 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
     [Tooltip("El Collider del Limb")]
     [SerializeField] Collider[] _Col;
 
+    Vector3 _KnockbackDir= Vector3.zero;
+    float _KnockbackForce = 0f;
 
     private void Start()
     {
@@ -41,6 +46,7 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
     }
     public void DismemberLimb()
     {
+        if(_IsDismemberable == false) return;
         if (_LimbHealth > 0) return;
 
         // 1. Destruir las uniones (CharacterJoint) para que el hueso quede libre
@@ -78,6 +84,10 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
         {
             GameObject Gibbedlimb = Instantiate
             (_LimbDismemberPrefab, this.transform.position, this.transform.rotation);
+
+            Rigidbody rb = Gibbedlimb.GetComponent<Rigidbody>();
+            rb.AddForce(_KnockbackDir * _KnockbackForce, ForceMode.Impulse);
+
         }
     }
 
@@ -102,8 +112,14 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
 
     void IDamageable.TakeDamageWithKnockback(Vector3 KnockbackDir, float KnockbackForce, DamageScore DamageDT)
     {
+        print("damaged limb: " + this.name);
+
         _LimbHealth -= DamageDT.DamageAmount;
         DamageDT.DamageAmount *= _LimbDamageReduction;
+
+        _KnockbackDir = KnockbackDir.normalized;
+        _KnockbackForce = KnockbackForce;
+
 
         _HPComp.TakeDamageWithKnockback(KnockbackDir, KnockbackForce, DamageDT);
     }
