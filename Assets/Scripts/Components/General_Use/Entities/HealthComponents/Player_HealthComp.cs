@@ -89,10 +89,14 @@ public class Player_HealthComp : Health_Component
                     .WithPosition(_Context.PlayerTransform.position)
                     .play(out SoundEmitter Emitter);
                 Emit = Emitter;
-                return;
             }
         }
-        base.InternalDamage(damage, KnockbarDir, force, Score);
+        else if(Emit != null && CurrentHealth >= MaxHealth * 0.3f || CurrentHealth <= 0)
+        {
+            SoundManager.Instance.ReturnToPool(Emit);
+             Emit = null;
+        }
+            base.InternalDamage(damage, KnockbarDir, force, Score);
 
 
     }
