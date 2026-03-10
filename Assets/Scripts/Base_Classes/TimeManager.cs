@@ -26,8 +26,6 @@ public static class TimeDilationManager
     {
         GlobalTimeScale = timeScale;
         OnTimeScaleChanged?.Invoke(GlobalTimeScale);
-
-        Debug.Log("New timescale: " + GlobalTimeScale);
     }
 
     public static void ResetTimeScale()

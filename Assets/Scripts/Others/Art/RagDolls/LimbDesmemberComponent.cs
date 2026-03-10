@@ -43,6 +43,7 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
         if (_joint.Length <= 0) _joint = GetComponentsInChildren<CharacterJoint>();
         if (_Rb.Length <= 0) _Rb = GetComponentsInChildren<Rigidbody>();
         if(_Col.Length <= 0) _Col= GetComponentsInChildren<Collider>();
+        if(_HPComp == null) _HPComp = GetComponentInParent<Health_Component>();
     }
     public void DismemberLimb()
     {

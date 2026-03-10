@@ -244,13 +244,9 @@ public class Health_Component : Visceral_Component, IDamageable
 
     protected void PlaySounds()
     {
-        print("Sonido entrado");
         if (soundData == null || Context == null) return;
-        print("no hay sonidos");
         if (soundData.Length == 0) { return; }
-
         int Sneed;
-        print("eligiendo sonidos");
         if (soundData.Length == 1) Sneed = 0;
         else
         {
@@ -279,6 +275,7 @@ public class Health_Component : Visceral_Component, IDamageable
 
     public bool GetHealthComponent(out Health_Component HPComp)
     {
+
         HPComp = this;
         return true;
     }
