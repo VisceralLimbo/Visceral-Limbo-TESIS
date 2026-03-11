@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 19b0ed8ef0dc2dd45ab8f1cd49898aed
+guid: 33c216e41bd55c14686064e1ebf14853
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -19,10 +19,14 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Caminata' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'Jefe_RightLeg' has translation animation
-      that will be discarded.\n"
+    animationImportWarnings: "\nClip 'PresentacionButtslam' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Jefe_LeftLeg' has translation
+      animation that will be discarded.\n\t'Jefe_RightLeg' has translation animation
+      that will be discarded.\n\t'Jefe_LeftForeArm' has translation animation that
+      will be discarded.\n\t'Jefe_RightForeArm' has translation animation that will
+      be discarded.\n\t'Martillo5' has translation animation that will be discarded.\n\t'Martillo5'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -36,11 +40,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Caminata
-      takeName: Caminata
-      internalID: -8498193376514169607
-      firstFrame: 6
-      lastFrame: 22
+      name: PresentacionButtslam
+      takeName: PresentacionButtslam
+      internalID: -4584972419680681970
+      firstFrame: 1
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -51,7 +55,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -63,7 +67,7 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 6
+      additiveReferencePoseFrame: 0.96
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -315,15 +319,15 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: Caminata(Clone)
+    - name: PresentacionButtslam(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Character
-      parentName: Caminata(Clone)
+      parentName: PresentacionButtslam(Clone)
       position: {x: 0.5582235, y: 3.437447, z: -0.35344863}
-      rotation: {x: 0.000314329, y: -0.706821, z: 0.00039880397, w: 0.7073922}
+      rotation: {x: 0.0003143297, y: -0.7068211, z: 0.0003987989, w: 0.7073922}
       scale: {x: 1, y: 1, z: 1}
     - name: L_Boot
       parentName: Character
@@ -386,7 +390,7 @@ ModelImporter:
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1.3397474}
     - name: Jefe_Guides
-      parentName: Caminata(Clone)
+      parentName: PresentacionButtslam(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.2748497, y: 0.24194129, z: -0.6984833, w: 0.61485213}
       scale: {x: 1, y: 1, z: 1}
@@ -506,129 +510,129 @@ ModelImporter:
       rotation: {x: 0.2748497, y: -0.24194129, z: 0.6984833, w: 0.61485213}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Reference1
-      parentName: Caminata(Clone)
+      parentName: PresentacionButtslam(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Reference
-      parentName: Caminata(Clone)
+      parentName: PresentacionButtslam(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Hips
       parentName: Jefe_Reference
-      position: {x: -0.00042319298, y: 2.0324936, z: -0.19198835}
-      rotation: {x: -0.50045377, y: 0.49954578, z: 0.5004538, w: -0.49954584}
-      scale: {x: 1.0000004, y: 1.0000004, z: 1}
+      position: {x: -0.00019180775, y: 2.0325224, z: -0.19423932}
+      rotation: {x: 0.5004538, y: -0.4995458, z: -0.50045377, w: 0.49954578}
+      scale: {x: 1.0000006, y: 1.0000007, z: 1.0000002}
     - name: Jefe_LeftUpLeg
       parentName: Jefe_Hips
-      position: {x: -0.06604256, y: -0.0034054748, z: 0.47648227}
-      rotation: {x: 0.0123233795, y: -0.10527186, z: 0.9934985, w: -0.041553557}
-      scale: {x: 1.000001, y: 1.000001, z: 1.0000012}
+      position: {x: -0.06604248, y: -0.003405458, z: 0.4764822}
+      rotation: {x: -0.012323321, y: 0.10527188, z: -0.9934985, w: 0.04155356}
+      scale: {x: 1.0000007, y: 1.0000011, z: 1.0000017}
     - name: Jefe_LeftLeg
       parentName: Jefe_LeftUpLeg
-      position: {x: -0.8681953, y: -0.000025149477, z: -0.0000043757614}
-      rotation: {x: 0.0571439, y: -0.004202996, z: -0.07052652, w: 0.9958629}
-      scale: {x: 1.000001, y: 1.0000011, z: 1.0000007}
+      position: {x: -0.868196, y: 0.000037093865, z: -0.000018557825}
+      rotation: {x: 0.05714391, y: -0.0042031296, z: -0.07052654, w: 0.9958629}
+      scale: {x: 1.0000017, y: 1.0000008, z: 1.0000012}
     - name: Jefe_LeftFoot
       parentName: Jefe_LeftLeg
-      position: {x: -1.0928271, y: -0.0000074792215, z: 0.0000014236367}
-      rotation: {x: 0.04357496, y: -0.00795359, z: 0.67496395, w: 0.73652}
-      scale: {x: 1.0000001, y: 1.0000007, z: 0.9999997}
+      position: {x: -1.0928272, y: -0.0000060380007, z: 0.0000006118982}
+      rotation: {x: 0.043574974, y: -0.007953466, z: 0.67496395, w: 0.73652}
+      scale: {x: 1.0000006, y: 1.0000013, z: 1.0000002}
     - name: Jefe_LeftToeBase
       parentName: Jefe_LeftFoot
-      position: {x: -0.57128656, y: -0.00000023331974, z: 0.000000492527}
-      rotation: {x: -0, y: -0, z: 0.0000000061409073, w: 1}
-      scale: {x: 1.0000005, y: 1.0000005, z: 1}
+      position: {x: -0.5712864, y: -0.00000006065334, z: 0.00000035512238}
+      rotation: {x: -0, y: -0, z: 9.022185e-10, w: 1}
+      scale: {x: 1.0000004, y: 1.0000014, z: 1.0000006}
     - name: Jefe_RightUpLeg
       parentName: Jefe_Hips
-      position: {x: -0.06604256, y: -0.0034054748, z: -0.47648227}
-      rotation: {x: 0.105343595, y: 0.012343228, z: -0.041518655, w: -0.9934922}
-      scale: {x: 1.0000012, y: 1.0000011, z: 1.0000006}
+      position: {x: -0.06604248, y: -0.003405458, z: -0.4764822}
+      rotation: {x: -0.10534361, y: -0.012343286, z: 0.04151858, w: 0.9934921}
+      scale: {x: 1.000001, y: 1.0000002, z: 1.0000008}
     - name: Jefe_RightLeg
       parentName: Jefe_RightUpLeg
-      position: {x: 0.8681952, y: 0.0005702062, z: 0.00011880506}
-      rotation: {x: -0.057211135, y: 0.004167032, z: 0.0704835, w: -0.99586225}
-      scale: {x: 0.9999997, y: 1, z: 1}
+      position: {x: 0.86819565, y: -0.000016791237, z: 0.00001451448}
+      rotation: {x: -0.0572111, y: 0.0041670306, z: 0.070483446, w: -0.9958623}
+      scale: {x: 1, y: 1.0000011, z: 1.0000006}
     - name: Jefe_RightFoot
       parentName: Jefe_RightLeg
-      position: {x: 1.0928277, y: 0.00000045472615, z: 0.0000008403423}
-      rotation: {x: -0.043568514, y: 0.007969387, z: -0.67495906, w: -0.7365247}
-      scale: {x: 1.0000001, y: 1.0000004, z: 1.0000001}
+      position: {x: 1.0928273, y: 0.0000046090845, z: -0.00000044688525}
+      rotation: {x: -0.04356854, y: 0.007969325, z: -0.6749591, w: -0.73652464}
+      scale: {x: 0.99999946, y: 1.0000002, z: 1.0000002}
     - name: Jefe_RightToeBase
       parentName: Jefe_RightFoot
-      position: {x: 0.5712861, y: 0.00000004210658, z: -0.00000019885637}
-      rotation: {x: 0.000025421377, y: -0.000000026077029, z: -0.00000013364478, w: 1}
-      scale: {x: 1.000001, y: 1, z: 1.0000011}
+      position: {x: 0.5712861, y: 0.00000002386786, z: -0.0000001234671}
+      rotation: {x: 0.0000254251, y: -0.0000000935979, z: -0.00000007427296, w: 1}
+      scale: {x: 1.0000002, y: 1, z: 1.0000006}
     - name: Jefe_Spine
       parentName: Jefe_Hips
-      position: {x: -0.5570571, y: 0.000000021695136, z: 2.4741494e-16}
-      rotation: {x: -0.000000029802322, y: 0.000000029802322, z: -0.0055797994, w: -0.9999845}
-      scale: {x: 1.0000008, y: 1.0000008, z: 1.0000007}
+      position: {x: -0.55705696, y: 0.000000055199973, z: 2.4736073e-16}
+      rotation: {x: 0.000000029802322, y: -0.000000059604645, z: 0.0055797994, w: 0.9999845}
+      scale: {x: 1.0000008, y: 1.0000008, z: 1.0000012}
     - name: Jefe_Spine1
       parentName: Jefe_Spine
-      position: {x: -0.5566144, y: -0.000000012475455, z: 2.4703547e-16}
-      rotation: {x: -0.000000029627252, y: 0.00000002997637, z: 0.00027743494, w: 1}
-      scale: {x: 1.0000006, y: 1.0000006, z: 1.0000004}
+      position: {x: -0.5566146, y: 0.000000015545064, z: 2.4744204e-16}
+      rotation: {x: -0.000000029785275, y: 1.7445956e-10, z: 0.00027743494, w: 1}
+      scale: {x: 1.0000018, y: 1.0000018, z: 1.0000012}
     - name: Jefe_Spine2
       parentName: Jefe_Spine1
-      position: {x: -0.52541995, y: -0.000000030144054, z: 2.3342873e-16}
-      rotation: {x: 0.000000029627252, y: -0.000000029976366, z: -0.003972046, w: 0.99999213}
-      scale: {x: 1.0000031, y: 1.0000031, z: 1.0000027}
+      position: {x: -0.52541995, y: -0.000000032172775, z: 2.295256e-16}
+      rotation: {x: 0.00000002956506, y: -1.736371e-10, z: -0.003972046, w: 0.99999213}
+      scale: {x: 1.0000037, y: 1.0000038, z: 1.0000037}
     - name: Jefe_Neck
       parentName: Jefe_Spine2
-      position: {x: -0.6668659, y: 0.000000029929186, z: 2.9620403e-16}
-      rotation: {x: 0.000000030295666, y: -0.000000029300672, z: 0.018578075, w: -0.9998275}
-      scale: {x: 1.000004, y: 1.0000042, z: 1.0000029}
+      position: {x: -0.66685605, y: 0.00000023842642, z: 2.821094e-16}
+      rotation: {x: -0.00000007560894, y: -4.2141668e-10, z: -0.018578045, w: 0.9998275}
+      scale: {x: 1.0000025, y: 1.0000025, z: 1.0000015}
     - name: Jefe_Head
       parentName: Jefe_Neck
-      position: {x: -1.348325, y: 0.00000016902622, z: 5.983712e-16}
-      rotation: {x: -0, y: -0, z: 8.876833e-16, w: 1}
-      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+      position: {x: -1.3483301, y: -0.00000054273306, z: 5.508289e-16}
+      rotation: {x: 7.1054257e-15, y: -0, z: -3.1862865e-17, w: 1}
+      scale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
     - name: Jefe_LeftShoulder
       parentName: Jefe_Spine2
-      position: {x: -0.5718418, y: -0.017846478, z: 0.9579732}
-      rotation: {x: -0.4111097, y: 0.5753163, z: 0.57451177, w: 0.41223335}
-      scale: {x: 1.0000014, y: 1.0000006, z: 1.0000006}
+      position: {x: -0.57184136, y: -0.01784646, z: 0.9579727}
+      rotation: {x: -0.4111099, y: 0.5753162, z: 0.57451165, w: 0.41223344}
+      scale: {x: 0.9999998, y: 0.9999998, z: 0.9999997}
     - name: Jefe_LeftArm
       parentName: Jefe_LeftShoulder
-      position: {x: -0.38359696, y: 0.00000010755805, z: -0.000000003936341}
-      rotation: {x: 0.74426246, y: -0.1613294, z: -0.119229645, w: 0.6370483}
-      scale: {x: 1.000002, y: 1.0000007, z: 0.9999992}
+      position: {x: -0.38359705, y: 0.0000002376683, z: -0.00000017742626}
+      rotation: {x: 0.74425864, y: -0.1613511, z: -0.11922932, w: 0.63704735}
+      scale: {x: 1, y: 1.0000002, z: 1.0000001}
     - name: Jefe_LeftForeArm
       parentName: Jefe_LeftArm
-      position: {x: -0.6063774, y: -0.000017977065, z: -0.000032088814}
-      rotation: {x: 0.0011974568, y: 0.01618083, z: -0.055212643, w: 0.9983428}
-      scale: {x: 1.0000005, y: 1.0000005, z: 1.0000002}
+      position: {x: -0.60637695, y: 0.000012527836, z: -0.00002166263}
+      rotation: {x: 0.0011978442, y: 0.01618588, z: -0.055224847, w: 0.9983421}
+      scale: {x: 1.000001, y: 1, z: 1.0000008}
     - name: Jefe_LeftHand
       parentName: Jefe_LeftForeArm
-      position: {x: -0.65374863, y: 0.00000019096562, z: 0.0000010020269}
-      rotation: {x: -0.0000000056024847, y: -0.0000006793704, z: 0.00003153265, w: 1}
-      scale: {x: 0.99999994, y: 0.9999992, z: 1.0000002}
+      position: {x: -0.65374887, y: -0.0000004640951, z: -0.00000037254105}
+      rotation: {x: -0.000000039741263, y: -0.0000006299667, z: 0.00003153266, w: 1}
+      scale: {x: 1, y: 1.0000002, z: 1.0000005}
     - name: Jefe_RightShoulder
       parentName: Jefe_Spine2
-      position: {x: -0.5718418, y: -0.017846478, z: -0.9579731}
-      rotation: {x: 0.5753164, y: 0.41110942, z: -0.41223302, w: 0.5745118}
-      scale: {x: 1.0000001, y: 1.0000048, z: 1.0000046}
+      position: {x: -0.57184136, y: -0.01784646, z: -0.95797265}
+      rotation: {x: 0.5753162, y: 0.41110983, z: -0.41223338, w: 0.5745117}
+      scale: {x: 1, y: 1.0000021, z: 1.0000033}
     - name: Jefe_RightArm
       parentName: Jefe_RightShoulder
-      position: {x: 0.38359702, y: -0.00000013232545, z: 0.0000000039363406}
-      rotation: {x: -0.74413776, y: 0.16132553, z: 0.11927347, w: -0.6371868}
-      scale: {x: 1.0000015, y: 0.99999946, z: 1}
+      position: {x: 0.38359672, y: -0.00000015472827, z: 0.00000025755816}
+      rotation: {x: -0.7441381, y: 0.16132812, z: 0.11925979, w: -0.63718826}
+      scale: {x: 0.99999994, y: 1.0000006, z: 1.0000007}
     - name: Jefe_RightForeArm
       parentName: Jefe_RightArm
-      position: {x: 0.60637754, y: 0.00002479384, z: -0.00000067470836}
-      rotation: {x: 0.0011990066, y: 0.016194718, z: -0.055197407, w: 0.99834347}
-      scale: {x: 1.0000014, y: 0.9999998, z: 1.0000004}
+      position: {x: 0.6063778, y: -0.0000072024745, z: 0.000019499208}
+      rotation: {x: 0.0011981721, y: 0.01619702, z: -0.05520456, w: 0.998343}
+      scale: {x: 1.0000007, y: 0.99999946, z: 1.0000002}
     - name: Jefe_RightHand
       parentName: Jefe_RightForeArm
-      position: {x: 0.6537488, y: -0.000001911804, z: -0.000008673009}
-      rotation: {x: -0.000003629013, y: -0.115163095, z: 0.01918714, w: 0.99316126}
-      scale: {x: 1, y: 1.0000004, z: 1}
+      position: {x: 0.65374833, y: -0.0000029121056, z: 0.000013007052}
+      rotation: {x: -0.000000064217595, y: 0.000000003696186, z: 0.00003102593, w: 1}
+      scale: {x: 1, y: 1.0000001, z: 1}
     - name: Martillo5
       parentName: Jefe_RightHand
-      position: {x: 0.66668105, y: -1.4602274, z: -0.26147112}
-      rotation: {x: 0.06311552, y: 0.09759379, z: 0.07335309, w: 0.9905106}
+      position: {x: 0.45268238, y: -1.0232807, z: -0.021340333}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Union_Martillo
       parentName: Martillo5
@@ -637,9 +641,9 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: "Empu\xF1adura"
       parentName: Martillo5
-      position: {x: -0.040253382, y: 0.625144, z: -0.027665209}
+      position: {x: -0.028819595, y: 0.18336095, z: -0.025234703}
       rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1.3601416, z: 1}
+      scale: {x: 1, y: 1, z: 1}
     - name: "Empu\xF1adura_Arriba"
       parentName: Martillo5
       position: {x: 0.20322022, y: -1.7239702, z: 0.16848186}
@@ -656,209 +660,209 @@ ModelImporter:
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_Reference
-      parentName: Caminata(Clone)
+      parentName: PresentacionButtslam(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_HipsEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -0.00042271614, y: 2.3094125, z: -0.1952745}
-      rotation: {x: -0.0000011984598, y: -7.3384505e-23, z: 7.3384505e-23, w: 1}
+      position: {x: -0.00019132649, y: 1.3373127, z: -0.19464707}
+      rotation: {x: 0.021770518, y: 1.3330598e-18, z: -1.3330598e-18, w: 0.999763}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftAnkleEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -0.41307873, y: 0.9805192, z: -0.9301933}
-      rotation: {x: 0.38115713, y: 0.063254036, z: -0.005896548, w: 0.922325}
+      position: {x: -0.72700757, y: 0.36480236, z: 0.014521749}
+      rotation: {x: 0.000010726733, y: -0.008855873, z: -0.0012896634, w: 0.99995995}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightAnkleEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: 0.41307414, y: 0.355762, z: -0.18293801}
-      rotation: {x: 0.000009982905, y: 0.008814947, z: 0.0012837044, w: 0.99996036}
+      position: {x: 0.77889186, y: 0.38502437, z: -0.15842892}
+      rotation: {x: 0.00000989427, y: 0.00881506, z: 0.0012837177, w: 0.99996036}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftWristEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -1.36622, y: 4.1317005, z: 0.917141}
-      rotation: {x: 0.6443485, y: -0.39820126, z: -0.6135946, w: -0.22305259}
+      position: {x: -1.7354574, y: 2.4979577, z: 0.4349148}
+      rotation: {x: -0.22781467, y: 0.30181247, z: 0.56272477, w: 0.7350855}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightWristEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: 1.3093534, y: 3.6342483, z: 0.6608601}
-      rotation: {x: 0.09118964, y: -0.68446046, z: -0.50270176, w: 0.5200859}
+      position: {x: 1.7034276, y: 2.3533669, z: 0.41593143}
+      rotation: {x: -0.15291014, y: -0.27352408, z: -0.5923452, w: 0.7422468}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftKneeEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -0.5689634, y: 1.4763283, z: 0.031130731}
-      rotation: {x: 0.5183949, y: -0.02827214, z: 0.06650299, w: 0.8520826}
+      position: {x: -0.6246989, y: 1.2993557, z: 0.52980965}
+      rotation: {x: 0.25736433, y: -0.045187164, z: -0.06092936, w: 0.9633324}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightKneeEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: 0.46600294, y: 1.4451122, z: -0.11374719}
-      rotation: {x: 0.03278701, y: 0.047001403, z: -0.022718443, w: 0.9980981}
+      position: {x: 0.63511634, y: 1.2248788, z: 0.4458932}
+      rotation: {x: 0.3116808, y: 0.047586787, z: 0.08331597, w: 0.94533014}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftElbowEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -1.4120994, y: 3.975058, z: 0.2840966}
-      rotation: {x: -0.47074318, y: 0.6350009, z: 0.36312845, w: 0.49326715}
+      position: {x: -1.64903, y: 2.8473222, z: 0.039075967}
+      rotation: {x: -0.14027259, y: 0.36501828, z: 0.48940644, w: 0.7794656}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightElbowEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: 1.5985136, y: 4.0575304, z: 0.2551437}
-      rotation: {x: 0.15297301, y: -0.7400318, z: -0.41653994, w: 0.50541747}
+      position: {x: 1.6463407, y: 2.848129, z: 0.059907977}
+      rotation: {x: -0.07824303, y: -0.33998135, z: -0.5465909, w: 0.7612681}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_ChestOriginEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -0.00042271614, y: 2.8004196, z: -0.19097842}
-      rotation: {x: -0.0000027125989, y: -1.6454682e-22, z: 1.6609152e-22, w: 1}
+      position: {x: -0.00019133532, y: 1.8269694, z: -0.17118087}
+      rotation: {x: 0.023270722, y: 1.4116069e-18, z: -1.4248586e-18, w: 0.9997292}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_ChestEndEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -0.00042274594, y: 4.4542093, z: -0.22035311}
-      rotation: {x: -0.0000027125989, y: -1.11022256e-16, z: -2.2182775e-16, w: 1}
+      position: {x: -0.0001913607, y: 3.4420757, z: -0.011927236}
+      rotation: {x: 0.10539004, y: -1.03940267e-16, z: -2.1534489e-16, w: 0.99443096}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftFootEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -0.3545222, y: 0.52422094, z: -0.5914727}
-      rotation: {x: 0.3811571, y: 0.063254036, z: -0.0058965455, w: 0.922325}
+      position: {x: -0.7372327, y: 0.2824823, z: 0.5797532}
+      rotation: {x: 0.00001073194, y: -0.008855934, z: -0.0012892815, w: 0.99995995}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightFootEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: 0.42329913, y: 0.27344263, z: 0.38229343}
-      rotation: {x: 0.000009983781, y: 0.008814933, z: 0.001283801, w: 0.99996036}
+      position: {x: 0.7891171, y: 0.30270514, z: 0.40680304}
+      rotation: {x: 0.0000098967885, y: 0.008815041, z: 0.001283673, w: 0.99996036}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftShoulderEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -1.3073082, y: 4.294814, z: -0.22035225}
-      rotation: {x: -0.2864534, y: 0.3749672, z: 0.5225138, w: 0.7101573}
+      position: {x: -1.3098358, y: 3.298015, z: -0.04062802}
+      rotation: {x: 0.0031131117, y: 0.058534205, z: 0.4838561, w: 0.8731823}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightShoulderEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: 1.3064628, y: 4.294814, z: -0.22035225}
-      rotation: {x: -0.025781557, y: -0.44853514, z: -0.24086012, w: 0.8603127}
+      position: {x: 1.3092977, y: 3.297485, z: -0.04066615}
+      rotation: {x: -0.009057544, y: -0.0728106, z: -0.48368114, w: 0.87216353}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_HeadEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -0.00042271614, y: 5.896759, z: -0.15525712}
-      rotation: {x: -0.000007642646, y: -4.679771e-22, z: 4.679771e-22, w: 1}
+      position: {x: -0.00019133532, y: 4.7765274, z: 0.46072176}
+      rotation: {x: 0.15830985, y: 9.6936824e-18, z: -9.6936824e-18, w: 0.9873895}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftHipEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: -0.47690463, y: 2.3094125, z: -0.1952745}
-      rotation: {x: -0.13597563, y: -0.0885949, z: -0.04155821, w: 0.9858674}
+      position: {x: -0.4766733, y: 1.3373127, z: -0.19464707}
+      rotation: {x: -0.6262653, y: -0.00016485996, z: -0.12674716, w: 0.7692379}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightHipEffector
       parentName: Jefe_Ctrl_Reference
-      position: {x: 0.4760592, y: 2.3094125, z: -0.1952745}
-      rotation: {x: -0.04608524, y: 0.10556461, z: -0.010729225, w: 0.9932861}
+      position: {x: 0.47629064, y: 1.3373127, z: -0.19464707}
+      rotation: {x: -0.57431966, y: -0.016742783, z: 0.15128678, w: 0.8043562}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_Hips
       parentName: Jefe_Ctrl_Reference
-      position: {x: -0.00042271614, y: 2.2433639, z: -0.19198883}
-      rotation: {x: -0.0000011984598, y: -7.3384505e-23, z: 7.3384505e-23, w: 1}
+      position: {x: -0.00019133532, y: 1.2712358, z: -0.19394585}
+      rotation: {x: 0.027202073, y: 1.6656466e-18, z: -1.6656466e-18, w: 0.99963}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftUpLeg
       parentName: Jefe_Ctrl_Hips
       position: {x: -0.47648263, y: 0.06604864, z: -0.003285528}
-      rotation: {x: -0.13597445, y: -0.08859485, z: -0.041558314, w: 0.98586756}
+      rotation: {x: -0.7088256, y: -0.00045179497, z: -0.12284377, w: 0.6946046}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftLeg
       parentName: Jefe_Ctrl_LeftUpLeg
       position: {x: -0, y: -0.8681962, z: 0}
-      rotation: {x: 0.63399786, y: 0.06011836, z: 0.05120268, w: 0.7692924}
+      rotation: {x: 0.8484089, y: 0.030074932, z: 0.049378853, w: 0.5261746}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftFoot
       parentName: Jefe_Ctrl_LeftLeg
       position: {x: -0, y: -1.0928282, z: 0}
-      rotation: {x: -0.14931129, y: 0.051568933, z: -0.10992839, w: 0.98130655}
+      rotation: {x: -0.24343948, y: 0.04242038, z: 0.076616324, w: 0.9659543}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftToeBase
       parentName: Jefe_Ctrl_LeftFoot
       position: {x: -0.00000036507853, y: -0.08232137, z: 0.5653246}
-      rotation: {x: 2.6368283e-24, y: -0.000000021531333, z: -1.2246467e-16, w: 1}
+      rotation: {x: 1.7951995e-32, y: -0.000000008255159, z: -1.2246467e-16, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightUpLeg
       parentName: Jefe_Ctrl_Hips
       position: {x: 0.47648263, y: 0.06604864, z: -0.003285528}
-      rotation: {x: -0.046084046, y: 0.10556461, z: -0.0107291, w: 0.99328613}
+      rotation: {x: -0.6672105, y: -0.0175748, z: 0.14174907, w: 0.73104614}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightLeg
       parentName: Jefe_Ctrl_RightUpLeg
       position: {x: -2.220446e-16, y: -0.8681962, z: 0.000008463861}
-      rotation: {x: 0.080458425, y: -0.057279214, z: -0.0062298756, w: 0.9950913}
+      rotation: {x: 0.84454083, y: -0.032734722, z: -0.052845787, w: 0.53187084}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightFoot
       parentName: Jefe_Ctrl_RightLeg
       position: {x: -0, y: -1.0928282, z: 0}
-      rotation: {x: -0.033036344, y: -0.03815906, z: 0.023710355, w: 0.99844396}
+      rotation: {x: -0.29595214, y: -0.048723705, z: -0.098117486, w: 0.94890004}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightToeBase
       parentName: Jefe_Ctrl_RightFoot
       position: {x: 0.000047445308, y: -0.08232137, z: 0.5653246}
-      rotation: {x: 2.2365468e-32, y: -0, z: -1.2246467e-16, w: 1}
+      rotation: {x: 6.405536e-32, y: -0.000000024897032, z: -1.2246467e-16, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_Spine
       parentName: Jefe_Ctrl_Hips
       position: {x: -0, y: 0.55705655, z: 0.0010116699}
-      rotation: {x: -0.0000015141391, y: -9.184799e-23, z: 9.271023e-23, w: 1}
+      rotation: {x: 0.001398882, y: 8.485647e-20, z: -8.565308e-20, w: 0.99999905}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_Spine1
       parentName: Jefe_Ctrl_Spine
       position: {x: -0, y: 0.5565902, z: -0.0052008047}
-      rotation: {x: -1.2663481e-16, y: -5.52337e-17, z: 2.8303685e-17, w: 1}
+      rotation: {x: 0.052271415, y: 1.2558328e-16, z: -1.0100991e-17, w: 0.99863297}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_Spine2
       parentName: Jefe_Ctrl_Spine1
       position: {x: -0, y: 0.5253943, z: -0.0052008047}
-      rotation: {x: 8.7386695e-17, y: 8.37548e-17, z: 2.7592341e-17, w: 1}
+      rotation: {x: 0.052271504, y: -1.0766452e-16, z: -2.1892177e-16, w: 0.9986329}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftShoulder
       parentName: Jefe_Ctrl_Spine2
       position: {x: -0.9579734, y: 0.57180583, z: -0.018964116}
-      rotation: {x: 0, y: 0, z: 2.7755576e-17, w: 1}
+      rotation: {x: 0.00000015014767, y: -0.00000023311316, z: -0.009009804, w: 0.9999594}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftArm
       parentName: Jefe_Ctrl_LeftShoulder
       position: {x: -0.34891263, y: -0.15939526, z: 0}
-      rotation: {x: -0.28645155, y: 0.37496567, z: 0.52251494, w: 0.71015805}
+      rotation: {x: -0.13459939, y: 0.1328065, z: 0.4607053, w: 0.8671771}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftForeArm
       parentName: Jefe_Ctrl_LeftArm
       position: {x: -0.6063776, y: -8.881784e-16, z: 1.110223e-16}
-      rotation: {x: 0.0026318852, y: 0.407942, z: 0.005524374, w: 0.91298735}
+      rotation: {x: -0.0012856545, y: 0.41502756, z: -0.0024909845, w: 0.9098046}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_LeftHand
       parentName: Jefe_Ctrl_LeftForeArm
       position: {x: -0.6537488, y: -8.881784e-16, z: 1.110223e-16}
-      rotation: {x: -0.4578704, y: -0.00008321879, z: -0.00004208543, w: 0.889019}
+      rotation: {x: -0.17832512, y: -0.000050818217, z: 0.000014524524, w: 0.98397166}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightShoulder
       parentName: Jefe_Ctrl_Spine2
       position: {x: 0.95797336, y: 0.57180583, z: -0.018964116}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      rotation: {x: 0.00000016600997, y: 0.00000029806182, z: 0.00825628, w: 0.9999659}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightArm
       parentName: Jefe_Ctrl_RightShoulder
       position: {x: 0.3489127, y: -0.15939526, z: 0}
-      rotation: {x: -0.025779217, y: -0.4485345, z: -0.24086136, w: 0.86031276}
+      rotation: {x: -0.14822675, y: -0.14848715, z: -0.46061084, w: 0.8624489}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightForeArm
       parentName: Jefe_Ctrl_RightArm
       position: {x: 0.6063777, y: 0, z: 1.110223e-16}
-      rotation: {x: 0.13604635, y: -0.3623771, z: -0.3243127, w: 0.8631312}
+      rotation: {x: 0.036429454, y: -0.35596326, z: -0.09544597, w: 0.92889893}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_RightHand
       parentName: Jefe_Ctrl_RightForeArm
       position: {x: 0.6537487, y: -0.0000004768373, z: 1.110223e-16}
-      rotation: {x: -0.12038038, y: 0.000026175758, z: -0.00021695725, w: 0.9927278}
+      rotation: {x: -0.14377517, y: 0.00006203422, z: 0.0000021035994, w: 0.9896104}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_Neck
       parentName: Jefe_Ctrl_Spine2
       position: {x: -0, y: 0.6668648, z: -0.0013033751}
-      rotation: {x: -0.0000049300484, y: -5.9385215e-17, z: -2.022283e-18, w: 1}
+      rotation: {x: 0.025421506, y: 4.4337596e-18, z: -1.1254208e-16, w: 0.9996768}
       scale: {x: 1, y: 1, z: 1}
     - name: Jefe_Ctrl_Head
       parentName: Jefe_Ctrl_Neck
       position: {x: -0, y: 1.3475155, z: 0.04745723}
-      rotation: {x: 3.0616168e-17, y: -0, z: -0, w: 1}
+      rotation: {x: 0.025423065, y: 1.5567137e-18, z: -1.5567138e-18, w: 0.99967676}
       scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
