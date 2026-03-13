@@ -10,7 +10,7 @@ public abstract class ItemLogic : MonoBehaviour
     [SerializeField] protected PlayerContext _Context;
 
     
-    [SerializeField] protected int ItemStacks;
+    [SerializeField] public int ItemStacks;
     public int Stacks { get { return ItemStacks; } }
 
     [SerializeField] protected bool IsInventoryMaster;
