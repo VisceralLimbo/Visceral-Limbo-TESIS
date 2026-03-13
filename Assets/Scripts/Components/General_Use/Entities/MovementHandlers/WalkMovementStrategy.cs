@@ -10,6 +10,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [SerializeField] GameObject _Model;
     [SerializeField] Rigidbody _RB;
     [SerializeField] StatsManager _StatMan;
+    [SerializeField] Obstacle_Avoidance_Component _ObsAvoid;
     [Space]
 
     [Header("Variables")]
@@ -87,6 +88,14 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
 
                 _MovementSpeed = _StatMan.GetFloatStatValue(_MovementStat);
                 _KnockbackResistance = _StatMan.GetFloatStatValue(_KnockbackResistanceStat);
+            }
+        }
+
+        if(_ObsAvoid == null)
+        {
+            if(this.TryGetComponent(out Obstacle_Avoidance_Component OBSComp))
+            {
+                _ObsAvoid = OBSComp;
             }
         }
 
@@ -205,10 +214,16 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
             var TargetVelocity = _MovementSpeed * groundedMovement;
             var ScaledVelocity = TargetVelocity * TimeDilationManager.GlobalTimeScale;
 
+            var FinalVelocity = ScaledVelocity;
+            if (_ObsAvoid != null)
+            {
+                FinalVelocity = _ObsAvoid.PerformObstacleAvoidance(ScaledVelocity, _MovementSpeed);
+            }
+
             currentVelocity = Vector3.Slerp
                  (
                      a: currentVelocity,
-                     b: ScaledVelocity,
+                     b: FinalVelocity,
                      t: 1f - Mathf.Exp(-_MovementAccel * (TimeDilationManager.GlobalTimeScale * deltaTime))
 
                  );
@@ -269,7 +284,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
         //
         //CASO 2: sentido adelante
         var forward = Vector3.ProjectOnPlane(
-                    vector: _TargetVelocity,
+                    vector: _KCC.BaseVelocity,
                     _KCC.CharacterUp
 
 
