@@ -127,6 +127,9 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] private Color SpecialRoomGlowColor = Color.magenta; //violetaxd
     [SerializeField] private Color BossRoomGlowColor = Color.red; // rojoxd
 
+    [Header("Progression Settings")]
+    [SerializeField] private int baseRegularRoomCount = 5; // salas iniciales del lvl 1
+    [SerializeField] private int roomsPerLevelIncrease = 3; // las q se agregan por lvl
 
     public Action<float> GenerationValue;
 
@@ -148,6 +151,15 @@ public class DungeonGenerator : MonoBehaviour
 
     private void Start()
     {
+        // leo el nivel del gamemanager
+        if (GameManager.Instance != null)
+        {
+            // ahora seria lvl1 = 5 salas (tengo q tocar las q estan puestas en el inscpector xd)
+            RegularRoomCount = baseRegularRoomCount + (roomsPerLevelIncrease * (GameManager.Instance.currentLevel - 1));
+            // aumento las especiales tmb
+            SpecialRoomCount += GameManager.Instance.currentLevel / 2;
+        }
+
         generatedRooms = new List<DungeonPart>();
         //comenzar a crear salas
         StartGeneration();

@@ -1,6 +1,4 @@
 using UnityEngine;
-using System;
-using System.Data;
 
 public class Boss_HealthComp : Health_Component
 {
@@ -64,6 +62,19 @@ public class Boss_HealthComp : Health_Component
                 Combat_UI_Manager._Instance.DisplayWin(true);
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
+            }
+
+            // busco el inv y lo guardo subo 1 lvl y voy para el nexus
+            if (GameManager.Instance != null)
+            {
+                InventoryManager playerInv = FindObjectOfType<InventoryManager>();
+                if (playerInv != null)
+                {
+                    GameManager.Instance.SavePlayerInventory(playerInv.GetInventoryItems());
+                }
+
+                GameManager.Instance.AdvanceLevel();
+                GameManager.Instance.GoToNexus();
             }
         }
     }

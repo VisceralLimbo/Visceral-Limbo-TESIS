@@ -19,6 +19,23 @@ public class InventoryManager : MonoBehaviour
 
     public UnityAction<ItemDefinitionSO> ItemPickUp;
 
+    private void Start()
+    {
+        // Si venimos de un nivel anterior y hay items guardados...
+        if (GameManager.Instance != null && GameManager.Instance.savedInventory.Count > 0)
+        {
+            foreach (var savedItem in GameManager.Instance.savedInventory)
+            {
+                // Añadimos el item tantas veces como stacks teniamos
+                for (int i = 0; i < savedItem.stacks; i++)
+                {
+                    AddItemStack(savedItem.definition);
+                }
+            }
+            GameManager.Instance.savedInventory.Clear(); 
+        }
+    }
+
     /// <summary>
     /// funcion para añadir un item / un stack
     /// RECORDATORIO: esta funcion maneja tanto añadir items nuevos
