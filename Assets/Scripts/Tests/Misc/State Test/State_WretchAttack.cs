@@ -18,6 +18,11 @@ public class State_WretchAttack : BaseState
     [Header("Variables")]
     [SerializeField] bool _FinishedAttack;
     [SerializeField] float _AttackMovementStrenght;
+
+    [Range(0,100)]
+    [SerializeField] int _ChanceForPredictiveAttack;
+    [SerializeField] float _PredictiveOffset; // que tanto tenemos que exagerar la prediccion 
+
     [Space]
 
     [Header("Events")]
@@ -25,6 +30,9 @@ public class State_WretchAttack : BaseState
 
 
     float pulse = 0;
+
+    Transform _LastTarget;
+    PlayerContext _LastContext;
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
         //enforce minimum duration 
@@ -47,19 +55,64 @@ public class State_WretchAttack : BaseState
         }
     }
 
+    Vector3 _FinalChargeDirection;
     public override void OnEnter(VisceralStateMachine CTX)
     {
         _FinishedAttack = false;
 
         _AnimatorHandler.SetParameter("Wretched", "IsCharging", AnimatorControllerParameterType.Trigger);
 
+        int RandomSeed = Random.Range(0, 101);
+        if(RandomSeed <= _ChanceForPredictiveAttack)
+        {
+            PredictiveAttack();
+        }
+        else
+        {
+            RegularAttack();
+        }
+
+
+    }
+
+
+    private void RegularAttack()
+    {
         //create an Inpulse for the Enemy
 
         Vector3 Dir = _Target.position - _KCC.Capsule.transform.position;
-        Dir.Normalize();
-        _MovementStrategy.KillAllMovement();
-        _MovementStrategy.ApplyExternalForce(Dir, _AttackMovementStrenght);
+
+        _FinalChargeDirection = Dir;
         OnChargeAttackStart?.Invoke();
+    }
+
+    private void PredictiveAttack()
+    {
+        print("Predictive");
+
+        if(_LastTarget != _Target || _LastTarget == null)
+        {
+            print("New Context");
+            _LastTarget = _Target;
+            _LastContext = _Target.GetComponentInParent<PlayerContext>();
+        }
+
+        Vector3 _TargetVelocity = Vector3.zero;
+
+        if (_LastContext != null)
+        {
+            _TargetVelocity = _LastContext.KCCMotor.BaseVelocity;
+        }
+
+        print("baseVelocity " + _TargetVelocity);
+
+        Vector3 OvershootTarget = _LastContext.KCCMotor.Capsule.transform.position + (_TargetVelocity * _PredictiveOffset);  
+
+        Vector3 Dir = OvershootTarget - _KCC.Capsule.transform.position;
+        _FinalChargeDirection = Dir;
+
+        OnChargeAttackStart?.Invoke();
+
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -113,11 +166,26 @@ public class State_WretchAttack : BaseState
 
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
-        if(_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+        _MovementStrategy.GetKCC().BaseVelocity = Vector3.zero;
+         Vector3 MoveDir = _FinalChargeDirection.normalized;
+
+        _MovementStrategy.ApplyExternalForce(MoveDir, _AttackMovementStrenght);
+
+        //_MovementStrategy.ApplyExternalForce(FinalDir, _AttackMovementStrenght);
+
+
+        if (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
         {
             _FinishedAttack = true;
         }
     }
 
+    private void OnDrawGizmosSelected()
+    {
+
+        Gizmos.DrawLine(_KCC.CharacterUp, _FinalChargeDirection);
+
+
+    }
 
 }

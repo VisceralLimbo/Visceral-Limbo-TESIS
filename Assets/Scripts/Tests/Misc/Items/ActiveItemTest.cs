@@ -27,7 +27,6 @@ public class ActiveItemTest : ItemLogic, I_ItemActiveItem
         if(pulse > timer)
         {
             pulse = 0;
-            print("item activo!");
         }
     }
 

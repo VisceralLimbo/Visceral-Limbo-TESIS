@@ -308,7 +308,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     {
         _AddExternalVelocity = Vector3.zero;
         _KillAllMovement = false;
-        _TargetRotation = null;
+        //_TargetRotation = null;
 
     }
 

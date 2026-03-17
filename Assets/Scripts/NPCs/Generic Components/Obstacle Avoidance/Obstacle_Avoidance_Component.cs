@@ -85,7 +85,7 @@ public class Obstacle_Avoidance_Component : MonoBehaviour
         }
 
         //a la direccion original le vamos a sumar el desplazamiento de obstacle avoidance
-        print(AvoidanceForce);
+
         finalDirection = (finalDirection + AvoidanceForce).normalized * OriginalSpeed;
 
         return finalDirection;

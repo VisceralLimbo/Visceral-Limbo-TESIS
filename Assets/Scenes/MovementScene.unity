@@ -5564,6 +5564,11 @@ PrefabInstance:
       propertyPath: _ObsAvoid
       value: 
       objectReference: {fileID: 1106299380}
+    - target: {fileID: 468632177334604354, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: _MaxRotationSpeed
+      value: 720
+      objectReference: {fileID: 0}
     - target: {fileID: 517940139666298676, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
       propertyPath: m_Layer
@@ -5747,7 +5752,7 @@ PrefabInstance:
     - target: {fileID: 4091262336931204975, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 424.3
+      value: 403.63
       objectReference: {fileID: 0}
     - target: {fileID: 4091262336931204975, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
@@ -5757,7 +5762,7 @@ PrefabInstance:
     - target: {fileID: 4091262336931204975, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 192.3
+      value: 242.16
       objectReference: {fileID: 0}
     - target: {fileID: 4091262336931204975, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
@@ -6024,6 +6029,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7930172695561420689, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: _MinDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7973290413071139186, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
       propertyPath: m_Layer
@@ -6063,6 +6073,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8712699911459687716, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: _PredictiveOffset
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8712699911459687716, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: _AttackMovementStrenght
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8712699911459687716, guid: 12ab87a74532c144ba81cd8a88625f40,
+        type: 3}
+      propertyPath: _ChanceForPredictiveAttack
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8724511471017686902, guid: 12ab87a74532c144ba81cd8a88625f40,
         type: 3}
@@ -7150,7 +7175,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &1907159822
 CapsuleCollider:
   m_ObjectHideFlags: 0
