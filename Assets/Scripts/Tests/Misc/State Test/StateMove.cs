@@ -37,10 +37,12 @@ public class StateMove : BaseState
             {
                 _KCC = CTX.GetComponentInChildren<KinematicCharacterMotor>();
             }
-            _Target = FindObjectOfType<Player_Movement>().transform;
+           
         }
 
-        if(_MovementStrategy == null)
+        _Target = FindObjectOfType<Player_Movement>().transform;
+
+        if (_MovementStrategy == null)
         {
             if(CTX.gameObject.TryGetComponent<IMovementStrategy>(out IMovementStrategy _Movement))
             {

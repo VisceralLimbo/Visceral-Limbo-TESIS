@@ -39,6 +39,7 @@ public class GlobalLevelManager
     public static void ResetGlobalLevelStage()
     {
         _GlobalLevelStage = 1;
+        OnGlobalLevelStageChange?.Invoke(_GlobalLevelStage);
     }
 
     public static int GetGlobalLevelStage() { return _GlobalLevelStage; }
