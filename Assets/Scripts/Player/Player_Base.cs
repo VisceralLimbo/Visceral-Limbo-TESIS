@@ -13,6 +13,7 @@ using System;
 
 public class Player_Base : Visceral_Script
 {
+
     public InputStruct _MovementInput { get; private set; }
     public InputStruct _CameraInput { get; private set; }
     [SerializeField] private Player_Movement _Player_Movement;
@@ -114,62 +115,34 @@ public class Player_Base : Visceral_Script
 
     private void Update()
     {
+     
         if (!IsAlive || !IsPlayerActive) return;
 
+        // 1. OBTENER LOS DATOS DEL HANDLER (Usando tu Singleton)
+        var movementInput = Player_InputHandler.instance.CurrentMovementInput;
+        var cameraInput = Player_InputHandler.instance._CameraInput;
 
-        var Input = _Player_InputActions.Gameplay;
+        // 2. LOGICA DE INTERFAZ (Tab)
+        // Nota: Deberíamos agregar el 'Inventory' al struct de InputMovement en el futuro!
+        _isTabPressed = Player_InputHandler.instance._Player_InputActions.Gameplay.Inventory.IsPressed();
 
-        _isTabPressed = Input.Inventory.IsPressed();
+        if (_isTabPressed && !previousTabState)
+        {
+            SoundManager.Instance.CreateSound().WithSoundData(_uiTabSound).play();
+        }
+        previousTabState = _isTabPressed;
 
-        // Detectar apertura del inventario
+        // 3. PASAR DATOS A LOS COMPONENTES
+        _Player_CameraController.UpdatePosition(_Player_Movement.GetCameraTarget());
+        _Player_CameraController.UpdateRotation(cameraInput);
+
+
         if (_isTabPressed && !previousTabState)
         {
             SoundManager.Instance.CreateSound().WithSoundData(_uiTabSound).play();
         }
         // Actualizar estado
         previousTabState = _isTabPressed;
-
-        //logica de camara
-        //
-        // recibir camera input y actualizar la rotacion
-        //creo struct
-        var cameraInput = new InputStruct
-        {
-            //set variable lookdelta con el valor del input.look creado en playerinput
-            LookDelta = Input.Look.ReadValue<Vector2>()
-
-        };
-        _Player_CameraController.UpdatePosition(_Player_Movement.GetCameraTarget());
-        _Player_CameraController.UpdateRotation(cameraInput);
-
-        //logica de movimiento
-        //recibo movement inputs y actualizo 
-        //creo struct
-        var movementInput = new InputMovement
-        {
-            //rotation => rotacion del jugador
-            //movement => movimiento del jugador
-            //jumping/jumpsustaining => salto del jugador
-
-            rotation = _Player_CameraController.transform.rotation,
-            Movement = Input.Movement.ReadValue<Vector2>(),
-            Jumping = Input.Jump.WasPressedThisFrame(),
-            JumpSustaining = Input.Jump.IsPressed(),
-
-            // pseudo codigo => si el boton crouch fue presionado, devolver toggle , de no serlo devolver none
-            Crouch = Input.Crouch.WasPressedThisFrame() ? CrouchEnum.Toggle : CrouchEnum.None,
-
-
-            Ability_Support = Input.Ability_Support.WasPressedThisFrame(),
-            LeftMouseClick = Input.Mouse1.WasPressedThisFrame(),
-            SustainedLeftMouseClick = Input.Mouse1.IsPressed(),
-            ReleasedLeftMouseClick = Input.Mouse1.WasReleasedThisFrame(),
-            Ability_1 = Input.Ability_1.WasPressedThisFrame(),
-            Ability_2 = Input.Ability_2.WasPressedThisFrame(),
-            Ultimate = Input.Ultimate.WasPressedThisFrame(),
-            Kick = Input.Kick.WasPressedThisFrame(),
-
-        };
 
         bool isMoving = movementInput.Movement.sqrMagnitude > 0.1f;
 

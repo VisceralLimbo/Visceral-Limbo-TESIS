@@ -3,15 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//Enum para determinar si el agacharse es manteniendo el boton, o tocando y soltando
-/// <summary>
-/// este enum indica que tipo de input de agachado usa el juego
-/// </summary>
-public enum CrouchEnum
-{
-    None, Toggle
-}
-
 //Enum para saber en que estado se encuentra el jugador
 /// <summary>
 /// este enum sirve para entender en que situacion de movimiento encuentra el jugador
@@ -34,71 +25,6 @@ public struct CharacterState
 /// </summary>
 ///
 
-public struct InputMovement
-{
-    /// <summary>
-    /// El quaternion de rotacion que tiene que realizar
-    /// </summary>
-    public Quaternion rotation;
-
-    /// <summary>
-    /// el vector de movimiento que tiene que utilizar
-    /// </summary>
-    public Vector2 Movement;
-
-    /// <summary>
-    /// booleano que indica que esta saltando
-    /// </summary>
-    public bool Jumping;
-
-    /// <summary>
-    /// booleano que indica que sigue saltando
-    /// </summary>
-    public bool JumpSustaining; //bool que se mantiene true mientras el jugador presione espacio
-
-    /// <summary>
-    /// Enum que indica que estamos agachandonos
-    /// </summary>
-    public CrouchEnum Crouch;
-
-    /// <summary>
-    /// booleano que indica que el jugador uso la habilidad soporte
-    /// </summary>
-    public bool Ability_Support;
-
-    /// <summary>
-    /// booleano que indica que el presiono el click izquierdo
-    /// </summary>
-    public bool LeftMouseClick;
-
-    /// <summary>
-    /// booleano que indica que el jugador mantiene presionado el click izquierdo
-    /// </summary>
-    public bool SustainedLeftMouseClick;
-
-    /// <summary>
-    /// booleano que indica que el jugador solto  el click izquierdo
-    /// </summary>
-    public bool ReleasedLeftMouseClick;
-
-    /// <summary>
-    /// booleano que indica que el jugador presiono la habilidad 1
-    /// </summary>
-    public bool Ability_1;
-    /// <summary>
-    /// booleano que indica que el jugador presiono la habilidad 2
-    /// </summary>
-    public bool Ability_2;
-    /// <summary>
-    /// booleano que indica que el jugador presiono la Ultimate
-    /// </summary>
-    public bool Ultimate;
-
-    /// <summary>
-    /// booleano que indica que el jugador presiono el kick
-    /// </summary>
-    public bool Kick;
-}
 
 //  patricio malvasio maddalena
 //  6/4/2025 21:57
