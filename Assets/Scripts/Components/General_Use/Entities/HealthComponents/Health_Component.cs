@@ -41,6 +41,7 @@ public class Health_Component : Visceral_Component, IDamageable
         CurrentHealth = MaxHealth;
         _RB= GetComponent<Rigidbody>();
         _Context= GetComponentInParent<PlayerContext>();
+
     }
 
     /// <summary>
@@ -279,4 +280,5 @@ public class Health_Component : Visceral_Component, IDamageable
         HPComp = this;
         return true;
     }
+
 }

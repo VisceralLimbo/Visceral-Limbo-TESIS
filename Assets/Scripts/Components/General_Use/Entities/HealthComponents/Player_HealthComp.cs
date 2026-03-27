@@ -115,12 +115,27 @@ public class Player_HealthComp : Health_Component
 
     private void UpdateStatValues(StatIdentifier statID, float values)
     {
-        if (statID == _MaxHealthID)
+        switch (statID)
         {
-            MaxHealth = values;
-            Combat_UI_Manager._Instance.UpdatePlayerHealthBar(CurrentHealth, MaxHealth, false);
+            case var _ when statID == _MaxHealthID:
+                MaxHealth = values;
+                Combat_UI_Manager._Instance.UpdatePlayerHealthBar(CurrentHealth, MaxHealth, false);
+                break;
+
+            case var _ when statID == _BaseDefenseID:
+                Defense = values;
+                break;
+
+            case var _ when statID == _BaseDamageReduction:
+                DamageReduction = values;
+                break;
+
+            case var _ when statID == _BaseDamageInvulnerability:
+                DamageInvulnerability = values;
+                break;
         }
     }
+
 
     private void SpawnDamageIndicator()
     {
