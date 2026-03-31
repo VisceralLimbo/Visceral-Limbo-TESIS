@@ -7,13 +7,15 @@ using UnityEngine.EventSystems;
 public class SwordTest : Visceral_WeaponBase
 {
     PlayerContext _UserContext;
-  
+    Player_MeleeAttack _meleeAttack; // refe
+
     [SerializeField] private PlayerRayCast playerRay;
 
     private void Start()
     {
         _UserContext = this.transform.root.GetComponentInChildren<PlayerContext>();
         playerRay = _UserContext.GetComponentInChildren<PlayerRayCast>();
+        _meleeAttack = _UserContext.GetComponent<Player_MeleeAttack>();
     }
 
     public override void Attacking()
@@ -75,11 +77,11 @@ public class SwordTest : Visceral_WeaponBase
         //
         PlayerEvents.PlayerSucessfulHit();
 
-        // notifico al flash sobre el bleed
+        // veo que particulas usa dependiendo si esta activo el item de bleed
         EnemyDamageFlash damageFlash = HPComp.GetComponent<EnemyDamageFlash>();
-        if (damageFlash != null)
+        if (damageFlash != null && _meleeAttack != null)
         {
-            damageFlash.SetBleedStatus(true);
+            damageFlash.SetBleedStatus(_meleeAttack.IsBleedEffectActive);
         }
         SlowMotion.Stop(0.1f, 0.05f, false);
     }
@@ -115,11 +117,11 @@ public class SwordTest : Visceral_WeaponBase
         //
         PlayerEvents.PlayerSucessfulHit();
 
-        // notifico al flash sobre el bleed
+        // veo que particulas usa dependiendo si esta activo el item de bleed
         EnemyDamageFlash damageFlash = HPComp.GetComponent<EnemyDamageFlash>();
-        if (damageFlash != null)
+        if (damageFlash != null && _meleeAttack != null)
         {
-            damageFlash.SetBleedStatus(true);
+            damageFlash.SetBleedStatus(_meleeAttack.IsBleedEffectActive);
         }
         SlowMotion.Stop(0.1f, 0.05f, false);
 

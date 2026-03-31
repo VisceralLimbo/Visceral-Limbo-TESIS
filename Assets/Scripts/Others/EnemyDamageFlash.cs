@@ -38,9 +38,9 @@ public class EnemyDamageFlash : MonoBehaviour
         _isBleedActiveOnHit = isBleed;
     }
 
-    void TriggerFlash()
+    public void TriggerFlash()
     {
-        // activo particulas
+        // activo en el lugar donde quiero
         Vector3 hitPosition = particleSpawn.position;
         PoolParticle.Instance.PlayParticle(hitPosition, _isBleedActiveOnHit);
 

@@ -90,6 +90,9 @@ public class Player_MeleeAttack : Visceral_Script
     //evento nuevo
     public event Action OnMeleeAttackCompleted;
 
+    // para el efecto de bleed
+    public bool IsBleedEffectActive => _isBleedEffectActive;
+
     public override void VS_Initialize()
     {
         if(DialogueManager.instance != null)
