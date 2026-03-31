@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player_HealthComp : Health_Component
 {
@@ -29,8 +30,7 @@ public class Player_HealthComp : Health_Component
         _Context = GetComponentInParent<PlayerContext>();
 
         OnDamaged += updateHealthBar;
-        OnHealed += updateHealthBar;  //se suscribe para curación igual q arriba para el damage xdxd
-
+        OnHealed += updateHealthBar;
         OnDamaged += SpawnDamageIndicator;
     }
 
@@ -44,11 +44,6 @@ public class Player_HealthComp : Health_Component
             Emit = null;
             return;
         }
-
-
-
-        //esto es mas facil y te evitas el evento si no lo queres (es lo que haces en updatestatvalue) lo hice para seguir tu logica pero hace la q pinte 
-        //updateHealthBar();
     }
 
     public override void SimpleDamage(float Damage)
@@ -104,13 +99,79 @@ public class Player_HealthComp : Health_Component
 
     private void updateHealthBar()
     {
-            Combat_UI_Manager._Instance.UpdatePlayerHealthBar(CurrentHealth, MaxHealth);
-            if (CurrentHealth <= 0)
+        Combat_UI_Manager._Instance.UpdatePlayerHealthBar(CurrentHealth, MaxHealth);
+
+        if (CurrentHealth <= 0f)
+        {
+            // si no uso la chance de gulag lo mando ahi
+            if (GameManager.Instance != null && !GameManager.Instance.AlreadyUseGulag)
             {
-                Combat_UI_Manager._Instance.DisplayLose(true);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+                ActiveGulag();
+            }
+            // si la uso no tiene gulag 
+            else
+            {
+
+                // activo la lose screen
+                if (Combat_UI_Manager._Instance != null)
+                    Combat_UI_Manager._Instance.DisplayLose(true);
+
+                // apago movimiento
+                Player_Movement mov = _Context.GetComponentInChildren<Player_Movement>();
+                if (mov != null)
+                {
+                    mov.enabled = false;
+                }
+
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+
+                // freezeo
+                Time.timeScale = 0f; 
+            }
         }
+    }
+
+    private void ActiveGulag()
+    {
+        GameManager.Instance.DeathPosition(this.transform.position);
+
+        // busco el mov para tirar el tp cuando activo el gulag
+        Player_Movement mov = _Context.GetComponentInChildren<Player_Movement>();
+        if (mov != null)
+        {
+            Vector3 posGulag = new Vector3(5000f, 5000f, 5000f);
+            mov.SetCharacterPosition(posGulag, true);
+        }
+
+        // revivo al player para el gulag 
+        CurrentHealth = MaxHealth;
+        Died = false;
+        updateHealthBar();
+    }
+
+    public void VictoryGulag()
+    {
+        Player_Movement mov = _Context.GetComponentInChildren<Player_Movement>();
+        if (mov != null)
+        {
+            // vuelvo a donde mori
+            mov.SetCharacterPosition(GameManager.Instance.posAntesDeMorir, true);
+
+            // reinicio vida y doy invulnerabilidad un toque para que no le peguen apenas se tepea
+            CurrentHealth = MaxHealth;
+            Died = false;
+            updateHealthBar();
+            StartCoroutine(TempInvulnerability(3f));
+        }
+    }
+
+    private IEnumerator TempInvulnerability(float tiempo)
+    {
+        float originalInv = DamageInvulnerability;
+        DamageInvulnerability = 999f;
+        yield return new WaitForSeconds(tiempo);
+        DamageInvulnerability = originalInv;
     }
 
     private void UpdateStatValues(StatIdentifier statID, float values)

@@ -13,6 +13,10 @@ public class GameManager : MonoBehaviour
     [Header("Inventory Persistence")]
     public List<SavedItem> savedInventory = new List<SavedItem>();
 
+    [Header("Gulag Local System")]
+    public Vector3 posAntesDeMorir;
+    public bool AlreadyUseGulag = false; // chequeo si ya uso la chance
+
     [System.Serializable]
     public class SavedItem
     {
@@ -33,20 +37,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // cuando muere llamo a esto para guardar la pos
+    public void DeathPosition(Vector3 posicion)
+    {
+        posAntesDeMorir = posicion;
+        AlreadyUseGulag = true; // se uso el gulag
+    }
+
     public void AdvanceLevel()
     {
         currentLevel++;
+        AlreadyUseGulag = false; // para q no tenga otra chance de gulag al avanzar de nivel
     }
 
-    public void GoToNexus()
-    {
-        StartCoroutine(WaitAndLoad());
-    }
+    public void GoToNexus() => StartCoroutine(WaitAndLoad("Nexus"));
 
-    private IEnumerator WaitAndLoad()
+    private IEnumerator WaitAndLoad(string sceneName)
     {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Nexus");
+        SceneManager.LoadScene(sceneName);
     }
 
     public void SavePlayerInventory(Dictionary<ItemDefinitionSO, ItemLogic> currentInventory)
@@ -54,14 +63,9 @@ public class GameManager : MonoBehaviour
         savedInventory.Clear();
         foreach (var pair in currentInventory)
         {
-            // chequeo q sea valido antes de guardar
             if (pair.Key != null && pair.Value != null)
             {
-                savedInventory.Add(new SavedItem
-                {
-                    definition = pair.Key,
-                    stacks = pair.Value.ItemStacks // uso ItemStacks que es la variable en ItemLogic
-                });
+                savedInventory.Add(new SavedItem { definition = pair.Key, stacks = pair.Value.ItemStacks });
             }
         }
     }
