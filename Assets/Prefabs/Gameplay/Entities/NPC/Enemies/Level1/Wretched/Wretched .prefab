@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 4892035731823008423}
   - component: {fileID: 4975273884728576176}
   - component: {fileID: 7923424443455457744}
+  - component: {fileID: 5275523639726089141}
   m_Layer: 10
   m_Name: CC_Base_L_Thigh
   m_TagString: Untagged
@@ -224,7 +225,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.1208152, y: -0.06660082, z: 0.076809816}
+  m_ConnectedAnchor: {x: -0.12082617, y: -0.06660056, z: 0.07681231}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -259,6 +260,28 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &7923424443455457744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318320925005613779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _LimbDismemberPrefab: {fileID: 7449148969086778518, guid: 2508cc31870dc6049a2bbb9267375634,
+    type: 3}
+  _RagTimer: {fileID: 0}
+  _HPComp: {fileID: 0}
+  _LimbHealth: 20
+  _IsDismemberable: 1
+  _LimbDamageReduction: 1
+  _joint: []
+  _Rb: []
+  _Col: []
+--- !u!114 &5275523639726089141
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -355,6 +378,7 @@ GameObject:
   - component: {fileID: 6971337294683739725}
   - component: {fileID: 7640042547117499790}
   - component: {fileID: 7257981265615892951}
+  - component: {fileID: 8745749575574851770}
   m_Layer: 10
   m_Name: CC_Base_R_Calf
   m_TagString: Untagged
@@ -442,7 +466,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000008983538, y: 0.5648544, z: -0.000019960104}
+  m_ConnectedAnchor: {x: 0.000019950792, y: 0.564855, z: -0.000017508863}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -489,6 +513,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Dismember: {fileID: 6127497000883481782}
+--- !u!114 &8745749575574851770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632549503870352310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e201e6784200c594d85a6db9b6139ba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Dismember: {fileID: 5584124903636655890}
 --- !u!1 &706478890671234684
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,6 +634,7 @@ GameObject:
   - component: {fileID: 3395210338332711022}
   - component: {fileID: 6219252523564730511}
   - component: {fileID: 3960142656067021626}
+  - component: {fileID: 8007714515697057285}
   m_Layer: 10
   m_Name: CC_Base_Head
   m_TagString: Untagged
@@ -680,7 +718,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000003123551, y: 0.7704857, z: -0.021743396}
+  m_ConnectedAnchor: {x: -0.0000078436815, y: 0.7704857, z: -0.021740763}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -715,6 +753,28 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &3960142656067021626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201538759068569671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _LimbDismemberPrefab: {fileID: 1098774483364683966, guid: 5d042a0d07ae0cb4ea45694ae0d32102,
+    type: 3}
+  _RagTimer: {fileID: 0}
+  _HPComp: {fileID: 0}
+  _LimbHealth: 20
+  _IsDismemberable: 1
+  _LimbDamageReduction: 2
+  _joint: []
+  _Rb: []
+  _Col: []
+--- !u!114 &8007714515697057285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -811,6 +871,7 @@ GameObject:
   - component: {fileID: 5997399679259225663}
   - component: {fileID: 607399953790560504}
   - component: {fileID: 3394606880483918449}
+  - component: {fileID: 5840121125751772740}
   m_Layer: 10
   m_Name: CC_Base_Spine01
   m_TagString: Untagged
@@ -894,7 +955,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000003061484, y: 0.23980358, z: -0.009506868}
+  m_ConnectedAnchor: {x: -0.000007905704, y: 0.23980236, z: -0.009519564}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -929,6 +990,27 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &3394606880483918449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664840699089983701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _LimbDismemberPrefab: {fileID: 0}
+  _RagTimer: {fileID: 0}
+  _HPComp: {fileID: 0}
+  _LimbHealth: 0
+  _IsDismemberable: 0
+  _LimbDamageReduction: 1
+  _joint: []
+  _Rb: []
+  _Col: []
+--- !u!114 &5840121125751772740
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1827,6 +1909,7 @@ GameObject:
   - component: {fileID: 5930455992208362813}
   - component: {fileID: 3330416477470592800}
   - component: {fileID: 6127497000883481782}
+  - component: {fileID: 5584124903636655890}
   m_Layer: 10
   m_Name: CC_Base_R_Thigh
   m_TagString: Untagged
@@ -1913,7 +1996,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.12082298, y: -0.06659982, z: 0.076811}
+  m_ConnectedAnchor: {x: 0.120812014, y: -0.06659956, z: 0.0768135}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -1948,6 +2031,28 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &6127497000883481782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4017800475969608018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _LimbDismemberPrefab: {fileID: 2935748124353220346, guid: ca5da5391d0c6a94a83b571637f29535,
+    type: 3}
+  _RagTimer: {fileID: 0}
+  _HPComp: {fileID: 0}
+  _LimbHealth: 20
+  _IsDismemberable: 1
+  _LimbDamageReduction: 1
+  _joint: []
+  _Rb: []
+  _Col: []
+--- !u!114 &5584124903636655890
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2170,7 +2275,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4091262336931204975
 Transform:
   m_ObjectHideFlags: 0
@@ -2450,6 +2555,7 @@ GameObject:
   - component: {fileID: 6820542387956529270}
   - component: {fileID: 1876858662632064514}
   - component: {fileID: 1874619028055295528}
+  - component: {fileID: 1066775598619576970}
   m_Layer: 10
   m_Name: CC_Base_Pelvis
   m_TagString: Untagged
@@ -2534,7 +2640,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000003996937, y: 0.0000064032347, z: 0.0000074397253}
+  m_ConnectedAnchor: {x: -0.0000069702523, y: 0.000007526187, z: -0.0000052661985}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -2569,6 +2675,27 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &1874619028055295528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4556030702201801083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _LimbDismemberPrefab: {fileID: 0}
+  _RagTimer: {fileID: 4775146000818692725}
+  _HPComp: {fileID: 1817444877513855909}
+  _LimbHealth: 0
+  _IsDismemberable: 0
+  _LimbDamageReduction: 1
+  _joint: []
+  _Rb: []
+  _Col: []
+--- !u!114 &1066775598619576970
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2633,6 +2760,7 @@ GameObject:
   - component: {fileID: 3743755186253870148}
   - component: {fileID: 960386769062978283}
   - component: {fileID: 5150523223262340004}
+  - component: {fileID: 4163627883807528515}
   m_Layer: 10
   m_Name: CC_Base_L_Upperarm
   m_TagString: Untagged
@@ -2719,7 +2847,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.23730193, y: 0.51826847, z: -0.06681175}
+  m_ConnectedAnchor: {x: -0.2373129, y: 0.51826847, z: -0.06680911}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -2754,6 +2882,28 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &5150523223262340004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4694255563489160951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _LimbDismemberPrefab: {fileID: 4661932403973934458, guid: d969b3aae2f798749a5291785fb44a7a,
+    type: 3}
+  _RagTimer: {fileID: 0}
+  _HPComp: {fileID: 0}
+  _LimbHealth: 20
+  _IsDismemberable: 1
+  _LimbDamageReduction: 1
+  _joint: []
+  _Rb: []
+  _Col: []
+--- !u!114 &4163627883807528515
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3051,7 +3201,7 @@ MonoBehaviour:
   _Target: {fileID: 0}
   _FinishedAttack: 0
   _AttackMovementStrenght: 15
-  _ChanceForPredictiveAttack: 50
+  _ChanceForPredictiveAttack: 100
   _PredictiveOffset: 3
   OnChargeAttackStart:
     m_PersistentCalls:
@@ -3485,6 +3635,7 @@ GameObject:
   - component: {fileID: 2854057856276201437}
   - component: {fileID: 5417497169318347755}
   - component: {fileID: 6312897115552410952}
+  - component: {fileID: 8480590028703711127}
   m_Layer: 10
   m_Name: CC_Base_R_Forearm
   m_TagString: Untagged
@@ -3572,7 +3723,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.000003973487, y: 0.5381513, z: -0.0000066682696}
+  m_ConnectedAnchor: {x: -0.000003974418, y: 0.5381404, z: -0.000004082918}
   serializedVersion: 2
   m_SwingAxis: {x: -1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -3619,6 +3770,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Dismember: {fileID: 6605826965728675999}
+--- !u!114 &8480590028703711127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6657474133038695831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e201e6784200c594d85a6db9b6139ba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Dismember: {fileID: 7614347876425575024}
 --- !u!1 &6805788309876668850
 GameObject:
   m_ObjectHideFlags: 0
@@ -4079,6 +4243,7 @@ GameObject:
   - component: {fileID: 6145849486259867346}
   - component: {fileID: 717092853317935496}
   - component: {fileID: 6605826965728675999}
+  - component: {fileID: 7614347876425575024}
   m_Layer: 10
   m_Name: CC_Base_R_Upperarm
   m_TagString: Untagged
@@ -4165,7 +4330,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.23730744, y: 0.5182684, z: -0.06681583}
+  m_ConnectedAnchor: {x: 0.23729648, y: 0.51826847, z: -0.0668132}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -4200,6 +4365,28 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &6605826965728675999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884149147152849372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _LimbDismemberPrefab: {fileID: 4093465170210406316, guid: 55c838d88eb6f0d4f8125bd0aee47d38,
+    type: 3}
+  _RagTimer: {fileID: 0}
+  _HPComp: {fileID: 0}
+  _LimbHealth: 20
+  _IsDismemberable: 1
+  _LimbDamageReduction: 1
+  _joint: []
+  _Rb: []
+  _Col: []
+--- !u!114 &7614347876425575024
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4265,6 +4452,7 @@ GameObject:
   - component: {fileID: 2739912398439212348}
   - component: {fileID: 6306919844089431720}
   - component: {fileID: 8550065968116039645}
+  - component: {fileID: 3189928509564622510}
   m_Layer: 10
   m_Name: CC_Base_L_Forearm
   m_TagString: Untagged
@@ -4352,7 +4540,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000002806074, y: 0.53814477, z: 0.000008776784}
+  m_ConnectedAnchor: {x: 0.0000027623018, y: 0.5381253, z: -0.000003874302}
   serializedVersion: 2
   m_SwingAxis: {x: 1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -4399,6 +4587,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Dismember: {fileID: 5150523223262340004}
+--- !u!114 &3189928509564622510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7997925037005772374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e201e6784200c594d85a6db9b6139ba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Dismember: {fileID: 4163627883807528515}
 --- !u!1 &8001548354247194868
 GameObject:
   m_ObjectHideFlags: 0
@@ -4419,6 +4620,7 @@ GameObject:
   - component: {fileID: 6622433606616808404}
   - component: {fileID: 1817444877513855909}
   - component: {fileID: 8818301346909051172}
+  - component: {fileID: 2852341844515189580}
   m_Layer: 7
   m_Name: Enemy Model
   m_TagString: Untagged
@@ -4574,7 +4776,7 @@ MonoBehaviour:
   _Model: {fileID: 8001548354247194868}
   _RB: {fileID: 3048824881661905011}
   _StatMan: {fileID: 0}
-  _ObsAvoid: {fileID: 8818301346909051172}
+  _ObsAvoid: {fileID: 2852341844515189580}
   _TargetVelocity: {x: 0, y: 0, z: 0}
   _IsActive: 1
   _KillAllMovement: 0
@@ -4711,6 +4913,27 @@ MonoBehaviour:
   _DamageInvulnerability: {fileID: 11400000, guid: 6d0c10123ee7983448d020fb89391831,
     type: 2}
 --- !u!114 &8818301346909051172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8001548354247194868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4a3ab56b240ee1418bda99b950d6b5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  context: {fileID: 4654570009590822600}
+  _KCC: {fileID: 662010605306157248}
+  _Layermasks:
+    serializedVersion: 2
+    m_Bits: 31
+  numberOfRays: 8
+  AngleOfRays: 90
+  RaycastLenght: 10
+  _ProximityStrenght: 5
+--- !u!114 &2852341844515189580
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5132,6 +5355,7 @@ GameObject:
   - component: {fileID: 6402984424376637586}
   - component: {fileID: 8473532481201790603}
   - component: {fileID: 1849225962386378220}
+  - component: {fileID: 5131313357077644857}
   m_Layer: 10
   m_Name: CC_Base_L_Calf
   m_TagString: Untagged
@@ -5219,7 +5443,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.000014765186, y: 0.5648558, z: -0.0000046417113}
+  m_ConnectedAnchor: {x: -0.00003428198, y: 0.5648552, z: -0.000017441807}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -5266,6 +5490,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Dismember: {fileID: 7923424443455457744}
+--- !u!114 &5131313357077644857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8947371924232652332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e201e6784200c594d85a6db9b6139ba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Dismember: {fileID: 5275523639726089141}
 --- !u!1 &9037379868430308846
 GameObject:
   m_ObjectHideFlags: 0
