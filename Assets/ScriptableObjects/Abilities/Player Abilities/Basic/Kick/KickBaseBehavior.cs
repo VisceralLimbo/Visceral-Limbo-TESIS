@@ -37,7 +37,7 @@ public class KickBaseBehavior : Visceral_SkillLogic
     IEnumerator LockSkill()
     {
 
-     
+
         //direccion de la camara
         //Vector3 KickDirection = _camContext.transform.forward;
         //Vector3 KickOrigin = _UserContext.PlayerTransform.position + KickDirection * KickRange;
@@ -45,6 +45,8 @@ public class KickBaseBehavior : Visceral_SkillLogic
         //transform.position = KickOrigin;
         //almacenamos la direccion global para proyectiles
         //PlayerDirector = KickDirection.normalized;
+
+        print("Kicking ");
 
         Ray rayct = new Ray(_camContext.transform.position,_camContext.transform.forward);
         //buscar objetos que podamos patear

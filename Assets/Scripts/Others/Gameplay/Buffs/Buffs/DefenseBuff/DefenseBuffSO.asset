@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7644f53ed1488ea46a3e881b86832c0e, type: 3}
+  m_Name: DefenseBuffSO
+  m_EditorClassIdentifier: 
+  BuffType: 0
+  BuffID: Block_buff
+  BuffName: Blocking
+  BuffDescription: 
+  BuffDuration: 1
+  IsInfinityDuration: 1
+  MaxBuffPotency: 1
+  ShouldOverrideSameBuffs: 1
+  ShouldScaleWithMultipleInstances: 0
+  statIdentifiers:
+  - {fileID: 11400000, guid: 12d0d6da375907f478d82b2971a7c8a4, type: 2}
+  BuffBehaviorScript: {fileID: 11500000, guid: cf60815ce9d63bf42a2dd5c274fe7fc2, type: 3}
+  AssemblyQualifiedName: DefenseBuff, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
