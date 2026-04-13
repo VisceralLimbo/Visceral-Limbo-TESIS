@@ -5281,6 +5281,7 @@ MonoBehaviour:
   _Model: {fileID: 0}
   _RB: {fileID: 7459543254969404063}
   _StatMan: {fileID: 0}
+  _ObsAvoid: {fileID: 0}
   _TargetVelocity: {x: 0, y: 0, z: 0}
   _IsActive: 0
   _KillAllMovement: 0
@@ -5399,7 +5400,9 @@ MonoBehaviour:
   healthDropPrefab: {fileID: 5905992647120320316, guid: ac2e132d58b9cde408aec08f6a9cf99c,
     type: 3}
   dropChance: 1
-  dropOffset: {x: 0, y: 0.2, z: 0}
+  dropOffset: {x: 0, y: -0.5, z: 0}
+  orbs: 5
+  radioSpawn: 1.5
 --- !u!82 &4250433918990917085
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5559,7 +5562,7 @@ MonoBehaviour:
   _Target: {fileID: 0}
   _KCC: {fileID: 0}
   flashAttackParticle: {fileID: 2357010806047519017}
-  _AttackSpeed: 0.75
+  _AttackSpeed: 0.5
   _attack: 0
   _SafeSpace: 3
   _FarAway: 25
@@ -6748,6 +6751,7 @@ MonoBehaviour:
   _RagDollDuration: 10
   _RootRigid: {fileID: 5575079529834396044}
   _ragdollBoneRetargeters: []
+  _limbDesmemberComponents: []
   AnimatorKey: Decayed
 --- !u!54 &5575079529834396044 stripped
 Rigidbody:
