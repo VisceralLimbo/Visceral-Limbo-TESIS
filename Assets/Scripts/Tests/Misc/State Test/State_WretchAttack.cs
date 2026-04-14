@@ -38,7 +38,7 @@ public class State_WretchAttack : BaseState
         //enforce minimum duration 
         if(pulse <= _MinStateLifetime)
         {
-            pulse += Time.deltaTime;
+          
             TO = null;
             return false;
         }
@@ -60,7 +60,9 @@ public class State_WretchAttack : BaseState
     {
         _FinishedAttack = false;
 
-        _AnimatorHandler.SetParameter("Wretched", "IsCharging", AnimatorControllerParameterType.Trigger);
+        //_AnimatorHandler.SetParameter("Wretched", "IsCharging", AnimatorControllerParameterType.Trigger);
+        _AnimatorHandler.SetParameter("Wretched", "IsAttacking", AnimatorControllerParameterType.Bool, true);
+
 
         int RandomSeed = Random.Range(0, 101);
         if(RandomSeed <= _ChanceForPredictiveAttack)
@@ -88,11 +90,10 @@ public class State_WretchAttack : BaseState
 
     private void PredictiveAttack()
     {
-        print("Predictive");
 
         if(_LastTarget != _Target || _LastTarget == null)
         {
-            print("New Context");
+
             _LastTarget = _Target;
             _LastContext = _Target.GetComponentInParent<PlayerContext>();
         }
@@ -104,7 +105,7 @@ public class State_WretchAttack : BaseState
             _TargetVelocity = _LastContext.KCCMotor.BaseVelocity;
         }
 
-        print("baseVelocity " + _TargetVelocity);
+    
 
         Vector3 OvershootTarget = _LastContext.KCCMotor.Capsule.transform.position + (_TargetVelocity * _PredictiveOffset);  
 
@@ -120,6 +121,7 @@ public class State_WretchAttack : BaseState
         _FinishedAttack = false;
         pulse = 0;
         _MovementStrategy.KillAllMovement();
+        _MovementStrategy.ResetMovementSpeed();
         OnChargeAttackEnd?.Invoke();
     }
 
@@ -166,18 +168,71 @@ public class State_WretchAttack : BaseState
 
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
-        _MovementStrategy.GetKCC().BaseVelocity = Vector3.zero;
-         Vector3 MoveDir = _FinalChargeDirection.normalized;
+        pulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
 
-        _MovementStrategy.ApplyExternalForce(MoveDir, _AttackMovementStrenght);
-
-        //_MovementStrategy.ApplyExternalForce(FinalDir, _AttackMovementStrenght);
+        _MovementStrategy.UpdateRotation(_FinalChargeDirection.normalized);
 
 
-        if (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+           // animation state = windup del ataque 
+        if(_Anim.GetCurrentAnimatorStateInfo(0).IsTag("WindupAttack"))
         {
-            _FinishedAttack = true;
+            // cero movimiento
+            _MovementStrategy.UpdateVelocity(Vector3.zero);
+            _MovementStrategy.KillAllMovement();
+            return;
         }
+           //_MovementStrategy.ApplyExternalForce(FinalDir, _AttackMovementStrenght);
+
+        if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("StartAttack"))
+        {
+            Vector3 MoveDir = _FinalChargeDirection.normalized;
+
+            _MovementStrategy.SetMovementSpeed(_AttackMovementStrenght);
+
+            _MovementStrategy.UpdateVelocity(MoveDir);
+            return;
+        }
+
+
+            // animation state = en el aire
+        if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("IdleAttack"))     
+        {
+            Vector3 MoveDir = _FinalChargeDirection.normalized;
+
+            _MovementStrategy.SetMovementSpeed(_AttackMovementStrenght);
+
+            _MovementStrategy.UpdateVelocity(MoveDir);
+        
+
+            // estoy finalizando la animacion de ataque
+            if(_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9)
+            {
+                _AnimatorHandler.SetParameter("Wretched", "IsAttacking", AnimatorControllerParameterType.Bool, false);
+            }
+            return;
+        }
+
+        // animation state = finalizar ataque
+        if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("EndAttack")
+            && _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1)
+        {
+
+            float SlowdownSpeed = Mathf.Lerp(_AttackMovementStrenght, 0f,_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
+
+            _MovementStrategy.SetMovementSpeed(SlowdownSpeed);
+            _MovementStrategy.UpdateVelocity(_FinalChargeDirection.normalized);
+
+
+            if (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
+            {
+                _FinishedAttack = true;
+            }
+            return;
+
+        }
+     
+
+
     }
 
     private void OnDrawGizmosSelected()

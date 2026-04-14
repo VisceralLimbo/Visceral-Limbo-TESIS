@@ -478,13 +478,13 @@ public class Player_MeleeAttack : Visceral_Script
     void sheateWeapon()
     {
         _Weapon.gameObject.SetActive(false);
-        print("sheating weapon");
+
     }
 
     void UnsheateWeapon()
     {
         _Weapon.gameObject.SetActive(true);
-        print("unsheating weapon");
+
     }
 
 

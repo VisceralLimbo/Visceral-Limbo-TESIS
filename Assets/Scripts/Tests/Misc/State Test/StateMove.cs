@@ -92,6 +92,7 @@ public class StateMove : BaseState
         Vector3 TargetDirection = _Target.transform.position - _KCC.Capsule.transform.position;
 
         _MovementStrategy.UpdateVelocity(TargetDirection);
+        _MovementStrategy.UpdateRotation(TargetDirection);
 
         if (_AnimatorHandler != null)
         {
