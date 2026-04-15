@@ -14,6 +14,7 @@ public class HostileNPC_HealthComp : Health_Component
     [SerializeField] StatIdentifier _DamageInvulnerability;
 
 
+
     public override void VS_Initialize()
     {
         base.VS_Initialize();
@@ -67,8 +68,6 @@ public class HostileNPC_HealthComp : Health_Component
             Defense = _StatMan.GetFloatStatValue(_DefenseStat);
             DamageReduction = _StatMan.GetFloatStatValue(_DamageReductionStat);
         }
-
-        
     }
 
     private void UpdateStats(StatIdentifier StatID, float value)
@@ -82,5 +81,7 @@ public class HostileNPC_HealthComp : Health_Component
 
 
     }
+
+    
 
 }
