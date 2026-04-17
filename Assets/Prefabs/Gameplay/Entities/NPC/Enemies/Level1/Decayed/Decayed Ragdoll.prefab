@@ -2848,6 +2848,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4030310680851451673}
   - component: {fileID: 1295942690491265735}
+  - component: {fileID: 6336174254102862296}
   m_Layer: 7
   m_Name: Decayed Ragdoll
   m_TagString: Untagged
@@ -2891,6 +2892,25 @@ MonoBehaviour:
   _ragdollBoneRetargeters: []
   _limbDesmemberComponents: []
   AnimatorKey: 
+  _dissolveController: {fileID: 6336174254102862296}
+  _dissolveDelayAfterRagdoll: 2
+--- !u!114 &6336174254102862296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7601251326713874099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9815f6bc99738874d97846e982171fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 5703459353809901998}
+  - {fileID: 976506595366337544}
+  dissolveDuration: 2
+  delay: 1
 --- !u!1 &7675522538313184824
 GameObject:
   m_ObjectHideFlags: 0

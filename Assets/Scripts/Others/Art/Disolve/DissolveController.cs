@@ -17,6 +17,7 @@ public class DissolveController : MonoBehaviour
 
     public void StartDissolve()
     {
+        renderers = GetComponentsInChildren<Renderer>();
         StartCoroutine(DissolveRoutine());
     }
 
@@ -31,9 +32,12 @@ public class DissolveController : MonoBehaviour
             t += Time.deltaTime;
             float value = t / dissolveDuration;
 
-            foreach (var mat in materials)
+            foreach (var r in renderers)
             {
-                mat.SetFloat("_DissolveAmount", value);
+                foreach (var mat in r.materials)
+                {
+                    mat.SetFloat("_DisolveAmount", value);
+                }
             }
 
             yield return null;

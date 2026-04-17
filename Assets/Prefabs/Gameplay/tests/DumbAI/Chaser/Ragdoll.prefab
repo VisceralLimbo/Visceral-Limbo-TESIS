@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 942711569430364187}
   - component: {fileID: 6670135137569344894}
+  - component: {fileID: 264793451087207032}
   m_Layer: 10
   m_Name: Ragdoll
   m_TagString: Untagged
@@ -45,10 +46,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cea55b9e6a3cec545a429fd6762105a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _AnimHandler: {fileID: 0}
+  _Hp: {fileID: 0}
   _RagDollDuration: 10
   _RootRigid: {fileID: 4882670497841541587}
   _ragdollBoneRetargeters: []
+  _limbDesmemberComponents: []
   AnimatorKey: 
+  _dissolveController: {fileID: 264793451087207032}
+  _dissolveDelayAfterRagdoll: 2
+--- !u!114 &264793451087207032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609295296370592642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9815f6bc99738874d97846e982171fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 1043576670895777941}
+  dissolveDuration: 2
+  delay: 1
 --- !u!1 &9148223428831088826
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,9 +520,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -907319819445056049, guid: d1f21558c692c0e4cbdef54e3f505e06,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -907319819445056049, guid: d1f21558c692c0e4cbdef54e3f505e06,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 86f385f0a04e43e4eaafe563db659277, type: 2}
+      objectReference: {fileID: 2100000, guid: 1d3cef9ea978b194ab479bc64f9ca332, type: 2}
     - target: {fileID: -311122046114860366, guid: d1f21558c692c0e4cbdef54e3f505e06,
         type: 3}
       propertyPath: m_Layer
@@ -1016,6 +1043,12 @@ CharacterJoint:
 --- !u!4 &578063534293134307 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -786234766247014727, guid: d1f21558c692c0e4cbdef54e3f505e06,
+    type: 3}
+  m_PrefabInstance: {fileID: 9012558401333290330}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1043576670895777941 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -907319819445056049, guid: d1f21558c692c0e4cbdef54e3f505e06,
     type: 3}
   m_PrefabInstance: {fileID: 9012558401333290330}
   m_PrefabAsset: {fileID: 0}
