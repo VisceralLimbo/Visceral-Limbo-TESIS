@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class Boss_HealthComp : Health_Component
 {
@@ -16,6 +17,10 @@ public class Boss_HealthComp : Health_Component
     [SerializeField] StatIdentifier _HealthStat, _DefenseStat, _DamageReductionStat;
 
     private Combat_UI_Manager Ref_CombatUI;
+
+    public event Action OnSecondPhase;
+
+    [SerializeField] private bool SecondPhase;
 
     // llamo desde el sppawner dsp de q se instancia el boss para conectar vida con la ui
     public void ConnectBossUI(BossHealthBarUI uiHandler)
@@ -142,14 +147,16 @@ public class Boss_HealthComp : Health_Component
             }
         }
 
-        else if (CurrentHealth - damage < MaxHealth * 0.5f)
+        else if (CurrentHealth - damage < MaxHealth * 0.5f || SecondPhase)
         {
             // iniciar spawners
             if(_EventBus != null)
             {
                 _EventBus.TriggerEvent(_StartEnemyEvent);
-
+                
             }
+
+            OnSecondPhase?.Invoke();
         }
         
 

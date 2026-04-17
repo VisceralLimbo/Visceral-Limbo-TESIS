@@ -556,6 +556,7 @@ MonoBehaviour:
   _Model: {fileID: 4498811984456590778}
   _RB: {fileID: 2549169445402206431}
   _StatMan: {fileID: 0}
+  _ObsAvoid: {fileID: 0}
   _TargetVelocity: {x: 0, y: 0, z: 0}
   _IsActive: 1
   _KillAllMovement: 0
@@ -668,6 +669,7 @@ MonoBehaviour:
   _DefenseStat: {fileID: 11400000, guid: 935a9002b9d6fe342b9677362fc8ce90, type: 2}
   _DamageReductionStat: {fileID: 11400000, guid: 12d0d6da375907f478d82b2971a7c8a4,
     type: 2}
+  SecondPhase: 1
 --- !u!54 &2549169445402206431
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -941,6 +943,9 @@ MonoBehaviour:
   numberOfPillars: 5
   indicatorDuration: 1.5
   timeBetweenAttacks: 10
+  _MinMaxSecondPhasePillarsCount: {x: 5, y: 10}
+  _MinPillarRandomPosition: {x: -30, y: -30}
+  _MaxPillarRandomPosition: {x: 30, y: 30}
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
@@ -949,6 +954,7 @@ MonoBehaviour:
   EnergyCost: 3
   Thinker: {fileID: 1390840764624858655}
   _AnimHandler: {fileID: 107750596267011980}
+  _BossHP: {fileID: 4341898696971776908}
 --- !u!1 &5449153354456122023
 GameObject:
   m_ObjectHideFlags: 0

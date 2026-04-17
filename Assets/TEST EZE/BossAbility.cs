@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BossAbility : BaseState,IStateEnergyCost
 {
@@ -12,6 +14,13 @@ public class BossAbility : BaseState,IStateEnergyCost
     public float indicatorDuration = 1.5f; // tiempo del quad (indicador) hasta q muere
     public float timeBetweenAttacks = 10f; // por ahora es un ataque automatico a modo de testeo (se ejecuta cada 10seg)
     private bool isAttacking = false;
+    private bool _SecondPhase;
+
+    [Space]
+    [SerializeField] Vector2 _MinMaxSecondPhasePillarsCount;
+    [SerializeField] Vector2 _MinPillarRandomPosition;
+    [SerializeField] Vector2 _MaxPillarRandomPosition;
+
 
     public LayerMask groundLayer; // layer del piso
     public float raycastDistance = 100f; // distancia del raycast
@@ -21,9 +30,13 @@ public class BossAbility : BaseState,IStateEnergyCost
 
     [SerializeField] private int EnergyCost;
 
+    [Header("References")]
+
     [SerializeField] Corpus_Thinking_Main_State Thinker;
 
     [SerializeField] AnimatorHandler _AnimHandler;
+
+    [SerializeField] Boss_HealthComp _BossHP;
 
     public override void OnInitialize(VisceralStateMachine CTX)
     {
@@ -40,6 +53,11 @@ public class BossAbility : BaseState,IStateEnergyCost
         else
         {
             Debug.LogError("no lo encontre je");
+        }
+
+        if(_BossHP != null)
+        {
+            _BossHP.OnSecondPhase += EnteredSecondPhase;
         }
 
     }
@@ -144,11 +162,78 @@ public class BossAbility : BaseState,IStateEnergyCost
                 pillarScript.SetupIndicator(finalSpawnPosition, indicatorDuration);
             }
 
+            if(_SecondPhase)
+            {
+                SecondPhasePillars();
+            }
+
             // espero el tiempo entre pilar
             yield return new WaitForSeconds(timeBetweenPillars);
         }
 
         isAttacking = false;
+    }
+
+
+    private void SecondPhasePillars()
+    {
+       int RandomSeed =  ((int)Random.Range(_MinMaxSecondPhasePillarsCount.x, _MinMaxSecondPhasePillarsCount.y + 1));
+
+        for(int i = 0; i < RandomSeed; i++)
+        {
+            Vector3 PillarPosition = Thinker.playerContext.KCCMotor.Capsule.transform.position;
+            PillarPosition.y = 0;
+
+            PillarPosition.x += Random.Range(_MinPillarRandomPosition.x, _MaxPillarRandomPosition.x + 1);
+            PillarPosition.z += Random.Range(_MinPillarRandomPosition.y, _MaxPillarRandomPosition.y + 1);
+            PillarPosition.y += playerTarget.transform.position.y + 1f;
+
+
+
+
+            RaycastHit Hit;
+            Vector3 FinalSpawnPosition;
+
+            if(Physics.Raycast(PillarPosition,Vector3.down,out Hit,raycastDistance,groundLayer))
+            {
+                FinalSpawnPosition = Hit.point;
+                FinalSpawnPosition.y += 0.01f;
+            }
+            else
+            {
+                FinalSpawnPosition = PillarPosition;
+                FinalSpawnPosition.y = Thinker.playerContext.KCCMotor.Capsule.transform.position.y;
+            }
+
+            Quaternion flatRotation = Quaternion.Euler(90f, 0, 0);
+
+            GameObject indicator = Instantiate(indicatorPrefab, FinalSpawnPosition, flatRotation);
+
+            if(indicator != null)
+            {
+                ParticleSystem[] particleSystems = indicator.GetComponentsInChildren<ParticleSystem>();
+                {
+                    foreach(ParticleSystem ps in particleSystems)
+                    {
+                        if (!ps.isPlaying)
+                        {
+                            ps.Play();
+                        }
+                    }
+                }
+            }
+
+
+            // paso las cosas al indicador
+            FlamePillarIndicator pillarScript = indicator.GetComponent<FlamePillarIndicator>();
+            if (pillarScript != null)
+            {
+                pillarScript.SetupIndicator(FinalSpawnPosition, indicatorDuration);
+            }
+
+
+
+        }
     }
 
     public string GetTransitionKey()
@@ -170,5 +255,7 @@ public class BossAbility : BaseState,IStateEnergyCost
     {
         return this;
     }
+
+    private void EnteredSecondPhase() => _SecondPhase = true;
 }
 
