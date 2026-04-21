@@ -5126,6 +5126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5372180300158302468}
   - component: {fileID: 4775146000818692725}
+  - component: {fileID: 1365514987618846154}
   m_Layer: 7
   m_Name: Ragdoll
   m_TagString: Untagged
@@ -5168,6 +5169,24 @@ MonoBehaviour:
   _ragdollBoneRetargeters: []
   _limbDesmemberComponents: []
   AnimatorKey: Wretched
+  _dissolveController: {fileID: 1365514987618846154}
+  _dissolveDelayAfterRagdoll: 2
+--- !u!114 &1365514987618846154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8678294708374041245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9815f6bc99738874d97846e982171fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 5324233168627536266}
+  dissolveDuration: 2
+  delay: 1
 --- !u!1 &8724511471017686902
 GameObject:
   m_ObjectHideFlags: 0

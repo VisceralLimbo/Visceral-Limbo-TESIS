@@ -13,6 +13,9 @@ public class RagDollTimer : MonoBehaviour
     LimbDesmemberComponent[] _limbDesmemberComponents;
     [SerializeField] string AnimatorKey;
 
+    [SerializeField] private DissolveController _dissolveController;
+    [SerializeField] private float _dissolveDelayAfterRagdoll = 2f;
+
     public Rigidbody RootRigid { get { return _RootRigid; } }
 
 
@@ -49,7 +52,6 @@ public class RagDollTimer : MonoBehaviour
     private void StartRagdolling()
     {
         this.transform.parent = null;
-        StartCoroutine(DestroySelf());
 
         _AnimHandler.TryGetAnimator(AnimatorKey, out Animator Anim);
         Anim.speed = 1;
@@ -63,13 +65,33 @@ public class RagDollTimer : MonoBehaviour
             }
         }
 
-        if(_limbDesmemberComponents.Length > 0)
+        if (_limbDesmemberComponents.Length > 0)
         {
-            foreach(var Limb in _limbDesmemberComponents)
+            foreach (var Limb in _limbDesmemberComponents)
             {
                 Limb.DismemberLimb();
             }
         }
+
+        
+        StartCoroutine(RagdollDissolveFlow());
+    }
+
+    IEnumerator RagdollDissolveFlow()
+    {
+        
+        yield return new WaitForSeconds(_dissolveDelayAfterRagdoll);
+
+        
+        if (_dissolveController != null)
+        {
+            _dissolveController.StartDissolve();
+        }
+
+        
+        yield return new WaitForSeconds(_RagDollDuration);
+
+        Destroy(this.gameObject);
     }
 
     IEnumerator DestroySelf()

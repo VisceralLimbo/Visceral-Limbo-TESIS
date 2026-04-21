@@ -1179,7 +1179,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 4
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 86f385f0a04e43e4eaafe563db659277, type: 2}
+  - {fileID: 2100000, guid: 1d3cef9ea978b194ab479bc64f9ca332, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3766,6 +3766,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4676614636909378600}
   - component: {fileID: 4701741620784262628}
+  - component: {fileID: 3867780850066214612}
   m_Layer: 7
   m_Name: Ragdoll
   m_TagString: Untagged
@@ -3801,10 +3802,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cea55b9e6a3cec545a429fd6762105a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _AnimHandler: {fileID: 0}
+  _Hp: {fileID: 0}
   _RagDollDuration: 10
   _RootRigid: {fileID: 1022662240579587552}
   _ragdollBoneRetargeters: []
+  _limbDesmemberComponents: []
   AnimatorKey: 
+  _dissolveController: {fileID: 3867780850066214612}
+  _dissolveDelayAfterRagdoll: 2
+--- !u!114 &3867780850066214612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8215694608737253297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9815f6bc99738874d97846e982171fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 4866144218630640806}
+  dissolveDuration: 2
+  delay: 1
 --- !u!1 &8320626039092752986
 GameObject:
   m_ObjectHideFlags: 0

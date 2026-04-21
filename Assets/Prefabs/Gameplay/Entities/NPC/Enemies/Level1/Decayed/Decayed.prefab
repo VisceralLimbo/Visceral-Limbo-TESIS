@@ -6469,9 +6469,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7745674693073775757, guid: 918355dba35195b43a4d585c3294065f,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7745674693073775757, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 71060933ba1932448bb44989b825b14b, type: 2}
+      objectReference: {fileID: 2100000, guid: 966f57a69ff0b1047bcb90699e258f42, type: 2}
     - target: {fileID: 7866020560666620550, guid: 918355dba35195b43a4d585c3294065f,
         type: 3}
       propertyPath: m_Layer
@@ -6617,6 +6622,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7041633688838733083}
+    - targetCorrespondingSourceObject: {fileID: 755006634252184373, guid: 918355dba35195b43a4d585c3294065f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7848541400599300215}
   m_SourcePrefab: {fileID: 100100000, guid: 918355dba35195b43a4d585c3294065f, type: 3}
 --- !u!54 &803523319314982515 stripped
 Rigidbody:
@@ -6645,6 +6654,12 @@ Rigidbody:
 --- !u!54 &2650147185879366082 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 7118862200029162621, guid: 918355dba35195b43a4d585c3294065f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5047534244673787327}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &3274780756542732594 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7745674693073775757, guid: 918355dba35195b43a4d585c3294065f,
     type: 3}
   m_PrefabInstance: {fileID: 5047534244673787327}
   m_PrefabAsset: {fileID: 0}
@@ -6753,6 +6768,25 @@ MonoBehaviour:
   _ragdollBoneRetargeters: []
   _limbDesmemberComponents: []
   AnimatorKey: Decayed
+  _dissolveController: {fileID: 7848541400599300215}
+  _dissolveDelayAfterRagdoll: 2
+--- !u!114 &7848541400599300215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5509629881334152842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9815f6bc99738874d97846e982171fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 3274780756542732594}
+  - {fileID: 8059655785188596884}
+  dissolveDuration: 2
+  delay: 1
 --- !u!54 &5575079529834396044 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 815952992094268467, guid: 918355dba35195b43a4d585c3294065f,
