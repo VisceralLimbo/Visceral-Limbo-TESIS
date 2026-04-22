@@ -18,6 +18,8 @@ public interface IMovementStrategy
     public void ApplyExternalRotation(Quaternion RotationDirection, float Force);
 
     public void SetMovementSpeed(float Speed);
+
+    public void ToggleObstacleAvoidance(bool ToggleObstacleAvoidance);
     public void ResetMovementSpeed();
 
     public void ForceUngroundSelf(float Time);

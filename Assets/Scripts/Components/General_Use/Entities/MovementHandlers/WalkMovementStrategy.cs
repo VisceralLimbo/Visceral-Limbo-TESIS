@@ -21,6 +21,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
     [SerializeField] float _BaseMovementSpeed;
     [SerializeField] float _MovementAccel;
     [SerializeField] float _MaxRotationSpeed;
+    [SerializeField] bool _ShouldUseObstacleAvoidance;
     [Space]
 
     [Header("Knockback Config")]
@@ -215,7 +216,7 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
             var ScaledVelocity = TargetVelocity * TimeDilationManager.GlobalTimeScale;
 
             var FinalVelocity = ScaledVelocity;
-            if (_ObsAvoid != null)
+            if (_ObsAvoid != null && _ShouldUseObstacleAvoidance)
             {
                 FinalVelocity = _ObsAvoid.PerformObstacleAvoidance(ScaledVelocity, _MovementSpeed);
             }
@@ -386,5 +387,10 @@ public class WalkMovementStrategy : MonoBehaviour, IMovementStrategy, ICharacter
             // Dibuja una linea desde el personaje hacia donde la IA le dice que mire
             Gizmos.DrawRay(_KCC.transform.position, _TargetRotation.Value * 5f);
         }
+    }
+
+    public void ToggleObstacleAvoidance(bool ToggleObstacleAvoidance)
+    {
+        _ShouldUseObstacleAvoidance = ToggleObstacleAvoidance;
     }
 }

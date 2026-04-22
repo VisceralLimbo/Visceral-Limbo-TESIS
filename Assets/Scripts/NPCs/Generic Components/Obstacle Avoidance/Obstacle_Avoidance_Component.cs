@@ -105,11 +105,12 @@ public class Obstacle_Avoidance_Component : MonoBehaviour
             var RotationMod = Quaternion.AngleAxis(AngleFraction * AngleOfRays * 2 - AngleOfRays, this.transform.up);
 
             // cual es la direccion del raycast
-            var Direction = RotationMod * this.transform.forward;
+            var Direction = RotationMod * this.transform.forward * RaycastLenght;
 
             var RayCast = new Ray(this.transform.position, Direction);
 
-            Gizmos.DrawRay(RayCast);
+            Gizmos.DrawLine(this.transform.position, this.transform.position + Direction);
+            //Gizmos.DrawRay(RayCast);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
 using UnityEngine.Events;
+using UnityEditor;
 
 
 public class State_WretchAttack : BaseState
@@ -16,12 +17,14 @@ public class State_WretchAttack : BaseState
     [Space]
 
     [Header("Variables")]
-    [SerializeField] bool _FinishedAttack;
+    [SerializeField] bool _FinishedAttack, _CancelAttack;
     [SerializeField] float _AttackMovementStrenght;
 
     [Range(0,100)]
     [SerializeField] int _ChanceForPredictiveAttack;
     [SerializeField] float _PredictiveOffset; // que tanto tenemos que exagerar la prediccion 
+    [SerializeField] LayerMask _RaycastMask;
+    [SerializeField] float _RaycastWallCheckLenght;
 
     [Space]
 
@@ -74,7 +77,7 @@ public class State_WretchAttack : BaseState
             RegularAttack();
         }
 
-
+        _MovementStrategy.ToggleObstacleAvoidance(true);
     }
 
 
@@ -122,6 +125,7 @@ public class State_WretchAttack : BaseState
         pulse = 0;
         _MovementStrategy.KillAllMovement();
         _MovementStrategy.ResetMovementSpeed();
+        _MovementStrategy.ToggleObstacleAvoidance(true);
         OnChargeAttackEnd?.Invoke();
     }
 
@@ -181,31 +185,34 @@ public class State_WretchAttack : BaseState
             _MovementStrategy.KillAllMovement();
             return;
         }
-           //_MovementStrategy.ApplyExternalForce(FinalDir, _AttackMovementStrenght);
 
-        if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("StartAttack"))
+        //  START ATTACK Y IDLE ATTACK (Fases de Movimiento)
+        if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("StartAttack") || _Anim.GetCurrentAnimatorStateInfo(0).IsTag("IdleAttack"))
         {
-            Vector3 MoveDir = _FinalChargeDirection.normalized;
+            // Chequeamos si se va a estampar contra la pared
+            if (IsHittingWall())
+            {
+                //_MovementStrategy.SetMovementSpeed(_AttackMovementStrenght);
+                //_MovementStrategy.UpdateVelocity(_FinalChargeDirection.normalized);
+                _MovementStrategy.UpdateVelocity(Vector3.zero);
 
-            _MovementStrategy.SetMovementSpeed(_AttackMovementStrenght);
+                if (_MovementStrategy != null)
+                {
+                    _MovementStrategy.ToggleObstacleAvoidance(false);
+                    print("Toggle Off start / Idle");
+                }
 
-            _MovementStrategy.UpdateVelocity(MoveDir);
-            return;
-        }
 
+            }
+            else
+            {
+                // Si el camino está libre, ataca normal
+                _MovementStrategy.SetMovementSpeed(_AttackMovementStrenght);
+                _MovementStrategy.UpdateVelocity(_FinalChargeDirection.normalized);
+            }
 
-            // animation state = en el aire
-        if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("IdleAttack"))     
-        {
-            Vector3 MoveDir = _FinalChargeDirection.normalized;
-
-            _MovementStrategy.SetMovementSpeed(_AttackMovementStrenght);
-
-            _MovementStrategy.UpdateVelocity(MoveDir);
-        
-
-            // estoy finalizando la animacion de ataque
-            if(_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9)
+            // Si estamos en la fase de vuelo, chequeamos el final de la animación
+            if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("IdleAttack") && _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
             {
                 _AnimatorHandler.SetParameter("Wretched", "IsAttacking", AnimatorControllerParameterType.Bool, false);
             }
@@ -216,6 +223,20 @@ public class State_WretchAttack : BaseState
         if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("EndAttack")
             && _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1)
         {
+            if (IsHittingWall())
+            {
+                _MovementStrategy.UpdateVelocity(Vector3.zero);
+
+                _MovementStrategy.ToggleObstacleAvoidance(false);
+                print("Toggle Off End");
+
+                if (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
+                {
+                    _FinishedAttack = true;
+                }
+                return;
+            }
+
 
             float SlowdownSpeed = Mathf.Lerp(_AttackMovementStrenght, 0f,_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
 
@@ -232,6 +253,25 @@ public class State_WretchAttack : BaseState
         }
      
 
+
+    }
+
+
+    private bool IsHittingWall()
+    {
+        if (_KCC == null) return false;
+
+        Vector3 OriginPoint = _KCC.Capsule.bounds.center;
+        Vector3 Direction = _FinalChargeDirection.normalized;
+
+        float Distance = _KCC.Capsule.radius + _RaycastWallCheckLenght;
+
+        if (Physics.Raycast(OriginPoint, Direction, Distance,_RaycastMask))
+        {
+            return true;
+        }
+
+        return false;
 
     }
 

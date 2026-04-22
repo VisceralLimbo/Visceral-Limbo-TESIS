@@ -3200,9 +3200,14 @@ MonoBehaviour:
   _Anim: {fileID: 0}
   _Target: {fileID: 0}
   _FinishedAttack: 0
+  _CancelAttack: 0
   _AttackMovementStrenght: 15
   _ChanceForPredictiveAttack: 100
   _PredictiveOffset: 3
+  _RaycastMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _RaycastWallCheckLenght: 0
   OnChargeAttackStart:
     m_PersistentCalls:
       m_Calls:
@@ -4620,7 +4625,6 @@ GameObject:
   - component: {fileID: 6622433606616808404}
   - component: {fileID: 1817444877513855909}
   - component: {fileID: 8818301346909051172}
-  - component: {fileID: 2852341844515189580}
   m_Layer: 7
   m_Name: Enemy Model
   m_TagString: Untagged
@@ -4776,7 +4780,7 @@ MonoBehaviour:
   _Model: {fileID: 8001548354247194868}
   _RB: {fileID: 3048824881661905011}
   _StatMan: {fileID: 0}
-  _ObsAvoid: {fileID: 2852341844515189580}
+  _ObsAvoid: {fileID: 0}
   _TargetVelocity: {x: 0, y: 0, z: 0}
   _IsActive: 1
   _KillAllMovement: 0
@@ -4784,6 +4788,7 @@ MonoBehaviour:
   _BaseMovementSpeed: 0
   _MovementAccel: 10
   _MaxRotationSpeed: 720
+  _ShouldUseObstacleAvoidance: 0
   GotKnockbacked: 0
   _KnockbackDecay: 10
   _KnockbackVelocity: {x: 0, y: 0, z: 0}
@@ -4915,27 +4920,6 @@ MonoBehaviour:
   _DamageInvulnerability: {fileID: 11400000, guid: 6d0c10123ee7983448d020fb89391831,
     type: 2}
 --- !u!114 &8818301346909051172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8001548354247194868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4a3ab56b240ee1418bda99b950d6b5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  context: {fileID: 4654570009590822600}
-  _KCC: {fileID: 662010605306157248}
-  _Layermasks:
-    serializedVersion: 2
-    m_Bits: 31
-  numberOfRays: 8
-  AngleOfRays: 90
-  RaycastLenght: 10
-  _ProximityStrenght: 5
---- !u!114 &2852341844515189580
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

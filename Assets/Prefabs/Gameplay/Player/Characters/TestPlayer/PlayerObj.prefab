@@ -1389,6 +1389,7 @@ GameObject:
   - component: {fileID: 858683521827146833}
   - component: {fileID: 6323216962684899046}
   - component: {fileID: 4149816992557057075}
+  - component: {fileID: 5171054834112143938}
   m_Layer: 6
   m_Name: PlayerObj
   m_TagString: Player
@@ -1699,6 +1700,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Player_CameraController: {fileID: 9214448604976076639}
+--- !u!114 &5171054834112143938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039303074304250013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89acd3509df308e469033d1d0ef1cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _StatMan: {fileID: 2037849703779783899}
+  _StatIdentifier: {fileID: 11400000, guid: 935a9002b9d6fe342b9677362fc8ce90, type: 2}
+  _Context: {fileID: 388799400367065248}
+  _FloatStat:
+    ModType: 0
+    EffectName: Blocking
+    ModifierValueFloat: 10
+  _AnimHandler: {fileID: 0}
+  BlockPotency: 1
+  _isCurrentlyBlocking: 0
+  _AnimatorParamID: IsDefending
+  _AnimatorKey: PlayerWeapon
 --- !u!1 &4133168876615495238
 GameObject:
   m_ObjectHideFlags: 0
@@ -1744,7 +1769,6 @@ GameObject:
   - component: {fileID: 8577399524032963587}
   - component: {fileID: 3066669182626761229}
   - component: {fileID: 5974637098410256426}
-  - component: {fileID: 4121000641431300234}
   m_Layer: 6
   m_Name: RootCamera
   m_TagString: MainCamera
@@ -1924,40 +1948,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4847287270814997606}
   m_Enabled: 1
---- !u!114 &4121000641431300234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4847287270814997606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowDebugText: 0
-  m_ShowCameraFrustum: 1
-  m_IgnoreTimeScale: 0
-  m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
-  m_BlendUpdateMethod: 1
-  m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
-    m_CustomCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  m_CustomBlends: {fileID: 0}
-  m_CameraCutEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_CameraActivatedEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5006734972074116238
 GameObject:
   m_ObjectHideFlags: 0
