@@ -290,34 +290,32 @@ public class RoomSpawnerManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnCoroutine()
+   IEnumerator SpawnCoroutine()
+{
+    foreach (var item in Spawners)
     {
-        foreach (var item in Spawners)
+        yield return StartCoroutine(item.SpawnEnemyWithVFX((newEnemy) =>
         {
-
-            GameObject newEnemy = item.SpawnEnemy(); // recibo el game obj
-
             if (newEnemy != null)
             {
                 _activeEnemies.Add(newEnemy);
-
-                // si hay efecto activo lo aplico cuando spawnea
                 ApplyEffectToNewEnemy(newEnemy);
             }
+        }));
 
-            SoundManager.Instance.CreateSound()
-                .WithSoundData(_spawnSound)
-                .WithPosition(item.transform.position)
-                .WithRandomPitch(true)
-                .WithSpatialBlend(1,_spawnSound.MinimunSoundDistance,_spawnSound.MaximunSoundDistance)
-                .play();
+        SoundManager.Instance.CreateSound()
+            .WithSoundData(_spawnSound)
+            .WithPosition(item.transform.position)
+            .WithRandomPitch(true)
+            .WithSpatialBlend(1,_spawnSound.MinimunSoundDistance,_spawnSound.MaximunSoundDistance)
+            .play();
 
-            if (_ShouldOffsetSpawnTime)
-            {
-                yield return new WaitForSeconds(_OffsetSpawnTime);
-            }
+        if (_ShouldOffsetSpawnTime)
+        {
+            yield return new WaitForSeconds(_OffsetSpawnTime);
         }
     }
+}
 
     public enum EnvironmentalEffect
     {

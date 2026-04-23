@@ -29,6 +29,10 @@ public class Spawner : MonoBehaviour
     [Header("Boss References")]
     public GameObject playerTarget; // player aca ahre  
 
+    [Header("VFX Spawn")]
+    [SerializeField] private GameObject spawnVFX;
+    [SerializeField] private float spawnDelay = 2f;
+
     private void Start()
     {
         if(_SpawnManager == null)
@@ -137,6 +141,52 @@ public class Spawner : MonoBehaviour
         EnemySpawnedHP = null;
         HasMinion = false;
         _SpawnManager.NotifyMinionDeath();
+    }
+
+    public IEnumerator SpawnEnemyWithVFX(System.Action<GameObject> onSpawned)
+    {
+        GameObject vfx = null;
+
+        if (spawnVFX != null)
+        {
+            Vector3 spawnPos = transform.position + Vector3.up * 0.1f;
+            vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity);
+
+            vfx.SetActive(true);
+
+            foreach (var ps in vfx.GetComponentsInChildren<ParticleSystem>())
+                ps.Play();
+
+            foreach (var fx in vfx.GetComponentsInChildren<UnityEngine.VFX.VisualEffect>())
+                fx.Play();
+        }
+
+        // esperamos antes de spawnear
+        yield return new WaitForSeconds(spawnDelay);
+
+        GameObject enemy = SpawnEnemy();
+
+        if (enemy != null)
+        {
+            var dissolve = enemy.GetComponent<DissolveController>();
+            if (dissolve == null)
+                dissolve = enemy.GetComponentInChildren<DissolveController>();
+
+            if (dissolve != null)
+            {
+                dissolve.StartAppear();
+                yield return new WaitForSeconds(0.5f);
+            }
+
+        }
+
+        // destruir VFX justo al final
+        if (vfx != null)
+        {
+            Destroy(vfx);
+        }
+
+        onSpawned?.Invoke(enemy);
     }
 
 }

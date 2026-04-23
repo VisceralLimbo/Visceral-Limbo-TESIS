@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.004, y: -0.003, z: 0}
-  m_LocalScale: {x: 1.0787967, y: 6.2828355, z: 0.8676952}
+  m_LocalScale: {x: 2.7670157, y: 16.114902, z: 2.2255595}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1434595008690518055}
@@ -49,7 +49,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
@@ -287,7 +287,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.11
+      scalar: 0.3
       minScalar: 0.36
       maxCurve:
         serializedVersion: 2
@@ -4858,7 +4858,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1563864, y: 1.1563864, z: 1.1563864}
+  m_LocalScale: {x: 2.8117242, y: 2.6821547, z: 2.086468}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1434595008690518055}
@@ -5700,7 +5700,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 10
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -9690,7 +9690,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.70710576, y: -0, z: -0, w: 0.70710784}
   m_LocalPosition: {x: 0, y: -1.72, z: 11.47}
-  m_LocalScale: {x: 4.1386, y: 4.1386, z: 4.1386}
+  m_LocalScale: {x: 10.759532, y: 10.759532, z: 10.759532}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 807820072873100693}
@@ -9713,7 +9713,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
@@ -9887,7 +9887,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.8879669, b: 0, a: 1}
+      maxColor: {r: 1, g: 0.8862746, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -9951,7 +9951,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 11
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -14508,6 +14508,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flamePillarVisuals: {fileID: 5216115997987650658, guid: aee85465e49cd374286af9f3406c022a,
     type: 3}
-  scaleSpeed: 3
-  pillarActiveDuration: 3
+  scaleSpeed: 1
+  pillarActiveDuration: 4
   heightCorrection: 2
