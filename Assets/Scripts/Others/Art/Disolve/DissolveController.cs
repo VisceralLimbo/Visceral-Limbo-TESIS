@@ -43,4 +43,41 @@ public class DissolveController : MonoBehaviour
             yield return null;
         }
     }
+
+    public void StartAppear()
+    {
+        renderers = GetComponentsInChildren<Renderer>();
+        StartCoroutine(AppearRoutine());
+    }
+
+    private IEnumerator AppearRoutine()
+    {
+        float t = 0;
+
+        
+        SetDissolve(1f);
+
+        while (t < dissolveDuration)
+        {
+            t += Time.deltaTime;
+            float value = 1f - (t / dissolveDuration); // inverso
+
+            SetDissolve(value);
+
+            yield return null;
+        }
+
+        SetDissolve(0f); // totalmente visible
+    }
+
+    private void SetDissolve(float value)
+    {
+        foreach (var r in renderers)
+        {
+            foreach (var mat in r.materials)
+            {
+                mat.SetFloat("_DisolveAmount", value);
+            }
+        }
+    }
 }

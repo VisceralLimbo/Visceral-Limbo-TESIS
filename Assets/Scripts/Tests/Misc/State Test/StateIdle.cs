@@ -23,6 +23,7 @@ public class StateIdle : BaseState
     float pulseLife;
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
+
         if(pulseLife < _MinStateLifetime)
         {
             pulseLife += Time.unscaledDeltaTime;
