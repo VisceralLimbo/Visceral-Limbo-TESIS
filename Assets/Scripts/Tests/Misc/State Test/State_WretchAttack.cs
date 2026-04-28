@@ -41,7 +41,6 @@ public class State_WretchAttack : BaseState
         //enforce minimum duration 
         if(pulse <= _MinStateLifetime)
         {
-          
             TO = null;
             return false;
         }
@@ -126,6 +125,7 @@ public class State_WretchAttack : BaseState
         _MovementStrategy.KillAllMovement();
         _MovementStrategy.ResetMovementSpeed();
         _MovementStrategy.ToggleObstacleAvoidance(true);
+        CTX.SetGlobalCondition("Melee", true);
         OnChargeAttackEnd?.Invoke();
     }
 

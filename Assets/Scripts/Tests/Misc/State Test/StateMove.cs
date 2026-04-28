@@ -18,7 +18,10 @@ public class StateMove : BaseState
     [SerializeField] float _Speed;
     [SerializeField] float _MovementAccel;
     [SerializeField] float _MaxRotationSpeed;
-    [SerializeField] float _MinDistance;
+    [SerializeField] float _ChargeCooldown;
+    [SerializeField] float _PulseChargeCooldown;
+    [SerializeField] float _MinChargeDistance;
+    [SerializeField] float _MinBiteDistance;
     [SerializeField] float _MaxDistance;
 
     [Header("Sounds")]
@@ -73,6 +76,7 @@ public class StateMove : BaseState
     {
         base.OnEnter(CTX);
         _MovementStrategy.SetActiveState(true);
+        stateMachine.SetGlobalCondition("BiteMelee", false);
     }
 
     public override void OnExit(VisceralStateMachine CTX)
@@ -100,15 +104,39 @@ public class StateMove : BaseState
                 , AnimatorControllerParameterType.Trigger);
         }
 
+        if (_SoundData != null && _SoundData.Clip != null)
+        {
+            EmitSounds();
+        }
 
 
         //CALCULO DE SITUACION
+        _PulseChargeCooldown -= (Time.deltaTime * TimeDilationManager.GlobalTimeScale);
         var Distance = Vector3.Distance(_KCC.Capsule.transform.position, _Target.transform.position);
-        if (Distance <= _MinDistance)
-        {
-            stateMachine.SetGlobalCondition("Melee", true);
 
+        // pick bite - charge attack
+        if (_PulseChargeCooldown <= 0)
+        { 
+            if (Distance <= _MinChargeDistance)
+            {
+                _PulseChargeCooldown = _ChargeCooldown;
+                stateMachine.SetGlobalCondition("Melee", true);
+                return;
+            }
         }
+
+        if (Distance <= _MinBiteDistance)
+        {
+            stateMachine.SetGlobalCondition("BiteMelee", true);
+
+            print("AnkleBiter");
+
+            return;
+        }
+   
+        stateMachine.SetGlobalCondition("Melee", false);
+        stateMachine.SetGlobalCondition("BiteMelee", false);
+
         if (Distance > _MaxDistance)
         {
             stateMachine.SetGlobalCondition("Moving", false);
@@ -116,13 +144,7 @@ public class StateMove : BaseState
         else
         {
             stateMachine.SetGlobalCondition("Moving", true);
-        }
-
-        if(_SoundData != null && _SoundData.Clip != null)
-        {
-            EmitSounds();
-        }
-      
+        }  
     }
 
     float pulseLifeTime;
@@ -136,27 +158,7 @@ public class StateMove : BaseState
             return false;
         }
 
-        if (GlobalParams != null)
-        {
-            if(Mytransitions.Length> 0)
-            {
-                foreach(var transition in Mytransitions) 
-                {
-                    if(transition.ShouldTransition(GlobalParams, out BaseState _TO))
-                    {
-                        print("Should transition to " + _TO.name);
-                        TO = _TO;
-
-                        pulseLifeTime = 0;
-                        return true;
-                    }
-                }
-            }
-        }
-
-        //NO SE PUDO TRANSICIONAR
-        TO = null;
-        return false;
+        return base.EvaluateTransitions(GlobalParams, out TO);
     }
 
 

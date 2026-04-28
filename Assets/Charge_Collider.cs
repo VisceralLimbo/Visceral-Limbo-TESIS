@@ -96,7 +96,6 @@ public class Charge_Collider : Visceral_Script
         while(_TargetGameObject != null)
         {
             yield return new WaitForSeconds(_DelayBetweenAttacksInsideCollider);
-            print("Bite");
             DealDamage(_TargetGameObject,_BiteDamage);
         }
     
@@ -106,7 +105,6 @@ public class Charge_Collider : Visceral_Script
     {
         if(other.gameObject == _TargetGameObject)
         {
-            print("se escapo mi enemigo");
             StopAllCoroutines();
             _TargetGameObject = null;
         }

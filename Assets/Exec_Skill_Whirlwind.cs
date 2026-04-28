@@ -9,20 +9,25 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
     [SerializeField] AnimatorOverrideController _ANCO;
     [SerializeField] Animator _Anim;
-    [SerializeField] Collider _col;
 
+
+    [SerializeField] PlayerContext _Context;
+
+    [SerializeField] float SkillAttackRadius;
     [SerializeField] float SkillDuration;
     [SerializeField] float Damage;
     [SerializeField] float SkillKnockback;
     [SerializeField]  GameObject _effectHability;
 
     [SerializeField] SoundEmitter _SoundEmit;
+    [SerializeField] LayerMask _AttackMask;
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
     {
         base.Initialize(data, Skmanager, UserContext);
 
         _Anim = _UserContext.PlayerGameObject.transform.root.GetComponentInChildren<Animator>();
 
+        _Context = _UserContext;
     }
 
 
@@ -48,54 +53,122 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         StartCoroutine(LockSkill());
     }
 
+
+    private HashSet<Collider> TaggedColliders = new HashSet<Collider>();
+    private HashSet<Health_Component> TaggedHealth = new HashSet<Health_Component>();
     IEnumerator LockSkill()
     {
-        //var Weapon = _UserContext.PlayerTransform.root.GetComponentInChildren<Visceral_WeaponBase>();
-        //Weapon.Damage = Damage;
-        //Weapon.Attacking();
-        _col.enabled = true;
-        _col.transform.position = _UserContext.PlayerTransform.position;
+        TaggedColliders.Clear();
+        TaggedHealth.Clear();
 
-        yield return new WaitForSeconds(SkillDuration);
+        float timer = 0;
+     
+        while(timer < SkillDuration)
+        {
+            Collider[] hitcolliders = Physics.OverlapSphere(_Context.PlayerTransform.position, SkillAttackRadius, _AttackMask);
+
+            foreach(var HitCol in hitcolliders)
+            {
+                ProcessHit(HitCol);
+            }
+
+            timer += (Time.deltaTime * TimeDilationManager.GlobalTimeScale);
+
+            yield return null;
+        }
+
         _Anim.speed = 1.0f;
-        //Weapon.StopAttacking();
 
         if(_SoundEmit != null && _SoundEmit.isActiveAndEnabled)
         {
             SoundManager.Instance.ReturnToPool(_SoundEmit);
             _SoundEmit = null;
         }
-   
-        _col.enabled = false;
-        // desactivo bloqueo
-        _PlayerBase.SetSkillActiveState(false);
 
+        _PlayerBase.SetSkillActiveState(false);
     }
 
-
-    private void OnTriggerEnter(Collider other)
+    private void ProcessHit(Collider other)
     {
-        print("Detected Enemy");
-
-        if (other.name == _UserContext.name) return;
         if (other.gameObject == _UserContext.PlayerGameObject) return;
-        if (other.GetComponent<PlayerContext>() == _UserContext) return;
+        if (TaggedColliders.Contains(other)) return;
 
-        if (other.TryGetComponent(out Health_Component HPComp))
+
+        // priorizamos el Idamageable
+        if(other.TryGetComponent(out IDamageable Idamage))
         {
-            Vector3 dir = other.gameObject.transform.position - _UserContext.PlayerTransform.transform.position;
+            if(Idamage.GetHealthComponent(out Health_Component IHealth) && !TaggedHealth.Contains(IHealth))
+            {
+                if(IHealth.Context != _Context)
+                {
+                    TaggedColliders.Add(other);
+                    TaggedHealth.Add(IHealth);
 
-            DamageScore DamageDT = new DamageScore();
-            DamageDT.Attacker = _UserContext;
-            DamageDT.DamageAmount = Damage;
-            DamageDT.Victim = other.GetComponent<PlayerContext>();
-            DamageDT.ElementalDamage = ElementType.Physical;
-            DamageDT.FactionID = FactionID.LimboMonster1;
-            DamageDT.AddTag(ScoreFlags.Skill1Kill);
+                    Vector3 Dir = IHealth.Context.PlayerTransform.position - _Context.PlayerTransform.position;
+                    Dir.y = 0;
 
-            if (HPComp.Context == null) { HPComp.SimpleDamage(Damage); return; }
-            HPComp.TakeDamageWithKnockback(dir.normalized,SkillKnockback , DamageDT);
+
+                    DamageScore DamageDT = new DamageScore
+                    {
+                        Attacker = _UserContext,
+                        DamageAmount = Damage,
+                        Victim = IHealth.Context, // Puede ser null si es un prop, lo manejamos abajo
+                        ElementalDamage = ElementType.Physical,
+                        FactionID = FactionID.LimboMonster1
+                    };
+                    DamageDT.AddTag(ScoreFlags.Skill1Kill);
+
+                    if (IHealth.Context == null)
+                    {
+                        IHealth.SimpleDamage(Damage);
+                    }
+                    else
+                    {
+                        IHealth.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
+                    }
+                }
+      
+
+
+            }
+
+
+        }
+        else if(other.TryGetComponent( out Health_Component HPComp))
+        {
+            if (HPComp.Context != _Context)
+            {
+                TaggedColliders.Add(other);
+                TaggedHealth.Add(HPComp);
+
+                Vector3 Dir = HPComp.Context.PlayerTransform.position - _Context.PlayerTransform.position;
+                Dir.y = 0;
+
+
+                DamageScore DamageDT = new DamageScore
+                {
+                    Attacker = _UserContext,
+                    DamageAmount = Damage,
+                    Victim = HPComp.Context, // Puede ser null si es un prop, lo manejamos abajo
+                    ElementalDamage = ElementType.Physical,
+                    FactionID = FactionID.LimboMonster1
+                };
+                DamageDT.AddTag(ScoreFlags.Skill1Kill);
+
+                if (HPComp.Context == null)
+                {
+                    HPComp.SimpleDamage(Damage);
+                }
+                else
+                {
+                    HPComp.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
+                }
+            }
+
+
 
         }
     }
+
+
 }
