@@ -304,13 +304,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533672736564034383}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.59825116, y: 0.47704178, z: 0.46387893, w: 0.44647855}
-  m_LocalPosition: {x: -0.0152, y: 0.0057, z: 0.1408}
-  m_LocalScale: {x: -0.012127538, y: -0.0140319355, z: -0.0140319355}
+  m_LocalRotation: {x: -0.5348787, y: 0.45292827, z: 0.54270095, w: 0.46285695}
+  m_LocalPosition: {x: 0.0151, y: 0.0048, z: 0.1018}
+  m_LocalScale: {x: -0.021590656, y: -0.024365202, z: -0.0140319355}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 550604693235586488}
-  m_LocalEulerAnglesHint: {x: -77.632, y: -142.949, z: 226.964}
+  m_LocalEulerAnglesHint: {x: -80.664, y: -83.8, z: 173.678}
 --- !u!96 &2652949802101751772
 TrailRenderer:
   serializedVersion: 3
@@ -3162,27 +3162,57 @@ PrefabInstance:
     - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_Time
-      value: 0.03
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.a
+      value: 0.15686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.5849056
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.5849056
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 0.5849056
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.a
+      value: 0.050980393
       objectReference: {fileID: 0}
     - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
-      value: 0
+      value: 0.0027694702
       objectReference: {fileID: 0}
     - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].time
-      value: 0.98153687
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.32439804
+      value: 0.84375
       objectReference: {fileID: 0}
     - target: {fileID: 7098623019545217082, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].value
-      value: 0
+      value: 0.4937439
       objectReference: {fileID: 0}
     - target: {fileID: 7131189859958413026, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
@@ -3356,18 +3386,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: -0.021590656
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: -0.024365202
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0152
+      value: 0.0151
       objectReference: {fileID: 0}
     - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0057
+      value: 0.0048
       objectReference: {fileID: 0}
     - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.1408
+      value: 0.1018
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.46285695
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.5348787
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.45292827
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.54270095
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -80.664
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -83.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762608756612670921, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 173.678
       objectReference: {fileID: 0}
     - target: {fileID: 8900968423970740195, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
