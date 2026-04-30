@@ -774,6 +774,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 284357644713527721, guid: f93b46a29e4a6334e8602e0b483004f2,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 305958742878614944, guid: f93b46a29e4a6334e8602e0b483004f2,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -968,6 +973,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -668.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 492159936341900035, guid: f93b46a29e4a6334e8602e0b483004f2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 626118556186118937, guid: f93b46a29e4a6334e8602e0b483004f2,
         type: 3}
@@ -2435,7 +2445,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1885234940}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 492159936341900035, guid: f93b46a29e4a6334e8602e0b483004f2,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 266434700}
   m_SourcePrefab: {fileID: 100100000, guid: f93b46a29e4a6334e8602e0b483004f2, type: 3}
 --- !u!114 &266434697 stripped
 MonoBehaviour:
@@ -2455,6 +2469,33 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 266434696}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &266434699 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 492159936341900035, guid: f93b46a29e4a6334e8602e0b483004f2,
+    type: 3}
+  m_PrefabInstance: {fileID: 266434696}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &266434700
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266434699}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ccfd35aa99a6db6468a7d9a6dda0f432, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &299645918
 GameObject:
   m_ObjectHideFlags: 0
@@ -5289,7 +5330,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1002013744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8028,12 +8069,12 @@ PrefabInstance:
     - target: {fileID: 4138625521007138705, guid: cc395648e199f8641ae29a9783ff33a7,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4138625521007138705, guid: cc395648e199f8641ae29a9783ff33a7,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4407140015702630801, guid: cc395648e199f8641ae29a9783ff33a7,
         type: 3}
@@ -8048,22 +8089,22 @@ PrefabInstance:
     - target: {fileID: 4814458884989944758, guid: cc395648e199f8641ae29a9783ff33a7,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6758198636877391775, guid: cc395648e199f8641ae29a9783ff33a7,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6758198636877391775, guid: cc395648e199f8641ae29a9783ff33a7,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6758198636877391775, guid: cc395648e199f8641ae29a9783ff33a7,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7218497046777736319, guid: cc395648e199f8641ae29a9783ff33a7,
         type: 3}
