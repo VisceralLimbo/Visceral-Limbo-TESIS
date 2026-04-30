@@ -106,28 +106,20 @@ public class Decayed_MoveState : BaseState
 
         float TargetDistance = TargetDirection.magnitude;
 
-        //
-        // determinar acciones
-        //
+        float GoldilockZone = (_MinDistance + _MaxDistance) / 2f;
 
-        bool IsTooFar = TargetDistance > _MaxDistance;
-        bool IsTooClose = TargetDistance < _MinDistance;
-        bool InAttackRange = !IsTooClose && !IsTooFar;
-        //
-        // movimiento
-        //
-
-        if (IsTooFar)
+      
+        if (TargetDistance > _MaxDistance)
         {
             _RunDirection = 1;
         }
-        else if (IsTooClose)
+        else if (TargetDistance < _MinDistance)
         {
             _RunDirection = -1;
         }
-        else
+        else 
         {
-            _RunDirection = -1f;
+            _RunDirection = (TargetDistance > GoldilockZone) ? 1f: -1f;
         }
 
         
@@ -137,19 +129,21 @@ public class Decayed_MoveState : BaseState
 
         Debug.Log(FinalMovementDirector);
         _MovementStrategy.UpdateVelocity(FinalMovementDirector);
+        _MovementStrategy.UpdateRotation(FinalMovementDirector);
 
         //
         // animaciones
         //
 
-        bool ShouldAttack = InAttackRange;
-        bool ShouldMove = IsTooClose || IsTooFar;
-
+     
         _AnimatorHandler.SetParameter("Decayed", "Walking", AnimatorControllerParameterType.Trigger);
 
-        stateMachine.SetGlobalCondition("Moving", ShouldMove);
-        stateMachine.SetGlobalCondition("Attack", ShouldAttack);
-
+        if(TargetDistance >= _MinDistance && TargetDistance <= _MaxDistance)
+        {
+            stateMachine.SetGlobalCondition("Moving", false);
+            stateMachine.SetGlobalCondition("Attack", true);
+        }
+       
     }
 
     float pulseLifeTime;

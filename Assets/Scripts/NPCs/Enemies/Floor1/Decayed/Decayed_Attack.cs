@@ -14,18 +14,23 @@ public class Decayed_Attack : BaseState
     [SerializeField] Transform _Target;
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] GameObject flashAttackParticle;
+    [SerializeField] PlayerContext _Context;
 
     [Header("Variables")]
     [SerializeField] float _AttackSpeed,_attack;
     [SerializeField] float _SafeSpace,_FarAway;
     Vector3 TargetDirection;
-    [SerializeField] bool _TargetIsTooClose,_TargetIsTooFar;
 
     [SerializeField] private AudioSource _AudioSource;
     [SerializeField] private AudioClip flashSound;
-    Coroutine _FlashingCoroutine;
-
     bool isFlashing = false;
+
+    [Header("Attack Sequence Variables")]
+    [Tooltip("En que porcentaje de la animacion se dispara el proyectil")]
+    [SerializeField] float _ShootPointTimer = 0.7f;
+    [SerializeField] bool _IsAttackingSequence;
+    [SerializeField] bool _HasFired;
+    [SerializeField] float _AttackPulse = 0f;
 
     [Space]
     [Header("Stats")]
@@ -33,36 +38,32 @@ public class Decayed_Attack : BaseState
 
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
-        if (_TargetIsTooClose || _TargetIsTooFar)
+        // Bloquear transiciones si estamos en medio de la animación
+        if (!_IsAttackingSequence)
         {
-            stateMachine.SetGlobalCondition("Attack", false);
-            stateMachine.SetGlobalCondition("Moving", true);
-        }
-        else
-        {
-            stateMachine.SetGlobalCondition("Attack", true);
-            stateMachine.SetGlobalCondition("Moving", false);
+            return base.EvaluateTransitions(GlobalParams, out TO);
         }
 
-        return base.EvaluateTransitions(GlobalParams, out TO);
+        TO = null;
+        return false;
     }
 
     public override void OnEnter(VisceralStateMachine CTX)
     {
-        _TargetIsTooClose = false;
-        _TargetIsTooFar = false;
         stateMachine.SetGlobalCondition("Moving", false);
         _AnimHandler.SetParameter("Decayed", "Idle", AnimatorControllerParameterType.Trigger);
         _MovementStrategy.KillAllMovement();
         pulse = 0;
+
+        _IsAttackingSequence = false;
+        _HasFired = false;
+        _AttackPulse = 0f;
 
     }
 
     public override void OnExit(VisceralStateMachine CTX)
     {
         stateMachine.SetGlobalCondition("Attack", false);
-        StopAllCoroutines();
-        _FlashingCoroutine = null;
     }
 
     public override void OnInitialize(VisceralStateMachine CTX)
@@ -74,6 +75,7 @@ public class Decayed_Attack : BaseState
         _MovementStrategy = stateMachine.GetComponentInChildren<IMovementStrategy>();
         _AnimHandler.TryGetAnimator("Decayed", out Animator _Anime);
         _Anim = _Anime;
+        if (_Context == null) _Context = CTX.GetComponent<PlayerContext>();
 
 
         StatsManager _StatMan = CTX.GetComponent<StatsManager>();
@@ -95,53 +97,103 @@ public class Decayed_Attack : BaseState
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
         // matar movimiento del personaje restante (entre updates)
-        _MovementStrategy.KillAllMovement();
+        _MovementStrategy.UpdateVelocity(Vector3.zero);
 
         // direccion del ataque
         TargetDirection = _Target.position - _KCC.Capsule.transform.position;
-
-        float targetDistance = Vector3.Distance(_Target.position, _KCC.Capsule.transform.position);
+        TargetDirection.y = 0;
 
         _MovementStrategy.UpdateRotation(TargetDirection.normalized);
 
-        //check! el enemigo esta muy cerca
-        if(_SafeSpace > targetDistance)
+        // paso 1) espera al ataque / cooldown
+        if (!_IsAttackingSequence)
         {
-    
-            // salir del estado
-            _TargetIsTooClose = true;
-            return;
-            
-        }
-        // segundo check, el enemigo esta muy lejos
-        else if(_FarAway < targetDistance)
-        {
-
-            _TargetIsTooFar = true;
-            return;
-        }
-        // esta en goldilocks zone
-        else
-        {
-            _TargetIsTooFar = false;
-            _TargetIsTooClose = false;
+            if (_AttackPulse < _AttackSpeed)
+            {
+                _AttackPulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+                return;
+            }
+            else
+            {
+                // iniciamos ataque
+                _IsAttackingSequence = true;
+                _HasFired = false;
+                _AnimHandler.SetParameter("Decayed", "Attack", AnimatorControllerParameterType.Trigger);
+                return;
+            }
         }
 
-        //periodo de cooldown entre ataque
-        if(pulse < _AttackSpeed)
-        {
-            pulse += TickRate;
-            return;
-        }
+        AnimatorStateInfo AnimInfo = _Anim.GetCurrentAnimatorStateInfo(0);
 
-        // Si no está haciendo flash, iniciarlo
-        if (!isFlashing && _FlashingCoroutine == null)
+        // paso 2) animacion y ataque
+        if (AnimInfo.IsTag("Shooting"))
         {
-            _FlashingCoroutine = StartCoroutine(FlashThenShoot());
+            // OBTENEMOS EL PORCENTAJE REAL (0.0 a 1.0)
+            float currentAnimTime = AnimInfo.normalizedTime % 1f;
+
+            // Ignorar frames del ataque anterior si acabamos de entrar
+            if (!_HasFired && currentAnimTime > 0.8f) return;
+
+            // si pasamos X% de la animacion y no disparamos => disparamos
+            if (currentAnimTime >= _ShootPointTimer && !_HasFired)
+            {
+                _HasFired = true;
+                ExecuteShoot();
+            }
+            //terminamos la animacion de ataque
+            else if (currentAnimTime >= 0.95f && _HasFired)
+            {
+                _AnimHandler.SetParameter("Decayed", "Idle", AnimatorControllerParameterType.Trigger);
+                ResetAttackStatus();
+            }
         }
     }
 
-    private IEnumerator FlashThenShoot()
+
+    private void ExecuteShoot()
+    {
+        var CorrectTarget = _Target.transform.position + Vector3.up;
+        _BulletSpawnPoint.LookAt(CorrectTarget, _KCC.CharacterUp);
+
+        var Bullet = Instantiate(_BulletPrefab, _BulletSpawnPoint.transform.position, _BulletSpawnPoint.rotation);
+        BulletDumb BulletScript = Bullet.GetComponent<BulletDumb>();
+
+        BulletScript.SetDamage(_attack);
+        BulletScript.SetOwner(stateMachine.gameObject, _Context);
+
+        if(flashAttackParticle != null)
+        {
+            GameObject FlashAttackGO = Instantiate(flashAttackParticle, _BulletSpawnPoint.transform.position, _BulletSpawnPoint.rotation);
+            ParticleSystem PartSys = FlashAttackGO.GetComponent<ParticleSystem>();
+
+            if (PartSys != null && !PartSys.isPlaying) PartSys.Play();
+
+            Destroy(PartSys,PartSys.main.duration);
+        }
+
+        if (_AudioSource != null && flashSound != null)
+        {
+            _AudioSource.PlayOneShot(flashSound);
+        }
+    }
+
+    private void ResetAttackStatus()
+    {
+        // Reseteamos variables para el próximo disparo
+        _IsAttackingSequence = false;
+        _HasFired = false;
+        _AttackPulse = 0;
+
+        // Evaluamos distancia post-ataque
+        float postAttackDistance = Vector3.Distance(_Target.position, _KCC.Capsule.transform.position);
+        if (postAttackDistance < _SafeSpace || postAttackDistance > _FarAway)
+        {
+            stateMachine.SetGlobalCondition("Attack", false);
+            stateMachine.SetGlobalCondition("Moving", true);
+        } 
+    }
+    #region Deprecated:
+    /*private IEnumerator FlashThenShoot()
     {
         isFlashing = true;
 
@@ -193,7 +245,8 @@ public class Decayed_Attack : BaseState
         isFlashing = false;
         _FlashingCoroutine = null;
     }
-
+    */
+    #endregion
     private void UpdateStats(StatIdentifier StatID,float Value)
     {
         if (StatID == AttackSpeedStatID) _AttackSpeed = Value;
