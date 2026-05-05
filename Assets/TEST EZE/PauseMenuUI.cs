@@ -76,4 +76,9 @@ public class PauseMenuUI : MonoBehaviour
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         SceneManager.LoadScene("Proc Gen Scene");
     }
+
+    public void OnClickItemsTab()
+    {
+        TutorialController.Instance?.OnItemsTabOpened();
+    }
 }

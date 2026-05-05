@@ -25,6 +25,7 @@ public class PauseMenu : MonoBehaviour
         // chequeo escape
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
+            TutorialController.Instance?.OnInventoryOpened();
             // si estaba pausado o nop
             if (!isPaused)
             {

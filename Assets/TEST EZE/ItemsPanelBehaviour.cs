@@ -137,6 +137,11 @@ public class ItemsPanelBehaviour : MonoBehaviour
 
         // inicio corrutina de fade in
         descriptionFadeCoroutine = StartCoroutine(FadeDescription(1f, fadeDuration));
+
+        if (TutorialController.Instance != null)
+        {
+            TutorialController.Instance.OnItemHovered();
+        }
     }
 
     // en el pointerexit oculto descripcion
