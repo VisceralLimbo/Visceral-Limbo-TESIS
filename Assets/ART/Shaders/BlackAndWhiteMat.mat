@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WindVelocityMat
-  m_Shader: {fileID: -6465566751694194690, guid: 130589e8f3f560648b6b4f960ae20bbe,
+  m_Name: BlackAndWhiteMat
+  m_Shader: {fileID: -6465566751694194690, guid: c820556206c732b4d8e846633befdddb,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,14 +24,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NoiseTex:
-        m_Texture: {fileID: 2800000, guid: 812a3594451f6494e8a9f289ca6f71b4, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -46,13 +38,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0
-    - _Mask_Contrast: 0.884
-    - _NoiseLerp: -1.07
-    - _NoiseScale: 50
-    - _NoiseTime: 0.2
-    - _VignettePower: 0.74
+    - _BlackAndWhiteActive: 1
+    - _Intensity: 0
     m_Colors:
-    - _Color: {r: 0.8572168, g: 1.7491893, b: 2.3601296, a: 1}
-    - _WindPosition: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _LightValues: {r: 0.2126, g: 0.7152, b: 0.0722, a: 0}
   m_BuildTextureStacks: []
