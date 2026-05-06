@@ -126,6 +126,8 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
                     {
                         IHealth.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
                     }
+
+                    SlowMotion.Stop(0.1f, 0.02f, false);
                 }
       
 
@@ -163,6 +165,9 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
                 {
                     HPComp.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
                 }
+
+
+                SlowMotion.Stop(0.1f, 0.02f, false);
             }
 
 

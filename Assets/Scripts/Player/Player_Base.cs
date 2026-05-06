@@ -20,7 +20,6 @@ public class Player_Base : Visceral_Script
     [SerializeField] private Player_CameraController _Player_CameraController;
     [SerializeField] private Player_DashTest _DashTest;
     [SerializeField] private Player_MeleeAttack _MeleeAttack;
-    [SerializeField] private Player_ChargedMeleeCombat _ChargedMeleeCombat;
     [SerializeField] private Visceral_SkillManager _SkillManager;
     [SerializeField] private bool IsAlive = true, OnDialogue;
     public PlayerContext _PlayerContext;
@@ -70,6 +69,8 @@ public class Player_Base : Visceral_Script
         _PlayerContext.VS_Initialize();
         _Player_Movement.VS_Initialize();
         _Player_CameraController.VS_InitializeWithParameters(_Player_Movement.GetCameraTarget());
+        _MeleeAttack.VS_Initialize();
+
         //_DashTest.VS_InitializeWithParameters(_Player_Movement);
 
         _SkillManager = GetComponent<Visceral_SkillManager>();

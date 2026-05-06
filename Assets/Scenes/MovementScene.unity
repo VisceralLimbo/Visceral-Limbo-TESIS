@@ -12404,6 +12404,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 492159936341900035, guid: f93b46a29e4a6334e8602e0b483004f2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1264564859035042188, guid: f93b46a29e4a6334e8602e0b483004f2,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -13661,6 +13666,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
+      propertyPath: _MeleeAttack
+      value: 
+      objectReference: {fileID: 6728285340898564732}
+    - target: {fileID: 1490595854630882232, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
       propertyPath: _uiElementToMove
       value: 
       objectReference: {fileID: 417480762}
@@ -13879,6 +13889,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 534007
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4691001370045176226, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
         type: 3}
@@ -14242,10 +14257,122 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4121000641431300234, guid: c9b37eb471cfbfe4b8e7d2c83992eee4, type: 3}
+    - {fileID: 8523669415137956118, guid: c9b37eb471cfbfe4b8e7d2c83992eee4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4039303074304250013, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 6728285340898564732}
+    - targetCorrespondingSourceObject: {fileID: 1517089907240841402, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6728285340898564733}
   m_SourcePrefab: {fileID: 100100000, guid: c9b37eb471cfbfe4b8e7d2c83992eee4, type: 3}
+--- !u!114 &6728285340898564726 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 388799400367065248, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6728285340898564725}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6728285340898564731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3289ddf945ef324ea0b2b94eaabb29d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6728285340898564727 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8935195771567458531, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6728285340898564725}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724efd21e229ae541893758ae65d7f20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6728285340898564728 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 822650225700030981, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6728285340898564725}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6728285340898564731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d6368eca891fd04484d56f26aad3c62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!23 &6728285340898564729 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5177286565348635834, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6728285340898564725}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6728285340898564730 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1517089907240841402, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6728285340898564725}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6728285340898564731 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4039303074304250013, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6728285340898564725}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6728285340898564732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6728285340898564731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aed71dd30cf0d141abd67a2332678a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _AnimHandler: {fileID: 6728285340898564728}
+  _Weapon: {fileID: 6728285340898564727}
+  _PlayerContext: {fileID: 6728285340898564726}
+  Combo: {fileID: 11400000, guid: 5a62b0f0e3912d442a61eb166bf6992e, type: 2}
+  ComboResetTime: 1.2
+  _baseDamageStat: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
+  _attackSpeedStat: {fileID: 11400000, guid: 86d3f1b42f8a0c541a550749b16903c4, type: 2}
+--- !u!114 &6728285340898564733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6728285340898564730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 769e75392305d3242a4cd63cd47e097a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _IsBleedActive: 0
+  _IsBoostActive: 0
+  _SwordMeshRenderer: {fileID: 6728285340898564729}
+  _NormalMaterial: {fileID: 2100000, guid: f29ce19c9349a8049a0716b67b5b1d15, type: 2}
+  _BoostMaterialGold: {fileID: 2100000, guid: ae8c75f743f4aff4abf9d3907113afe5, type: 2}
+  _BleedColor: {r: 1, g: 0.1, b: 0.1, a: 1}
+  _BleedBlendValue: 0.04
+  _swordTrails: []
+  _bleedSwordTrails: []
+  swingSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
 --- !u!1001 &7393306241924394166
 PrefabInstance:
   m_ObjectHideFlags: 0

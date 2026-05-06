@@ -54,7 +54,7 @@ public class MagicSwordItemLogic : ItemLogic
         if (_playerMeleeAttack != null)
         {
             // suscribo al evento de la espada
-            _playerMeleeAttack.OnMeleeAttackCompleted += ShootProjectile;
+            PlayerEvents.OnEndAttacking += ShootProjectile;
         }
     }
 
@@ -62,7 +62,7 @@ public class MagicSwordItemLogic : ItemLogic
     {
         if (_playerMeleeAttack != null)
         {
-            _playerMeleeAttack.OnMeleeAttackCompleted -= ShootProjectile;
+            PlayerEvents.OnEndAttacking -= ShootProjectile;
         }
 
         base.Unregister();
