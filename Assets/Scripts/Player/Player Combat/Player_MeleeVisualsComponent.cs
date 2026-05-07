@@ -71,6 +71,7 @@ public class Player_MeleeVisualsComponent : MonoBehaviour
 
     private void StopAllTrails()
     {
+        print("Stopping trails");
         foreach (var trail in _swordTrails) { if (trail != null) { trail.emitting = false; trail.Clear(); } }
         foreach (var trail in _bleedSwordTrails) { if (trail != null) { trail.emitting = false; trail.Clear(); } }
     }

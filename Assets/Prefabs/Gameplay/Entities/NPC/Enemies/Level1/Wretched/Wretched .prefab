@@ -138,7 +138,6 @@ GameObject:
   - component: {fileID: 4892035731823008423}
   - component: {fileID: 4975273884728576176}
   - component: {fileID: 7923424443455457744}
-  - component: {fileID: 5275523639726089141}
   m_Layer: 10
   m_Name: CC_Base_L_Thigh
   m_TagString: Untagged
@@ -281,28 +280,6 @@ MonoBehaviour:
   _joint: []
   _Rb: []
   _Col: []
---- !u!114 &5275523639726089141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 318320925005613779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _LimbDismemberPrefab: {fileID: 7449148969086778518, guid: 2508cc31870dc6049a2bbb9267375634,
-    type: 3}
-  _RagTimer: {fileID: 0}
-  _HPComp: {fileID: 0}
-  _LimbHealth: 20
-  _IsDismemberable: 1
-  _LimbDamageReduction: 1
-  _joint: []
-  _Rb: []
-  _Col: []
 --- !u!1 &517940139666298676
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,7 +355,6 @@ GameObject:
   - component: {fileID: 6971337294683739725}
   - component: {fileID: 7640042547117499790}
   - component: {fileID: 7257981265615892951}
-  - component: {fileID: 8745749575574851770}
   m_Layer: 10
   m_Name: CC_Base_R_Calf
   m_TagString: Untagged
@@ -513,19 +489,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Dismember: {fileID: 6127497000883481782}
---- !u!114 &8745749575574851770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 632549503870352310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e201e6784200c594d85a6db9b6139ba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Dismember: {fileID: 5584124903636655890}
 --- !u!1 &706478890671234684
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +597,6 @@ GameObject:
   - component: {fileID: 3395210338332711022}
   - component: {fileID: 6219252523564730511}
   - component: {fileID: 3960142656067021626}
-  - component: {fileID: 8007714515697057285}
   m_Layer: 10
   m_Name: CC_Base_Head
   m_TagString: Untagged
@@ -774,28 +736,6 @@ MonoBehaviour:
   _joint: []
   _Rb: []
   _Col: []
---- !u!114 &8007714515697057285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1201538759068569671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _LimbDismemberPrefab: {fileID: 1098774483364683966, guid: 5d042a0d07ae0cb4ea45694ae0d32102,
-    type: 3}
-  _RagTimer: {fileID: 0}
-  _HPComp: {fileID: 0}
-  _LimbHealth: 20
-  _IsDismemberable: 1
-  _LimbDamageReduction: 2
-  _joint: []
-  _Rb: []
-  _Col: []
 --- !u!1 &1476857469123605576
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,7 +811,6 @@ GameObject:
   - component: {fileID: 5997399679259225663}
   - component: {fileID: 607399953790560504}
   - component: {fileID: 3394606880483918449}
-  - component: {fileID: 5840121125751772740}
   m_Layer: 10
   m_Name: CC_Base_Spine01
   m_TagString: Untagged
@@ -990,27 +929,6 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &3394606880483918449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664840699089983701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _LimbDismemberPrefab: {fileID: 0}
-  _RagTimer: {fileID: 0}
-  _HPComp: {fileID: 0}
-  _LimbHealth: 0
-  _IsDismemberable: 0
-  _LimbDamageReduction: 1
-  _joint: []
-  _Rb: []
-  _Col: []
---- !u!114 &5840121125751772740
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1797,7 +1715,10 @@ MonoBehaviour:
   _Speed: 0
   _MovementAccel: 0
   _MaxRotationSpeed: 2400
-  _MinDistance: 10
+  _ChargeCooldown: 0
+  _PulseChargeCooldown: 0
+  _MinChargeDistance: 0
+  _MinBiteDistance: 0
   _MaxDistance: 20
   _SoundDownTime: 5
   _RandomSoundOffset: 0
@@ -1909,7 +1830,6 @@ GameObject:
   - component: {fileID: 5930455992208362813}
   - component: {fileID: 3330416477470592800}
   - component: {fileID: 6127497000883481782}
-  - component: {fileID: 5584124903636655890}
   m_Layer: 10
   m_Name: CC_Base_R_Thigh
   m_TagString: Untagged
@@ -2031,28 +1951,6 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &6127497000883481782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4017800475969608018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _LimbDismemberPrefab: {fileID: 2935748124353220346, guid: ca5da5391d0c6a94a83b571637f29535,
-    type: 3}
-  _RagTimer: {fileID: 0}
-  _HPComp: {fileID: 0}
-  _LimbHealth: 20
-  _IsDismemberable: 1
-  _LimbDamageReduction: 1
-  _joint: []
-  _Rb: []
-  _Col: []
---- !u!114 &5584124903636655890
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2555,7 +2453,6 @@ GameObject:
   - component: {fileID: 6820542387956529270}
   - component: {fileID: 1876858662632064514}
   - component: {fileID: 1874619028055295528}
-  - component: {fileID: 1066775598619576970}
   m_Layer: 10
   m_Name: CC_Base_Pelvis
   m_TagString: Untagged
@@ -2695,27 +2592,6 @@ MonoBehaviour:
   _joint: []
   _Rb: []
   _Col: []
---- !u!114 &1066775598619576970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4556030702201801083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _LimbDismemberPrefab: {fileID: 0}
-  _RagTimer: {fileID: 4775146000818692725}
-  _HPComp: {fileID: 1817444877513855909}
-  _LimbHealth: 0
-  _IsDismemberable: 0
-  _LimbDamageReduction: 1
-  _joint: []
-  _Rb: []
-  _Col: []
 --- !u!1 &4587299687419558443
 GameObject:
   m_ObjectHideFlags: 0
@@ -2760,7 +2636,6 @@ GameObject:
   - component: {fileID: 3743755186253870148}
   - component: {fileID: 960386769062978283}
   - component: {fileID: 5150523223262340004}
-  - component: {fileID: 4163627883807528515}
   m_Layer: 10
   m_Name: CC_Base_L_Upperarm
   m_TagString: Untagged
@@ -2882,28 +2757,6 @@ CharacterJoint:
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!114 &5150523223262340004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4694255563489160951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _LimbDismemberPrefab: {fileID: 4661932403973934458, guid: d969b3aae2f798749a5291785fb44a7a,
-    type: 3}
-  _RagTimer: {fileID: 0}
-  _HPComp: {fileID: 0}
-  _LimbHealth: 20
-  _IsDismemberable: 1
-  _LimbDamageReduction: 1
-  _joint: []
-  _Rb: []
-  _Col: []
---- !u!114 &4163627883807528515
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3640,7 +3493,6 @@ GameObject:
   - component: {fileID: 2854057856276201437}
   - component: {fileID: 5417497169318347755}
   - component: {fileID: 6312897115552410952}
-  - component: {fileID: 8480590028703711127}
   m_Layer: 10
   m_Name: CC_Base_R_Forearm
   m_TagString: Untagged
@@ -3775,19 +3627,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Dismember: {fileID: 6605826965728675999}
---- !u!114 &8480590028703711127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6657474133038695831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e201e6784200c594d85a6db9b6139ba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Dismember: {fileID: 7614347876425575024}
 --- !u!1 &6805788309876668850
 GameObject:
   m_ObjectHideFlags: 0
@@ -4248,7 +4087,6 @@ GameObject:
   - component: {fileID: 6145849486259867346}
   - component: {fileID: 717092853317935496}
   - component: {fileID: 6605826965728675999}
-  - component: {fileID: 7614347876425575024}
   m_Layer: 10
   m_Name: CC_Base_R_Upperarm
   m_TagString: Untagged
@@ -4391,28 +4229,6 @@ MonoBehaviour:
   _joint: []
   _Rb: []
   _Col: []
---- !u!114 &7614347876425575024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7884149147152849372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c5e7551ced13a74288271aea3f94955, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _LimbDismemberPrefab: {fileID: 4093465170210406316, guid: 55c838d88eb6f0d4f8125bd0aee47d38,
-    type: 3}
-  _RagTimer: {fileID: 0}
-  _HPComp: {fileID: 0}
-  _LimbHealth: 20
-  _IsDismemberable: 1
-  _LimbDamageReduction: 1
-  _joint: []
-  _Rb: []
-  _Col: []
 --- !u!1 &7973290413071139186
 GameObject:
   m_ObjectHideFlags: 0
@@ -4457,7 +4273,6 @@ GameObject:
   - component: {fileID: 2739912398439212348}
   - component: {fileID: 6306919844089431720}
   - component: {fileID: 8550065968116039645}
-  - component: {fileID: 3189928509564622510}
   m_Layer: 10
   m_Name: CC_Base_L_Forearm
   m_TagString: Untagged
@@ -4592,19 +4407,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Dismember: {fileID: 5150523223262340004}
---- !u!114 &3189928509564622510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7997925037005772374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e201e6784200c594d85a6db9b6139ba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Dismember: {fileID: 4163627883807528515}
 --- !u!1 &8001548354247194868
 GameObject:
   m_ObjectHideFlags: 0
@@ -5360,7 +5162,6 @@ GameObject:
   - component: {fileID: 6402984424376637586}
   - component: {fileID: 8473532481201790603}
   - component: {fileID: 1849225962386378220}
-  - component: {fileID: 5131313357077644857}
   m_Layer: 10
   m_Name: CC_Base_L_Calf
   m_TagString: Untagged
@@ -5495,19 +5296,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Dismember: {fileID: 7923424443455457744}
---- !u!114 &5131313357077644857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8947371924232652332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e201e6784200c594d85a6db9b6139ba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Dismember: {fileID: 5275523639726089141}
 --- !u!1 &9037379868430308846
 GameObject:
   m_ObjectHideFlags: 0

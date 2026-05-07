@@ -98,6 +98,7 @@ public class SwordTest : Visceral_WeaponBase
 
         if (IDamage.GetHealthComponent(out Health_Component HPComp) == false) return;
 
+        print("Notified hit" + other.name);
         DamageScore damageScore = new DamageScore()
         {
             DamageAmount = Damage,

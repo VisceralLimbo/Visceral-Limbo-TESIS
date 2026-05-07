@@ -5533,6 +5533,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1286231023210557397}
   - component: {fileID: 8129654649378102644}
+  - component: {fileID: 4481318128366562054}
   m_Layer: 0
   m_Name: hand
   m_TagString: Untagged
@@ -5579,6 +5580,36 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4481318128366562054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3738918669124918545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 769e75392305d3242a4cd63cd47e097a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _IsBleedActive: 0
+  _IsBoostActive: 0
+  _SwordMeshRenderer: {fileID: 7005328538969446673}
+  _NormalMaterial: {fileID: 2100000, guid: f29ce19c9349a8049a0716b67b5b1d15, type: 2}
+  _BoostMaterialGold: {fileID: 2100000, guid: ae8c75f743f4aff4abf9d3907113afe5, type: 2}
+  _BleedColor: {r: 1, g: 0.1, b: 0.1, a: 1}
+  _BleedBlendValue: 0.04
+  _swordTrails: []
+  _bleedSwordTrails: []
+  swingSound:
+    Clip: {fileID: 8300000, guid: a2d450b1fbc9f754ab5d23e07a22fce6, type: 3}
+    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 1
 --- !u!1 &3830913269593556987
 GameObject:
   m_ObjectHideFlags: 0
@@ -22181,6 +22212,12 @@ PrefabInstance:
 --- !u!4 &2398909585161697299 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4881060105484825713, guid: 11a43635e24902240aabc4e9403ea8d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 7131346384545336418}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7005328538969446673 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 270300573083456883, guid: 11a43635e24902240aabc4e9403ea8d2,
     type: 3}
   m_PrefabInstance: {fileID: 7131346384545336418}
   m_PrefabAsset: {fileID: 0}

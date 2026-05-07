@@ -47,6 +47,8 @@ public class HitBox : Visceral_Script
                 if(Idamage.GetHealthComponent(out Health_Component HPComp) == true 
                                               && !TaggedHealth.Contains(HPComp))
                 {
+                    print("Hit box hit" + other.name);
+
                     if(HPComp.Context != _Context)
                     {
                         _WeaponOwner.NotifyHit(other, Idamage);
