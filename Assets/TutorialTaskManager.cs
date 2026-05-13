@@ -20,7 +20,7 @@ public class TutorialTaskManager : MonoBehaviour
     public bool attackDone;
     public bool AllCompleted => moveDone && jumpDone && crouchDone && attackDone;
 
-    [SerializeField] private Player_MeleeAttack meleeAttack;
+    [SerializeField] private Player_MeleeComboComponent meleeAttack;
 
     void Start()
     {

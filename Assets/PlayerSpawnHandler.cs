@@ -27,6 +27,7 @@ public class PlayerSpawnHandler : MonoBehaviour
         {
             // primera vez al tuto
             playerMovement.SetCharacterPosition(tutorialSpawn.position);
+            BloodEchoesManager.AddBloodEchoes(50);
         }
         else
         {

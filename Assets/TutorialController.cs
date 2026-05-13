@@ -14,6 +14,10 @@ public class TutorialController : MonoBehaviour
     private bool inItemsTab;
     private bool hoveredItem;
 
+    [Header("Tutorial Finish")]
+    [SerializeField] private Player_Movement playerMovement;
+    [SerializeField] private Transform normalSpawn;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -39,19 +43,19 @@ public class TutorialController : MonoBehaviour
         switch (id)
         {
             case TutorialID.Ability_Q:
-                popupUI.Show("Usá la habilidad Q");
+                popupUI.Show("Toca Q para hacer un giro y repeleer enemigos");
                 break;
 
             case TutorialID.Ability_E:
-                popupUI.Show("Usá la habilidad E");
+                popupUI.Show("Toca E para hacer un parry y redirigir un proyectil");
                 break;
 
             case TutorialID.Ability_Shift:
-                popupUI.Show("Usá la habilidad Shift");
+                popupUI.Show("Toca Shift para hacer un dash");
                 break;
 
             case TutorialID.Ability_F:
-                popupUI.Show("Usá la habilidad F");
+                popupUI.Show("Toca la F para patear objetos");
                 break;
 
             case TutorialID.Inventory:
@@ -157,5 +161,23 @@ public class TutorialController : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
 
         Complete();
+    }
+
+    public void FinishTutorial()
+    {
+        StartCoroutine(FinishTutorialRoutine());
+    }
+
+    IEnumerator FinishTutorialRoutine()
+    {
+        yield return StartCoroutine(ScreenFader.Instance.FadeOut());
+
+        TutorialManager.MarkTutorialAsSeen();
+
+        playerMovement.SetCharacterPosition(normalSpawn.position);
+
+        yield return new WaitForSeconds(0.2f);
+
+        yield return StartCoroutine(ScreenFader.Instance.FadeIn());
     }
 }
