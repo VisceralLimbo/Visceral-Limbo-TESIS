@@ -18,6 +18,14 @@ public class TutorialUI : MonoBehaviour
     void Start()
     {
         tutorialCanvas.SetActive(false);
+        if (DungeonGenerator.Instance != null)
+        {
+            DungeonGenerator.Instance.OnSuccessfulGeneration += ShowTutorial;
+        }
+        else
+        {
+            Debug.LogError("DungeonGenerator sigue siendo NULL en Start");
+        }
     }
 
     void Update()
@@ -112,14 +120,17 @@ public class TutorialUI : MonoBehaviour
 
     void OnEnable()
     {
-        if (DungeonGenerator.Instance != null)
-            DungeonGenerator.Instance.OnSuccessfulGeneration += ShowTutorial;
+        {
+            if (DungeonGenerator.Instance != null)
+                DungeonGenerator.Instance.OnSuccessfulGeneration += ShowTutorial;
+        }
     }
-
-    void OnDisable()
+    void OnDestroy()
     {
         if (DungeonGenerator.Instance != null)
+        {
             DungeonGenerator.Instance.OnSuccessfulGeneration -= ShowTutorial;
+        }
     }
 
 }
