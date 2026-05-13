@@ -4,6 +4,7 @@ using UnityEngine;
 public static class PlayerEvents
 {
     public static event Action OnAttack;
+    public static event Action OnStartAttacking, OnEndAttacking;
     public static event Action OnPlayerUsedUtilitySkill;
     public static event Action OnPlayerUsedSkill2;
     public static event Action OnPlayerUsedSkill1;
@@ -19,6 +20,9 @@ public static class PlayerEvents
     public static void PlayerUsedUtilSkill() => OnPlayerUsedUtilitySkill?.Invoke();
     public static void PlayerUsedSkill2() => OnPlayerUsedSkill2?.Invoke();
     public static void PlayerUsedSkill1() => OnPlayerUsedSkill1?.Invoke();
+
+    public static void StartAttacking() => OnStartAttacking?.Invoke();
+    public static void EndAttacking() => OnEndAttacking?.Invoke();
 
     public static void PlayerSucessfulHit() => OnPlayerSuccesfulHit?.Invoke();
 

@@ -99,7 +99,15 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         {
             if(Idamage.GetHealthComponent(out Health_Component IHealth) && !TaggedHealth.Contains(IHealth))
             {
-                if(IHealth.Context != _Context)
+                // stopgap ! player ataco algo sin Context
+                if(IHealth.Context == null)
+                {
+                    IHealth.SimpleDamage(Damage);
+                    PlayerEvents.PlayerSucessfulHit();
+                    return;
+                }
+
+                if(IHealth.Context != null && IHealth.Context != _Context )
                 {
                     TaggedColliders.Add(other);
                     TaggedHealth.Add(IHealth);
@@ -118,14 +126,10 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
                     };
                     DamageDT.AddTag(ScoreFlags.Skill1Kill);
 
-                    if (IHealth.Context == null)
-                    {
-                        IHealth.SimpleDamage(Damage);
-                    }
-                    else
-                    {
-                        IHealth.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
-                    }
+                    PlayerEvents.PlayerSucessfulHit();
+                  
+                    IHealth.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
+                    SlowMotion.Stop(0.1f, 0.02f, false);
                 }
       
 
@@ -136,6 +140,13 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         }
         else if(other.TryGetComponent( out Health_Component HPComp))
         {
+            if(HPComp.Context == null)
+            {
+                HPComp.SimpleDamage(Damage);
+                PlayerEvents.PlayerSucessfulHit();
+                return;
+            }
+
             if (HPComp.Context != _Context)
             {
                 TaggedColliders.Add(other);
@@ -163,6 +174,9 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
                 {
                     HPComp.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
                 }
+
+
+                SlowMotion.Stop(0.1f, 0.02f, false);
             }
 
 

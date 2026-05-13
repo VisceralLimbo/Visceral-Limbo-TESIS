@@ -7,7 +7,7 @@ public class UtilitySkillBoost : BuffBehavior
     [SerializeField] StatIdentifier StatID;
     [SerializeField] float _StartingDamageMultiplerValue = 1;
 
-    [SerializeField] Player_MeleeAttack _MeleeAttack;
+    [SerializeField] Player_MeleeVisualsComponent _MeleeVisual;
 
     public override PlayerContext GetOrigin()
     {
@@ -40,7 +40,7 @@ public class UtilitySkillBoost : BuffBehavior
         }
 
         PlayerEvents.OnPlayerSuccesfulHit += ActivatedBuff;
-        _MeleeAttack = StatMan.GetComponentInChildren<Player_MeleeAttack>();
+        _MeleeVisual = StatMan.GetComponentInChildren<Player_MeleeVisualsComponent>();
 
         float TotalPotency = _StartingDamageMultiplerValue * (1 * 0.15f * (_BuffPotency - 1));
 
@@ -68,9 +68,9 @@ public class UtilitySkillBoost : BuffBehavior
 
         StatMan.UpdateFloatStatValue(StatID, _Mod);
 
-        if(_MeleeAttack != null)
+        if(_MeleeVisual != null)
         {
-            _MeleeAttack.IsEvasionBoostActive = true;
+            _MeleeVisual.AddBoostVisualSource();
         }
     }
 
@@ -78,9 +78,9 @@ public class UtilitySkillBoost : BuffBehavior
     {
         _StatMan.RemoveFloatStatModifier(StatID, _BuffSO.BuffID);
 
-        if (_MeleeAttack != null)
+        if (_MeleeVisual != null)
         {
-            _MeleeAttack.IsEvasionBoostActive = false;
+            _MeleeVisual.RemoveBoostVisualSource();
         }
     }
 

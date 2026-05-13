@@ -30,7 +30,7 @@ public class LimbProxy : MonoBehaviour, IDamageable
     private void Start()
     {
         if(_Dismember == null) GetComponentInParent<LimbDesmemberComponent>();
-        if(_Dismember != null) _DismemberDamageable = _Dismember.GetComponent<IDamageable>();
+        if (_Dismember != null) _DismemberDamageable = _Dismember;
     }
 
 }

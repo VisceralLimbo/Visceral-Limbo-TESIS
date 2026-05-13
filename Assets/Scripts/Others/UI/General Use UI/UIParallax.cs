@@ -104,13 +104,13 @@ public class UIParallax : MonoBehaviour
     private void OnEnable()
     {
         if (meleeAttack != null)
-            meleeAttack.OnMeleeAttackCompleted += PlayAttackShake;
+           PlayerEvents.OnEndAttacking += PlayAttackShake;
     }
 
     private void OnDisable()
     {
         if (meleeAttack != null)
-            meleeAttack.OnMeleeAttackCompleted -= PlayAttackShake;
+            PlayerEvents.OnEndAttacking -= PlayAttackShake;
     }
 
     private void PlayAttackShake()

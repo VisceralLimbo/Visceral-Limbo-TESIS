@@ -55,6 +55,7 @@ public class Charge_Collider : Visceral_Script
     private void OnTriggerEnter(Collider other)
     {
         if (!_Active) return;
+        
         if (other.TryGetComponent(out PlayerContext OtherContext))
         {
             // el enemigo de dash no puede hacer daño a aliados, por como funciona causa que 

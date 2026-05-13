@@ -70,31 +70,97 @@ public class BulletDumb : MonoBehaviour, IParriable
     }
 
 
+    private HashSet<Collider> TaggedColliders = new HashSet<Collider>();
+    private HashSet<Health_Component> TaggedHealth = new HashSet<Health_Component>();
+
     private void OnTriggerEnter(Collider other)
     {
-        print(other.gameObject.name);
+        if (other.gameObject == _OwnerContext.PlayerGameObject) return;
+        if (TaggedColliders.Contains(other)) return;
 
-        if (other.gameObject == _OwnerGameObject) return;
-        if (other.GetComponent<PlayerContext>() == _OwnerContext) return;
-        if (other.GetComponent<Visceral_SkillLogic>()) return;
 
-        if(other.TryGetComponent(out Health_Component HPComp))
+        // priorizamos el Idamageable
+        if (other.TryGetComponent(out IDamageable Idamage))
         {
-            Vector3 dir = other.gameObject.transform.position - this.transform.position;
+            if (Idamage.GetHealthComponent(out Health_Component IHealth) && !TaggedHealth.Contains(IHealth))
+            {
+                if (IHealth.Context != _OwnerContext)
+                {
+                    TaggedColliders.Add(other);
+                    TaggedHealth.Add(IHealth);
 
-            DamageScore DamageDT = new DamageScore();
-            DamageDT.Attacker = _OwnerContext;
-            DamageDT.DamageAmount = damage;
-            DamageDT.Victim = other.GetComponent<PlayerContext>();
-            DamageDT.ElementalDamage = ElementType.Physical;
-            DamageDT.FactionID = FactionID.LimboMonster1;
-            if(Parried)DamageDT.AddTag(ScoreFlags.Parried);
-           
-            if(HPComp.Context == null) { HPComp.SimpleDamage(damage);return; }
-            HPComp.TakeDamageWithKnockback(dir.normalized, 5, DamageDT);
-   
+                    Vector3 Dir = IHealth.Context.PlayerTransform.position - _OwnerContext.PlayerTransform.position;
+                    Dir.y = 0;
+
+
+                    DamageScore DamageDT = new DamageScore
+                    {
+                        Attacker = _OwnerContext,
+                        DamageAmount = Damage,
+                        Victim = IHealth.Context, // Puede ser null si es un prop, lo manejamos abajo
+                        ElementalDamage = ElementType.Physical,
+                        FactionID = FactionID.LimboMonster1
+                    };
+                    DamageDT.AddTag(ScoreFlags.Skill1Kill);
+
+                    if (IHealth.Context == null)
+                    {
+                        IHealth.SimpleDamage(Damage);
+                    }
+                    else
+                    {
+                        IHealth.TakeDamageWithKnockback(Dir.normalized, 0f, DamageDT);
+                    }
+                }
+                else
+                {
+                    return;
+                }
+
+
+
+            }
+
+
         }
 
+        else if (other.TryGetComponent(out Health_Component HPComp))
+        {
+            if (HPComp.Context != _OwnerContext)
+            {
+                TaggedColliders.Add(other);
+                TaggedHealth.Add(HPComp);
+
+                Vector3 Dir = HPComp.Context.PlayerTransform.position - _OwnerContext.PlayerTransform.position;
+                Dir.y = 0;
+
+
+                DamageScore DamageDT = new DamageScore
+                {
+                    Attacker = _OwnerContext,
+                    DamageAmount = Damage,
+                    Victim = HPComp.Context, // Puede ser null si es un prop, lo manejamos abajo
+                    ElementalDamage = ElementType.Physical,
+                    FactionID = FactionID.LimboMonster1
+                };
+                DamageDT.AddTag(ScoreFlags.Skill1Kill);
+
+                if (HPComp.Context == null)
+                {
+                    HPComp.SimpleDamage(Damage);
+                }
+                else
+                {
+                    HPComp.TakeDamageWithKnockback(Dir.normalized, 0f, DamageDT);
+                }
+            }
+            else
+            {
+                return;
+            }
+
+
+        }
         Destroy(this.gameObject);
     }
 

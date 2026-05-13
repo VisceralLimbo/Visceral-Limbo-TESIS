@@ -1380,7 +1380,7 @@ GameObject:
   - component: {fileID: 1489878496788334027}
   - component: {fileID: 1490595854630882232}
   - component: {fileID: 4522773646099621157}
-  - component: {fileID: 8523669415137956118}
+  - component: {fileID: 4331199444872902564}
   - component: {fileID: 388799400367065248}
   - component: {fileID: 6517383520978276483}
   - component: {fileID: 1762061369327758656}
@@ -1430,8 +1430,7 @@ MonoBehaviour:
   _Player_Movement: {fileID: 6500121958363365470}
   _Player_CameraController: {fileID: 9214448604976076639}
   _DashTest: {fileID: 2414886674968126972}
-  _MeleeAttack: {fileID: 4522773646099621157}
-  _ChargedMeleeCombat: {fileID: 8523669415137956118}
+  _MeleeAttack: {fileID: 4331199444872902564}
   _SkillManager: {fileID: 6517383520978276483}
   IsAlive: 1
   OnDialogue: 0
@@ -1477,7 +1476,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4039303074304250013}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0eda4e6aa45496b4996efb6257c439a3, type: 3}
   m_Name: 
@@ -1542,44 +1541,25 @@ MonoBehaviour:
   - {fileID: 5194719899523950829}
   - {fileID: 259649078539047552}
   - {fileID: 7249689108911262204}
---- !u!114 &8523669415137956118
+--- !u!114 &4331199444872902564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4039303074304250013}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670ce57eb17738745af010ab4a7f27ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 1aed71dd30cf0d141abd67a2332678a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundData:
-  - Clip: {fileID: 8300000, guid: a2d450b1fbc9f754ab5d23e07a22fce6, type: 3}
-    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
-    Loop: 0
-    PlayOnAwake: 0
-    SpatialBlend: 0
-    MinimunSoundDistance: 0
-    MaximunSoundDistance: 0
-    IsFrequent: 0
-  SwordAttacks:
-  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
-  - {fileID: 11400000, guid: 799c2ce3e4a460545be69334a6883373, type: 2}
-  _ChargeAmount: 0
-  _MaximumCharge: 3
-  _MinimunToAttack: 0.3
-  _Anim: {fileID: 0}
+  _AnimHandler: {fileID: 822650225700030981}
   _Weapon: {fileID: 8935195771567458531}
-  _ChargeSlider: {fileID: 0}
-  AttackSpeedMod: 1.5
-  RechargeRate: 0
-  _SwordRenderer: {fileID: 3645706006359751121}
-  shaderFloatName: _FresnelGradientBlend
-  chargeThreshold: 1
-  blendSpeed: 10
-  swordTrail: {fileID: 4930851727240373649}
-  swordTrail2: {fileID: 6888208631664464397}
+  _PlayerContext: {fileID: 388799400367065248}
+  Combo: {fileID: 11400000, guid: 5a62b0f0e3912d442a61eb166bf6992e, type: 2}
+  ComboResetTime: 1.2
+  _baseDamageStat: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
+  _attackSpeedStat: {fileID: 11400000, guid: 86d3f1b42f8a0c541a550749b16903c4, type: 2}
 --- !u!114 &388799400367065248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2524,6 +2504,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 640511117393224855, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
     - target: {fileID: 793885513855110951, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2653,6 +2638,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.22364835
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521813320363998768, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 1940516630768351188, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
@@ -2934,6 +2924,71 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.003529696
       objectReference: {fileID: 0}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _swordTrails.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _swordTrails.Array.data[0]
+      value: 
+      objectReference: {fileID: 4930851727240373649}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _swordTrails.Array.data[1]
+      value: 
+      objectReference: {fileID: 6888208631664464397}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _swordTrails.Array.data[2]
+      value: 
+      objectReference: {fileID: 3152248793695588532}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _swordTrails.Array.data[3]
+      value: 
+      objectReference: {fileID: 4956021539705696077}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _swordTrails.Array.data[4]
+      value: 
+      objectReference: {fileID: 6607749736418727239}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _swordTrails.Array.data[5]
+      value: 
+      objectReference: {fileID: 6607749736418727239}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[0]
+      value: 
+      objectReference: {fileID: 2652949802101751772}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[1]
+      value: 
+      objectReference: {fileID: 910483816258787721}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[2]
+      value: 
+      objectReference: {fileID: 5194719899523950829}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[3]
+      value: 
+      objectReference: {fileID: 259649078539047552}
+    - target: {fileID: 4481318128366562054, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: _bleedSwordTrails.Array.data[4]
+      value: 
+      objectReference: {fileID: 7249689108911262204}
     - target: {fileID: 4561375188201320247, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_IsActive
@@ -3054,6 +3109,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5664512104115549952, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
     - target: {fileID: 5735949972215854762, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3098,6 +3158,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 8.414844
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922356420978784097, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 6052117998725099545, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}
@@ -3283,6 +3348,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -26.93845
+      objectReference: {fileID: 0}
+    - target: {fileID: 7941754969078264115, guid: e5469ed8d51aff74a979372cc1730bcf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 7981464028546031987, guid: e5469ed8d51aff74a979372cc1730bcf,
         type: 3}

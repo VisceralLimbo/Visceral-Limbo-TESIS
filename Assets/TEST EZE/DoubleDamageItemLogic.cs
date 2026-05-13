@@ -5,25 +5,25 @@ using System.Collections.Generic;
 public class DoubleDamageItemLogic : ItemLogic
 {
     [SerializeField] private float damageMultiplierBoost = 2f;
-    [SerializeField] private StatIdentifier DAMAGE_STAT_NAME; //tiene q ser igual q en el float stat list
+    [SerializeField] private StatIdentifier DAMAGE_STAT_NAME;
     private const string EFFECT_NAME = "DoubleDamageItemLogicBoost";
+
+    [SerializeField] Player_MeleeVisualsComponent _PlayerVisuals;
 
     // guardo el acumulado del item
     private float _totalBoostValue = 0f;
     private bool _isBoostActive = false;
 
-    // mismo q player health xq necesito el meeleattack
-    private Player_MeleeAttack _playerMeleeAttack;
 
     [SerializeField] SoundData _PickUpSound;
 
-    private Player_MeleeAttack PlayerMeleeAttackComponent{get
+    private Player_MeleeVisualsComponent PlayerMeleeVisualsComponent{get
         {
-            if (_playerMeleeAttack == null && _Context != null)
+            if (_PlayerVisuals == null && _Context != null)
             {
-                _playerMeleeAttack = _Context.GetComponent<Player_MeleeAttack>();
+                _PlayerVisuals = _Context.GetComponent<Player_MeleeVisualsComponent>();
             }
-            return _playerMeleeAttack;
+            return _PlayerVisuals;
         }
     }
 
@@ -102,7 +102,7 @@ public class DoubleDamageItemLogic : ItemLogic
         _isBoostActive = true;
 
         // registro boost activo
-        PlayerMeleeAttackComponent?.RegisterBoostSource();
+        _PlayerVisuals?.AddBoostVisualSource();
     }
 
     //remuevo
@@ -117,7 +117,7 @@ public class DoubleDamageItemLogic : ItemLogic
             _isBoostActive = false;
 
             // elimino registro
-            PlayerMeleeAttackComponent?.UnregisterBoostSource();
+            _PlayerVisuals.RemoveBoostVisualSource();
         }
     }
 
@@ -199,7 +199,7 @@ public class DoubleDamageItemLogic : ItemLogic
         // chequeo q se elimine el dorado al elminar registro
         if (_isBoostActive)
         {
-            PlayerMeleeAttackComponent?.UnregisterBoostSource();
+            _PlayerVisuals?.AddBoostVisualSource();
         }
 
         // chequeo que se removio del statmanager

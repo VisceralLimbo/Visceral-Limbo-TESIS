@@ -19,12 +19,12 @@ public class BleedItemLogic : ItemLogic, I_OnHitItem
 
     [SerializeField] SoundData _PickUpSound;
 
-    private Player_MeleeAttack _playerMeleeAttack;
-    private Player_MeleeAttack PlayerMeleeAttackComponent{get
+    private Player_MeleeVisualsComponent _playerMeleeAttack;
+    private Player_MeleeVisualsComponent PlayerMeleeVisualComponent{get
         {
             if (_playerMeleeAttack == null && _Context != null)
             {
-                _playerMeleeAttack = _Context.GetComponent<Player_MeleeAttack>();
+                _playerMeleeAttack = _Context.GetComponent<Player_MeleeVisualsComponent>();
             }
             return _playerMeleeAttack;
         }
@@ -62,7 +62,7 @@ public class BleedItemLogic : ItemLogic, I_OnHitItem
     public override void Unregister()
     {
         // notifico efecto off
-        PlayerMeleeAttackComponent?.SetBleedEffectActive(false);
+        PlayerMeleeVisualComponent?.SetBleedVisuals(false);
 
         // paro particulas (de igual manera el bleed nunca se desactiva una vez agarrado pero lo dejo seteado igual)
         if (swordParticles != null)
@@ -88,11 +88,11 @@ public class BleedItemLogic : ItemLogic, I_OnHitItem
     public override void AddStack()
     {
 
-            // pase todo el efecto a playerattack quiza deberiamos tener un manager para todos los efectos son bastantes..
-            PlayerMeleeAttackComponent?.SetBleedEffectActive(true);
+        // pase todo el efecto a playerattack quiza deberiamos tener un manager para todos los efectos son bastantes..
+        PlayerMeleeVisualComponent?.SetBleedVisuals(true);
 
-            // particulas ya no estan en pickup
-            if (swordParticles != null)
+        // particulas ya no estan en pickup
+        if (swordParticles != null)
             {
                 swordParticles.gameObject.SetActive(true);
                 swordParticles.Play();
