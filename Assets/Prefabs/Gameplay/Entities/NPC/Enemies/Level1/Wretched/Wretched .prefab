@@ -1114,6 +1114,73 @@ Transform:
   - {fileID: 6749383393521747998}
   m_Father: {fileID: 6489504427406447565}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2282684290446595833
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1874680785847740182}
+  - component: {fileID: 8187994637040587182}
+  m_Layer: 7
+  m_Name: State - Bite
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1874680785847740182
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2282684290446595833}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8493371771134585519}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8187994637040587182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2282684290446595833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa88d59bf7989443b73c53106632b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
+  Mytransitions:
+  - conditions: []
+    _FromGO: {fileID: 2282684290446595833}
+    _ToGO: {fileID: 3593838866995410337}
+    _ShouldTransitionWithNoConditions: 1
+  _MinStateLifetime: 0
+  _AnimHandler: {fileID: 790518200079803162}
+  _Target: {fileID: 0}
+  _PlayerContext: {fileID: 4654570009590822600}
+  _StatsManager: {fileID: 1932132607407447805}
+  _AttackRadius: 3
+  _BiteAttack: 0
+  _AttackKnockback: 0
+  _AttackMask:
+    serializedVersion: 2
+    m_Bits: 1216
+  _CanTransition: 0
+  _TotalAnimationLenght: 1
+  _StartDealingDamage: 0.1
+  _StopDealingDamage: 0.6
+  AttackStatID: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
+  KnockbackStatID: {fileID: 11400000, guid: 5771a42bb69cae941a261dfc753f5536, type: 2}
 --- !u!1 &2339122454485781642
 GameObject:
   m_ObjectHideFlags: 0
@@ -1703,6 +1770,13 @@ MonoBehaviour:
   stateMachine: {fileID: 4746130255494018027}
   Mytransitions:
   - conditions:
+    - ConditionName: BiteMelee
+      Value: 1
+      IsResetAfterSwitch: 0
+    _FromGO: {fileID: 3593838866995410337}
+    _ToGO: {fileID: 2282684290446595833}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
     - ConditionName: Melee
       Value: 1
       IsResetAfterSwitch: 0
@@ -1716,10 +1790,10 @@ MonoBehaviour:
   _Speed: 0
   _MovementAccel: 0
   _MaxRotationSpeed: 2400
-  _ChargeCooldown: 0
+  _ChargeCooldown: 3
   _PulseChargeCooldown: 0
-  _MinChargeDistance: 0
-  _MinBiteDistance: 0
+  _MinChargeDistance: 5
+  _MinBiteDistance: 3
   _MaxDistance: 20
   _SoundDownTime: 5
   _RandomSoundOffset: 0
@@ -2209,6 +2283,7 @@ MonoBehaviour:
   - {fileID: 7930172695561420689}
   - {fileID: 8712699911459687716}
   - {fileID: 4563711927287464760}
+  - {fileID: 8187994637040587182}
   _StartingState: {fileID: 7930172695561420689}
   _CurrentState: {fileID: 0}
   _LastState: {fileID: 0}
@@ -2217,6 +2292,9 @@ MonoBehaviour:
     Value: 0
     IsResetAfterSwitch: 1
   - ConditionName: Melee
+    Value: 0
+    IsResetAfterSwitch: 1
+  - ConditionName: BiteMelee
     Value: 0
     IsResetAfterSwitch: 1
   _HPComp: {fileID: 1817444877513855909}
@@ -3060,8 +3138,8 @@ MonoBehaviour:
   _PredictiveOffset: 3
   _RaycastMask:
     serializedVersion: 2
-    m_Bits: 0
-  _RaycastWallCheckLenght: 0
+    m_Bits: 24577
+  _RaycastWallCheckLenght: 1.5
   OnChargeAttackStart:
     m_PersistentCalls:
       m_Calls:
@@ -3125,6 +3203,7 @@ Transform:
   - {fileID: 2396486691347343484}
   - {fileID: 3376497035797695434}
   - {fileID: 3514927230207140960}
+  - {fileID: 1874680785847740182}
   m_Father: {fileID: 4091262336931204975}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5600984027496406869
@@ -4583,7 +4662,7 @@ MonoBehaviour:
   _Model: {fileID: 8001548354247194868}
   _RB: {fileID: 3048824881661905011}
   _StatMan: {fileID: 0}
-  _ObsAvoid: {fileID: 0}
+  _ObsAvoid: {fileID: 8818301346909051172}
   _TargetVelocity: {x: 0, y: 0, z: 0}
   _IsActive: 1
   _KillAllMovement: 0
@@ -4738,10 +4817,10 @@ MonoBehaviour:
   _KCC: {fileID: 662010605306157248}
   _Layermasks:
     serializedVersion: 2
-    m_Bits: 31
+    m_Bits: 16415
   numberOfRays: 8
   AngleOfRays: 90
-  RaycastLenght: 10
+  RaycastLenght: 1
   _ProximityStrenght: 5
 --- !u!1 &8132487428885576320
 GameObject:
@@ -5120,7 +5199,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.6
+  m_Radius: 1
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}

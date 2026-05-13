@@ -55,8 +55,16 @@ public class SwordTest : Visceral_WeaponBase
     /// <param name="HPComp"></param>
     public override void NotifyHit(Collider other, Health_Component HPComp)
     {
+        if(HPComp.Context == null)
+        {
+            HPComp.SimpleDamage(Damage);
+            PlayerEvents.PlayerSucessfulHit();
+
+            return;
+        }
+
         //hitting user
-        if (HPComp.Context != null && HPComp.Context == _UserContext) return;
+        if (HPComp.Context == _UserContext) return;
 
         DamageScore damageScore = new DamageScore()
         {
