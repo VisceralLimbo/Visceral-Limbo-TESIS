@@ -41,6 +41,8 @@ public class Corpus_Thinking_Main_State : BaseState
 
     private List<IStateEnergyCost> AttacksCosts = new List<IStateEnergyCost>();
     private List<IStateEnergyCost> RangeAttackCosts = new List<IStateEnergyCost>();
+
+    private IStateEnergyCost _LastAttack = null;
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
         return base.EvaluateTransitions(GlobalParams, out TO);
@@ -129,7 +131,6 @@ public class Corpus_Thinking_Main_State : BaseState
             }
             else
             {
-                print("puedo hacer algo");
                 _CanMakeDecision = true;
                 DeactivateEnergy(false);
             }
@@ -252,7 +253,7 @@ public class Corpus_Thinking_Main_State : BaseState
 
         //paso 2) Determinar que ataques puedo comprar con mi energia actual
 
-        IStateEnergyCost[] ViableAttacks = PossibleAttacks.Where(x => Energy - x.GetCost() >= 0).ToArray();
+        IStateEnergyCost[] ViableAttacks = PossibleAttacks.Where(x => Energy - x.GetCost() >= 0 && x != _LastAttack).ToArray();
 
         // CATCH! no hay ataques viables
         if(ViableAttacks.Length <= 0)
@@ -272,6 +273,7 @@ public class Corpus_Thinking_Main_State : BaseState
         {
             Energy -= ViableAttacks[RandomAttack].GetCost();
             IEnegyCost = ViableAttacks[RandomAttack];
+            _LastAttack = ViableAttacks[RandomAttack];
             return ChosenAttack;
         }
         else

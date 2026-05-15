@@ -7,7 +7,6 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
 {
     [Header("Transition Setup")]
     [SerializeField] string TransitionKey;
-    [SerializeField] Corpus_Thinking_Main_State _Main_State;
     [SerializeField] int EnergyCost;
     [SerializeField] float TimingDuration;
     [SerializeField] bool CanExit = false;
@@ -15,7 +14,7 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
 
     [Header("References")]
     [SerializeField] IMovementStrategy _movementStrategy;
-    [SerializeField] Corpus_Thinking_Main_State _MainState;
+    [SerializeField] Corpus_Controller _MainState;
     [SerializeField] Transform _Target;
     [SerializeField] Collider _Col;
     [SerializeField] AnimatorHandler _AnimatorHandler;
@@ -65,13 +64,19 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
 
     public override void OnEnter(VisceralStateMachine CTX)
     {
+
+        if (_Target == null)
+        {
+            _Target = _MainState.Target;
+        }
+
         base.OnEnter(CTX);
 
         if(_LockAngle == false)
         {
             if(_Target != null)
             {
-                _Direction = _Target.position - _Main_State.playerContext.PlayerGameObject.transform.position;
+                _Direction = _Target.position - _MainState.playerContext.PlayerGameObject.transform.position;
                 _Direction.Normalize();
                 _LockAngle = true;
             }
@@ -85,7 +90,7 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
 
         OnTackleStart?.Invoke();
 
-        _Main_State.DeactivateEnergy(true);
+  
         _movementStrategy.KillAllMovement();
         _AnimatorHandler.SetParameter("Corpus_Anim", "Running", AnimatorControllerParameterType.Bool,true);
     }
@@ -95,7 +100,7 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
         _LockAngle = false;
 
 
-        _MainState.DeactivateEnergy(false);
+        _MainState.NotifyAttackFinished();
 
         _movementStrategy.ResetMovementSpeed();
         _movementStrategy.UpdateVelocity(Vector3.zero);
@@ -118,12 +123,7 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
         }
         if(_MainState == null)
         {
-            _MainState = this.transform.parent.GetComponent<Corpus_Thinking_Main_State>();
-        }
-
-        if(_Target == null)
-        {
-            _Target = FindObjectOfType<Player_Base>().GetComponentInChildren<Player_Movement>().transform;
+            _MainState = this.transform.parent.GetComponent<Corpus_Controller>();
         }
 
         if(_Col == null)

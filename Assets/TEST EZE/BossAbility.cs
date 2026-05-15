@@ -32,7 +32,7 @@ public class BossAbility : BaseState,IStateEnergyCost
 
     [Header("References")]
 
-    [SerializeField] Corpus_Thinking_Main_State Thinker;
+    [SerializeField] Corpus_Controller Thinker;
 
     [SerializeField] AnimatorHandler _AnimHandler;
 
@@ -41,7 +41,7 @@ public class BossAbility : BaseState,IStateEnergyCost
     public override void OnInitialize(VisceralStateMachine CTX)
     {
         base.OnInitialize(CTX);
-        Thinker = GetComponentInParent<Corpus_Thinking_Main_State>();
+        Thinker = GetComponentInParent<Corpus_Controller>();
 
         // busco por la etiqueta
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
@@ -68,7 +68,6 @@ public class BossAbility : BaseState,IStateEnergyCost
         isAttacking = false;
         Thinker.KillMovement();
 
-        Thinker.DeactivateEnergy(true);
         _AnimHandler.SetParameter("Corpus_Anim", "PilarAttack", AnimatorControllerParameterType.Bool, true);
 
         StartPillarAttack();
@@ -77,6 +76,7 @@ public class BossAbility : BaseState,IStateEnergyCost
     public override void OnExit(VisceralStateMachine CTX)
     {
         _AnimHandler.SetParameter("Corpus_Anim", "PilarAttack", AnimatorControllerParameterType.Bool, false);
+        Thinker.NotifyAttackFinished();
         base.OnExit(CTX);
     }
 
@@ -257,5 +257,10 @@ public class BossAbility : BaseState,IStateEnergyCost
     }
 
     private void EnteredSecondPhase() => _SecondPhase = true;
+
+    private void OnDestroy()
+    {
+        _BossHP.OnDeath -= EnteredSecondPhase;
+    }
 }
 

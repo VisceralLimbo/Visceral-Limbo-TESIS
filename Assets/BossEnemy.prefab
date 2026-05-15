@@ -184,7 +184,6 @@ MonoBehaviour:
   _MinStateLifetime: 0
   _AnimHandler: {fileID: 107750596267011980}
   _Main_State: {fileID: 1390840764624858655}
-  _MoveStrat: {fileID: 5081794324909463561}
   _Target: {fileID: 0}
   TransitionKey: Attack_Melee1
   EnergyCost: 2
@@ -247,7 +246,6 @@ MonoBehaviour:
     _ShouldTransitionWithNoConditions: 1
   _MinStateLifetime: 0
   TransitionKey: Attack_Tackle
-  _Main_State: {fileID: 1390840764624858655}
   EnergyCost: 3
   TimingDuration: 1
   CanExit: 0
@@ -564,6 +562,7 @@ MonoBehaviour:
   _BaseMovementSpeed: 9
   _MovementAccel: 10
   _MaxRotationSpeed: 360
+  _ShouldUseObstacleAvoidance: 0
   GotKnockbacked: 0
   _KnockbackDecay: 10
   _KnockbackVelocity: {x: 0, y: 0, z: 0}
@@ -798,6 +797,70 @@ MonoBehaviour:
   - ConditionName: Attack_ButtSlam
     Value: 0
     IsResetAfterSwitch: 1
+  _AnyTransitionState:
+  - conditions:
+    - ConditionName: ShouldMove
+      Value: 1
+      IsResetAfterSwitch: 1
+    _FromGO: {fileID: 0}
+    _ToGO: {fileID: 4356099116620958206}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: ShouldMoveAround
+      Value: 1
+      IsResetAfterSwitch: 1
+    _FromGO: {fileID: 0}
+    _ToGO: {fileID: 96233033401408967}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Attack_Melee1
+      Value: 1
+      IsResetAfterSwitch: 1
+    _FromGO: {fileID: 0}
+    _ToGO: {fileID: 3605147469828259737}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Attack_Melee2
+      Value: 1
+      IsResetAfterSwitch: 1
+    _FromGO: {fileID: 0}
+    _ToGO: {fileID: 6548380599138473957}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Attack_Tackle
+      Value: 1
+      IsResetAfterSwitch: 1
+    _FromGO: {fileID: 0}
+    _ToGO: {fileID: 4354382155185038462}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Attack_Pilar
+      Value: 1
+      IsResetAfterSwitch: 1
+    _FromGO: {fileID: 0}
+    _ToGO: {fileID: 5303746232933651665}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Attack_ButtSlam
+      Value: 1
+      IsResetAfterSwitch: 1
+    - ConditionName: InRange
+      Value: 1
+      IsResetAfterSwitch: 1
+    _FromGO: {fileID: 0}
+    _ToGO: {fileID: 5449153354456122023}
+    _ShouldTransitionWithNoConditions: 0
+  - conditions:
+    - ConditionName: Attack_ButtSlam
+      Value: 1
+      IsResetAfterSwitch: 1
+    - ConditionName: InRange
+      Value: 0
+      IsResetAfterSwitch: 1
+    _FromGO: {fileID: 0}
+    _ToGO: {fileID: 8018752445279937858}
+    _ShouldTransitionWithNoConditions: 0
+  _PrioritizeAnyTransitions: 1
   _HPComp: {fileID: 4341898696971776908}
 --- !u!114 &4503892774817222897
 MonoBehaviour:
@@ -1081,7 +1144,6 @@ MonoBehaviour:
   _MinStateLifetime: 1
   _AnimHandler: {fileID: 107750596267011980}
   _Main_State: {fileID: 1390840764624858655}
-  _MoveStrat: {fileID: 5081794324909463561}
   _Target: {fileID: 0}
   TransitionKey: Attack_Melee2
   EnergyCost: 2
