@@ -21,13 +21,6 @@ public class MainMenu : MonoBehaviour
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
     }
 
-    public void MainMenuPlayGame()
-    {
-        LoadGameScene("GameScene");
-        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
-        ResetUIState();
-    }
-
     public void MainMenuShop()
     {
         LoadGameScene("Nexus");
