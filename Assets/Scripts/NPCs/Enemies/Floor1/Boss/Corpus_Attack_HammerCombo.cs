@@ -8,6 +8,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     [Header("References")]
     [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Corpus_Controller _Main_State;
+    [SerializeField] WalkMovementStrategy _CheckMove;
     [SerializeField] IMovementStrategy _MoveStrat;
     [SerializeField] Transform _Target;
     [Space]
@@ -51,8 +52,8 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     {
 
         CTX.SetGlobalCondition(TransitionKey, false);
-        print("Performing hammer swings, woosh!" + this.name); // el print estaba en cada tick lo pase aca
         base.OnEnter(CTX);
+
         CanExit = false;
         _Main_State.KillMovement();
         pulse = 0;
@@ -76,7 +77,11 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
         base.OnInitialize(CTX);
         _Main_State = GetComponentInParent<Corpus_Controller>();
 
-        if (_MoveStrat == null) _MoveStrat = CTX.GetComponentInChildren<IMovementStrategy>(); 
+        if (_MoveStrat == null) _MoveStrat = CTX.GetComponentInChildren<IMovementStrategy>();
+        _CheckMove = (WalkMovementStrategy)_MoveStrat;
+
+
+
     }
 
     float pulse = 0;
@@ -95,7 +100,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
             }
 
             //rotar hacia player
-            if (_Target != null)
+            if (_Target != null && _MoveStrat != null)
             {
                 Vector3 Dir =  _Target.transform.position - _MoveStrat.GetKCC().Capsule.transform.position;
                 _MoveStrat.UpdateRotation(Dir);

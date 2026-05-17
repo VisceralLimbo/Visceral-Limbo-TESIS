@@ -123,7 +123,8 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
         }
         if(_MainState == null)
         {
-            _MainState = this.transform.parent.GetComponent<Corpus_Controller>();
+            _movementStrategy = _MainState.MovementStrategy;
+
         }
 
         if(_Col == null)

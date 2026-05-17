@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class Boss_HealthComp : Health_Component
+public class Boss_HealthComp : Health_Component, IDamageable
 {
     // se asigna en el spawner
     [HideInInspector] public BossHealthBarUI bossUIHandler;
@@ -164,11 +164,22 @@ public class Boss_HealthComp : Health_Component
 
     }
 
-
     private void UpdateStats(StatIdentifier StatID, float Value)
     {
         if(StatID == _HealthStat) { MaxHealth = Value; return; };
         if (StatID == _DefenseStat) { Defense = Value; return; };
         if (StatID == _DamageReductionStat) { DamageReduction = Value; return; };
     }
+
+
+    void IDamageable.TakeDamageWithKnockback(UnityEngine.Vector3 KnockbackDir, float KnockbackForce, DamageScore DamageDT)
+    {
+        TakeDamageWithKnockback(KnockbackDir, KnockbackForce, DamageDT);
+    }
+
+    void IDamageable.TakeDamage(DamageScore DamageDT)
+    {
+        TakeDamage(DamageDT);
+    }
+
 }

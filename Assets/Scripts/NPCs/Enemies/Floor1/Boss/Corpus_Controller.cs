@@ -14,6 +14,8 @@ public class Corpus_Controller : MonoBehaviour
 
 
     [SerializeField] private IMovementStrategy _movementStrategy;
+    public IMovementStrategy MovementStrategy { get { return _movementStrategy; } }
+
     [SerializeField] private AnimatorHandler _anim;
     [SerializeField] private PlayerContext _playerContext;
     public PlayerContext playerContext { get { return _playerContext; } }

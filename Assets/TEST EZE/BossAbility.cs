@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class BossAbility : BaseState,IStateEnergyCost
 {
     [Header("config del pilarr")]
-    public GameObject playerTarget;
+    public Transform playerTarget;
     public GameObject indicatorPrefab;
     public float timeBetweenPillars = 0.5f; // cada cuanto se instancia un pilar
     public int numberOfPillars = 5; // cuantos pilares en el ataque (estaria bueno jugar con esto y hace q mientras menos vida tenga sean mas pilares)
@@ -38,17 +38,19 @@ public class BossAbility : BaseState,IStateEnergyCost
 
     [SerializeField] Boss_HealthComp _BossHP;
 
+    [SerializeField] IMovementStrategy _MoveStrat;
+
     public override void OnInitialize(VisceralStateMachine CTX)
     {
         base.OnInitialize(CTX);
         Thinker = GetComponentInParent<Corpus_Controller>();
 
         // busco por la etiqueta
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        
 
-        if (playerObject != null)
+        if (playerTarget == null)
         {
-            playerTarget = playerObject;
+            playerTarget = Thinker.Target;
         }
         else
         {
@@ -60,6 +62,8 @@ public class BossAbility : BaseState,IStateEnergyCost
             _BossHP.OnSecondPhase += EnteredSecondPhase;
         }
 
+
+        _MoveStrat = Thinker.MovementStrategy;
     }
 
     public override void OnEnter(VisceralStateMachine CTX)
@@ -105,15 +109,22 @@ public class BossAbility : BaseState,IStateEnergyCost
 
     private IEnumerator PillarAttackCoroutine()
     {
+        
         isAttacking = true;
 
         // aca iria una animacion si tuvieramos :v
         yield return new WaitForSeconds(0.5f); // pausita para la anim :v
 
+        if(_MoveStrat != null)
+        {
+            _MoveStrat.UpdateVelocity(Vector3.zero);
+            _MoveStrat.KillAllMovement();
+        }
+
         for (int i = 0; i < numberOfPillars; i++)
         {
             // agarro la pos del player
-            Vector3 spawnPoint = playerTarget.transform.position;
+            Vector3 spawnPoint = playerTarget.position;
 
             RaycastHit hit;
             Vector3 finalSpawnPosition; // pos para el instance
@@ -159,7 +170,7 @@ public class BossAbility : BaseState,IStateEnergyCost
             FlamePillarIndicator pillarScript = indicator.GetComponent<FlamePillarIndicator>();
             if (pillarScript != null)
             {
-                pillarScript.SetupIndicator(finalSpawnPosition, indicatorDuration);
+                //pillarScript.SetupIndicator(finalSpawnPosition, indicatorDuration);
             }
 
             if(_SecondPhase)
@@ -187,8 +198,6 @@ public class BossAbility : BaseState,IStateEnergyCost
             PillarPosition.x += Random.Range(_MinPillarRandomPosition.x, _MaxPillarRandomPosition.x + 1);
             PillarPosition.z += Random.Range(_MinPillarRandomPosition.y, _MaxPillarRandomPosition.y + 1);
             PillarPosition.y += playerTarget.transform.position.y + 1f;
-
-
 
 
             RaycastHit Hit;
@@ -228,7 +237,7 @@ public class BossAbility : BaseState,IStateEnergyCost
             FlamePillarIndicator pillarScript = indicator.GetComponent<FlamePillarIndicator>();
             if (pillarScript != null)
             {
-                pillarScript.SetupIndicator(FinalSpawnPosition, indicatorDuration);
+                //pillarScript.SetupIndicator(FinalSpawnPosition, indicatorDuration);
             }
 
 

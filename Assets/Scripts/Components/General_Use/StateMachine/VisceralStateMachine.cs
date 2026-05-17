@@ -201,8 +201,6 @@ public class VisceralStateMachine : MonoBehaviour
                 if (_GlobalConditions.ContainsKey(condition.ConditionName))
                 {
                     _GlobalConditions[condition.ConditionName] = condition.Value;
-                    print("ResetCondition" + condition.ConditionName);
-
 
 #if UNITY_EDITOR
                     //delete in unity build
