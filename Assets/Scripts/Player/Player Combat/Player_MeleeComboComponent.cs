@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Player_MeleeComboComponent : Player_MeleeAttack
 {
@@ -8,6 +9,7 @@ public class Player_MeleeComboComponent : Player_MeleeAttack
     [SerializeField] AnimatorHandler _AnimHandler;
     [SerializeField] Visceral_WeaponBase _Weapon;
     [SerializeField] private PlayerContext _PlayerContext;
+    public event Action OnMeleeAttackCompleted;
 
     private Animator _Anim;
 
@@ -91,7 +93,7 @@ public class Player_MeleeComboComponent : Player_MeleeAttack
 
         _Weapon.StopAttacking();
         PlayerEvents.EndAttacking();
-        
+        OnMeleeAttackCompleted?.Invoke();
 
         yield return new WaitForSeconds(remainingTime / attackSpeedMod);
 

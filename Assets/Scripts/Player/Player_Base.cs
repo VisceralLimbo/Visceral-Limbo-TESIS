@@ -59,7 +59,6 @@ public class Player_Base : Visceral_Script
 
     [SerializeField] SoundData _walkSound;
     private SoundEmitter currentWalkSound;
-    [SerializeField] SoundData _jumpSound;
 
 
     void Start()
@@ -163,11 +162,6 @@ public class Player_Base : Visceral_Script
                 currentWalkSound.Stop();
                 currentWalkSound = null;
             }
-        }
-
-        if (movementInput.Jumping && !OnDialogue)
-        {
-            SoundManager.Instance.CreateSound().WithSoundData(_jumpSound).play();
         }
 
         // guardo el input para llamar en speedlogic

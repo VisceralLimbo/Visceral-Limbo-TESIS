@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 
 
 /// <summary>
@@ -115,23 +115,45 @@ public class Player_InputHandler : MonoBehaviour
 
     public Player_CameraController _Player_CameraController;
 
+    public event Action OnJump;
+    public event Action OnAttack;
+    public event Action OnCrouch;
+    public event Action OnAbility1;
+    public event Action OnAbility2;
+    public event Action OnUltimate;
+    public event Action OnInventory;
+
 
     private void Awake()
     {
-        _Player_InputActions = new PlayerInputActions();
-        _Player_InputActions.Enable();
-
-        if(instance == null && instance != this)
+        if (instance == null)
         {
             instance = this;
         }
-        else
+        else if (instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
 
+        _Player_InputActions = new PlayerInputActions();
     }
 
+    private void OnEnable()
+    {
+        if (_Player_InputActions != null)
+        {
+            _Player_InputActions.Enable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_Player_InputActions != null)
+        {
+            _Player_InputActions.Disable();
+        }
+    }
 
     public void Update()
     {
@@ -184,9 +206,29 @@ public class Player_InputHandler : MonoBehaviour
         };
 
         CurrentMovementInput = movementInput;
+
+        // envetos cuando toco las teclas para el tuto y evitar el hardcodeo
+        if (movementInput.SustainedLeftMouseClick)
+            OnAttack?.Invoke();
+
+        if (movementInput.Jumping)
+            OnJump?.Invoke();
+
+        if (movementInput.Crouch == CrouchEnum.Toggle)
+            OnCrouch?.Invoke();
+
+        if (movementInput.Ability_1)
+            OnAbility1?.Invoke();
+
+        if (movementInput.Ability_2)
+            OnAbility2?.Invoke();
+
+        if (movementInput.Ultimate)
+            OnUltimate?.Invoke();
+
+        if (movementInput.Inventory)
+            OnInventory?.Invoke();
+
         _CameraInput = cameraInput;
-
-
     }
-
 }
