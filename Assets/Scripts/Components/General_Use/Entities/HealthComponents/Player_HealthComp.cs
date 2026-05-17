@@ -208,4 +208,12 @@ public class Player_HealthComp : Health_Component
         indicator.GetComponent<DamageIndicator>().SetDamageLocation(lastHitPosition, _Context.PlayerTransform);
     }
 
+    private void OnDestroy()
+    {
+        if (Emit != null)
+        {
+            Emit.Stop();
+            Emit = null;
+        }
+    }
 }

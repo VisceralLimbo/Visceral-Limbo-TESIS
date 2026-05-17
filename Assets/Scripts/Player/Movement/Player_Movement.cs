@@ -98,7 +98,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     [SerializeField] private StatIdentifier _AirSpeedStatID; // la ID de la estadistica de movimiento en el aire
     [SerializeField] private StatIdentifier _CrouchSpeedStatID; // la ID de la estadistica de movimiento agachado
 
-
+    [SerializeField] private SoundData _jumpSound;
 
     private Collider[] _UncrouchOverlapColliders; // solo usado para detectar si estamos golpeando algo
 
@@ -587,6 +587,8 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
                 //añadimos la diferencia entre velocidad actual y la deseada al KCC
 
                 currentVelocity += _KCCMotor.CharacterUp * (TargetVecticalSpeed - CurrentVerticalSpeed);
+
+                SoundManager.Instance.CreateSound().WithSoundData(_jumpSound).play();
             }
             else
             {

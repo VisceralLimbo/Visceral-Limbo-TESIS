@@ -64,6 +64,9 @@ public class InventoryManager : MonoBehaviour
         {
             //instanciado de items
             var newItem = Instantiate(item.ItemDataPrefab,this.transform.position,Quaternion.identity,this.transform);
+            // si apagarlo hace que algo se rompa se lo puede mover a otro punto lejos del mapa y listo 
+            //  new Vector3(9999,9999,9999), por ejemplo esto iria reemplazando a this.transform.position y listo
+            newItem.SetActive(false);
             var NewComponentItem=  newItem.GetComponent<ItemLogic>();
             NewComponentItem.Register(this, _Context);
 
