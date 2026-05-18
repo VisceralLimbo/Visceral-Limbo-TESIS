@@ -14,7 +14,23 @@ public class Corpus_Controller : MonoBehaviour
 
 
     [SerializeField] private IMovementStrategy _movementStrategy;
-    public IMovementStrategy MovementStrategy { get { return _movementStrategy; } }
+    public IMovementStrategy MovementStrategy
+    {
+        get
+        {
+            if (_movementStrategy == null)
+            {
+                // Unity busca directamente cualquier componente en los hijos que implemente la interfaz
+                _movementStrategy = GetComponentInChildren<IMovementStrategy>();
+
+                if (_movementStrategy == null)
+                {
+                    Debug.LogError("<color=red>[Corpus_Controller Error]</color> No se encontró ningún componente que implemente IMovementStrategy en este GameObject ni en sus hijos.");
+                }
+            }
+            return _movementStrategy;
+        }
+    }
 
     [SerializeField] private AnimatorHandler _anim;
     [SerializeField] private PlayerContext _playerContext;
@@ -31,16 +47,17 @@ public class Corpus_Controller : MonoBehaviour
     private Coroutine _energyCoroutine;
 
     [Tooltip("Bloquea la toma de decisiones y la regeneracion de energia mientras ataca")]
-    private bool _isAttacking;
+    [SerializeField]private bool _isAttacking;
 
     [Header("Configuracion IA")]
     [SerializeField] private float _aiResponsiveness;
     private float _aiThoughtPulse;
-    private bool _canMakeDecision;
+    [SerializeField] private bool _canMakeDecision;
 
     [Header("Datos de Ataques")]
     [SerializeField] private BaseState[] _meleeAttacks;
     [SerializeField] private BaseState[] _rangeAttacks;
+    [SerializeField] private BaseState _ChosenState;
 
     private List<IStateEnergyCost> _meleeAttackCosts = new List<IStateEnergyCost>();
     private List<IStateEnergyCost> _rangeAttackCosts = new List<IStateEnergyCost>();
@@ -52,6 +69,7 @@ public class Corpus_Controller : MonoBehaviour
     private void Awake()
     {
         CacheAttackCosts();
+        _movementStrategy = GetComponentInChildren<IMovementStrategy>();
     }
 
     private void Start()
@@ -123,6 +141,7 @@ public class Corpus_Controller : MonoBehaviour
         if (_pendingAttack == null || !IsPendingAttackValidForRange(inRange))
         {
             _pendingAttack = ChooseNextAttack(inRange);
+            _ChosenState = _pendingAttack.GetState();
         }
 
         // 2. Si tenemos un ataque en mente, evaluamos si podemos pagarlo
@@ -277,6 +296,21 @@ public class Corpus_Controller : MonoBehaviour
     {
         _isAttacking = false;
         StartEnergyRegen();
+    }
+
+    public string CheckDistanceForTransitions()
+    {
+        float distanceToPlayer = Vector3.Distance(_target.position, _playerContext.PlayerTransform.position);
+        bool inRange = distanceToPlayer <= _minimumAttackRange;
+
+        if (!inRange)
+        {
+            return "ShouldMove";
+        }
+        else
+        {
+            return "ShouldMoveAround";
+        }
     }
 
     public void KillMovement()

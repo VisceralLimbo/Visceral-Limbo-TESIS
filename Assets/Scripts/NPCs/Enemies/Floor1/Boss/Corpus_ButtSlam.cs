@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
 
+
 public class Corpus_ButtSlam : BaseState, IStateEnergyCost
 {
     [Header("Energy Setup")]
@@ -48,6 +49,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         {
             if(_MinStateLifetime>= _SlamToIdleTimer)
             {
+                _Main_State.NotifyAttackFinished();
                 return base.EvaluateTransitions(GlobalParams, out TO);
             }
             else
@@ -193,6 +195,9 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlamToIdle", AnimatorControllerParameterType.Trigger);
         if (_ButtSlamParticles != null) _ButtSlamParticles.PlayAllParticles();
         _FinishedAttack = true;
+
+        stateMachine.SetGlobalCondition("Attack_ButtSlam", false);
+        stateMachine.SetGlobalCondition(_Main_State.CheckDistanceForTransitions(), false);
     }
 
 

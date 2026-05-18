@@ -6,31 +6,112 @@ using KinematicCharacterController;
 public class Corpus_MovementRotateState : BaseState
 {
     [Header("References")]
-    [SerializeField] Transform Model;
-    [SerializeField] Transform Target;
-    [SerializeField] Corpus_Thinking_Main_State thinkingMain;
+    [SerializeField] private Corpus_Controller _controller;
+    [SerializeField] private IMovementStrategy _movementStrategy;
+    [SerializeField] private AnimatorHandler _animHandler;
 
-    [SerializeField] IMovementStrategy MovementStrategy;
-    [SerializeField] AnimatorHandler _AnimHandler;
     [Space]
-
     [Header("Variables")]
-    [SerializeField] float movementSpeed;
-    [SerializeField] float OrbitRadius;
+    [SerializeField] private float movementSpeed = 8f;
+    [SerializeField] private float OrbitRadius = 7f;
 
-    [Tooltip("Como es un movimiento radial con aceleracion, lentamente el personaje se va a ir alejando por fuerza centrifugal, para evitar eso se le aplica una correccion determinada por este valor")]
-    [SerializeField] float SpiralDriftCorrection;
+    [Tooltip("Qué tan agresivo es el ajuste para volver al radio ideal (Valores entre 0.5 y 2 recomendados)")]
+    [SerializeField] private float SpiralDriftCorrection = 1f;
 
-   
+    private float _statePulse = 0;
+    private bool _flipFlopDirection;
 
-    [SerializeField] float Statepulse = 0;
+    public override void OnInitialize(VisceralStateMachine CTX)
+    {
+        base.OnInitialize(CTX);
 
-    bool FlipFlopDirection;
+        if (_controller == null)
+        {
+            _controller = CTX.GetComponentInChildren<Corpus_Controller>();
+        }
+
+        if (_movementStrategy == null)
+        {
+            _movementStrategy = CTX.GetComponentInChildren<IMovementStrategy>();
+
+            if (_movementStrategy != null && _controller != null)
+            {
+                _movementStrategy.Initialize(CTX.GetComponentInChildren<KinematicCharacterMotor>(), _controller.playerContext.PlayerGameObject);
+            }
+        }
+    }
+
+    public override void OnEnter(VisceralStateMachine CTX)
+    {
+        base.OnEnter(CTX);
+
+        _statePulse = 0;
+        _flipFlopDirection = !_flipFlopDirection; // Cambia de dirección (horario/antihorario) en cada entrada
+
+        if (_movementStrategy != null)
+        {
+            _movementStrategy.SetActiveState(true);
+            _movementStrategy.SetMovementSpeed(movementSpeed); // Aseguramos que la estrategia conozca la velocidad
+        }
+
+        CTX.SetGlobalCondition("ShouldMove", false);
+        CTX.SetGlobalCondition("ShouldMoveAround", false);
+
+        _animHandler.SetParameter("Corpus_Anim", "SideWalk", AnimatorControllerParameterType.Bool, true);
+    }
+
+    public override void OnTick(VisceralStateMachine CTX, float TickRate)
+    {
+        base.OnTick(CTX, TickRate);
+
+        if (_controller == null || _controller.Target == null || _movementStrategy == null) return;
+
+        Vector3 modelPos = _controller.playerContext.PlayerGameObject.transform.position;
+        Vector3 targetPos = _controller.Target.position;
+
+        // 1) Vector base hacia el jugador (Aplanado en Y)
+        Vector3 toTarget = targetPos - modelPos;
+        toTarget.y = 0;
+
+        float currentDistance = toTarget.magnitude;
+        if (currentDistance < 0.1f) return; // Failsafe para evitar división por cero
+
+        Vector3 lookDirection = toTarget / currentDistance; // Dirección normalizada hacia el jugador
+
+        // 2) Rotación: El modelo siempre clava la mirada en el jugador de forma limpia
+        _movementStrategy.UpdateRotation(lookDirection);
+
+        // 3) Dirección Tangencial (El movimiento lateral de la órbita)
+        Vector3 tangentDirection;
+        if (_flipFlopDirection)
+        {
+            tangentDirection = Vector3.Cross(Vector3.up, -lookDirection).normalized;
+        }
+        else
+        {
+            tangentDirection = Vector3.Cross(-lookDirection, Vector3.up).normalized;
+        }
+
+        // 4) Cálculo del error de distancia escalar (Control de órbita estable)
+        // Si distError > 0: Estamos lejos, hay que inclinarse HACIA el jugador.
+        // Si distError < 0: Estamos muy cerca, hay que inclinarse LEJOS del jugador.
+        float distanceError = currentDistance - OrbitRadius;
+
+        // Creamos un vector de corrección empujando hacia adelante o hacia atrás del eje de mirada
+        Vector3 correctionDirection = lookDirection * distanceError * SpiralDriftCorrection;
+
+        // 5) Combinación final: Sumamos el movimiento lateral + la inclinación de corrección
+        Vector3 finalMovementDirection = (tangentDirection + correctionDirection).normalized;
+
+        // 6) Inyección al KCC multiplicando OBLIGATORIAMENTE por la velocidad de movimiento
+        _movementStrategy.UpdateVelocity(finalMovementDirection * movementSpeed);
+    }
+
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
-        if(_MinStateLifetime > Statepulse)
+        if (_MinStateLifetime > _statePulse)
         {
-            Statepulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+            _statePulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
             TO = null;
             return false;
         }
@@ -38,136 +119,16 @@ public class Corpus_MovementRotateState : BaseState
         return base.EvaluateTransitions(GlobalParams, out TO);
     }
 
-    public override void OnDeInitialize(VisceralStateMachine CTX)
-    {
-        base.OnDeInitialize(CTX);
-    }
-
-    public override void OnEnter(VisceralStateMachine CTX)
-    {
-
-        base.OnEnter(CTX);
-        Target = thinkingMain.GetTargetTransform;
-        Model = thinkingMain.GetModel.transform;
-        MovementStrategy.SetActiveState(true);
-
-        CTX.SetGlobalCondition("ShouldMove", false);
-        CTX.SetGlobalCondition("ShouldMoveAround", false);
-        Statepulse = 0;
-        thinkingMain.DeactivateEnergy(false);
-
-        _AnimHandler.SetParameter("Corpus_Anim", "SideWalk", AnimatorControllerParameterType.Bool, true);
-
-        FlipFlopDirection = !FlipFlopDirection;
-    }
-
     public override void OnExit(VisceralStateMachine CTX)
     {
-        if(thinkingMain.GetCurrentEnergy > 3)
+        _animHandler.SetParameter("Corpus_Anim", "SideWalk", AnimatorControllerParameterType.Bool, false);
+        _statePulse = 0;
+
+        if (_movementStrategy != null)
         {
-            _AnimHandler.SetParameter("Corpus_Anim", "SideWalk", AnimatorControllerParameterType.Bool, false);
+            _movementStrategy.ResetMovementSpeed();
         }
+
         base.OnExit(CTX);
-        Statepulse = 0;
     }
-
-    public override void OnInitialize(VisceralStateMachine CTX)
-    {
-        base.OnInitialize(CTX);
-        if(thinkingMain == null)
-        {
-            thinkingMain = CTX.GetComponentInChildren<Corpus_Thinking_Main_State>();
-        }
-
-        if(MovementStrategy == null)
-        {
-            MovementStrategy = CTX.GetComponentInChildren<IMovementStrategy>();
-            MovementStrategy.Initialize(CTX.GetComponentInChildren<KinematicCharacterMotor>(),thinkingMain.GetModel);
-        }
-    }
-
-    public override void OnTick(VisceralStateMachine CTX, float TickRate)
-    {
-        base.OnTick(CTX, TickRate);
-
-
-        // paso 1) calcular el vector de direccion al centro del radio
-        Vector3 VectorRadius = Model.transform.position - Target.transform.position;
-
-        float CurrentDistance = VectorRadius.magnitude;
-        if (CurrentDistance < 0.01f) return; // evitar division por cero 
-
-        Vector3 RadiusDirection = VectorRadius / CurrentDistance;
-
-        #region depreciated:
-        /*
-        // paso 2) calcular la distancia del radio
-        float RadiusDistance = VectorRadius.magnitude;
-        if(RadiusDistance < 0.01f)
-        {
-            // evitamos calcular con un valor igual a 0
-            return;
-        }
-
-        // paso 3) velocidad angular
-
-        float AngularVelocity = movementSpeed / RadiusDistance;
-
-        // paso 4) calculamos el desplazamiento en este frame (convertimos a grados )
-
-        float DeltaAngle = AngularVelocity * Mathf.Deg2Rad * (Time.deltaTime * TimeDilationManager.GlobalTimeScale);
-        Quaternion FrameRotation = Quaternion.AngleAxis(DeltaAngle, Vector3.up);
-
-        // paso 5) calcular la nueva posicion
-        Vector3 NewRelativePosition = FrameRotation * VectorRadius;
-        Vector3 NewAbsolutePosition = Target.transform.position + NewRelativePosition;
-
-        // paso 6) calcular el vector de velocidad de desplazamiento (destino - origen / tiempo)
-        Vector3 FinalVelocity = (NewAbsolutePosition - Model.transform.position) / (Time.deltaTime * TimeDilationManager.GlobalTimeScale);
-
-        MovementStrategy.UpdateVelocity(FinalVelocity);
-
-        */
-        #endregion
-
-        //paso 2) velocidad tangencial
-
-        // notas: Vector3.cross da un vector tangencial a los dos pasados.
-
-        Vector3 TangentDirection;
-
-        // invertir sentido con un flip flop :)
-        if (FlipFlopDirection)
-        {
-            TangentDirection = Vector3.Cross(Model.transform.up, RadiusDirection).normalized;
-        }
-        else
-        {
-            TangentDirection = Vector3.Cross(RadiusDirection,Model.transform.up).normalized;
-        }
-
-        // paso 3) Calcular nuestra posicion radial deseada
-
-        // nuestra posicion deseada
-        Vector3 DesiredPositionOnRadius = Target.transform.position + (RadiusDirection * OrbitRadius);
-
-        // paso 4) calcular la compensacion deseada.
-
-        // este vector determina hacia adonde tenemos que compensar
-        Vector3 CorrectionVector = DesiredPositionOnRadius - (Model.transform.position);
-
-        // Paso 5 ) calcular desplazamiento final
-
-        Vector3 FinalDirection = TangentDirection + (CorrectionVector * SpiralDriftCorrection);
-       
-        MovementStrategy.UpdateRotation(-VectorRadius.normalized);
-
-        MovementStrategy.UpdateVelocity(FinalDirection.normalized);
-
-        // rotar hacia el player
-
-
-
-    }
-
 }

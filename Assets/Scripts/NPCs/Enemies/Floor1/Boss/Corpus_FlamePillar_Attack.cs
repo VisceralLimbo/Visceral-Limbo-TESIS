@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
@@ -16,7 +17,7 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
     [SerializeField] private Vector2Int _minMaxSecondPhasePillarsCount;
     [SerializeField] private Vector2 _minPillarRandomPosition;
     [SerializeField] private Vector2 _maxPillarRandomPosition;
-    private bool _secondPhase;
+    [SerializeField] private bool _secondPhase;
 
     [Header("Raycast")]
     [SerializeField] LayerMask groundLayer;
@@ -30,6 +31,7 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
     [SerializeField] private Corpus_Controller thinker;
     [SerializeField] private AnimatorHandler animHandler;
     [SerializeField] private Boss_HealthComp bossHP;
+    [SerializeField] private PlayerContext _Context;
 
     private IMovementStrategy _moveStrat;
     private bool _isAttacking;
@@ -39,25 +41,34 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
 
     public override void OnInitialize(VisceralStateMachine CTX)
     {
-        base.OnInitialize(CTX);
         if (thinker == null) thinker = GetComponentInParent<Corpus_Controller>();
         playerTarget = thinker.Target;
-        _moveStrat = thinker.MovementStrategy;
+
 
         if(bossHP != null)
         {
             bossHP.OnSecondPhase += ToggleSecondPhase;
         }
 
+        if(_moveStrat == null)
+        {
+            //_moveStrat = CTX.GetComponentInChildren<IMovementStrategy>();
+            _moveStrat = thinker.MovementStrategy;
+        }
 
+
+        print("Finished On Initialize");
+        base.OnInitialize(CTX);
     }
 
     public override void OnEnter(VisceralStateMachine CTX)
     {
         base.OnEnter(CTX);
 
-        thinker.KillMovement();
-
+        if (_moveStrat == null) 
+        {
+            _moveStrat = thinker.MovementStrategy;
+        }
         if(_moveStrat != null)
         {
             _moveStrat.UpdateVelocity(Vector3.zero);
@@ -72,6 +83,9 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
 
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
+
+        _moveStrat.UpdateVelocity(Vector3.zero);
+
         base.OnTick(CTX, TickRate);
     }
 
@@ -82,6 +96,10 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
             TO = null;
             return false;
         }
+
+        stateMachine.SetGlobalCondition("Attack_Pilar", false);
+        stateMachine.SetGlobalCondition(thinker.CheckDistanceForTransitions(), true);
+
 
         return base.EvaluateTransitions(GlobalParams, out TO);
     }
@@ -122,8 +140,10 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
                         Random.Range(_minPillarRandomPosition.y, _maxPillarRandomPosition.y)
                     );
 
+                    Vector3 OwnPosition = _Context.PlayerTransform.position;
+
                     // Tomamos la posicion del jugador y le sumamos el offset
-                    Vector3 randomPos = playerTarget.position + randomOffset;
+                    Vector3 randomPos = OwnPosition + randomOffset;
                     randomPos.y += 1f; // Lo elevamos un poco para asegurarnos de que el Raycast hacia abajo funcione bien
 
                     SpawnSinglePillar(randomPos);
@@ -132,6 +152,8 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
 
             yield return new WaitForSeconds(_timeBetweenPillars);
         }
+
+        _isAttacking = false;
     }
 
     private void SpawnSinglePillar(Vector3 CastOrigin)

@@ -43,7 +43,6 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
             return false;
         }
 
-
         return base.EvaluateTransitions(GlobalParams, out TO);
     }
 
@@ -104,6 +103,7 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
 
         _movementStrategy.ResetMovementSpeed();
         _movementStrategy.UpdateVelocity(Vector3.zero);
+        
 
         CTX.SetGlobalCondition(TransitionKey,false);
 
@@ -143,12 +143,14 @@ public class Corpus_Tackle_Attack : BaseState, IStateEnergyCost
         if (pulse < TimingDuration)
         {
             pulse = pulse + Time.deltaTime * TimeDilationManager.GlobalTimeScale;
-
             _movementStrategy.UpdateVelocity(_Direction);
         }
         else
         {
             CanExit = true;
+            stateMachine.SetGlobalCondition(TransitionKey, false);
+            stateMachine.SetGlobalCondition(_MainState.CheckDistanceForTransitions(), true);
+
         }
     }
 

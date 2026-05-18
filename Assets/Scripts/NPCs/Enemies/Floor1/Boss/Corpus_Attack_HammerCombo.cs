@@ -38,7 +38,8 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
             return false;
         }
 
-
+        stateMachine.SetGlobalCondition(TransitionKey, false);
+        stateMachine.SetGlobalCondition(_Main_State.CheckDistanceForTransitions(), true);
         return base.EvaluateTransitions(GlobalParams, out TO);
     }
 
@@ -89,6 +90,10 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
   
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
+        if(_MoveStrat!= null)
+        {
+            _MoveStrat.UpdateVelocity(Vector3.zero);
+        }
        
         if(pulse < TimingDuration) 
         {
@@ -100,7 +105,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
             }
 
             //rotar hacia player
-            if (_Target != null && _MoveStrat != null)
+            if (_Target != null)
             {
                 Vector3 Dir =  _Target.transform.position - _MoveStrat.GetKCC().Capsule.transform.position;
                 _MoveStrat.UpdateRotation(Dir);
@@ -140,7 +145,11 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
             pulse = 0;
             CanExit = true;
         }
-      
+
+        stateMachine.SetGlobalCondition(TransitionKey, false);
+        stateMachine.SetGlobalCondition(_Main_State.CheckDistanceForTransitions(),true);
+        _Main_State.NotifyAttackFinished();
+
     }
 
     public void SetCost(float newCost)
