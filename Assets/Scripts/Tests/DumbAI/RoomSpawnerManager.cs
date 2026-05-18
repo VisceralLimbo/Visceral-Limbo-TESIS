@@ -41,6 +41,8 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private bool _canHaveEnvironmentalEffect = true; // si no queremos q la sala tenga efectos desactivamos
     [SerializeField] public EnvironmentalEffect _currentEffect = EnvironmentalEffect.None;
     public ParticleSystem blackFog;
+    public ParticleSystem snowParticles;
+
     public List<Light> GetCombatLights() => combatLights;
 
     public event System.Action OnCombatEnded;
@@ -343,6 +345,7 @@ public class RoomSpawnerManager : MonoBehaviour
         {
             // elige un efecto random
             _currentEffect = effects[Random.Range(0, effects.Length)];
+            RoomEffectMessageManager.Instance?.TryShowMessage(_currentEffect);
             Debug.Log($"Efecto ambiental activado en la sala: {_currentEffect}");
         }
         else

@@ -103,6 +103,8 @@ public class Player_HealthComp : Health_Component
 
         if (CurrentHealth <= 0f)
         {
+            HealthFullscreenEffect.Instance?.ResetAllEffects();
+
             // si no uso la chance de gulag lo mando ahi
             if (GameManager.Instance != null && !GameManager.Instance.AlreadyUseGulag)
             {
