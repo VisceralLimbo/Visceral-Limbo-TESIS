@@ -75,6 +75,11 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
             _moveStrat.KillAllMovement();
         }
 
+        if(playerTarget == null)
+        {
+            playerTarget = thinker.Target;
+        }
+
         animHandler.SetParameter("Corpus_Anim", "PilarAttack", AnimatorControllerParameterType.Bool, true);
 
         if (_attackRoutine != null) StopCoroutine(_attackRoutine);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PillarDamage : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PillarDamage : MonoBehaviour
     [SerializeField] float _damageTickRate = 0.5f;
     [SerializeField] float _pillarDuration = 3f;
     [SerializeField] LayerMask _PlayerMask;
+    [SerializeField] VisualEffect _PilarVisual;
 
     // Trackers separados para logica de Burst vs DoT
     private HashSet<Health_Component> _receivedInitialDamage = new HashSet<Health_Component>();
@@ -23,6 +25,10 @@ public class PillarDamage : MonoBehaviour
         _pillarDuration = duration;
         _damageCollider = GetComponent<Collider>();
         _creatorContext = context;
+        if(_PilarVisual != null )
+        {
+            _PilarVisual.Play();
+        }
 
         StartCoroutine(HandlePillarLifetime());
     }
@@ -51,6 +57,7 @@ public class PillarDamage : MonoBehaviour
             yield return new WaitForSeconds(_damageTickRate);
             timer += _damageTickRate;
         }
+        _PilarVisual.Stop();
 
         Destroy(gameObject);
     }
