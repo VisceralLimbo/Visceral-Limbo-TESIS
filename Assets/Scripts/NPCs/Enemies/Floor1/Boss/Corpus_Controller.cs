@@ -34,6 +34,7 @@ public class Corpus_Controller : MonoBehaviour
 
     [SerializeField] private AnimatorHandler _anim;
     [SerializeField] private PlayerContext _playerContext;
+    [SerializeField] private Boss_HealthComp _HealthComp;
     public PlayerContext playerContext { get { return _playerContext; } }
 
     [Header("Variables de Combate")]
@@ -41,10 +42,14 @@ public class Corpus_Controller : MonoBehaviour
     [SerializeField] private float _minimumAttackRange;
 
     [Header("Variables de Energia")]
-    [SerializeField] private int _energy;
+    [SerializeField] private float _energy;
     [SerializeField] private int _maxEnergy;
     [SerializeField] private float _energyRefillRate;
+    [SerializeField] private float _ExtraEnergyRefillPerHit;
+    [SerializeField] private float _SecondPhaseExtraEnergtRefillPerHit;
     private Coroutine _energyCoroutine;
+    [SerializeField] bool _SecondPhase;
+    [SerializeField] private float _SecondPhaseRefillRate;
 
     [Tooltip("Bloquea la toma de decisiones y la regeneracion de energia mientras ataca")]
     [SerializeField]private bool _isAttacking;
@@ -79,6 +84,14 @@ public class Corpus_Controller : MonoBehaviour
             var player = FindObjectOfType<Player_Base>().GetComponent<PlayerContext>();
             if (player != null) _target = player.PlayerTransform;
         }
+
+        if(_HealthComp == null)
+        {
+            _HealthComp = GetComponentInChildren<Boss_HealthComp>();
+        }
+        _HealthComp.OnDamaged += ExtraEnergy;
+        _HealthComp.OnSecondPhase += EnteredSecondPhase;
+
 
         StartEnergyRegen();
     }
@@ -320,6 +333,30 @@ public class Corpus_Controller : MonoBehaviour
             _movementStrategy.KillAllMovement();
             _movementStrategy.SetActiveState(false);
         }
+    }
+
+    private void EnteredSecondPhase()
+    {
+        _SecondPhase = true;
+        _energyRefillRate = _SecondPhaseRefillRate;
+    }
+
+    private void ExtraEnergy()
+    {
+        if((_energy + _SecondPhaseExtraEnergtRefillPerHit) >= _maxEnergy)
+        {
+            return;
+        }
+
+        if(_SecondPhase)
+        {
+            _energy += _SecondPhaseExtraEnergtRefillPerHit;
+        }
+        else
+        {
+            _energy += _ExtraEnergyRefillPerHit;
+        }
+
     }
 }
 
