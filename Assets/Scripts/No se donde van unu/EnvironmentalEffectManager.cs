@@ -68,4 +68,20 @@ public class EnvironmentalEffectManager : MonoBehaviour
             }
         }
     }
+    // PAUSA Y REANUDO
+    public void PauseEffect()
+    {
+        if (_activeEffect != null && _roomManager != null)
+        {
+            _activeEffect.RemoveEffect(_roomManager);
+        }
+    }
+
+    public void ResumeEffect()
+    {
+        if (_activeEffect != null && _roomManager != null)
+        {
+            _activeEffect.ApplyEffect(_roomManager);
+        }
+    }
 }

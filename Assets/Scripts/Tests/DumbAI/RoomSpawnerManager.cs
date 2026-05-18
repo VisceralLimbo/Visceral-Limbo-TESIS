@@ -54,6 +54,8 @@ public class RoomSpawnerManager : MonoBehaviour
     [Header("Enemy List")]
     private List<GameObject> _activeEnemies = new List<GameObject>();
 
+    public static RoomSpawnerManager SalaActiva { get; private set; }
+
     private void Awake()
     {
         _DungeonPart = GetComponent<DungeonPart>();
@@ -80,6 +82,10 @@ public class RoomSpawnerManager : MonoBehaviour
     public void AssignPlayerContext(PlayerContext playerCont)
     {
         playerContext = playerCont;
+
+        // guardo la sala en la q estoy como la activa en el momento
+        SalaActiva = this;
+
         _StartingCombatScore = ScoreManager.Instance.GetPlayerScore;
 
         ScoreManager.Instance.RegisterMilestone(_StartingCombatScore + _AddExtraRequiredScore);

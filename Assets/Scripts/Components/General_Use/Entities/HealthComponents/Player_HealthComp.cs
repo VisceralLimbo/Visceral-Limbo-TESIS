@@ -138,6 +138,16 @@ public class Player_HealthComp : Health_Component
     {
         GameManager.Instance.DeathPosition(this.transform.position);
 
+        // PAUSO EL EFECTO PARA EL GULAG
+        if (RoomSpawnerManager.SalaActiva != null)
+        {
+            var effectManager = RoomSpawnerManager.SalaActiva.GetComponent<EnvironmentalEffectManager>();
+            if (effectManager != null)
+            {
+                effectManager.PauseEffect();
+            }
+        }
+
         // busco el mov para tirar el tp cuando activo el gulag
         Player_Movement mov = _Context.GetComponentInChildren<Player_Movement>();
         if (mov != null)
@@ -159,6 +169,16 @@ public class Player_HealthComp : Health_Component
         {
             // vuelvo a donde mori
             mov.SetCharacterPosition(GameManager.Instance.posAntesDeMorir, true);
+
+            // REANUDO EL EFECTO PARA EL GULAG
+            if (RoomSpawnerManager.SalaActiva != null)
+            {
+                var effectManager = RoomSpawnerManager.SalaActiva.GetComponent<EnvironmentalEffectManager>();
+                if (effectManager != null)
+                {
+                    effectManager.ResumeEffect();
+                }
+            }
 
             // reinicio vida y doy invulnerabilidad un toque para que no le peguen apenas se tepea
             CurrentHealth = MaxHealth;
