@@ -4,69 +4,113 @@ using UnityEngine;
 
 public class PillarDamage : MonoBehaviour
 {
-    [Header("Configuración de Daño")]
-    public float initialDamage = 20f; // daño cuando aparece
-    public float dotDamage = 5f;      // daño por segundo
-    public float damageTickRate = 0.5f; // tickrate xd
-    public float pillarDuration = 3f;   // tiempo del pilar
+    [Header("Configuracion de Danio")]
+    [SerializeField] float _initialDamage = 20f; // Danio cuando aparece
+    [SerializeField] float _dotDamage = 5f;      // Danio por tick
+    [SerializeField] float _damageTickRate = 0.5f;
+    [SerializeField] float _pillarDuration = 3f;
+    [SerializeField] LayerMask _PlayerMask;
 
-    private bool hasDoneInitialDamage = false;
-    private Collider damageCollider;
+    // Trackers separados para logica de Burst vs DoT
+    private HashSet<Health_Component> _receivedInitialDamage = new HashSet<Health_Component>();
+    private HashSet<Health_Component> _hitThisTick = new HashSet<Health_Component>();
 
-    void Start()
+    [SerializeField] PlayerContext _creatorContext;
+    private Collider _damageCollider;
+
+    public void Initialize(float duration, PlayerContext context)
     {
-        damageCollider = GetComponent<Collider>();
-        // corrutina para destruir el pilar
+        _pillarDuration = duration;
+        _damageCollider = GetComponent<Collider>();
+        _creatorContext = context;
+
         StartCoroutine(HandlePillarLifetime());
     }
 
-    // ontrigerstay para el dot
-    private void OnTriggerStay(Collider other)
-    {
-        // si colisiono con el jugador lo hago papilla dea
-        Player_HealthComp playerHealth = other.GetComponent<Player_HealthComp>();
-
-        if (playerHealth != null)
-        {
-            // daño q se aplica la primera vez q se collisiona con el pilar (la idea seria que este daño sea elevado asi tiene sentido q sea algo de lo q hay q tener cuidado bue)
-            if (!hasDoneInitialDamage)
-            {
-                // PERDON PATO PERO SIMPLEDAMAGE SERA AHRE
-                playerHealth.SimpleDamage(initialDamage);
-                hasDoneInitialDamage = true;
-            }
-        }
-    }
-
-    // corrutina para el dot
     private IEnumerator HandlePillarLifetime()
     {
         float timer = 0f;
 
-        // bucle dot
-        while (timer < pillarDuration)
+        while (timer < _pillarDuration)
         {
-            // espero el tickrate q se puso
-            yield return new WaitForSeconds(damageTickRate);
-            timer += damageTickRate;
+            _hitThisTick.Clear(); // Limpiamos solo los hits de ESTE tick para re-escanear el area
 
-            // agarro los colliders q esten dentro del pilar
-            Collider[] collidersInArea = Physics.OverlapBox(damageCollider.bounds.center, damageCollider.bounds.extents, Quaternion.identity, LayerMask.GetMask("Player") // con layer para no mandar un moco
+            Collider[] collidersInArea = Physics.OverlapBox(
+                _damageCollider.bounds.center,
+                _damageCollider.bounds.extents,
+                Quaternion.identity,
+                _PlayerMask
             );
 
             foreach (Collider col in collidersInArea)
             {
-                // dot a los q sigan dentro
-                Player_HealthComp playerHealth = col.GetComponent<Player_HealthComp>();
-                if (playerHealth != null)
-                {
-                    playerHealth.SimpleDamage(dotDamage);
-                }
+                ProcessHit(col);
             }
+
+            // Esperamos el tickrate antes de volver a aplicar DoT
+            yield return new WaitForSeconds(_damageTickRate);
+            timer += _damageTickRate;
         }
 
-        // chau pilar
         Destroy(gameObject);
+    }
+
+    private void ProcessHit(Collider other)
+    {
+        // Failsafe: Evitamos que el creador del pilar (el Jefe) se haga daño a si mismo
+        if (_creatorContext != null && other.gameObject == _creatorContext.PlayerGameObject) return;
+
+        // Priorizamos la interfaz IDamageable
+        if (other.TryGetComponent(out IDamageable idamage))
+        {
+            if (idamage.GetHealthComponent(out Health_Component iHealth))
+            {
+                ApplyDamage(other, iHealth);
+            }
+        }
+        else if (other.TryGetComponent(out Health_Component hpComp))
+        {
+            ApplyDamage(other, hpComp);
+        }
+    }
+
+    private void ApplyDamage(Collider other, Health_Component healthComp)
+    {
+        // Si el enemigo ya recibio daño en este tick exacto (ej. tiene varios colliders), lo ignoramos
+        if (_hitThisTick.Contains(healthComp)) return;
+
+        // Failsafe extra de contexto para aliados/creador
+        if (healthComp.Context != null && healthComp.Context == _creatorContext) return;
+
+        _hitThisTick.Add(healthComp);
+
+        // Determinamos si aplicamos el burst inicial o el danio sobre tiempo
+        bool isInitialHit = !_receivedInitialDamage.Contains(healthComp);
+        float damageToApply = isInitialHit ? _initialDamage : _dotDamage;
+
+        if (isInitialHit)
+        {
+            _receivedInitialDamage.Add(healthComp);
+        }
+
+ 
+        DamageScore damageDT = new DamageScore
+        {
+            Attacker = _creatorContext,
+            DamageAmount = damageToApply,
+            Victim = healthComp.Context, 
+            ElementalDamage = ElementType.Fire,
+            FactionID = FactionID.LimboMonster1
+        };
+
+        if (healthComp.Context == null)
+        {
+            healthComp.SimpleDamage(damageToApply);
+        }
+        else
+        {
+            healthComp.TakeDamageWithKnockback(Vector3.zero, 0, damageDT);
+        }
     }
 }
 

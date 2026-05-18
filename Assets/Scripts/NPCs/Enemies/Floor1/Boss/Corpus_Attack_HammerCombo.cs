@@ -7,8 +7,9 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
 
     [Header("References")]
     [SerializeField] AnimatorHandler _AnimHandler;
-    [SerializeField] Corpus_Thinking_Main_State _Main_State;
-    [SerializeField] WalkMovementStrategy _MoveStrat;
+    [SerializeField] Corpus_Controller _Main_State;
+    [SerializeField] WalkMovementStrategy _CheckMove;
+    [SerializeField] IMovementStrategy _MoveStrat;
     [SerializeField] Transform _Target;
     [Space]
 
@@ -37,7 +38,8 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
             return false;
         }
 
-
+        stateMachine.SetGlobalCondition(TransitionKey, false);
+        stateMachine.SetGlobalCondition(_Main_State.CheckDistanceForTransitions(), true);
         return base.EvaluateTransitions(GlobalParams, out TO);
     }
 
@@ -51,14 +53,13 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
     {
 
         CTX.SetGlobalCondition(TransitionKey, false);
-        print("Performing hammer swings, woosh!" + this.name); // el print estaba en cada tick lo pase aca
         base.OnEnter(CTX);
+
         CanExit = false;
         _Main_State.KillMovement();
         pulse = 0;
         DrawWireframe = true;
-        _Main_State.DeactivateEnergy(true);
-        _Target = _Main_State.GetTargetTransform;
+        _Target = _Main_State.Target;
 
         _AnimHandler.SetParameter("Corpus_Anim", "HammerCombo", AnimatorControllerParameterType.Trigger);
 
@@ -67,16 +68,21 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
 
     public override void OnExit(VisceralStateMachine CTX)
     {
-        print("Oh no, i finished swinging my hammer, clang!");
+        _Main_State.NotifyAttackFinished();
+
         base.OnExit(CTX);
     }
 
     public override void OnInitialize(VisceralStateMachine CTX)
     {
         base.OnInitialize(CTX);
-        _Main_State = GetComponentInParent<Corpus_Thinking_Main_State>();
+        _Main_State = GetComponentInParent<Corpus_Controller>();
 
-        if (_MoveStrat == null) CTX.GetComponentInChildren<IMovementStrategy>(); 
+        if (_MoveStrat == null) _MoveStrat = CTX.GetComponentInChildren<IMovementStrategy>();
+        _CheckMove = (WalkMovementStrategy)_MoveStrat;
+
+
+
     }
 
     float pulse = 0;
@@ -84,6 +90,10 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
   
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
+        if(_MoveStrat!= null)
+        {
+            _MoveStrat.UpdateVelocity(Vector3.zero);
+        }
        
         if(pulse < TimingDuration) 
         {
@@ -97,7 +107,7 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
             //rotar hacia player
             if (_Target != null)
             {
-                Vector3 Dir = _MoveStrat.GetKCC().Capsule.transform.position - _Target.transform.position;
+                Vector3 Dir =  _Target.transform.position - _MoveStrat.GetKCC().Capsule.transform.position;
                 _MoveStrat.UpdateRotation(Dir);
             }
         }
@@ -135,7 +145,11 @@ public class Corpus_Attack_HammerCombo : BaseState, IStateEnergyCost
             pulse = 0;
             CanExit = true;
         }
-      
+
+        stateMachine.SetGlobalCondition(TransitionKey, false);
+        stateMachine.SetGlobalCondition(_Main_State.CheckDistanceForTransitions(),true);
+        _Main_State.NotifyAttackFinished();
+
     }
 
     public void SetCost(float newCost)

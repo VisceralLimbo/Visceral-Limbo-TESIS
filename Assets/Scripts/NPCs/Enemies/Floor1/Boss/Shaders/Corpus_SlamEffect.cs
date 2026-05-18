@@ -13,6 +13,5 @@ public class Corpus_SlamEffect : MonoBehaviour
         floorMaterial.SetVector("_CollisionPos", transform.position);
         floorMaterial.SetFloat("_Radius", radius);
         floorMaterial.SetFloat("_Strength", strength);
-        Debug.Log("Se spawnea el shader!");
     }
 }

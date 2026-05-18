@@ -89,7 +89,7 @@ public class Spawner : MonoBehaviour
                 // si lo encuentro asigno el player
                 if (bossAbilityScript != null && playerTarget != null)
                 {
-                    bossAbilityScript.playerTarget = playerTarget;
+                    bossAbilityScript.playerTarget = playerTarget.transform;
                     Debug.Log("aca ta el jefe y le asigno el player");
                 }
 
