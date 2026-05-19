@@ -1773,6 +1773,7 @@ MonoBehaviour:
   _canHaveEnvironmentalEffect: 0
   _currentEffect: 0
   blackFog: {fileID: 0}
+  snowParticles: {fileID: 0}
   fireParticles:
   - {fileID: 2596616738279599180}
   - {fileID: 6001207340163165709}
@@ -3187,7 +3188,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 218103807
+    rgba: 1895825407
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 1
   m_colorMode: 2
@@ -5410,7 +5411,12 @@ PrefabInstance:
     - target: {fileID: 2586661794197095984, guid: 50b561b669373fe4ea253e4adaa5505a,
         type: 3}
       propertyPath: m_WarningMessage
-      value: 
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'Jefe_LeftUpLeg'\n\tTransform 'Jefe_Spine1'\n\tTransform
+        'Jefe_LeftHand'\n\tTransform 'Jefe_Reference'\n\tTransform 'Jefe_Head'\n\tTransform
+        'Jefe_Neck'\n\tTransform 'Jefe_RightLeg'\n\tTransform 'Jefe_RightForeArm'\n\tTransform
+        'Jefe_Hips'\n\tTransform 'Jefe_LeftToeBase'\n\tand more ..."
       objectReference: {fileID: 0}
     - target: {fileID: 2615010862308593024, guid: 50b561b669373fe4ea253e4adaa5505a,
         type: 3}
@@ -5745,7 +5751,7 @@ PrefabInstance:
     - target: {fileID: 5358199096666145557, guid: 50b561b669373fe4ea253e4adaa5505a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5429417976225963964, guid: 50b561b669373fe4ea253e4adaa5505a,
         type: 3}

@@ -20,10 +20,28 @@ public class Transition
     [Space]
 
     [Header("Transiciones")]
+
+    [Tooltip("De donde transicionamos, ignorado en caso de ser un AnyState")]
     [SerializeField] GameObject _FromGO; // el estado del que vinimos
+
+    [Tooltip("Hacia donde transicionamos")]
     [SerializeField] GameObject _ToGO; // el estado al que vamos
-    BaseState _TO => _ToGO.GetComponent<BaseState>();
-    BaseState _FROM => _FromGO.GetComponent<BaseState>();
+
+    // cache de variables
+    private BaseState _cachedTO;
+    private bool _isToCached = false;
+    public BaseState TargetState
+    {
+        get
+        {
+            if (!_isToCached && _ToGO != null)
+            {
+                _cachedTO = _ToGO.GetComponent<BaseState>();
+                _isToCached = true;
+            }
+            return _cachedTO;
+        }
+    }
 
     [Space]
 
@@ -44,10 +62,10 @@ public class Transition
     /// <returns></returns>
     public bool ShouldTransition(Dictionary<string,bool> GlobalParams, out BaseState TO)
     {
-        if(_TO == null)
+        if(TargetState == null)
         {
             Debug.LogError("Transition points to Null State: Gameobject is" +
-                " missing the required State data: " + _ToGO.name );
+                " missing the required State data ");
             TO = null; 
             return false;
         
@@ -55,7 +73,7 @@ public class Transition
 
         if(_ShouldTransitionWithNoConditions)
         {
-            TO = _TO;
+            TO = TargetState;
             return true;
         }
 
@@ -73,7 +91,7 @@ public class Transition
             }
         }
 
-        TO = _TO;
+        TO = TargetState;
         return true;
 
     }

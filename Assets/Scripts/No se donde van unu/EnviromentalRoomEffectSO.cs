@@ -1,12 +1,22 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 [CreateAssetMenu(fileName = "NewEffect", menuName = "Visceral_Limbo/Effects/NewEffect")]
 public class EnviromentalRoomEffectSO : RoomEffectSO
 {
-    //tengo dos asi q o es bufo/debufo o visual, aca deberia agrandar esto para otros efectos
-    public enum EffectCategory { BuffPlayer, VisualChange}
+    [Flags]
+    public enum EffectCategory
+    {
+        None = 0,
+        BuffPlayer = 1,
+        VisualChange = 2
+    }
+
     public EffectCategory category;
+
+    // tipo especifico del efecto
+    public RoomSpawnerManager.EnvironmentalEffect effectType;
 
     [Header("Buff Data")]
     public BuffSO buffToApply;
@@ -27,26 +37,35 @@ public class EnviromentalRoomEffectSO : RoomEffectSO
 
     public override void ApplyEffect(RoomSpawnerManager manager)
     {
-        // logica del frozen
-        if (category == EffectCategory.BuffPlayer)
-        {
-            // aplico al player
-            if (manager.playerContext != null)
-                ApplyToSingleTarget(manager.playerContext.BuffManager);
+        // =========================
+        // FROZEN (BUFF / DEBUFF)
 
-            // aplico a enemigos
+        if ((category & EffectCategory.BuffPlayer) != 0)
+        {
+            // player
+            if (manager.playerContext != null)
+            {
+                ApplyToSingleTarget(manager.playerContext.BuffManager);
+            }
+
+            // enemigos
             var enemyBuffs = manager.GetActiveEnemyBuffManagers();
+
             foreach (var bManager in enemyBuffs)
             {
                 ApplyToSingleTarget(bManager);
             }
         }
 
-        // logica del lowvisibilty
-        if (category == EffectCategory.VisualChange)
+        // =========================
+        // VISUAL EFFECTS
+
+        if ((category & EffectCategory.VisualChange) != 0)
         {
             _oldIntensities.Clear();
+
             var lights = manager.GetCombatLights();
+
             foreach (var l in lights)
             {
                 if (l != null)
@@ -56,40 +75,101 @@ public class EnviromentalRoomEffectSO : RoomEffectSO
                 }
             }
 
-            if (manager.blackFog != null)
+            // =========================
+            // LOW VISIBILITY
+
+            if (effectType == RoomSpawnerManager.EnvironmentalEffect.LowVisibility)
             {
-                manager.blackFog.Play();
+                if (manager.blackFog != null)
+                {
+                    manager.blackFog.Play();
+                }
+
+                HealthFullscreenEffect.Instance.FadeDarkness(0.8f, 1.5f);
+
+                HealthFullscreenEffect.Instance.FadeBlackAndWhite(1f, 1f);
+            }
+
+            // =========================
+            // FROZEN VISUALS
+
+            if (effectType == RoomSpawnerManager.EnvironmentalEffect.Frozen)
+            {
+                HealthFullscreenEffect.Instance.FadeFreeze(1f, 1.5f);
+
+                if (manager.snowParticles != null)
+                {
+                    manager.snowParticles.Play();
+                }
             }
         }
     }
 
     public override void RemoveEffect(RoomSpawnerManager manager)
     {
-        if (category == EffectCategory.BuffPlayer)
-        {
-            // remuevo del palyer
-            if (manager.playerContext != null && buffToApply != null)
-                manager.playerContext.BuffManager.ForceExpirationBuff(buffToApply.BuffID);
+        // =========================
+        // REMOVE BUFFS
 
-            // remuevo de los enemigos
+        if ((category & EffectCategory.BuffPlayer) != 0)
+        {
+            // player
+            if (manager.playerContext != null && buffToApply != null)
+            {
+                manager.playerContext.BuffManager
+                    .ForceExpirationBuff(buffToApply.BuffID);
+            }
+
+            // enemigos
             var enemyBuffs = manager.GetActiveEnemyBuffManagers();
+
             foreach (var buffManager in enemyBuffs)
             {
                 buffManager.ForceExpirationBuff(buffToApply.BuffID);
             }
         }
 
-        if (category == EffectCategory.VisualChange)
+        // =========================
+        // REMOVE VISUALS
+
+        if ((category & EffectCategory.VisualChange) != 0)
         {
             var lights = manager.GetCombatLights();
+
             for (int i = 0; i < lights.Count; i++)
             {
                 if (i < _oldIntensities.Count && lights[i] != null)
+                {
                     lights[i].intensity = _oldIntensities[i];
+                }
             }
 
-            if (manager.blackFog != null)
-                manager.blackFog.Stop();
+            // =========================
+            // LOW VISIBILITY REMOVE
+
+            if (effectType == RoomSpawnerManager.EnvironmentalEffect.LowVisibility)
+            {
+                if (manager.blackFog != null)
+                {
+                    manager.blackFog.Stop();
+                }
+
+                HealthFullscreenEffect.Instance.FadeDarkness(0f, 1.5f);
+
+                HealthFullscreenEffect.Instance.FadeBlackAndWhite(0f, 1f);
+            }
+
+            // =========================
+            // FROZEN REMOVE
+
+            if (effectType == RoomSpawnerManager.EnvironmentalEffect.Frozen)
+            {
+                HealthFullscreenEffect.Instance.FadeFreeze(0f, 1.5f);
+
+                if (manager.snowParticles != null)
+                {
+                    manager.snowParticles.Stop();
+                }
+            }
         }
     }
 }

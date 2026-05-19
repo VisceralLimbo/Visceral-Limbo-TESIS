@@ -36,14 +36,16 @@ public class HitBox : Visceral_Script
     {
         if (_WeaponOwner != null)
         {
-
             other.TryGetComponent(out IDamageable Idamage);
 
+            print("Other collider" + other.name);
             // vamos a priorizar la Interfaz Damageable,
             // porque significa que implementa algo especial
             // a la hora de recibir daño
             if (Idamage != null && !TaggedColliders.Contains(other))
             {
+                print("Detectado IDamageable" + Idamage.ToString());
+
                 if(Idamage.GetHealthComponent(out Health_Component HPComp) == true 
                                               && !TaggedHealth.Contains(HPComp))
                 {
@@ -63,8 +65,11 @@ public class HitBox : Visceral_Script
                                          && !TaggedColliders.Contains(other)
                                          && !TaggedHealth.Contains(HPComp))
             {
+                print("Fallback daño");
+
                if(HPComp.Context != _Context)
                 {
+                    print("daño falback");
                     _WeaponOwner.NotifyHit(other, HPComp);
                     TaggedColliders.Add(other);
                     TaggedHealth.Add(HPComp);

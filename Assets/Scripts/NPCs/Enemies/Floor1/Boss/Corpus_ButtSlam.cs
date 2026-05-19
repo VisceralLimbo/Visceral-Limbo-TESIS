@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
 
+
 public class Corpus_ButtSlam : BaseState, IStateEnergyCost
 {
     [Header("Energy Setup")]
@@ -12,7 +13,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
 
     [Header("References")]
     [SerializeField] Transform _Target;
-    [SerializeField] Corpus_Thinking_Main_State _Main_State;
+    [SerializeField] Corpus_Controller _Main_State;
     IMovementStrategy _MoveStrategy;
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] AnimatorHandler _AnimatorHandler;
@@ -48,6 +49,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         {
             if(_MinStateLifetime>= _SlamToIdleTimer)
             {
+                _Main_State.NotifyAttackFinished();
                 return base.EvaluateTransitions(GlobalParams, out TO);
             }
             else
@@ -70,7 +72,6 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         base.OnEnter(CTX);
 
         _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlam", AnimatorControllerParameterType.Trigger);
-        _Main_State.DeactivateEnergy(true);
         _MoveStrategy.KillAllMovement();
 
         // Reset de variables
@@ -85,7 +86,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     public override void OnExit(VisceralStateMachine CTX)
     {
         base.OnExit(CTX);
-        _Main_State.DeactivateEnergy(false);
+        _Main_State.NotifyAttackFinished();
         _ExecutingAttack = false;
         _FinishedAttack = false;
         CTX.SetGlobalCondition(TransitionKey, false);
@@ -95,9 +96,9 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     {
         base.OnInitialize(CTX);
 
-        if (_Target == null) _Target = FindObjectOfType<Player_Movement>().transform;
-        if (_Main_State == null) _Main_State = GetComponentInParent<Corpus_Thinking_Main_State>();
+        if (_Main_State == null) _Main_State = GetComponentInParent<Corpus_Controller>();
         if (_MoveStrategy == null) _MoveStrategy = CTX.GetComponentInChildren<IMovementStrategy>();
+        if (_Target == null) _Target = _Main_State.Target;
         if (_KCC == null) _KCC = CTX.GetComponentInChildren<KinematicCharacterMotor>();
     }
 
@@ -194,6 +195,9 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlamToIdle", AnimatorControllerParameterType.Trigger);
         if (_ButtSlamParticles != null) _ButtSlamParticles.PlayAllParticles();
         _FinishedAttack = true;
+
+        stateMachine.SetGlobalCondition("Attack_ButtSlam", false);
+        stateMachine.SetGlobalCondition(_Main_State.CheckDistanceForTransitions(), false);
     }
 
 

@@ -4,60 +4,58 @@ using UnityEngine;
 
 public class FlamePillarIndicator : MonoBehaviour
 {
-    [Header("config del quad (indicador)")]
-    [SerializeField] private GameObject flamePillarVisuals;
-    public float scaleSpeed = 3f; //escalado
-    public float pillarActiveDuration = 3f; // tiempo activo
+    [Header("References")]
 
-    private float duration; // viene del jefe el tiempo
-    private float startTime; // para saber el tiempo q paso
+    [Tooltip("El pilar de fuego con daño y visuales finales")]
+    [SerializeField] PillarDamage FlamePillarPrefab;
 
-    [Header("ajuste para la altura del pilar")]
-    public float heightCorrection = 2f; // mitad de la altura para q no aparezca enterrado xd
+    [Tooltip("Particulas del indicador de fuego")]
+    [SerializeField] ParticleSystem[] IndicatorParticles;
+    [SerializeField] PlayerContext _Context;
 
-    // llamado en boos ability
-    public void SetupIndicator(Vector3 pos, float dur)
+    [Space]
+    [Header("Variables")]
+    [SerializeField] float _ScaleSpeed = 3f;
+    [SerializeField] float _PillarActiveDuration = 3f;
+    [SerializeField] float _HeightCorrection = 2f;
+
+    float _Duration;
+    float _StartTime;
+
+
+    public void SetupIndicator(Vector3 pos, float Duration, PlayerContext Context)
     {
-        // guardo el tiempo de inicio para el escalado
-        startTime = Time.time;
-        duration = dur;
+        _StartTime = Time.time;
+        _Duration = Duration;
+        _Context = Context;
+
+        foreach(var indicator in IndicatorParticles)
+        {
+            if(indicator != null && !indicator.isPlaying) indicator.Play();
+        }
+
         StartCoroutine(ExecutePillar());
+        
     }
 
     private void Update()
     {
-        // escalo si la corrutina no se termino, y el time - startime es para saber el tiempo q paso
-        float timeElapsed = Time.time - startTime;
+        float T = (Time.time - _StartTime) / _Duration;
+        transform.localScale = Vector3.Slerp(Vector3.zero, Vector3.one, (T * _ScaleSpeed) * TimeDilationManager.GlobalTimeScale);
 
-        // de 0 a 1
-        float t = timeElapsed / duration;
-
-        // aplico escala con lerp para ir de 0 a 1 y t se multiplica por la escala para setear que tan rapido crece (siento que tiene q ser mas rapido pero se ve)
-        transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t * scaleSpeed);
     }
 
     private IEnumerator ExecutePillar()
     {
-        // espero tiempo para q el player tenga chance
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(_Duration);
 
-        // activo pilar
-        if (flamePillarVisuals != null)
+        if(FlamePillarPrefab !=  null)
         {
-            // agarro la pos del indicador
-            Vector3 spawnPosition = transform.position;
+            Vector3 SpawnPosition = transform.position + (Vector3.up * _HeightCorrection);
+            PillarDamage Pillar = Instantiate(FlamePillarPrefab, SpawnPosition, Quaternion.identity);
+            Pillar.Initialize(_PillarActiveDuration,_Context);
 
-            //subo spawn
-            spawnPosition.y += heightCorrection;
-
-
-            Instantiate(flamePillarVisuals, spawnPosition, Quaternion.identity);
         }
-
-        // espero que termine la vida del pilar
-        yield return new WaitForSeconds(pillarActiveDuration);
-
-        // chau todo
         Destroy(gameObject);
     }
 }

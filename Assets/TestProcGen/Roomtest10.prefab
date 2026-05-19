@@ -2217,6 +2217,7 @@ MonoBehaviour:
   _canHaveEnvironmentalEffect: 0
   _currentEffect: 0
   blackFog: {fileID: 6875031247282123872}
+  snowParticles: {fileID: 7501889058204541170}
   fireParticles:
   - {fileID: 367222446164107343}
   - {fileID: 4879102882001986581}
@@ -11262,7 +11263,7 @@ PrefabInstance:
     - target: {fileID: 7059732191978958790, guid: 03998b33ba8b00244b385c9cec5d3313,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11272,6 +11273,12 @@ PrefabInstance:
 --- !u!4 &5626741154674510775 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1277446778287358951, guid: 03998b33ba8b00244b385c9cec5d3313,
+    type: 3}
+  m_PrefabInstance: {fileID: 6893977862911232080}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7501889058204541170 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4012782091192297634, guid: 03998b33ba8b00244b385c9cec5d3313,
     type: 3}
   m_PrefabInstance: {fileID: 6893977862911232080}
   m_PrefabAsset: {fileID: 0}

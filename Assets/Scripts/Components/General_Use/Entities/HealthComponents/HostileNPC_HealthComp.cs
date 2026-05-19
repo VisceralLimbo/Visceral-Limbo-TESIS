@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HostileNPC_HealthComp : Health_Component
+public class HostileNPC_HealthComp : Health_Component, IDamageable
 {
     [Space]
     [Header("Stats Setup")]
@@ -77,11 +77,18 @@ public class HostileNPC_HealthComp : Health_Component
         if (StatID == _DamageReductionStat) { DamageReduction = value; return; }
 
         if (StatID == _DamageInvulnerability) { DamageInvulnerability = value; return; }
-
-
-
     }
 
-    
+
+    void IDamageable.TakeDamageWithKnockback(UnityEngine.Vector3 KnockbackDir, float KnockbackForce, DamageScore DamageDT)
+    {
+        TakeDamageWithKnockback(KnockbackDir, KnockbackForce, DamageDT);
+    }
+
+    void IDamageable.TakeDamage(DamageScore DamageDT)
+    {
+        TakeDamage(DamageDT);
+    }
+
 
 }

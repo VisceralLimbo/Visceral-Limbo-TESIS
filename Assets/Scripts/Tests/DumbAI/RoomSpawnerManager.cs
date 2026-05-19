@@ -41,6 +41,8 @@ public class RoomSpawnerManager : MonoBehaviour
     [SerializeField] private bool _canHaveEnvironmentalEffect = true; // si no queremos q la sala tenga efectos desactivamos
     [SerializeField] public EnvironmentalEffect _currentEffect = EnvironmentalEffect.None;
     public ParticleSystem blackFog;
+    public ParticleSystem snowParticles;
+
     public List<Light> GetCombatLights() => combatLights;
 
     public event System.Action OnCombatEnded;
@@ -51,6 +53,8 @@ public class RoomSpawnerManager : MonoBehaviour
 
     [Header("Enemy List")]
     private List<GameObject> _activeEnemies = new List<GameObject>();
+
+    public static RoomSpawnerManager SalaActiva { get; private set; }
 
     private void Awake()
     {
@@ -78,6 +82,10 @@ public class RoomSpawnerManager : MonoBehaviour
     public void AssignPlayerContext(PlayerContext playerCont)
     {
         playerContext = playerCont;
+
+        // guardo la sala en la q estoy como la activa en el momento
+        SalaActiva = this;
+
         _StartingCombatScore = ScoreManager.Instance.GetPlayerScore;
 
         ScoreManager.Instance.RegisterMilestone(_StartingCombatScore + _AddExtraRequiredScore);
@@ -343,6 +351,7 @@ public class RoomSpawnerManager : MonoBehaviour
         {
             // elige un efecto random
             _currentEffect = effects[Random.Range(0, effects.Length)];
+            RoomEffectMessageManager.Instance?.TryShowMessage(_currentEffect);
             Debug.Log($"Efecto ambiental activado en la sala: {_currentEffect}");
         }
         else
