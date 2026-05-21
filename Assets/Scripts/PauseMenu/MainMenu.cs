@@ -9,6 +9,9 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] SoundData _ClickSound;
 
+    [SerializeField] private GameObject menuFirstButton;
+    [SerializeField] private GameObject optionsFirstButton;
+
     private void Awake()
     {
         optionsPanel.SetActive(false);
@@ -19,6 +22,7 @@ public class MainMenu : MonoBehaviour
     public void Start()
     {
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
+        EventSystem.current.SetSelectedGameObject(menuFirstButton);
     }
 
     public void MainMenuShop()
@@ -33,6 +37,8 @@ public class MainMenu : MonoBehaviour
         buttonsHide.SetActive(false);
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
+
+        EventSystem.current.SetSelectedGameObject(optionsFirstButton);
     }
 
     public void MainMenuBack()
@@ -41,6 +47,7 @@ public class MainMenu : MonoBehaviour
         buttonsHide.SetActive(true);
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
+        EventSystem.current.SetSelectedGameObject(menuFirstButton);
     }
 
     public void MainMenuGenProc()
