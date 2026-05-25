@@ -52,10 +52,16 @@ public class MainMenu : MonoBehaviour
 
     public void MainMenuGenProc()
     {
-        //hay q cambiarle el nobmre a esto me comi los espacios y las mayusxd
-        LoadGameScene("Proc Gen Scene");
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ResetUIState();
+        if (!TutorialManager.HasSeenTutorial())
+        {
+            LoadGameScene("TutorialScene");
+        }
+        else
+        {
+            LoadGameScene("Proc Gen Scene");
+        }
     }
 
     public void MainMenuCloseGame()
