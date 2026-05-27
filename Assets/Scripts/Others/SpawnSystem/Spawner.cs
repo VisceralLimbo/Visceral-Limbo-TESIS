@@ -149,7 +149,8 @@ public class Spawner : MonoBehaviour
 
         if (spawnVFX != null)
         {
-            Vector3 spawnPos = transform.position + Vector3.up * 0.1f;
+            Vector3 spawnPos = transform.position + Vector3.up * 0.02f;
+            vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity, transform);
 
             // parento al spawner
             vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity, transform);
@@ -170,12 +171,14 @@ public class Spawner : MonoBehaviour
 
         if (enemy != null)
         {
-            // aseguro pos exacta del spawn
-            enemy.transform.position = transform.position;
+            Vector3 spawnPos = GetGroundedSpawnPosition();
+
+            enemy.transform.position = spawnPos;
             enemy.transform.rotation = transform.rotation;
 
-            var dissolve = enemy.GetComponent<DissolveController>();
+            FreezeEnemy(enemy, true);
 
+            var dissolve = enemy.GetComponent<DissolveController>();
             if (dissolve == null)
                 dissolve = enemy.GetComponentInChildren<DissolveController>();
 
@@ -184,6 +187,10 @@ public class Spawner : MonoBehaviour
                 dissolve.StartAppear();
                 yield return new WaitForSeconds(0.5f);
             }
+
+            yield return new WaitForSeconds(0.2f);
+
+            FreezeEnemy(enemy, false);
         }
 
         // destruir VFX justo al final
@@ -206,6 +213,48 @@ public class Spawner : MonoBehaviour
         {
             IsSpent = true;
         }
+    }
+
+    private void FreezeEnemy(GameObject enemy, bool freeze)
+    {
+        if (enemy == null) return;
+
+        var movement = enemy.GetComponent<IMovementStrategy>();
+
+        if (movement == null)
+            movement = enemy.GetComponentInChildren<IMovementStrategy>();
+
+        if (movement != null)
+        {
+            movement.KillAllMovement();
+            movement.SetActiveState(!freeze);
+        }
+
+        var kcc = enemy.GetComponent<KinematicCharacterController.KinematicCharacterMotor>();
+
+        if (kcc == null)
+            kcc = enemy.GetComponentInChildren<KinematicCharacterController.KinematicCharacterMotor>();
+
+        if (kcc != null)
+        {
+            kcc.BaseVelocity = Vector3.zero;
+
+            if (freeze)
+            {
+                kcc.SetPosition(GetGroundedSpawnPosition(), true);
+            }
+        }
+    }
+    private Vector3 GetGroundedSpawnPosition()
+    {
+        Vector3 origin = transform.position + Vector3.up * 3f;
+
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 10f))
+        {
+            return hit.point;
+        }
+
+        return transform.position;
     }
 }
 
