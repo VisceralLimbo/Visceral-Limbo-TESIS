@@ -50,7 +50,7 @@ MonoBehaviour:
   _controller: {fileID: 4965782652354847623}
   _animHandler: {fileID: 107750596267011980}
   movementSpeed: 9
-  OrbitRadius: 2
+  OrbitRadius: 5
   SpiralDriftCorrection: 1
 --- !u!1 &1640711995996675159
 GameObject:
@@ -192,10 +192,14 @@ MonoBehaviour:
   TransitionKey: Attack_Melee1
   EnergyCost: 2
   TimingDuration: 0.08
+  AttackWindow: 0
   CanExit: 0
   _KnockbackValue: 30
   attackradius: 3
   AttackDamage: 30
+  _Mask:
+    serializedVersion: 2
+    m_Bits: 0
   DrawWireframe: 0
   _Model: {fileID: 5871233309053035945}
 --- !u!1 &4354382155185038462
@@ -1226,10 +1230,14 @@ MonoBehaviour:
   TransitionKey: Attack_Melee2
   EnergyCost: 2
   TimingDuration: 0.08
+  AttackWindow: 0
   CanExit: 0
   _KnockbackValue: 50
   attackradius: 2
   AttackDamage: 20
+  _Mask:
+    serializedVersion: 2
+    m_Bits: 0
   DrawWireframe: 0
   _Model: {fileID: 5871233309053035945}
 --- !u!1 &7195207331811232290

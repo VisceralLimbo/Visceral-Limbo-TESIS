@@ -184,6 +184,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
 
                     Vector3 Dir = playerHp.Context.PlayerTransform.position - _Model.transform.position;
                     Dir.Normalize();
+                    Dir.y = 0.7f;
 
                     playerHp.TakeDamageWithKnockback(Dir, AttackKnockback, DMScore);
 
