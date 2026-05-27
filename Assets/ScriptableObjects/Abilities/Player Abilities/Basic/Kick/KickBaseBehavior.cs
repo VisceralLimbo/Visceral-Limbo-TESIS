@@ -48,47 +48,44 @@ public class KickBaseBehavior : Visceral_SkillLogic
 
         print("Kicking ");
 
-        Ray rayct = new Ray(_camContext.transform.position,_camContext.transform.forward);
-        //buscar objetos que podamos patear
+        Ray rayct = new Ray(_camContext.transform.position, _camContext.transform.forward);
 
-        if(!Physics.Raycast(rayct,out RaycastHit HitInfo,KickRange)) yield break;
+        if (!Physics.Raycast(rayct, out RaycastHit HitInfo, KickRange))
+            yield break;
 
         GameObject HitOBJ = HitInfo.collider.gameObject;
+
+        // evito pegarme a mi mismo
+        if (HitInfo.collider.GetComponentInParent<PlayerContext>() == _UserContext)
+            yield break;
+
         print(HitOBJ.name);
 
-            Health_Component HPComp = null;
+        Health_Component HPComp = HitOBJ.GetComponentInParent<Health_Component>();
 
-            if (HitOBJ.TryGetComponent(out Health_Component HP))
-            {
-               HPComp = HP;
-            }
-
-            if(HPComp == null)
-            {
-                HPComp = HitOBJ.GetComponentInChildren<Health_Component>();
-            }
-            else
-            {
-            HPComp = HitOBJ.GetComponentInParent<Health_Component>();
+        if (HPComp == null)
+        {
+            HPComp = HitOBJ.GetComponentInChildren<Health_Component>();
         }
 
-            if(HPComp != null)
+        if (HPComp != null)
+        {
+            DamageScore DMG = new DamageScore()
             {
-                DamageScore DMG = new DamageScore()
-                {
-                    DamageAmount = KickDamage,
-                    Attacker = _UserContext,
-                    ElementalDamage = ElementType.Physical,
-                    FactionID = _UserContext.faction,
-                };
+                DamageAmount = KickDamage,
+                Attacker = _UserContext,
+                ElementalDamage = ElementType.Physical,
+                FactionID = _UserContext.faction,
+            };
 
-                Vector3 Dir = HitOBJ.transform.position - _UserContext.PlayerTransform.position;
-                Dir.Normalize();
+            Vector3 Dir = HPComp.transform.position - _UserContext.PlayerTransform.position;
+            Dir.y = 0f;
+            Dir.Normalize();
 
-                print(HPComp.name + " " + HitOBJ.name);
-                HPComp.TakeDamageWithKnockback(Dir, KickStrenght, DMG);
-            }
-        
+            print(HPComp.name + " " + HitOBJ.name);
+            HPComp.TakeDamageWithKnockback(Dir, KickStrenght, DMG);
+        }
+
         yield break;
     }
 

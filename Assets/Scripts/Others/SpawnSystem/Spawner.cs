@@ -114,7 +114,7 @@ public class Spawner : MonoBehaviour
         else
         {
             IsSpent = true;
-            _SpawnManager.NotifyMinionDeath();
+            //_SpawnManager.NotifyMinionDeath();
             print("isSpent");
         }
 
@@ -150,7 +150,9 @@ public class Spawner : MonoBehaviour
         if (spawnVFX != null)
         {
             Vector3 spawnPos = transform.position + Vector3.up * 0.1f;
-            vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity);
+
+            // parento al spawner
+            vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity, transform);
 
             vfx.SetActive(true);
 
@@ -168,7 +170,12 @@ public class Spawner : MonoBehaviour
 
         if (enemy != null)
         {
+            // aseguro pos exacta del spawn
+            enemy.transform.position = transform.position;
+            enemy.transform.rotation = transform.rotation;
+
             var dissolve = enemy.GetComponent<DissolveController>();
+
             if (dissolve == null)
                 dissolve = enemy.GetComponentInChildren<DissolveController>();
 
@@ -177,7 +184,6 @@ public class Spawner : MonoBehaviour
                 dissolve.StartAppear();
                 yield return new WaitForSeconds(0.5f);
             }
-
         }
 
         // destruir VFX justo al final
@@ -189,6 +195,18 @@ public class Spawner : MonoBehaviour
         onSpawned?.Invoke(enemy);
     }
 
+    public bool CanSpawnMore()
+    {
+        return !HasMinion && !IsSpent && RemainingSpawns > 0;
+    }
+
+    public void MarkSpentIfEmpty()
+    {
+        if (RemainingSpawns <= 0 && !HasMinion)
+        {
+            IsSpent = true;
+        }
+    }
 }
 
 //script hecho por patricio malvasio maddalena

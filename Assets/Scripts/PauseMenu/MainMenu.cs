@@ -16,27 +16,23 @@ public class MainMenu : MonoBehaviour
     {
         optionsPanel.SetActive(false);
         buttonsHide.SetActive(true);
-        ResetUIState();
     }
 
     public void Start()
     {
-        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         EventSystem.current.SetSelectedGameObject(menuFirstButton);
     }
 
     public void MainMenuShop()
     {
         LoadGameScene("Nexus");
-        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
-        ResetUIState();
+        PlayClick();
     }
     public void MainMenuOptions()
     {
         optionsPanel.SetActive(true);
         buttonsHide.SetActive(false);
-        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
-        ResetUIState();
+        PlayClick();
 
         EventSystem.current.SetSelectedGameObject(optionsFirstButton);
     }
@@ -45,15 +41,13 @@ public class MainMenu : MonoBehaviour
     {
         optionsPanel.SetActive(false);
         buttonsHide.SetActive(true);
-        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
-        ResetUIState();
+        PlayClick();
         EventSystem.current.SetSelectedGameObject(menuFirstButton);
     }
 
     public void MainMenuGenProc()
     {
-        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
-        ResetUIState();
+        PlayClick();
         if (!TutorialManager.HasSeenTutorial())
         {
             LoadGameScene("TutorialScene");
@@ -66,19 +60,8 @@ public class MainMenu : MonoBehaviour
 
     public void MainMenuCloseGame()
     {
-        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
+        PlayClick();
         Application.Quit();
-    }
-
-    // limpio seleccion y flechitas
-    public void ResetUIState()
-    {
-        ArrowsUI arrowSelector = FindObjectOfType<ArrowsUI>();
-        if (arrowSelector != null)
-            arrowSelector.HideArrows();
-
-        if (EventSystem.current != null)
-            EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void ClearPlayerRef()
@@ -96,7 +79,7 @@ public class MainMenu : MonoBehaviour
 
         // fuerzo q las opciones se recargen
         SettingsUIPanelManager uiManager = FindObjectOfType<SettingsUIPanelManager>();
-        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
+        PlayClick();
 
         if (uiManager != null)
         {
@@ -114,4 +97,8 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("LoadingScene");
     }
 
+    private void PlayClick()
+    {
+        SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(transform.position).play();
+    }
 }
