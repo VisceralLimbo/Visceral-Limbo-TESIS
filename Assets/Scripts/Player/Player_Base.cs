@@ -302,6 +302,15 @@ public class Player_Base : Visceral_Script
         IsSkillActive = state;
     }
 
+    public void StopWalkSound()
+    {
+        if (currentWalkSound != null && currentWalkSound.gameObject.activeInHierarchy)
+        {
+            currentWalkSound.Stop();
+            currentWalkSound = null;
+        }
+    }
+
     public void SetPlayerActive() => IsPlayerActive = true;
     public void SetPlayerInactive() => IsPlayerActive = false;
 }
