@@ -4856,13 +4856,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2160154227886015791}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.00000012117653, y: -1, z: 0.0000031292439, w: 0.000002945011}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.8117242, y: 2.6821547, z: 2.086468}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1434595008690518055}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!198 &6478580059611509010
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4879,7 +4879,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
@@ -4999,7 +4999,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.4
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -14509,6 +14509,7 @@ MonoBehaviour:
   FlamePillarPrefab: {fileID: 1307304281510130174, guid: aee85465e49cd374286af9f3406c022a,
     type: 3}
   IndicatorParticles:
+  - {fileID: 774781770473095239}
   - {fileID: 684747389559730283}
   - {fileID: 6478580059611509010}
   _Context: {fileID: 0}
