@@ -146,6 +146,42 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
                 _MoveStrategy.ApplyExternalForce(Vector3.up, _JumpStrenght);
             }
 
+            // vamos a hacer daño al jugador si se para debajo del jefe
+            hits = Physics.OverlapSphere(_Model.transform.position, attackradius);
+
+            if (hits.Length > 0)
+            {
+                // Lista para evitar doble daño a la misma entidad con multiples colliders
+                List<Health_Component> damagedTargets = new List<Health_Component>();
+
+                foreach (Collider collider in hits)
+                {
+                    if (collider.TryGetComponent(out Health_Component playerHp))
+                    {
+                        if (playerHp == null || playerHp.Context == null) continue;
+
+                        // Ignorar self y duplicados
+                        if (playerHp.Context == _Main_State.playerContext) continue;
+                        if (damagedTargets.Contains(playerHp)) continue;
+
+                        DamageScore DMScore = new DamageScore();
+                        DMScore.Attacker = _Main_State.playerContext;
+                        DMScore.FactionID = _Main_State.playerContext.faction;
+                        DMScore.DamageAmount = 1;
+                        DMScore.ElementalDamage = ElementType.Physical;
+
+                        Vector3 Dir = playerHp.Context.PlayerTransform.position - _Model.transform.position;
+                        Dir.Normalize(); 
+                        Dir.y = 0.7f;
+
+                        playerHp.TakeDamageWithKnockback(Dir, AttackKnockback *2, DMScore);
+
+                        damagedTargets.Add(playerHp);
+                    }
+                }
+            }
+
+
 
             // Solo chequeamos si aterrizó si YA pasamos el tiempo mínimo de aire (_MinAirTime).
             // Esto evita que detecte el suelo en el mismo frame que saltó.
