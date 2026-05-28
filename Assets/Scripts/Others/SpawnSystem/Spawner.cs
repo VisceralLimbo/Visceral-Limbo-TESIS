@@ -32,6 +32,8 @@ public class Spawner : MonoBehaviour
     [Header("VFX Spawn")]
     [SerializeField] private GameObject spawnVFX;
     [SerializeField] private float spawnDelay = 2f;
+    [SerializeField] private float vfxYOffset = -0.5f;
+    [SerializeField] private float vfxDestroyDelay = 3f;
 
     private void Start()
     {
@@ -149,10 +151,8 @@ public class Spawner : MonoBehaviour
 
         if (spawnVFX != null)
         {
-            Vector3 spawnPos = transform.position + Vector3.up * 0.02f;
-            vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity, transform);
+            Vector3 spawnPos = transform.position + Vector3.up * vfxYOffset;
 
-            // parento al spawner
             vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity, transform);
 
             vfx.SetActive(true);
@@ -162,6 +162,7 @@ public class Spawner : MonoBehaviour
 
             foreach (var fx in vfx.GetComponentsInChildren<UnityEngine.VFX.VisualEffect>())
                 fx.Play();
+
         }
 
         // esperamos antes de spawnear
@@ -256,6 +257,8 @@ public class Spawner : MonoBehaviour
 
         return transform.position;
     }
+
+   
 }
 
 //script hecho por patricio malvasio maddalena
