@@ -24,6 +24,7 @@ public class TutorialTaskManager : MonoBehaviour
 
     void Start()
     {
+        BloodEchoesManager.AddBloodEchoes(50);
         input = Player_InputHandler.instance;
 
         if (meleeAttack != null)

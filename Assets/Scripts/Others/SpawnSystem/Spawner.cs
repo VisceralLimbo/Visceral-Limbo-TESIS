@@ -32,6 +32,8 @@ public class Spawner : MonoBehaviour
     [Header("VFX Spawn")]
     [SerializeField] private GameObject spawnVFX;
     [SerializeField] private float spawnDelay = 2f;
+    [SerializeField] private float vfxYOffset = -0.5f;
+    [SerializeField] private float vfxDestroyDelay = 3f;
 
     private void Start()
     {
@@ -114,7 +116,7 @@ public class Spawner : MonoBehaviour
         else
         {
             IsSpent = true;
-            _SpawnManager.NotifyMinionDeath();
+            //_SpawnManager.NotifyMinionDeath();
             print("isSpent");
         }
 
@@ -149,8 +151,9 @@ public class Spawner : MonoBehaviour
 
         if (spawnVFX != null)
         {
-            Vector3 spawnPos = transform.position + Vector3.up * 0.1f;
-            vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity);
+            Vector3 spawnPos = transform.position + Vector3.up * vfxYOffset;
+
+            vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity, transform);
 
             vfx.SetActive(true);
 
@@ -159,6 +162,7 @@ public class Spawner : MonoBehaviour
 
             foreach (var fx in vfx.GetComponentsInChildren<UnityEngine.VFX.VisualEffect>())
                 fx.Play();
+
         }
 
         // esperamos antes de spawnear
@@ -168,6 +172,13 @@ public class Spawner : MonoBehaviour
 
         if (enemy != null)
         {
+            Vector3 spawnPos = GetGroundedSpawnPosition();
+
+            enemy.transform.position = spawnPos;
+            enemy.transform.rotation = transform.rotation;
+
+            FreezeEnemy(enemy, true);
+
             var dissolve = enemy.GetComponent<DissolveController>();
             if (dissolve == null)
                 dissolve = enemy.GetComponentInChildren<DissolveController>();
@@ -178,6 +189,9 @@ public class Spawner : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
             }
 
+            yield return new WaitForSeconds(0.2f);
+
+            FreezeEnemy(enemy, false);
         }
 
         // destruir VFX justo al final
@@ -189,6 +203,62 @@ public class Spawner : MonoBehaviour
         onSpawned?.Invoke(enemy);
     }
 
+    public bool CanSpawnMore()
+    {
+        return !HasMinion && !IsSpent && RemainingSpawns > 0;
+    }
+
+    public void MarkSpentIfEmpty()
+    {
+        if (RemainingSpawns <= 0 && !HasMinion)
+        {
+            IsSpent = true;
+        }
+    }
+
+    private void FreezeEnemy(GameObject enemy, bool freeze)
+    {
+        if (enemy == null) return;
+
+        var movement = enemy.GetComponent<IMovementStrategy>();
+
+        if (movement == null)
+            movement = enemy.GetComponentInChildren<IMovementStrategy>();
+
+        if (movement != null)
+        {
+            movement.KillAllMovement();
+            movement.SetActiveState(!freeze);
+        }
+
+        var kcc = enemy.GetComponent<KinematicCharacterController.KinematicCharacterMotor>();
+
+        if (kcc == null)
+            kcc = enemy.GetComponentInChildren<KinematicCharacterController.KinematicCharacterMotor>();
+
+        if (kcc != null)
+        {
+            kcc.BaseVelocity = Vector3.zero;
+
+            if (freeze)
+            {
+                kcc.SetPosition(GetGroundedSpawnPosition(), true);
+            }
+        }
+    }
+    private Vector3 GetGroundedSpawnPosition()
+    {
+        Vector3 origin = transform.position + Vector3.up * 3f;
+
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 10f))
+        {
+            return hit.point;
+        }
+
+        return transform.position;
+    }
+
+   
 }
 
 //script hecho por patricio malvasio maddalena

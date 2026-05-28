@@ -84,12 +84,7 @@ public class CinematicBossFight : MonoBehaviour
         {
             cinematicPlayed = true;
             player_Base = other.GetComponentInParent<Player_Base>();
-            Player_Movement movement = player_Base.GetComponentInChildren<Player_Movement>();
-
-            if (movement != null)
-            {
-                movement.LockMovementImmediate();
-            }
+            SetPlayerCinematicLock(true);
             Camera.main.enabled = false;
             PlayCinematic();
         }
@@ -122,13 +117,8 @@ public class CinematicBossFight : MonoBehaviour
 
         if (player_Base != null)
         {
+            SetPlayerCinematicLock(false);
             player_Base.SetPlayerActive();
-
-            Player_Movement movement = player_Base.GetComponentInChildren<Player_Movement>();
-            if (movement != null)
-            {
-                movement.UnlockMovement();
-            }
         }
 
         if (mainCamera != null)
@@ -146,5 +136,25 @@ public class CinematicBossFight : MonoBehaviour
             Boss.SetActive(true);
         }
 
+    }
+
+    private void SetPlayerCinematicLock(bool locked)
+    {
+        if (player_Base == null) return;
+
+        Player_Movement movement = player_Base.GetComponentInChildren<Player_Movement>();
+
+        if (movement != null)
+        {
+            if (locked) movement.LockMovementImmediate();
+            else movement.UnlockMovement();
+        }
+
+        if (locked)
+        {
+            player_Base.StopWalkSound();
+        }
+
+        player_Base.enabled = !locked;
     }
 }

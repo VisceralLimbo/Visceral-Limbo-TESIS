@@ -13,6 +13,9 @@ public class MinimapCameraFollow : MonoBehaviour
     [SerializeField] private float maxZoom = 150f;
     [SerializeField] private float lerpSpeed = 5f;
 
+    [Header("Scene Type")]
+    [SerializeField] private bool tutorialScene;
+
     private float targetZoom;
 
     void Start()
@@ -24,8 +27,20 @@ public class MinimapCameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
-        // sigo si player esta y si la generacion termino
-        if (playerTransform != null && DungeonGenerator.Instance.HasFinishedGeneration())
+        if (playerTransform == null)
+            return;
+
+        // si es tuto sin dungeongenerator
+        if (tutorialScene)
+        {
+            FollowPlayer();
+            HandleZoom();
+            return;
+        }
+
+        // si es procedural con dungeongenerator
+        if (DungeonGenerator.Instance != null &&
+            DungeonGenerator.Instance.HasFinishedGeneration())
         {
             FollowPlayer();
             HandleZoom();
@@ -34,11 +49,17 @@ public class MinimapCameraFollow : MonoBehaviour
 
     void FollowPlayer()
     {
-        // camara sobre el player
-        Vector3 targetPosition = new Vector3(playerTransform.position.x, transform.position.y, playerTransform.position.z);
+        Vector3 targetPosition = new Vector3(
+            playerTransform.position.x,
+            transform.position.y,
+            playerTransform.position.z
+        );
 
-        // lerp para suavizar
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * lerpSpeed);
+        transform.position = Vector3.Lerp(
+            transform.position,
+            targetPosition,
+            Time.deltaTime * lerpSpeed
+        );
     }
 
     void HandleZoom()
@@ -51,7 +72,10 @@ public class MinimapCameraFollow : MonoBehaviour
             targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
         }
 
-        // aplico zoom
-        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetZoom, Time.deltaTime * lerpSpeed);
+        cam.orthographicSize = Mathf.Lerp(
+            cam.orthographicSize,
+            targetZoom,
+            Time.deltaTime * lerpSpeed
+        );
     }
 }
