@@ -136,4 +136,17 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
         HPComp = _HPComp;
         return true;
     }
+
+    bool IDamageable.GetPlayerContext(out PlayerContext playerContext) 
+    {
+        if(_HPComp == null)
+        {
+            playerContext= null;
+            return false;
+        }
+
+        playerContext = _HPComp.Context;
+        return true;
+    }
+
 }

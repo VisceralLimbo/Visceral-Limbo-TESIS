@@ -3574,6 +3574,8 @@ MonoBehaviour:
   playerTarget: {fileID: 0}
   spawnVFX: {fileID: 0}
   spawnDelay: 2
+  vfxYOffset: -0.5
+  vfxDestroyDelay: 3
 --- !u!4 &829380646
 Transform:
   m_ObjectHideFlags: 0
@@ -4122,6 +4124,8 @@ MonoBehaviour:
   playerTarget: {fileID: 0}
   spawnVFX: {fileID: 0}
   spawnDelay: 2
+  vfxYOffset: -0.5
+  vfxDestroyDelay: 3
 --- !u!4 &949229765
 Transform:
   m_ObjectHideFlags: 0
@@ -7613,6 +7617,8 @@ MonoBehaviour:
   playerTarget: {fileID: 0}
   spawnVFX: {fileID: 0}
   spawnDelay: 2
+  vfxYOffset: -0.5
+  vfxDestroyDelay: 3
 --- !u!4 &2041108469
 Transform:
   m_ObjectHideFlags: 0
@@ -7673,6 +7679,8 @@ MonoBehaviour:
   playerTarget: {fileID: 0}
   spawnVFX: {fileID: 0}
   spawnDelay: 2
+  vfxYOffset: -0.5
+  vfxDestroyDelay: 3
 --- !u!4 &2074755294
 Transform:
   m_ObjectHideFlags: 0
@@ -9006,8 +9014,44 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3728964659038077150, guid: fab1a881c0ae0904db796863978fa4eb,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7393306241924394168}
   m_SourcePrefab: {fileID: 100100000, guid: fab1a881c0ae0904db796863978fa4eb, type: 3}
+--- !u!1 &7393306241924394167 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3728964659038077150, guid: fab1a881c0ae0904db796863978fa4eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 7393306241924394166}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7393306241924394168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7393306241924394167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be8789af84c947418e435027fd17424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _WaveThickness: 3.59
+  _DamageMask:
+    serializedVersion: 2
+    m_Bits: 1216
+  _DamageCheck: 0
+  _ExpansionSpeed: 0
+  _MaxRadius: 20
+  _Damage: 0
+  _Knockback: 0
+  _ExpandOnY: 1
+  _OwnerContext: {fileID: 0}
+  _VisualElement: {fileID: 0}
+  _CurrentRadius: 9.97
+  DrawGizmos: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

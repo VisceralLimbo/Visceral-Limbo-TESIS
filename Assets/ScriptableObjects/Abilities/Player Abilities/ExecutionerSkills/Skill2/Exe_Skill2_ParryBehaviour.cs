@@ -5,7 +5,6 @@ using UnityEngine;
 public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
 {
     //usercontext 
-
     [Header("References")]
     [SerializeField] Player_CameraController _camContext;
     [SerializeField] AnimatorOverrideController _ANCO;

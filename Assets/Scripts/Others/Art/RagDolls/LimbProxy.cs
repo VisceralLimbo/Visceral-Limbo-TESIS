@@ -33,4 +33,8 @@ public class LimbProxy : MonoBehaviour, IDamageable
         if (_Dismember != null) _DismemberDamageable = _Dismember;
     }
 
+    bool IDamageable.GetPlayerContext(out PlayerContext playerContext)
+    {
+        return _DismemberDamageable.GetPlayerContext(out playerContext);
+    }
 }
