@@ -17,10 +17,22 @@ public struct ShockwaveConfig
     public float _WaveThickness;
     public LayerMask _DamageMask;
     public WaveDamageCheck _DamageCheck;
+
+    [Tooltip("La velocidad de expansion del anillo")]
     public float _ExpansionSpeed;
+
+    [Tooltip("El radio máximo del anillo")]
     public float _MaxRadius;
     public float _Damage;
     public float _Knockback;
+
+    [Tooltip("Cada cuanto tiempo puedo volver a hacer daño a objetivos ya dañados, menor a -1 es igual a nunca resetear")]
+    public float _DamageResetTimer;
+
+    [Tooltip("El poder de knockback en Y exclusivo")]
+    public float _KnockbackYStrenght;
+
+    [Tooltip("Visual: Si el elemento visual escala solo en X,Z o en todos los ejes con el tiempo")]
     public bool _ExpandOnY;
     public GameObject _VisualElement;
 }
@@ -31,6 +43,7 @@ public class ExpandingShockWave : MonoBehaviour
     [Header("Configuration & Variables")]
     [SerializeField] ShockwaveConfig _Config;
     [SerializeField] PlayerContext _OwnerContext;
+    [SerializeField] GameObject _Visuals;
 
     [SerializeField] private float _CurrentRadius;
     [Space]
@@ -50,11 +63,25 @@ public class ExpandingShockWave : MonoBehaviour
         this.transform.position = StartingPosition;
     }
 
+    public void PerformShockwave(Vector3 StartingPosition)
+    {
+        print("Performing Shockwave");
+        _CurrentRadius = 0f;
+
+        this.transform.position = StartingPosition;
+        this.enabled = true;
+
+        if(_Visuals != null)
+        {
+            _Visuals?.SetActive(true);
+        }
+    }
+
     public void Start()
     {
-        if(_Config._VisualElement != null)
+        if(_Config._VisualElement != null && _Visuals == null)
         {
-            Instantiate(_Config._VisualElement,this.transform);
+            _Visuals = Instantiate(_Config._VisualElement,this.transform);
         }
 
     }
@@ -88,7 +115,9 @@ public class ExpandingShockWave : MonoBehaviour
         {
             // step 4) agarramos el Collider correspondiente
 
-            Collider Hit = Cols[i];       
+            Collider Hit = Cols[i];
+
+            print(Hit.name);
 
             // tratamos de obtener el Idamageable
             if (Hit.TryGetComponent(out IDamageable IDamage))
@@ -105,6 +134,7 @@ public class ExpandingShockWave : MonoBehaviour
                 // else, procesamos el hit
                 if(IDamage.GetHealthComponent(out Health_Component HPComp) && HPComp != null && !IDamagedEntities.Contains(HPComp)) 
                 {
+                    print("Hit.name " + Context + " " + HPComp);
                     ProcessHit(Hit, IDamage, Context, HPComp);
                 }
             }
@@ -112,7 +142,33 @@ public class ExpandingShockWave : MonoBehaviour
 
         if(_CurrentRadius > _Config._MaxRadius)
         {
-            Destroy(this.gameObject);
+            this.enabled = false;
+            if(_Visuals != null)
+            {
+                _Visuals?.SetActive(false);
+            }
+        }
+
+        if(_Config._DamageResetTimer <= -1)
+        {
+            return;
+        }
+        ResetDamageTimer();
+
+    }
+
+    float _DamagePulse = 0;
+    private void ResetDamageTimer()
+    {
+        if(_DamagePulse <= _Config._DamageResetTimer)
+        {
+            _DamagePulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+        }
+        else
+        {
+            IDamagedEntities.Clear();
+            IDamagedColliders.Clear();
+            _DamagePulse = 0;
         }
 
     }
@@ -173,7 +229,7 @@ public class ExpandingShockWave : MonoBehaviour
         Vector3 pushDir = HPCOMP.transform.position - this.transform.position;
         pushDir.y = 0;
         pushDir.Normalize();
-        pushDir.y = 0.5f;
+        pushDir.y = _Config._KnockbackYStrenght;
 
         // Si existe la interfaz la usamos, sino usamos el componente directo
         if (IDamage != null)

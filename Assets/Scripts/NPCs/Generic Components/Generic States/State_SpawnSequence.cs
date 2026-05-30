@@ -69,8 +69,6 @@ public class State_SpawnSequence : BaseState
                 CTX.SetGlobalCondition(key.TransitionKey, key.TransitionValue);
             }
         }
-
-
         base.OnTick(CTX, TickRate);
     }
 

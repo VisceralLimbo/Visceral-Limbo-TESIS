@@ -18,18 +18,24 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] AnimatorHandler _AnimatorHandler;
     [SerializeField] DamageCollisionTrigger _KnockbackTrigger;
+    [SerializeField] ExpandingShockWave _Shockwave;
     [SerializeField] VFXPlayer _ButtSlamParticles;
 
     [Space]
 
-    [Header("Variables")]
+    [Header("Variables - first phase")]
     [SerializeField] float _JumpStrenght;
     [SerializeField] float _JumpDuration; // Nota: Esto no se usa actualmente en la lógica, solo el físico
     [SerializeField] bool _FinishedAttack;
 
     float _AirTimer;
     [SerializeField] float _MinAirTime = 0.2f;
+
     [Space]
+
+    [Header("Variables - first phase")]
+    [SerializeField] ShockwaveConfig _ShockwaveConfig;
+    [SerializeField] bool _SecondPhase;
 
 
     [Header("For Testing purposes")]
@@ -100,6 +106,8 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
         if (_MoveStrategy == null) _MoveStrategy = CTX.GetComponentInChildren<IMovementStrategy>();
         if (_Target == null) _Target = _Main_State.Target;
         if (_KCC == null) _KCC = CTX.GetComponentInChildren<KinematicCharacterMotor>();
+
+        _Main_State.HealthComp.OnSecondPhase += EnterSecondPhase;
     }
 
     [SerializeField] float _Windup;
@@ -172,7 +180,7 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
 
                         Vector3 Dir = playerHp.Context.PlayerTransform.position - _Model.transform.position;
                         Dir.Normalize(); 
-                        Dir.y = 0.7f;
+                        Dir.y = 0.1f;
 
                         playerHp.TakeDamageWithKnockback(Dir, AttackKnockback *2, DMScore);
 
@@ -180,8 +188,6 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
                     }
                 }
             }
-
-
 
             // Solo chequeamos si aterrizó si YA pasamos el tiempo mínimo de aire (_MinAirTime).
             // Esto evita que detecte el suelo en el mismo frame que saltó.
@@ -231,10 +237,27 @@ public class Corpus_ButtSlam : BaseState, IStateEnergyCost
 
         _AnimatorHandler.SetParameter("Corpus_Anim", "ButtSlamToIdle", AnimatorControllerParameterType.Trigger);
         if (_ButtSlamParticles != null) _ButtSlamParticles.PlayAllParticles();
+
+        if (_SecondPhase)
+        {
+            ShockwaveAttack();
+        }
         _FinishedAttack = true;
 
         stateMachine.SetGlobalCondition("Attack_ButtSlam", false);
         stateMachine.SetGlobalCondition(_Main_State.CheckDistanceForTransitions(), false);
+    }
+
+    private void ShockwaveAttack()
+    {
+        _Shockwave.PerformShockwave(_Main_State.playerContext.PlayerTransform.position);
+    }
+
+    private void EnterSecondPhase()
+    {
+        _SecondPhase = true;
+        _Main_State.HealthComp.OnSecondPhase -= EnterSecondPhase;
+        _Shockwave.Initialize(_ShockwaveConfig, _Main_State.playerContext, _Main_State.playerContext.PlayerTransform.position);
     }
 
 
