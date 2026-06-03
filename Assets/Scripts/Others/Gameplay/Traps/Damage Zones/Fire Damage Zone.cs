@@ -7,7 +7,8 @@ public class FireDamageZone : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] ParticleSystem[] _Particles;
-    [SerializeField] GameObject _RootObject;
+    [SerializeField] GameObject _Prefab;
+    public GameObject Prefab { get { return _Prefab; } }
     [SerializeField] VisualEffect[] _VisualEffects;
     [SerializeField] PlayerContext _Context;
 
@@ -55,6 +56,10 @@ public class FireDamageZone : MonoBehaviour
             {
                 IsPooled = false;
             }
+        }
+        else
+        {
+            IsPooled = true;
         }
         if(_Particles.Length <= 0)
         {

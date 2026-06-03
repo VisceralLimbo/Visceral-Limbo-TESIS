@@ -2,34 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using System;
 
 public class PoolObjectComponent : MonoBehaviour
 {
+    /// <summary>
+    /// La Funcion / Evento de liberacion del objeto al pool
+    /// </summary>
+    private Action _releaseAction;
+    private bool _isReturning = false; // evitamos recursividad de return
 
-    [Header("Setup")]
-    [SerializeField] IObjectPool<PoolObjectComponent> _MyPool;
-
-    public void Initialize(IObjectPool<PoolObjectComponent> NewPool)
+    // Inyectamos la funcion de liberacion
+    public void Initialize(Action releaseAction)
     {
-        _MyPool = NewPool;
+        _releaseAction = releaseAction;
     }
 
     public void ReleaseToPool()
     {
-        if(_MyPool != null )
+        // evitamos double return a pool
+        if (_isReturning) return;
+        _isReturning = true;
+
+        if (_releaseAction != null)
         {
-            _MyPool.Release(this);
+            _releaseAction.Invoke();
         }
         else
         {
             Destroy(this.gameObject);
         }
-
     }
 
     private void OnDisable()
     {
         ReleaseToPool();
     }
+
+    private void OnEnable()
+    {
+        _isReturning = false;
+    }
+
 
 }

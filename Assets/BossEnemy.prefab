@@ -265,15 +265,23 @@ MonoBehaviour:
   _MinStateLifetime: 0
   TransitionKey: Attack_Tackle
   EnergyCost: 3
-  TimingDuration: 1
+  TimingDuration: 2.5
   CanExit: 0
   _MainState: {fileID: 4965782652354847623}
   _Target: {fileID: 0}
   _Col: {fileID: 6775764482594893343}
   _AnimatorHandler: {fileID: 107750596267011980}
   _PlayerContext: {fileID: 4503892774817222897}
+  _FireObjPrefab: {fileID: 8585257615906328968, guid: 49d649ce73cdefd4e866864052497831,
+    type: 3}
   _LockAngle: 0
   _TackleSpeed: 15
+  _SecondPhase: 0
+  _DelayBetweenFires: 0.3
+  _FireDuration: 5
+  _FireMask:
+    serializedVersion: 2
+    m_Bits: 1048577
   pulse: 0
   OnTackleStart:
     m_PersistentCalls:
@@ -1160,7 +1168,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 64
     _DamageCheck: 0
-    _ExpansionSpeed: 5
+    _ExpansionSpeed: 30
     _MaxRadius: 60
     _Damage: 30
     _Knockback: 20
@@ -1498,7 +1506,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 64
     _DamageCheck: 0
-    _ExpansionSpeed: 5
+    _ExpansionSpeed: 30
     _MaxRadius: 60
     _Damage: 30
     _Knockback: 20
