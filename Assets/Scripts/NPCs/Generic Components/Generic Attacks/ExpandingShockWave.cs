@@ -65,7 +65,6 @@ public class ExpandingShockWave : MonoBehaviour
 
     public void PerformShockwave(Vector3 StartingPosition)
     {
-        print("Performing Shockwave");
         _CurrentRadius = 0f;
 
         this.transform.position = StartingPosition;
@@ -134,7 +133,7 @@ public class ExpandingShockWave : MonoBehaviour
                 // else, procesamos el hit
                 if(IDamage.GetHealthComponent(out Health_Component HPComp) && HPComp != null && !IDamagedEntities.Contains(HPComp)) 
                 {
-                    print("Hit.name " + Context + " " + HPComp);
+                   
                     ProcessHit(Hit, IDamage, Context, HPComp);
                 }
             }

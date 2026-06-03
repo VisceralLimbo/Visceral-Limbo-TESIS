@@ -191,15 +191,15 @@ MonoBehaviour:
   _Target: {fileID: 0}
   TransitionKey: Attack_Melee1
   EnergyCost: 2
-  TimingDuration: 0.08
-  AttackWindow: 0
+  TimingDuration: 0.53
+  AttackWindow: 0.5
   CanExit: 0
   _KnockbackValue: 30
-  attackradius: 3
+  attackradius: 5
   AttackDamage: 30
   _Mask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 17601
   DrawWireframe: 0
   _Model: {fileID: 5871233309053035945}
 --- !u!1 &4354382155185038462
@@ -923,11 +923,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stateMachine: {fileID: 1804251351171486122}
+  _HealthComp: {fileID: 4341898696971776908}
   _target: {fileID: 0}
   _anim: {fileID: 107750596267011980}
   _playerContext: {fileID: 4503892774817222897}
-  _HealthComp: {fileID: 4341898696971776908}
-  _minimumAttackRange: 6
+  _minimumAttackRange: 9
   _energy: 0
   _maxEnergy: 6
   _energyRefillRate: 1
@@ -1089,6 +1089,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6007973441911166267}
   - component: {fileID: 4104683179676223321}
+  - component: {fileID: 2334268553043871679}
   m_Layer: 7
   m_Name: attack - ButtSlam
   m_TagString: Untagged
@@ -1147,14 +1148,30 @@ MonoBehaviour:
   _KCC: {fileID: 5480121978322433914}
   _AnimatorHandler: {fileID: 107750596267011980}
   _KnockbackTrigger: {fileID: 2696773006517339164}
+  _Shockwave: {fileID: 1109308277205906608}
   _ButtSlamParticles: {fileID: 5192470303283363074}
   _JumpStrenght: 15
   _JumpDuration: 2
   _FinishedAttack: 0
   _MinAirTime: 0.2
+  _ShockwaveConfig:
+    _WaveThickness: 2
+    _DamageMask:
+      serializedVersion: 2
+      m_Bits: 64
+    _DamageCheck: 0
+    _ExpansionSpeed: 5
+    _MaxRadius: 60
+    _Damage: 30
+    _Knockback: 20
+    _DamageResetTimer: 2
+    _KnockbackYStrenght: 2
+    _ExpandOnY: 0
+    _VisualElement: {fileID: 0}
+  _SecondPhase: 0
   attackradius: 6
   AttackDamage: 50
-  AttackKnockback: 6
+  AttackKnockback: 12
   DrawWireframe: 1
   _Model: {fileID: 5871233309053035945}
   hits: []
@@ -1162,6 +1179,36 @@ MonoBehaviour:
   _Windup: 0.2
   _WindupPulse: 0
   _ExecutingAttack: 0
+--- !u!114 &2334268553043871679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5449153354456122023}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be8789af84c947418e435027fd17424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Config:
+    _WaveThickness: 3
+    _DamageMask:
+      serializedVersion: 2
+      m_Bits: 192
+    _DamageCheck: 0
+    _ExpansionSpeed: 5
+    _MaxRadius: 50
+    _Damage: 30
+    _Knockback: 30
+    _DamageResetTimer: 3
+    _KnockbackYStrenght: 1
+    _ExpandOnY: 0
+    _VisualElement: {fileID: 0}
+  _OwnerContext: {fileID: 4503892774817222897}
+  _Visuals: {fileID: 0}
+  _CurrentRadius: 0
+  DrawGizmos: 1
 --- !u!1 &6548380599138473957
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,15 +1276,15 @@ MonoBehaviour:
   _Target: {fileID: 0}
   TransitionKey: Attack_Melee2
   EnergyCost: 2
-  TimingDuration: 0.08
-  AttackWindow: 0
+  TimingDuration: 0.53
+  AttackWindow: 0.5
   CanExit: 0
-  _KnockbackValue: 50
-  attackradius: 2
+  _KnockbackValue: 30
+  attackradius: 5
   AttackDamage: 20
   _Mask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 17601
   DrawWireframe: 0
   _Model: {fileID: 5871233309053035945}
 --- !u!1 &7195207331811232290
@@ -1380,6 +1427,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3193149568987953089}
   - component: {fileID: 4896723854202604527}
+  - component: {fileID: 1109308277205906608}
   m_Layer: 7
   m_Name: attack - ButtSlam Range
   m_TagString: Untagged
@@ -1438,14 +1486,30 @@ MonoBehaviour:
   _KCC: {fileID: 5480121978322433914}
   _AnimatorHandler: {fileID: 107750596267011980}
   _KnockbackTrigger: {fileID: 2696773006517339164}
+  _Shockwave: {fileID: 1109308277205906608}
   _ButtSlamParticles: {fileID: 5192470303283363074}
   _JumpStrenght: 15
   _JumpDuration: 2
   _FinishedAttack: 0
   _MinAirTime: 0.2
+  _ShockwaveConfig:
+    _WaveThickness: 2
+    _DamageMask:
+      serializedVersion: 2
+      m_Bits: 64
+    _DamageCheck: 0
+    _ExpansionSpeed: 5
+    _MaxRadius: 60
+    _Damage: 30
+    _Knockback: 20
+    _DamageResetTimer: 2
+    _KnockbackYStrenght: 2
+    _ExpandOnY: 0
+    _VisualElement: {fileID: 0}
+  _SecondPhase: 0
   attackradius: 6
   AttackDamage: 50
-  AttackKnockback: 6
+  AttackKnockback: 12
   DrawWireframe: 1
   _Model: {fileID: 5871233309053035945}
   hits: []
@@ -1453,6 +1517,36 @@ MonoBehaviour:
   _Windup: 0.2
   _WindupPulse: 0
   _ExecutingAttack: 0
+--- !u!114 &1109308277205906608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8018752445279937858}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be8789af84c947418e435027fd17424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Config:
+    _WaveThickness: 3
+    _DamageMask:
+      serializedVersion: 2
+      m_Bits: 192
+    _DamageCheck: 0
+    _ExpansionSpeed: 5
+    _MaxRadius: 50
+    _Damage: 30
+    _Knockback: 30
+    _DamageResetTimer: 3
+    _KnockbackYStrenght: 1
+    _ExpandOnY: 0
+    _VisualElement: {fileID: 0}
+  _OwnerContext: {fileID: 4503892774817222897}
+  _Visuals: {fileID: 0}
+  _CurrentRadius: 0
+  DrawGizmos: 1
 --- !u!1 &8218591002988278101
 GameObject:
   m_ObjectHideFlags: 0
