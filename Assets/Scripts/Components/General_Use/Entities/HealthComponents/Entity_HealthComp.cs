@@ -30,7 +30,7 @@ public class Entity_HealthComp : Health_Component
         base.TakeDamageWithKnockback(Direction, knockback, DamageDT);
     }
 
-    protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
+    protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore? Score)
     {
         CurrentHealth -= damage;
 

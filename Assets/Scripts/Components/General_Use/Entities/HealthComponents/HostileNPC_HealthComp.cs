@@ -44,7 +44,7 @@ public class HostileNPC_HealthComp : Health_Component, IDamageable
         base.TakeDamageWithKnockback(Direction, knockback, DamageDT);
     }
 
-    protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
+    protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore? Score)
     {
         base.InternalDamage(damage, KnockbarDir, force, Score);
     }
