@@ -9,6 +9,8 @@ public class Corpus_Controller : MonoBehaviour
     [Header("Referencias")]
     [Tooltip("Referencia a la máquina de estados que este cerebro va a controlar")]
     [SerializeField] private VisceralStateMachine _stateMachine;
+    [SerializeField] private Boss_HealthComp _HealthComp;
+    public Boss_HealthComp HealthComp { get { return _HealthComp; } }
     [SerializeField] private Transform _target;
     public Transform Target { get { return _target; } }
 
@@ -34,7 +36,6 @@ public class Corpus_Controller : MonoBehaviour
 
     [SerializeField] private AnimatorHandler _anim;
     [SerializeField] private PlayerContext _playerContext;
-    [SerializeField] private Boss_HealthComp _HealthComp;
     public PlayerContext playerContext { get { return _playerContext; } }
 
     [Header("Variables de Combate")]

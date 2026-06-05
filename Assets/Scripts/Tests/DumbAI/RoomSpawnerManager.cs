@@ -54,6 +54,9 @@ public class RoomSpawnerManager : MonoBehaviour
     [Header("Enemy List")]
     private List<GameObject> _activeEnemies = new List<GameObject>();
 
+    private bool isSpawningWave;
+    private bool combatEnding;
+    private Coroutine lightsCoroutine;
     public static RoomSpawnerManager SalaActiva { get; private set; }
 
     private void Awake()
@@ -126,14 +129,18 @@ public class RoomSpawnerManager : MonoBehaviour
         //remuevo cualquiera muerto o nulo de la lista
         _activeEnemies.RemoveAll(e => e == null);
 
+        foreach (var spawner in Spawners)
+        {
+            spawner.MarkSpentIfEmpty();
+        }
+
         MinionsAlive = Spawners.Any(x => x.HasMinion);
         SpawnersSpent = Spawners.All(x => x.IsSpent);
 
         // no hay minions vivos pero todavía quedan spawners = spawnear otra oleada
-        if (!MinionsAlive && !SpawnersSpent)
+        if (!MinionsAlive && !SpawnersSpent && !isSpawningWave)
         {
             bool nextWaveWillBeLast = Spawners.All(s => s.RemainingSpawns <= 1);
-
 
             if (nextWaveWillBeLast && !lightsChanged)
             {
@@ -153,56 +160,17 @@ public class RoomSpawnerManager : MonoBehaviour
                 item.SetSolidState(false);
                 item.SetCombatState(true);
             }
+            return;
         }
 
         // no hay minions y no quedan spawners = combate terminado
         if (!MinionsAlive && SpawnersSpent)
         {
-            if(roomTriggers.Count > 0)
-            {
-                foreach (var item in roomTriggers)
-                {
-                    item.SetSolidState(true);
-                    item.SetCombatState(false);
-                }
+            if (combatEnding) return;
 
-            }
-
-            StopThisManager = true;
-
-            foreach (var trap in trapsInThisRoom)
-            {
-                trap.DeactivateTrap();
-            }
-
-            //audioSource.Play();
-            SoundManager.Instance.CreateSound().WithSoundData(_FinishWaveSound).play();
-
-
-            ChangeLightsToEndWave();
-
-            /* if (ScoreManager.Instance.GetPlayerScore >= (_StartingCombatScore + _AddExtraRequiredScore))
-             {
-                 if(_reward != null)
-                 {
-                     Instantiate(_reward, _spawnPointReward.transform.position, _spawnPointReward.transform.rotation);
-                 }
-
-                 SoundManager.Instance.CreateSound()
-                     .WithSoundData(_rewardSound)
-                     .WithRandomPitch(true)
-                     .WithPosition(_spawnPointReward.position)
-                     .WithSpatialBlend(1).play();
-             }*/
-
-            //sumamos el score del jugador obtenido en combate como moneda.
-            //BloodEchoesManager.AddBloodEchoes(ScoreManager.Instance.GetCurrentPlayerScore);
-
-            DialogueManager.instance.StartDialogue(_finishCombatDialogue);
-
-            MusicManager.Instance?.PlayExplorationMusic();
-            OnCombatEnded?.Invoke();
-            print("end wave");
+            combatEnding = true;
+            StartCoroutine(EndCombatSequence());
+            return;
         }
 
     }
@@ -230,8 +198,12 @@ public class RoomSpawnerManager : MonoBehaviour
     {
         if (combatLights == null || combatLights.Count == 0) return;
 
-        StopAllCoroutines(); // paramos cualquier transición previa
-        StartCoroutine(TransitionLightsColor(targetColor, duration));
+        if (lightsCoroutine != null)
+        {
+            StopCoroutine(lightsCoroutine);
+        }
+
+        lightsCoroutine = StartCoroutine(TransitionLightsColor(targetColor, duration));
     }
 
     private IEnumerator TransitionLightsColor(Color targetColor, float duration)
@@ -298,32 +270,49 @@ public class RoomSpawnerManager : MonoBehaviour
         }
     }
 
-   IEnumerator SpawnCoroutine()
-{
-    foreach (var item in Spawners)
+    IEnumerator SpawnCoroutine()
     {
-        yield return StartCoroutine(item.SpawnEnemyWithVFX((newEnemy) =>
+        isSpawningWave = true;
+
+        foreach (var item in Spawners)
         {
-            if (newEnemy != null)
+            if (item == null) continue;
+
+            if (!item.CanSpawnMore())
             {
-                _activeEnemies.Add(newEnemy);
-                ApplyEffectToNewEnemy(newEnemy);
+                item.MarkSpentIfEmpty();
+                continue;
             }
-        }));
 
-        SoundManager.Instance.CreateSound()
-            .WithSoundData(_spawnSound)
-            .WithPosition(item.transform.position)
-            .WithRandomPitch(true)
-            .WithSpatialBlend(1,_spawnSound.MinimunSoundDistance,_spawnSound.MaximunSoundDistance)
-            .play();
+            yield return StartCoroutine(item.SpawnEnemyWithVFX((newEnemy) =>
+            {
+                if (newEnemy != null)
+                {
+                    _activeEnemies.Add(newEnemy);
+                    ApplyEffectToNewEnemy(newEnemy);
+                }
+            }));
 
-        if (_ShouldOffsetSpawnTime)
-        {
-            yield return new WaitForSeconds(_OffsetSpawnTime);
+            if (!item.IsSpent)
+            {
+                SoundManager.Instance.CreateSound()
+                    .WithSoundData(_spawnSound)
+                    .WithPosition(item.transform.position)
+                    .WithRandomPitch(true)
+                    .WithSpatialBlend(1, _spawnSound.MinimunSoundDistance, _spawnSound.MaximunSoundDistance)
+                    .play();
+            }
+
+            if (_ShouldOffsetSpawnTime)
+            {
+                yield return new WaitForSeconds(_OffsetSpawnTime);
+            }
         }
+
+        isSpawningWave = false;
+
+        NotifyMinionDeath();
     }
-}
 
     public enum EnvironmentalEffect
     {
@@ -398,5 +387,49 @@ public class RoomSpawnerManager : MonoBehaviour
                 effectManager.ApplyActiveEffectToTarget(enemy);
             }
         }
+    }
+    public void StartFirstWave()
+    {
+        NotifyMinionDeath();
+    }
+
+    private void EndCombat()
+    {
+        foreach (var item in roomTriggers)
+        {
+            if (item == null) continue;
+            item.SetSolidState(true);
+            item.SetCombatState(false);
+        }
+
+        StopThisManager = true;
+
+        foreach (var trap in trapsInThisRoom)
+        {
+            trap.DeactivateTrap();
+        }
+
+        SoundManager.Instance.CreateSound()
+            .WithSoundData(_FinishWaveSound)
+            .play();
+
+        ChangeLightsToEndWave();
+
+        DialogueManager.instance.StartDialogue(_finishCombatDialogue);
+
+        MusicManager.Instance?.PlayExplorationMusic();
+        OnCombatEnded?.Invoke();
+
+        print("end wave");
+    }
+
+    private IEnumerator EndCombatSequence()
+    {
+        SlowMotion.Stop(1f, 0.15f, true);
+        FindObjectOfType<SlowMotionController>()?.ApplyEffect(1f, 0.6f);
+
+        yield return new WaitForSecondsRealtime(0.6f);
+
+        EndCombat();
     }
 }

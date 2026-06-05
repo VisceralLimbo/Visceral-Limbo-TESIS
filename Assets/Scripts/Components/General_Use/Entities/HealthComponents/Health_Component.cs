@@ -274,11 +274,26 @@ public class Health_Component : Visceral_Component, IDamageable
         TakeDamage(DamageDT);
     }
 
+    bool IDamageable.GetPlayerContext(out PlayerContext playerContext)
+    {
+        if(Context != null)
+        {
+            playerContext = Context;
+            return true;
+        }
+        else
+        {
+            playerContext = null;
+            return false;
+        }
+    }
+
     public bool GetHealthComponent(out Health_Component HPComp)
     {
 
         HPComp = this;
         return true;
     }
+
 
 }

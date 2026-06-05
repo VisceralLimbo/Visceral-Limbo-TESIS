@@ -21,6 +21,14 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
     [SerializeField] SoundEmitter _SoundEmit;
     [SerializeField] LayerMask _AttackMask;
+
+    //private HashSet<Collider> TaggedColliders = new HashSet<Collider>(); VIEJO
+    //private HashSet<Health_Component> TaggedHealth = new HashSet<Health_Component>(); VIEJO
+
+    [SerializeField] private float hitCooldownPerEnemy = 0.5f; //NUEVO
+
+    private Dictionary<Health_Component, float> lastHitTime = new Dictionary<Health_Component, float>(); // NUEVO
+
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
     {
         base.Initialize(data, Skmanager, UserContext);
@@ -53,13 +61,12 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         StartCoroutine(LockSkill());
     }
 
-
-    private HashSet<Collider> TaggedColliders = new HashSet<Collider>();
-    private HashSet<Health_Component> TaggedHealth = new HashSet<Health_Component>();
     IEnumerator LockSkill()
     {
-        TaggedColliders.Clear();
-        TaggedHealth.Clear();
+        //TaggedColliders.Clear(); //VIEJO
+        //TaggedHealth.Clear(); // VIEJO
+
+        lastHitTime.Clear(); //NUEVO
 
         float timer = 0;
      
@@ -91,13 +98,14 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
     private void ProcessHit(Collider other)
     {
         if (other.gameObject == _UserContext.PlayerGameObject) return;
-        if (TaggedColliders.Contains(other)) return;
+        //if (TaggedColliders.Contains(other)) return; //VIEJO
 
 
         // priorizamos el Idamageable
         if(other.TryGetComponent(out IDamageable Idamage))
         {
-            if(Idamage.GetHealthComponent(out Health_Component IHealth) && !TaggedHealth.Contains(IHealth))
+            //if(Idamage.GetHealthComponent(out Health_Component IHealth) && !TaggedHealth.Contains(IHealth))//VIEJO
+            if (Idamage.GetHealthComponent(out Health_Component IHealth) && CanHitHealth(IHealth)) //NUEVO
             {
                 // stopgap ! player ataco algo sin Context
                 if(IHealth.Context == null)
@@ -109,8 +117,8 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
                 if(IHealth.Context != null && IHealth.Context != _Context )
                 {
-                    TaggedColliders.Add(other);
-                    TaggedHealth.Add(IHealth);
+                    //TaggedColliders.Add(other); //VIEJO
+                    //TaggedHealth.Add(IHealth); //VIEJO
 
                     Vector3 Dir = IHealth.Context.PlayerTransform.position - _Context.PlayerTransform.position;
                     Dir.y = 0;
@@ -127,7 +135,6 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
                     DamageDT.AddTag(ScoreFlags.Skill1Kill);
 
                     PlayerEvents.PlayerSucessfulHit();
-                  
                     IHealth.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
                     SlowMotion.Stop(0.1f, 0.02f, false);
                 }
@@ -149,8 +156,10 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
             if (HPComp.Context != _Context)
             {
-                TaggedColliders.Add(other);
-                TaggedHealth.Add(HPComp);
+                if (!CanHitHealth(HPComp)) return; //NUEVO
+
+                //TaggedColliders.Add(other); //VIEJO
+                //TaggedHealth.Add(HPComp); //VIEJO
 
                 Vector3 Dir = HPComp.Context.PlayerTransform.position - _Context.PlayerTransform.position;
                 Dir.y = 0;
@@ -184,5 +193,18 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
         }
     }
 
+    //NUEVO METODO
+    private bool CanHitHealth(Health_Component health)
+    {
+        if (health == null) return false;
 
+        if (lastHitTime.TryGetValue(health, out float lastTime))
+        {
+            if (Time.time - lastTime < hitCooldownPerEnemy)
+                return false;
+        }
+
+        lastHitTime[health] = Time.time;
+        return true;
+    }
 }

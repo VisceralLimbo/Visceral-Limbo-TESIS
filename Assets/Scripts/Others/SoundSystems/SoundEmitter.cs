@@ -85,13 +85,14 @@ public class SoundEmitter : MonoBehaviour
         _audioSource.spatialBlend = Data.SpatialBlend;
         _audioSource.minDistance = Data.MinimunSoundDistance;
         _audioSource.maxDistance= Data.MaximunSoundDistance;
-
+        // reseteo pitch para reutilizar
+        _audioSource.pitch = 1f;
     }
 
 
     public void RandomizePitch(float min = -0.05f,float max = 0.05f)
     {
-        _audioSource.pitch += Random.Range(min, max);
+        _audioSource.pitch = 1f + Random.Range(min, max);
     }
 
     public void OnSpatialBlended(float blended,float minimum,float maximum)

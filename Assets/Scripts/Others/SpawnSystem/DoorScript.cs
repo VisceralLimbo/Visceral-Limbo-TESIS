@@ -401,6 +401,18 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
     private void StartCombat(PlayerContext PContext)
     {
+        _LockDoor = true;
+        PlayerEnteredRoom = true;
+
+        ForceDoorClosed();
+
+        // cancelo el movimiento un toque para evitar q se dashee afuera // puede q este al pedo pero tengo q seguir testeando
+        var movement = PContext.GetComponentInChildren<Player_Movement>();
+        if (movement != null)
+        {
+            StartCoroutine(BrieflyLockPlayer(movement));
+        }
+
         _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, false);
         _AnimHandler.SetParameter("DoorAnim", "AbrirAdentro", AnimatorControllerParameterType.Bool, false);
 
@@ -408,22 +420,26 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
 
         roomSpawnerManager.AssignPlayerContext(PContext);
         roomSpawnerManager.StartRoomCombat();
-        roomSpawnerManager.NotifyMinionDeath();
+        roomSpawnerManager.StartFirstWave();
 
-        _LockDoor = true;
-        PlayerEnteredRoom = true; // Importante marcar esto para que no vuelva a triggerear
-
-        SoundManager.Instance.CreateSound().WithSoundData(_SoundCloseDoor).WithRandomPitch(true).WithPosition(this.transform.position).play();
+        SoundManager.Instance.CreateSound()
+            .WithSoundData(_SoundCloseDoor)
+            .WithRandomPitch(true)
+            .WithPosition(transform.position)
+            .play();
     }
 
 
     IEnumerator DoorCollision()
     {
+        // bloquea desde el frame 0
+        _StopperCol.isTrigger = false;
+
         _Col.enabled = false;
         _Col.isTrigger = true;
 
         _StopperCol.isTrigger = false;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSecondsRealtime(1.5f);
 
        
         _Col.enabled = true;
@@ -555,4 +571,31 @@ public class DoorScript : MonoBehaviour, IRaycastInteractable
             }
         }
     }
+
+    private IEnumerator BrieflyLockPlayer(Player_Movement movement)
+    {
+        movement.LockMovementImmediate();
+        yield return new WaitForSecondsRealtime(0.25f);
+        movement.UnlockMovement();
+    }
+
+    private void ForceDoorClosed()
+    {
+        _AnimHandler.SetParameter("DoorAnim", "Abrir", AnimatorControllerParameterType.Bool, false);
+        _AnimHandler.SetParameter("DoorAnim", "AbrirAdentro", AnimatorControllerParameterType.Bool, false);
+
+        Animator animator = GetComponentInChildren<Animator>();
+        if (animator != null)
+        {
+            animator.Play("Close", 0, 0f);
+            animator.Update(0f);
+        }
+
+        _Col.enabled = true;
+        _Col.isTrigger = false;
+
+        _StopperCol.enabled = true;
+        _StopperCol.isTrigger = false;
+    }
+
 }

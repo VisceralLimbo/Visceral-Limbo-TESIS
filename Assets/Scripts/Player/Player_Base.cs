@@ -40,15 +40,21 @@ public class Player_Base : Visceral_Script
     [SerializeField] private RectTransform _uiElementToMove;
     [SerializeField] private float moveAmount;
     [SerializeField] private float moveSpeed = 5f;
-    private Vector2 _originalUIPosition;
     private bool _isTabPressed;
     [SerializeField] private float moveAmountRight;
 
     [SerializeField] private RectTransform uiElementToMoveRight1;
     [SerializeField] private RectTransform uiElementToMoveRight2;
 
-    private Vector2 _originalUIRight1Pos;
-    private Vector2 _originalUIRight2Pos;
+    [Header("UI Positions")]
+    [SerializeField] private Vector2 leftClosedPosition;
+    [SerializeField] private Vector2 leftOpenPosition;
+
+    [SerializeField] private Vector2 right1ClosedPosition;
+    [SerializeField] private Vector2 right1OpenPosition;
+
+    [SerializeField] private Vector2 right2ClosedPosition;
+    [SerializeField] private Vector2 right2OpenPosition;
 
     private bool previousTabState = false;
     [SerializeField] SoundData _uiTabSound;
@@ -88,16 +94,7 @@ public class Player_Base : Visceral_Script
         DialogueManager.instance.OnDialogueStart += DialogueStart;
         DialogueManager.instance.OnDialogueEnd += DialogueEnd;
 
-        if (uiElementToMoveRight1 != null && uiElementToMoveRight2 != null && _uiElementToMove != null)
-        {
-            _originalUIPosition = _uiElementToMove.anchoredPosition;
-
-            _originalUIRight1Pos = uiElementToMoveRight1.anchoredPosition;
-
-
-            _originalUIRight2Pos = uiElementToMoveRight2.anchoredPosition;
-
-        }
+       
 
         DungeonGenerator Generator = FindObjectOfType<DungeonGenerator>();
         if (Generator != null)
@@ -115,7 +112,6 @@ public class Player_Base : Visceral_Script
 
     private void Update()
     {
-     
         if (!IsAlive || !IsPlayerActive) return;
 
         // 1. OBTENER LOS DATOS DEL HANDLER (Usando tu Singleton)
@@ -198,8 +194,8 @@ public class Player_Base : Visceral_Script
         if (_uiElementToMove != null)
         {
             Vector2 targetPosition = _isTabPressed
-                ? _originalUIPosition + Vector2.left * moveAmount
-                : _originalUIPosition;
+                ? leftOpenPosition
+                : leftClosedPosition;
 
             _uiElementToMove.anchoredPosition = Vector2.Lerp(
                 _uiElementToMove.anchoredPosition,
@@ -211,8 +207,8 @@ public class Player_Base : Visceral_Script
         if (uiElementToMoveRight1 != null)
         {
             Vector2 targetPos1 = _isTabPressed
-                ? _originalUIRight1Pos + Vector2.right * moveAmountRight
-                : _originalUIRight1Pos;
+                ? right1OpenPosition
+                : right1ClosedPosition;
 
             uiElementToMoveRight1.anchoredPosition = Vector2.Lerp(
                 uiElementToMoveRight1.anchoredPosition,
@@ -224,8 +220,8 @@ public class Player_Base : Visceral_Script
         if (uiElementToMoveRight2 != null)
         {
             Vector2 targetPos2 = _isTabPressed
-                ? _originalUIRight2Pos + Vector2.right * moveAmountRight
-                : _originalUIRight2Pos;
+                ? right2OpenPosition
+                : right2ClosedPosition;
 
             uiElementToMoveRight2.anchoredPosition = Vector2.Lerp(
                 uiElementToMoveRight2.anchoredPosition,
@@ -304,6 +300,15 @@ public class Player_Base : Visceral_Script
     public void SetSkillActiveState(bool state)
     {
         IsSkillActive = state;
+    }
+
+    public void StopWalkSound()
+    {
+        if (currentWalkSound != null && currentWalkSound.gameObject.activeInHierarchy)
+        {
+            currentWalkSound.Stop();
+            currentWalkSound = null;
+        }
     }
 
     public void SetPlayerActive() => IsPlayerActive = true;

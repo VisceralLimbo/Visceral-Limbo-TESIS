@@ -8,7 +8,9 @@ public class PauseMenu : MonoBehaviour
     private bool isPaused = false;
     [SerializeField] private Player_Base playerBase; // ref al player base para traer el _Player_InputActions (no lo tienen en la jerarquia, lo llaman en playerbase entonces tuve que hacer esto xd)
     [SerializeField] private PauseMenuUI _pauseMenuUI;
+    [SerializeField] private GameObject firstSelectedButton;
     public GameObject description;
+    [SerializeField] private DungeonGenerator dungeonGenerator;
 
     [SerializeField] SoundData _ClickSound;
 
@@ -25,6 +27,14 @@ public class PauseMenu : MonoBehaviour
         // chequeo escape
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
+
+            // eveitar pausa si esta generando
+            if (dungeonGenerator != null &&
+                !dungeonGenerator.HasFinishedGeneration())
+            {
+                return;
+            }
+
             TutorialController.Instance?.OnInventoryOpened();
             // si estaba pausado o nop
             if (!isPaused)
@@ -62,6 +72,12 @@ public class PauseMenu : MonoBehaviour
         if (playerBase != null)
         {
             playerBase._Player_InputActions.Gameplay.Disable();
+        }
+
+        // pausa q inice con boton seleccionado
+        if (firstSelectedButton != null)
+        {
+            EventSystem.current.SetSelectedGameObject(firstSelectedButton);
         }
     }
 

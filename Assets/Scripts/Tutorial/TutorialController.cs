@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialController : MonoBehaviour
 {
@@ -13,10 +14,6 @@ public class TutorialController : MonoBehaviour
     private bool inventoryOpened;
     private bool inItemsTab;
     private bool hoveredItem;
-
-    [Header("Tutorial Finish")]
-    [SerializeField] private Player_Movement playerMovement;
-    [SerializeField] private Transform normalSpawn;
 
     private void Awake()
     {
@@ -174,10 +171,6 @@ public class TutorialController : MonoBehaviour
 
         TutorialManager.MarkTutorialAsSeen();
 
-        playerMovement.SetCharacterPosition(normalSpawn.position);
-
-        yield return new WaitForSeconds(0.2f);
-
-        yield return StartCoroutine(ScreenFader.Instance.FadeIn());
+        SceneManager.LoadScene("Proc Gen Scene");
     }
 }

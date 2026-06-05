@@ -17,15 +17,13 @@ public class TutorialUI : MonoBehaviour
 
     void Start()
     {
-        tutorialCanvas.SetActive(false);
-        if (DungeonGenerator.Instance != null)
-        {
-            DungeonGenerator.Instance.OnSuccessfulGeneration += ShowTutorial;
-        }
-        else
-        {
-            Debug.LogError("DungeonGenerator sigue siendo NULL en Start");
-        }
+        tutorialCanvas.SetActive(true);
+
+        manager.EnableTutorial();
+
+        rect.anchoredPosition = new Vector2(-300, rect.anchoredPosition.y);
+
+        StartCoroutine(AnimateIn());
     }
 
     void Update()
@@ -56,27 +54,12 @@ public class TutorialUI : MonoBehaviour
             return $"<color=#888888>[ ] {task}</color>";
     }
 
-    void ShowTutorial()
-    {
-        if (TutorialManager.HasSeenTutorial())
-            return;
-
-        tutorialCanvas.SetActive(true);
-        manager.EnableTutorial();
-
-        // arranca fuera de pantalla
-        rect.anchoredPosition = new Vector2(-300, rect.anchoredPosition.y);
-
-        StartCoroutine(AnimateIn());
-    }
-
     IEnumerator HideRoutine()
     {
         yield return new WaitForSeconds(0.8f);
 
         yield return AnimateOut();
 
-        TutorialManager.MarkTutorialAsSeen();
         tutorialCanvas.SetActive(false);
     }
 
@@ -117,20 +100,4 @@ public class TutorialUI : MonoBehaviour
 
         rect.anchoredPosition = end;
     }
-
-    void OnEnable()
-    {
-        {
-            if (DungeonGenerator.Instance != null)
-                DungeonGenerator.Instance.OnSuccessfulGeneration += ShowTutorial;
-        }
-    }
-    void OnDestroy()
-    {
-        if (DungeonGenerator.Instance != null)
-        {
-            DungeonGenerator.Instance.OnSuccessfulGeneration -= ShowTutorial;
-        }
-    }
-
 }

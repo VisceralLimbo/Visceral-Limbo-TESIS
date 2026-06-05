@@ -2284,7 +2284,8 @@ MonoBehaviour:
   - {fileID: 8712699911459687716}
   - {fileID: 4563711927287464760}
   - {fileID: 8187994637040587182}
-  _StartingState: {fileID: 7930172695561420689}
+  - {fileID: 8915480453591296344}
+  _StartingState: {fileID: 8915480453591296344}
   _CurrentState: {fileID: 0}
   _LastState: {fileID: 0}
   Conditions:
@@ -2297,6 +2298,8 @@ MonoBehaviour:
   - ConditionName: BiteMelee
     Value: 0
     IsResetAfterSwitch: 1
+  _AnyTransitionState: []
+  _PrioritizeAnyTransitions: 0
   _HPComp: {fileID: 1817444877513855909}
 --- !u!114 &4654570009590822600
 MonoBehaviour:
@@ -3204,6 +3207,7 @@ Transform:
   - {fileID: 3376497035797695434}
   - {fileID: 3514927230207140960}
   - {fileID: 1874680785847740182}
+  - {fileID: 732970014633044208}
   m_Father: {fileID: 4091262336931204975}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5600984027496406869
@@ -3831,6 +3835,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7371485013600384264}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7001895634958865110
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 732970014633044208}
+  - component: {fileID: 8915480453591296344}
+  m_Layer: 7
+  m_Name: State - Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &732970014633044208
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7001895634958865110}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8493371771134585519}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8915480453591296344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7001895634958865110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1cc6469e45768429686aa24d5e7832, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
+  Mytransitions:
+  - conditions: []
+    _FromGO: {fileID: 7001895634958865110}
+    _ToGO: {fileID: 3593838866995410337}
+    _ShouldTransitionWithNoConditions: 1
+  _MinStateLifetime: 0
+  _Timer: 1.5
+  _Pulse: 0
+  _TransitionKeys:
+  - TransitionKey: 
+    TransitionValue: 0
+  _CanTransition: 0
 --- !u!1 &7032516549157426615
 GameObject:
   m_ObjectHideFlags: 0

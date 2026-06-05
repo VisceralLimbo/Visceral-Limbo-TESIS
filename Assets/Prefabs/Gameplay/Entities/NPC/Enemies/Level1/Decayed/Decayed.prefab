@@ -31,6 +31,7 @@ Transform:
   m_Children:
   - {fileID: 1526434022689666370}
   - {fileID: 1524265506600217876}
+  - {fileID: 1199708590460727974}
   m_Father: {fileID: 395486412890734126}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1094546387155140947
@@ -5096,7 +5097,8 @@ MonoBehaviour:
   _States:
   - {fileID: 8369587007972144004}
   - {fileID: 9146965356403695512}
-  _StartingState: {fileID: 8369587007972144004}
+  - {fileID: 3045721523414889888}
+  _StartingState: {fileID: 3045721523414889888}
   _CurrentState: {fileID: 0}
   _LastState: {fileID: 0}
   Conditions:
@@ -5106,6 +5108,8 @@ MonoBehaviour:
   - ConditionName: Attack
     Value: 0
     IsResetAfterSwitch: 1
+  _AnyTransitionState: []
+  _PrioritizeAnyTransitions: 0
   _HPComp: {fileID: 8353474706175351458}
 --- !u!114 &7768544437872115800
 MonoBehaviour:
@@ -5157,6 +5161,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockData: {fileID: 11400000, guid: 7715ee596cb37e846bf1e36eae99587e, type: 2}
   FloatStatList: []
+--- !u!1 &3709502813470989416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1199708590460727974}
+  - component: {fileID: 3045721523414889888}
+  m_Layer: 7
+  m_Name: State - Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1199708590460727974
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3709502813470989416}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4435938121642611956}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3045721523414889888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3709502813470989416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1cc6469e45768429686aa24d5e7832, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
+  Mytransitions:
+  - conditions: []
+    _FromGO: {fileID: 3709502813470989416}
+    _ToGO: {fileID: 1094546387155140947}
+    _ShouldTransitionWithNoConditions: 1
+  _MinStateLifetime: 0
+  _Timer: 1.5
+  _Pulse: 0
+  _TransitionKeys: []
+  _CanTransition: 0
 --- !u!1 &5296925727539463049
 GameObject:
   m_ObjectHideFlags: 0

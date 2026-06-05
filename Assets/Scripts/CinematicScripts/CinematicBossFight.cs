@@ -6,30 +6,35 @@ using UnityEngine.Timeline;
 
 public class CinematicBossFight : MonoBehaviour
 {
-    [Header("Cameras")]
-    public GameObject cinematicRoot;
-
     [Header("Timeline")]
     public PlayableDirector playableDirector;
+
+    [Header("Camera")]
+    [SerializeField] private Transform cameraRig;
+
+    private Transform rootCamera;
+    private Transform originalParent;
+
+    private Vector3 originalLocalPosition;
+    private Quaternion originalLocalRotation;
 
     private Player_Base player_Base;
 
     [SerializeField] private VisceralStateMachine visceralStateMachine;
-
     [SerializeField] private GameObject Boss;
-
-    private Camera mainCamera;
 
     private bool cinematicPlayed = false;
 
     private GameObject gameplayUI;
 
-
     private void Awake()
     {
-
-        playableDirector.stopped += OnTimelineFinished;
+        if (playableDirector != null)
+        {
+            playableDirector.stopped += OnTimelineFinished;
+        }
     }
+
     private void Start()
     {
         if (player_Base == null)
@@ -47,12 +52,22 @@ public class CinematicBossFight : MonoBehaviour
             Boss.SetActive(false);
         }
 
-        if (mainCamera == null)
-        {
-            mainCamera = Camera.main;
-        }
-
         gameplayUI = GameObject.FindGameObjectWithTag("UICombat");
+
+        GameObject cam = GameObject.Find("RootCamera");
+
+        if (cam != null)
+        {
+            rootCamera = cam.transform;
+
+            originalParent = rootCamera.parent;
+            originalLocalPosition = rootCamera.localPosition;
+            originalLocalRotation = rootCamera.localRotation;
+        }
+        else
+        {
+            Debug.LogError("No se encontró un objeto llamado RootCamera.");
+        }
     }
 
     private void Update()
@@ -70,38 +85,39 @@ public class CinematicBossFight : MonoBehaviour
         }
     }
 
-
     private void OnDestroy()
     {
-        playableDirector.stopped -= OnTimelineFinished;
+        if (playableDirector != null)
+        {
+            playableDirector.stopped -= OnTimelineFinished;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (cinematicPlayed) return;
+        if (cinematicPlayed)
+            return;
 
         if (other.CompareTag("Player"))
         {
             cinematicPlayed = true;
-            player_Base = other.GetComponentInParent<Player_Base>();
-            Player_Movement movement = player_Base.GetComponentInChildren<Player_Movement>();
 
-            if (movement != null)
-            {
-                movement.LockMovementImmediate();
-            }
-            Camera.main.enabled = false;
+            player_Base = other.GetComponentInParent<Player_Base>();
+
+            SetPlayerCinematicLock(true);
+
             PlayCinematic();
         }
     }
 
     private void PlayCinematic()
     {
-
-        cinematicRoot.SetActive(true);
+        AttachCameraToRig();
 
         if (gameplayUI != null)
+        {
             gameplayUI.SetActive(false);
+        }
 
         playableDirector.time = 0;
         playableDirector.Play();
@@ -114,26 +130,17 @@ public class CinematicBossFight : MonoBehaviour
 
     private void OnTimelineFinished(PlayableDirector director)
     {
-
-        cinematicRoot.SetActive(false);
+        DetachCameraFromRig();
 
         if (gameplayUI != null)
+        {
             gameplayUI.SetActive(true);
+        }
 
         if (player_Base != null)
         {
+            SetPlayerCinematicLock(false);
             player_Base.SetPlayerActive();
-
-            Player_Movement movement = player_Base.GetComponentInChildren<Player_Movement>();
-            if (movement != null)
-            {
-                movement.UnlockMovement();
-            }
-        }
-
-        if (mainCamera != null)
-        {
-            mainCamera.enabled = true;
         }
 
         if (visceralStateMachine != null)
@@ -145,6 +152,53 @@ public class CinematicBossFight : MonoBehaviour
         {
             Boss.SetActive(true);
         }
+    }
 
+    private void AttachCameraToRig()
+    {
+        if (rootCamera == null || cameraRig == null)
+        {
+            Debug.LogWarning("RootCamera o CameraRig es null.");
+            return;
+        }
+
+        rootCamera.SetParent(cameraRig);
+
+        rootCamera.localPosition = Vector3.zero;
+        rootCamera.localRotation = Quaternion.identity;
+    }
+
+    private void DetachCameraFromRig()
+    {
+        if (rootCamera == null)
+            return;
+
+        rootCamera.SetParent(originalParent);
+
+        rootCamera.localPosition = originalLocalPosition;
+        rootCamera.localRotation = originalLocalRotation;
+    }
+
+    private void SetPlayerCinematicLock(bool locked)
+    {
+        if (player_Base == null)
+            return;
+
+        Player_Movement movement = player_Base.GetComponentInChildren<Player_Movement>();
+
+        if (movement != null)
+        {
+            if (locked)
+                movement.LockMovementImmediate();
+            else
+                movement.UnlockMovement();
+        }
+
+        if (locked)
+        {
+            player_Base.StopWalkSound();
+        }
+
+        player_Base.enabled = !locked;
     }
 }

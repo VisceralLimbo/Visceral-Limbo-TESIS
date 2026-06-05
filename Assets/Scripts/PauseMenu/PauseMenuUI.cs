@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class PauseMenuUI : MonoBehaviour
@@ -8,6 +9,10 @@ public class PauseMenuUI : MonoBehaviour
     public GameObject opcionesPanel;    // menu opciones 
     public GameObject abandonPanel;     // menu abandonar
     public GameObject itemsPanel;       // menu items
+    [SerializeField] private GameObject optionsFirstButton;
+    [SerializeField] private GameObject abandonFirstButton;
+    [SerializeField] private GameObject itemsFirstButton;
+    [SerializeField] private GameObject pauseFirstButton;
 
     [Header("Refes")]
     public PauseMenu ref_PauseMenu;
@@ -25,6 +30,8 @@ public class PauseMenuUI : MonoBehaviour
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         //reseteo la ui por bug en flechitas xd
         ref_PauseMenu.ResetUIState();
+
+        EventSystem.current.SetSelectedGameObject(pauseFirstButton);
     }
 
     public void ShowOpciones()
@@ -35,6 +42,8 @@ public class PauseMenuUI : MonoBehaviour
         itemsPanel.SetActive(false);
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ref_PauseMenu.ResetUIState();
+
+        EventSystem.current.SetSelectedGameObject(optionsFirstButton);
     }
 
     public void ShowAbandon()
@@ -45,6 +54,8 @@ public class PauseMenuUI : MonoBehaviour
         itemsPanel.SetActive(false);
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
         ref_PauseMenu.ResetUIState();
+
+        EventSystem.current.SetSelectedGameObject(abandonFirstButton);
     }
 
     public void ShowItems()
@@ -57,6 +68,7 @@ public class PauseMenuUI : MonoBehaviour
         ref_PauseMenu.ResetUIState();
         // redibujo ui
         itemsUI.RefreshInventoryUI();
+        EventSystem.current.SetSelectedGameObject(itemsFirstButton);
     }
 
     public void BackToPauseMenu()

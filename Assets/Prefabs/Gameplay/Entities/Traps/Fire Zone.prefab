@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3363631299835955107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3771644959970733938}
+  - component: {fileID: 8585257615906328968}
+  - component: {fileID: 3249278351837393565}
+  m_Layer: 0
+  m_Name: Fire Zone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3771644959970733938
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3363631299835955107}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 382.4499, y: 49.434185, z: 258.49}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8585257615906328968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3363631299835955107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fe4cd7b471afcd408d33994472b83f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Particles: []
+  _Prefab: {fileID: 3363631299835955107}
+  _VisualEffects: []
+  _Context: {fileID: 0}
+  _PoolComponent: {fileID: 3249278351837393565}
+  _Duration: 10
+  _Damage: 5
+  _DamageInterval: 0.5
+  _FireRadius: 3
+  _DamageOriginPoint: {fileID: 3771644959970733938}
+  _Mask:
+    serializedVersion: 2
+    m_Bits: 24768
+  _DebugDraw: 1
+--- !u!114 &3249278351837393565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3363631299835955107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8145a0e8362db1e498fded3866370ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
