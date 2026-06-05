@@ -35,6 +35,8 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float vfxYOffset = -0.5f;
     [SerializeField] private float vfxDestroyDelay = 3f;
 
+    private AudioSource audioSource;
+
     private void Start()
     {
         if(_SpawnManager == null)
@@ -42,6 +44,16 @@ public class Spawner : MonoBehaviour
             _SpawnManager= GetComponentInParent<RoomSpawnerManager>();
         }
         EnemyGenerator = GetNextEnemy().GetEnumerator();
+
+        audioSource = GetComponent<AudioSource>();
+
+        if (_SpawnManager == null)
+        {
+            _SpawnManager = GetComponentInParent<RoomSpawnerManager>();
+        }
+
+        EnemyGenerator = GetNextEnemy().GetEnumerator();
+
     }
 
     public int RemainingSpawns
@@ -156,6 +168,11 @@ public class Spawner : MonoBehaviour
             vfx = Instantiate(spawnVFX, spawnPos, Quaternion.identity, transform);
 
             vfx.SetActive(true);
+
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
 
             foreach (var ps in vfx.GetComponentsInChildren<ParticleSystem>())
                 ps.Play();
