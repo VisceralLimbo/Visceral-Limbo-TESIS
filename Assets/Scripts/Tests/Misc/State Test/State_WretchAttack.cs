@@ -9,6 +9,7 @@ using UnityEditor;
 public class State_WretchAttack : BaseState
 {
     [Header("References")]
+    [SerializeField] PlayerContext _Context;
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] AnimatorHandler _AnimatorHandler;
     [SerializeField] Animator _Anim; // cache de animador
@@ -18,7 +19,15 @@ public class State_WretchAttack : BaseState
 
     [Header("Variables")]
     [SerializeField] bool _FinishedAttack, _CancelAttack;
+    [SerializeField] float _Damage;
     [SerializeField] float _AttackMovementStrenght;
+    [SerializeField] float _knockbackForce;
+    [SerializeField] float _HitBoxRadius;
+    [SerializeField] Vector3 _HitboxOffset;
+    [SerializeField] LayerMask _Mask;
+
+    Collider[] _HitResults = new Collider[50];
+    private HashSet<Health_Component> _hitcache = new HashSet<Health_Component>();
 
     [Range(0,100)]
     [SerializeField] int _ChanceForPredictiveAttack;
@@ -61,8 +70,9 @@ public class State_WretchAttack : BaseState
     public override void OnEnter(VisceralStateMachine CTX)
     {
         _FinishedAttack = false;
+        _hitcache.Clear();
 
-        //_AnimatorHandler.SetParameter("Wretched", "IsCharging", AnimatorControllerParameterType.Trigger);
+       
         _AnimatorHandler.SetParameter("Wretched", "IsAttacking", AnimatorControllerParameterType.Bool, true);
 
 
@@ -77,6 +87,7 @@ public class State_WretchAttack : BaseState
         }
 
         _MovementStrategy.ToggleObstacleAvoidance(true);
+
     }
 
 
@@ -163,6 +174,18 @@ public class State_WretchAttack : BaseState
             }
         }
 
+        if(_Context == null)
+        {
+            if(CTX.gameObject.TryGetComponent(out PlayerContext Cont))
+            {
+                _Context = Cont;
+            }
+            else
+            {
+                _Context = CTX.gameObject.GetComponentInChildren<PlayerContext>();
+            }
+        }
+
  
         _AnimatorHandler.TryGetAnimator("Wretched", out Animator Anim);
         _Anim = Anim;
@@ -206,12 +229,16 @@ public class State_WretchAttack : BaseState
             }
             else
             {
-                // Si el camino está libre, ataca normal
+                // Si el camino esta libre, ataca normal
                 _MovementStrategy.SetMovementSpeed(_AttackMovementStrenght);
                 _MovementStrategy.UpdateVelocity(_FinalChargeDirection.normalized);
             }
 
-            // Si estamos en la fase de vuelo, chequeamos el final de la animación
+            // procesar danio 
+            ProcessHitbox(CTX);
+
+
+            // Si estamos en la fase de vuelo, chequeamos el final de la animacion
             if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("IdleAttack") && _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
             {
                 _AnimatorHandler.SetParameter("Wretched", "IsAttacking", AnimatorControllerParameterType.Bool, false);
@@ -264,9 +291,10 @@ public class State_WretchAttack : BaseState
         Vector3 OriginPoint = _KCC.Capsule.bounds.center;
         Vector3 Direction = _FinalChargeDirection.normalized;
 
+        float radius = _KCC.Capsule.radius * 0.9f;
         float Distance = _KCC.Capsule.radius + _RaycastWallCheckLenght;
 
-        if (Physics.Raycast(OriginPoint, Direction, Distance,_RaycastMask))
+        if (Physics.SphereCast(OriginPoint,radius,Direction,out RaycastHit hit,_RaycastWallCheckLenght, _RaycastMask))
         {
             return true;
         }
@@ -274,6 +302,45 @@ public class State_WretchAttack : BaseState
         return false;
 
     }
+
+    void ProcessHitbox(VisceralStateMachine CTX)
+    {
+
+        Vector3 sphereCenter = _KCC.Capsule.transform.position + (_KCC.Capsule.transform.rotation * _HitboxOffset);
+
+        int hits = Physics.OverlapSphereNonAlloc(sphereCenter, _HitBoxRadius,_HitResults,_Mask);
+
+
+        for(int i = 0; i < hits ; i++)
+        {
+            Collider hitcol = _HitResults[i];
+
+            if (hitcol == null) continue;
+
+            DamageScore DMS = new DamageScore()
+            {
+                Attacker = _Context,
+                DamageAmount = _Damage,
+                ElementalDamage = ElementType.Physical,
+                FactionID = FactionID.LimboMonster1
+            };
+
+            Vector3 knockbackDir = (hitcol.transform.position - _KCC.Capsule.transform.position);
+            knockbackDir.y = 0;
+
+            DamageDispatcher.ProcessSingleHit
+                (
+                hitcol,
+                ref DMS,
+                knockbackDir,
+                _knockbackForce,
+                _hitcache,
+                false               
+                );
+        }
+
+    }
+
 
     private void OnDrawGizmosSelected()
     {
