@@ -25,8 +25,8 @@ public static class DamageDispatcher
         // tratamos de obtener el healthComponent y el Idamageable
         if(TryExtractHealth(HitCollider,out IDamageable Damageable,out Health_Component HPComp))
         {
-            // si NO podemos aniadir el HPComponent al hitcache, ejecutamos danio
-            if (!HitCache.Add(HPComp))
+            // si podemos aniadir el HPComponent al hitcache, ejecutamos danio
+            if (HitCache.Add(HPComp))
             {
                 return ExecuteDamage(Damageable, HPComp,ref DMScore, KnockbackDir, KnockbackForce, ProcOnHit);
             }
@@ -79,7 +79,10 @@ public static class DamageDispatcher
         // prioridad IDamageable
         if(Col.TryGetComponent(out IDamageable Damage))
         {
-            return Damage.GetHealthComponent(out Health_Component hp);
+            IDamage = Damage;
+            bool HasHealth =  Damage.GetHealthComponent(out Health_Component hp);
+            HPComp = hp;
+            return HasHealth;
         }
 
         // fallback HealthComponent => potencialmente caro!
@@ -128,7 +131,7 @@ public static class DamageDispatcher
 
 
         // caso a) golpeamos algo que no tiene context, ejemplo: props
-        if(HP_Comp.Context != null)
+        if(HP_Comp.Context == null)
         {
             HP_Comp.SimpleDamage(DMScore.DamageAmount);
             PlayerEvents.PlayerSucessfulHit();
