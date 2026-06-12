@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class BleedItemLogic : ItemLogic, I_OnHitItem
 {
-
-
-
-
     [Tooltip("Bleed Scriptable Object Data")]
     [SerializeField] BuffSO _BleedSO;
 
@@ -110,9 +106,9 @@ public class BleedItemLogic : ItemLogic, I_OnHitItem
 
 
 
-    public void OnProcEffect(PlayerContext Inflictor, DamageScore DMS, Health_Component VictimHP)
+    public void OnProcEffect(PlayerContext Inflictor, DamageScore? DMS, Health_Component VictimHP)
     {
-        if(Inflictor == null || DMS == null || VictimHP == null)
+        if(Inflictor == null || !DMS.HasValue || VictimHP == null)
         {
             Debug.Log("Couldnt inflict bleed Inflictor = " 
                 + Inflictor.name 
@@ -125,11 +121,11 @@ public class BleedItemLogic : ItemLogic, I_OnHitItem
         // asumimos que golpeamos a algo correcto
 
         //1) ADQUIRIMOS EL BUFFMANAGER DE LA VICTIMA
-        if(DMS.Victim != null)
+        if(DMS.Value.Victim != null)
         {
-                if (DMS.Victim.BuffManager != null)
+                if (DMS.Value.Victim.BuffManager != null)
                 {
-                    BuffManager buffManager = DMS.Victim.BuffManager;
+                    BuffManager buffManager = DMS.Value.Victim.BuffManager;
                     buffManager.AddNewBuff(_BleedSO.BuffID, _BleedSO, ItemStacks, Inflictor);
                 }
         }

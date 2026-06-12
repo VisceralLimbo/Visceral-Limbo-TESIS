@@ -98,7 +98,7 @@ public class Health_Component : Visceral_Component, IDamageable
     /// <param name="KnockbarDir"></param>
     /// <param name="force"></param>
     /// <param name="Score"></param>
-    protected virtual void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
+    protected virtual void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore? Score)
     {
         if (Died) return;
 
@@ -146,10 +146,9 @@ public class Health_Component : Visceral_Component, IDamageable
         }
 
 
-        if (CurrentHealth <= 0f && _Context != null && Score != null && Score.Attacker != null)
+        if (CurrentHealth <= 0f && _Context != null && Score != null && Score.Value.Attacker != null)
         {
-            DamageScore FinalScore = Score != null
-                ? DamageScoreBuilder.Complete(Score, _Context, CurrentHealth, MaxHealth) : null;
+            DamageScore FinalScore = DamageScoreBuilder.Complete(Score.Value, _Context, CurrentHealth, MaxHealth);
 
             if (ScoreManager.Instance != null)
                 ScoreManager.Instance.ProcessKill(FinalScore);

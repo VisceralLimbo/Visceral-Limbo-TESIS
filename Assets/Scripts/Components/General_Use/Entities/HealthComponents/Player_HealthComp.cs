@@ -67,7 +67,7 @@ public class Player_HealthComp : Health_Component
     }
 
     SoundEmitter Emit;
-    protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
+    protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore? Score)
     {
         if (KnockbarDir.HasValue)
         {
