@@ -590,6 +590,8 @@ MonoBehaviour:
   _AirSpeed: 10
   _AirResponse: 120
   _CoyoteTime: 0.2
+  _KnockbackResistance: 0
+  _KnockbackDecay: 10
   _SlideStartSpeed: 25
   _SlideEndSpeed: 15
   _SlideFriction: 0.8
@@ -602,6 +604,7 @@ MonoBehaviour:
   _MovementStatID: {fileID: 11400000, guid: 06a9673a0529f4d43b28676b24f0c658, type: 2}
   _AirSpeedStatID: {fileID: 11400000, guid: f3252d96338ab1f479c18fad65f9f08a, type: 2}
   _CrouchSpeedStatID: {fileID: 11400000, guid: c16058ee25f9a6f42a5c4686b465186a, type: 2}
+  _KnockbackResistanceID: {fileID: 0}
   _jumpSound:
     Clip: {fileID: 0}
     mixerGroup: {fileID: 0}
@@ -796,7 +799,8 @@ MonoBehaviour:
     IsFrequent: 0
   HealingSoundData:
   - Clip: {fileID: 8300000, guid: 1a60a2e5b6f434c43bfeca14bb7157bf, type: 3}
-    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    mixerGroup: {fileID: -8742619173097497107, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+      type: 2}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 0
@@ -815,7 +819,8 @@ MonoBehaviour:
   _Context: {fileID: 388799400367065248}
   _LowHP:
     Clip: {fileID: 8300000, guid: e9b946ae8a342bf4ab261fbc23f4a1f9, type: 3}
-    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    mixerGroup: {fileID: -8742619173097497107, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+      type: 2}
     Loop: 1
     PlayOnAwake: 0
     SpatialBlend: 0
@@ -1458,7 +1463,8 @@ MonoBehaviour:
   right2OpenPosition: {x: 240, y: 413}
   _uiTabSound:
     Clip: {fileID: 8300000, guid: 9c866c338e7122942afeb682fadcc58e, type: 3}
-    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    mixerGroup: {fileID: -3840333982723509021, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+      type: 2}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
@@ -1468,7 +1474,8 @@ MonoBehaviour:
   IsPlayerActive: 1
   _walkSound:
     Clip: {fileID: 8300000, guid: b5ee82acd87f4a24aa251c1d5a757316, type: 3}
-    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    mixerGroup: {fileID: -8742619173097497107, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+      type: 2}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
@@ -1491,7 +1498,8 @@ MonoBehaviour:
   _Weapon: {fileID: 8935195771567458531}
   soundData:
   - Clip: {fileID: 8300000, guid: 7a8bb446c6bb7cf43872bb63e438ad95, type: 3}
-    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    mixerGroup: {fileID: -8742619173097497107, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+      type: 2}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 0
@@ -1499,7 +1507,8 @@ MonoBehaviour:
     MaximunSoundDistance: 0
     IsFrequent: 0
   - Clip: {fileID: 8300000, guid: 557002dbb1945524e8be6d510d47c6d0, type: 3}
-    mixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a, type: 2}
+    mixerGroup: {fileID: -8742619173097497107, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+      type: 2}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 0
