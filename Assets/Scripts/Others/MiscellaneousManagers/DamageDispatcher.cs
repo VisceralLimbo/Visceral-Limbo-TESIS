@@ -17,7 +17,7 @@ public static class DamageDispatcher
     /// <returns></returns>
     public static bool ProcessSingleHit(Collider HitCollider
         , ref DamageScore DMScore
-        , Vector3 KnockbackDir
+        , Vector3? KnockbackDir
         , float KnockbackForce
         , HashSet<Health_Component> HitCache
         , bool ProcOnHit = false)
@@ -39,7 +39,7 @@ public static class DamageDispatcher
         (
             Collider HitCollider,
             ref DamageScore DMScore,
-            Vector3 KnockbackDir,
+            Vector3? KnockbackDir,
             float KnockbackForce,
             Dictionary<Health_Component, float> cooldownTimer,
             float cooldownTime,
@@ -60,7 +60,7 @@ public static class DamageDispatcher
                     return false;
                 }
             }
-            cooldownTimer[HPComp] = Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+            cooldownTimer[HPComp] = Time.time;
 
             return ExecuteDamage(IDamage, HPComp, ref DMScore, KnockbackDir, KnockbackForce, ProcOnHit);
         }
@@ -101,7 +101,7 @@ public static class DamageDispatcher
             IDamageable IDamage,
             Health_Component HP_Comp,
             ref DamageScore DMScore,
-            Vector3 KnockbackDir,
+            Vector3? KnockbackDir,
             float KnockbackForce,
             bool OnProcHit
         )
@@ -115,6 +115,16 @@ public static class DamageDispatcher
                 return false;
             }
         }
+
+        if(DMScore.Victim != null)
+        {
+            if(DMScore.Victim == DMScore.Attacker)
+            {
+                // evitar self hit
+                return false;
+            }
+        }
+
 
         DMScore.Victim = HP_Comp.Context;
 
@@ -137,17 +147,34 @@ public static class DamageDispatcher
             PlayerEvents.PlayerSucessfulHit();
             return true;
         }
-
         // caso b) priorizamos IDamageable interface
-        if(IDamage != null)
+
+        // B.1) tenemos knockback
+        if (KnockbackDir.HasValue)
         {
-            IDamage.TakeDamageWithKnockback(KnockbackDir, KnockbackForce, DMScore);
+            
+            if (IDamage != null)
+            {
+                IDamage.TakeDamageWithKnockback(KnockbackDir.Value, KnockbackForce, DMScore);
+            }
+            else
+            {
+                HP_Comp.TakeDamageWithKnockback(KnockbackDir.Value, KnockbackForce, DMScore);
+            }
         }
         else
         {
-            HP_Comp.TakeDamageWithKnockback(KnockbackDir,KnockbackForce, DMScore);
-        }
 
+            if (IDamage != null)
+            {
+                IDamage.TakeDamage(DMScore);
+            }
+            else
+            {
+                HP_Comp.TakeDamage(DMScore);
+            }
+        }
+       
         PlayerEvents.PlayerSucessfulHit();
         return true; 
     }

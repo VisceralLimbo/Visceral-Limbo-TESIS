@@ -1180,7 +1180,7 @@ MonoBehaviour:
   _StartDealingDamage: 0.1
   _StopDealingDamage: 0.6
   AttackStatID: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
-  KnockbackStatID: {fileID: 11400000, guid: 5771a42bb69cae941a261dfc753f5536, type: 2}
+  KnockbackStatID: {fileID: 0}
 --- !u!1 &2339122454485781642
 GameObject:
   m_ObjectHideFlags: 0
@@ -3158,7 +3158,7 @@ MonoBehaviour:
   OnChargeAttackStart:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2052785069324251790}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Charge_Collider, Assembly-CSharp
         m_MethodName: ToggleAttack
         m_Mode: 6
@@ -3173,7 +3173,7 @@ MonoBehaviour:
   OnChargeAttackEnd:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2052785069324251790}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Charge_Collider, Assembly-CSharp
         m_MethodName: ToggleAttack
         m_Mode: 6
@@ -4601,7 +4601,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5372180300158302468}
-  - {fileID: 7644194880114145955}
   m_Father: {fileID: 4091262336931204975}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4338678787431566964
@@ -5220,88 +5219,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5048670006154648692}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8872006745843749271
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7644194880114145955}
-  - component: {fileID: 7539286382284910902}
-  - component: {fileID: 2052785069324251790}
-  m_Layer: 7
-  m_Name: DamageCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7644194880114145955
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8872006745843749271}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1031295680299478082}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &7539286382284910902
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8872006745843749271}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1
-  m_Height: 3
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &2052785069324251790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8872006745843749271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 764a152797e4e694f8148d8be49af6d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _OwnerContext: {fileID: 4654570009590822600}
-  _OwnerGameObject: {fileID: 4271440006843977573}
-  _TargetGameObject: {fileID: 0}
-  _ChargeDamage: 20
-  _BiteDamage: 10
-  _knockback: 5
-  _DelayBetweenAttacksInsideCollider: 3
-  _Active: 0
-  _Masks:
-    serializedVersion: 2
-    m_Bits: 1408
-  _Statman: {fileID: 0}
-  _DamageStatID: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
-  _KnockbackStatID: {fileID: 11400000, guid: 5771a42bb69cae941a261dfc753f5536, type: 2}
 --- !u!1 &8947371924232652332
 GameObject:
   m_ObjectHideFlags: 0

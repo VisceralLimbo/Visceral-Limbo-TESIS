@@ -232,7 +232,7 @@ public class Wretch_StateBite : BaseState
     private void UpdateStats(StatIdentifier Stat, float Value)
     {
         if (Stat == AttackStatID) { _BiteAttack = Value; return; };
-        if (Stat == KnockbackStatID) { _AttackKnockback = Value; ; return; }
+        if (Stat == KnockbackStatID) {}
 
 
     }

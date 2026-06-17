@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ public class SpikeTrap : MonoBehaviour
 
     private Vector3[] startPositions;
 
+    // lista de colliders dentro del pincho
+    private HashSet<Collider> occupants = new HashSet<Collider>();
     //diccionario que respeta cada nextdamage de cada collider que entra, ahora se conectan entre si para que cuando juntemos las trampas no se haga daño haciendo adadad
     private static Dictionary<Health_Component, float> lastDamageTime = new Dictionary<Health_Component, float>();
 
@@ -28,57 +31,96 @@ public class SpikeTrap : MonoBehaviour
 
     private void Update()
     {
-        if (spikes.Count == 0 || startPositions == null || startPositions.Length != spikes.Count) return;
+        HandleMovement();
 
-        float offsetY = Mathf.Sin(Time.time * moveSpeed) * moveHeight;
+        // Si están bajo tierra o no hay nadie, no procesamos daño
+        if (spikes[0].localPosition.y <= startPositions[0].y || occupants.Count == 0) return;
 
-        for (int i = 0; i < spikes.Count; i++)
+        occupants.RemoveWhere(x => x == null);
+
+        foreach (Collider Col in occupants)
         {
-            if (spikes[i] == null) continue;
-            spikes[i].localPosition = new Vector3(startPositions[i].x, startPositions[i].y + offsetY, startPositions[i].z);
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        // chequeo q se hayan guardado las pos
-        if (spikes.Count == 0 || startPositions == null || startPositions.Length == 0) return;
-
-        // si estan bajo tierra no hacen daño
-        if (spikes[0].localPosition.y <= startPositions[0].y) return;
-
-        if (other.TryGetComponent(out Health_Component HPComp))
-        {
-            if (lastDamageTime.TryGetValue(HPComp, out float lastTime))
+            if(Col.TryGetComponent(out IDamageable Dmg))
             {
-                if (Time.time < lastTime + damageInterval) return;
+                DamageScore DMS = new DamageScore()
+                {
+                    Attacker = this.playerContext,
+                    DamageAmount = damage,
+                    FactionID = FactionID.LimboTrap,
+                };
+
+                // Delegamos al dispatcher. el se encarga de checkear el diccionario y el cooldown.
+                DamageDispatcher.ProcessContinuousHit(Col, ref DMS, null, 0, lastDamageTime, damageInterval, false);
             }
+            else if (Col.TryGetComponent(out Health_Component HPComp))
+            {
+                DamageScore DMS = new DamageScore()
+                {
+                    Attacker = this.playerContext,
+                    DamageAmount = damage,
+                    FactionID = FactionID.LimboTrap,
+                };
 
-            ApplyTrapDamage(HPComp);
-            lastDamageTime[HPComp] = Time.time;
+                // Delegamos al dispatcher. el se encarga de checkear el diccionario y el cooldown.
+                DamageDispatcher.ProcessContinuousHit(Col, ref DMS, null, 0, lastDamageTime, damageInterval, false);
+            }
         }
+
+        ClearStaticDictionary();
     }
 
-    private void ApplyTrapDamage(Health_Component HPComp)
+    float clearTime = 5f, ClearPulse;
+
+    /// <summary>
+    /// Prevencion de memory leak por uso de diccionario static.
+    /// </summary>
+    private void ClearStaticDictionary()
     {
-        PlayerContext victimCtx = HPComp.Context;
-        if (victimCtx != null)
+        if(clearTime > ClearPulse)
         {
-            DamageScore dmg = new DamageScore();
-            dmg.Attacker = playerContext;
-            dmg.Victim = victimCtx;
-            dmg.DamageAmount = damage;
-            dmg.ElementalDamage = ElementType.Physical;
-            dmg.FactionID = FactionID.LimboTrap;
-
-            HPComp.TakeDamageWithKnockback(Vector3.zero, 0, dmg);
+            ClearPulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
+            return;
         }
-        else
+
+        List<Health_Component> DeadComps = new List<Health_Component>(lastDamageTime.Keys.Count);
+
+        foreach(var HPComp in lastDamageTime.Keys)
         {
-            HPComp.SimpleDamage(damage);
+            if(HPComp == null)
+            {
+                DeadComps.Add(HPComp);
+            }
+        }
+
+        foreach(var HPComp in DeadComps)
+        {
+            lastDamageTime.Remove(HPComp);
+        }
+
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private void ClearCache()
+    {
+        if(lastDamageTime != null)
+        {
+            lastDamageTime.Clear();
         }
     }
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        occupants.Add(other);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (occupants.Contains(other))
+        {
+            occupants.Remove(other);
+        }
+    }
     private void InitializeSpikes()
     {
         if (spikes.Count == 0) return;
@@ -92,6 +134,20 @@ public class SpikeTrap : MonoBehaviour
             {
                 startPositions[i] = spikes[i].localPosition;
             }
+        }
+    }
+
+
+    private void HandleMovement()
+    {
+        if (spikes.Count == 0 || startPositions == null || startPositions.Length != spikes.Count) return;
+
+        float offsetY = Mathf.Sin(Time.time * moveSpeed) * moveHeight;
+
+        for (int i = 0; i < spikes.Count; i++)
+        {
+            if (spikes[i] == null) continue;
+            spikes[i].localPosition = new Vector3(startPositions[i].x, startPositions[i].y + offsetY, startPositions[i].z);
         }
     }
 }

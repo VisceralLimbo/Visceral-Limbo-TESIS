@@ -582,10 +582,19 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         //aplicar knockback
         if(_ActiveKnockback.sqrMagnitude > 0.1f)
         {
-            currentVelocity += _ActiveKnockback;
-
-
+            // 1. Degradamos el limite dinamico
             _ActiveKnockback = Vector3.Lerp(_ActiveKnockback, Vector3.zero, _KnockbackDecay * (Time.deltaTime * TimeDilationManager.GlobalTimeScale));
+
+            // 2. Friccion Aerea (solo horizontal)
+            var planarVelocity = Vector3.ProjectOnPlane(currentVelocity, _KCCMotor.CharacterUp);
+            float ScaledAirSpeed = _AirSpeed * TimeDilationManager.GlobalTimeScale;
+
+            if (planarVelocity.magnitude > ScaledAirSpeed && !_KCCMotor.GroundingStatus.IsStableOnGround)
+            {
+                // vamos reduciendo la velocidad
+                Vector3 horizontalFriction = planarVelocity * (2f * Time.deltaTime * TimeDilationManager.GlobalTimeScale);
+                currentVelocity -= horizontalFriction;
+            }
         }
 
 
@@ -645,8 +654,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         print("Player Knockback: " + KnockbackDir + " Force: " + Force);
         KnockbackDir.Normalize();
 
-
-        if(KnockbackDir.y < 0.5f)
+        if (KnockbackDir.y < 0.5f)
         {
             KnockbackDir.y += 0.5f;
             KnockbackDir.Normalize();
@@ -654,8 +662,12 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
         Vector3 FinalDir = KnockbackDir * Force;
 
-        _KCCMotor.ForceUnground();
+        _KCCMotor.ForceUnground(0.15f);
 
+        // 1. Inyectamos la fuerza UNA SOLA VEZ directamente al motor
+        _KCCMotor.BaseVelocity += FinalDir;
+
+        // 2. Guardamos el vector solo para usarlo como límite de velocidad dinámico en UpdateVelocity
         _ActiveKnockback = FinalDir;
 
     }

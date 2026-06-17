@@ -109,6 +109,7 @@ public class LimbDesmemberComponent : MonoBehaviour, IDamageable
         DamageDT.DamageAmount *= _LimbDamageReduction;
 
         _HPComp.TakeDamage(DamageDT);
+       
     }
 
     void IDamageable.TakeDamageWithKnockback(Vector3 KnockbackDir, float KnockbackForce, DamageScore DamageDT)

@@ -369,7 +369,7 @@ public class State_WretchAttack : BaseState
                 (
                 hitcol,
                 ref DMS,
-                knockbackDir,
+                knockbackDir.normalized,
                 _knockbackForce,
                 _hitcache,
                 false               
