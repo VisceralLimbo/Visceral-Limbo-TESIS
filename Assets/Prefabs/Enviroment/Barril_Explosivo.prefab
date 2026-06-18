@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.94696, y: 1.034175, z: 0.94696}
+  m_LocalScale: {x: 1.2304573, y: 1.3437827, z: 1.2304573}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 233365217434440052}
@@ -43,7 +43,7 @@ AudioSource:
   m_GameObject: {fileID: 5301716528659643073}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+  OutputAudioMixerGroup: {fileID: -8742619173097497107, guid: ef146cfd61eeb1f4dabb04e83eca930a,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: b66402182ed823941b1f555d5b4f9180, type: 3}
   m_PlayOnAwake: 0
@@ -139,6 +139,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3191320214389629670}
     m_Modifications:
+    - target: {fileID: 1800119381231638649, guid: 507628e2ef3abbb4d8f277fe932eb0e1,
+        type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -8742619173097497107, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+        type: 2}
     - target: {fileID: 1854912585607186426, guid: 507628e2ef3abbb4d8f277fe932eb0e1,
         type: 3}
       propertyPath: m_Layer
@@ -290,7 +296,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2568198013022578175, guid: 507628e2ef3abbb4d8f277fe932eb0e1, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 507628e2ef3abbb4d8f277fe932eb0e1, type: 3}
@@ -388,6 +395,12 @@ PrefabInstance:
       propertyPath: m_Volume
       value: 0.675
       objectReference: {fileID: 0}
+    - target: {fileID: 6758860461613544935, guid: b851c424923d10e418676f995d44acd5,
+        type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -8742619173097497107, guid: ef146cfd61eeb1f4dabb04e83eca930a,
+        type: 2}
     - target: {fileID: 7325149160288529469, guid: b851c424923d10e418676f995d44acd5,
         type: 3}
       propertyPath: m_Layer
@@ -404,7 +417,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3649368788474115731, guid: b851c424923d10e418676f995d44acd5, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b851c424923d10e418676f995d44acd5, type: 3}
