@@ -116,7 +116,12 @@ public static class DamageDispatcher
             }
         }
 
-        if(DMScore.Victim != null)
+
+
+        DMScore.Victim = HP_Comp.Context;
+
+
+        if (DMScore.Victim != null)
         {
             if(DMScore.Victim == DMScore.Attacker)
             {
@@ -124,10 +129,6 @@ public static class DamageDispatcher
                 return false;
             }
         }
-
-
-        DMScore.Victim = HP_Comp.Context;
-
 
         // si proqueamos efectos y nuestro atacker no es null
         if(OnProcHit && DMScore.Attacker != null)

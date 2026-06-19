@@ -68,7 +68,6 @@ public class Wretch_StateBite : BaseState
     {
         movementStrategy.ResetMovementSpeed();
 
-        TaggedColliders.Clear();
         TaggedHealth.Clear();
     }
 
@@ -109,6 +108,8 @@ public class Wretch_StateBite : BaseState
 
 
     bool FinishedAttack;
+    Collider[] TaggedCol = new Collider[50];
+
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
     {
         if (_Target == null) return;
@@ -130,103 +131,58 @@ public class Wretch_StateBite : BaseState
             }
             else if (_AnimationPulse > _StartDealingDamage)
             {
-                Collider[] HitsCollider = Physics.OverlapSphere(movementStrategy.GetKCC().Capsule.transform.position, _AttackRadius, _AttackMask);
+                // calculamos los hits
+                int hits = Physics.OverlapSphereNonAlloc(
+                    movementStrategy.GetKCC().Capsule.transform.position
+                    , _AttackRadius
+                    , TaggedCol,_AttackMask);
 
-                if (HitsCollider.Length > 0)
+                if(hits > 0)
                 {
-                    foreach (var Col in HitsCollider)
+                    for(int i = 0; i < hits; i++)
                     {
-                        ProcessHit(Col);
+                        ProcessHit(TaggedCol[i]);
+
                     }
                 }
+               
 
             }
         }
       
     }
 
-    HashSet<Collider> TaggedColliders = new HashSet<Collider>();
+
     HashSet<Health_Component> TaggedHealth = new HashSet<Health_Component>();
     private void ProcessHit(Collider other)
     {
         if (other.gameObject == _PlayerContext.PlayerGameObject) return;
-        if (TaggedColliders.Contains(other)) return;
 
+        // Calculamos la direccion del knockback
+        Vector3 dir = other.transform.position - _PlayerContext.PlayerTransform.position;
+        dir.y = 0;
 
-        // priorizamos el Idamageable
-        if (other.TryGetComponent(out IDamageable Idamage))
+        // Damage score
+        DamageScore damageDT = new DamageScore
         {
-            if (Idamage.GetHealthComponent(out Health_Component IHealth) && !TaggedHealth.Contains(IHealth))
-            {
-                if (IHealth.Context != _PlayerContext)
-                {
-                    TaggedColliders.Add(other);
-                    TaggedHealth.Add(IHealth);
+            Attacker = _PlayerContext,
+            DamageAmount = _BiteAttack,
+            ElementalDamage = ElementType.Physical,
+            FactionID = FactionID.LimboMonster1
+        };
+        damageDT.AddTag(ScoreFlags.Skill1Kill);
 
-                    Vector3 Dir = IHealth.Context.PlayerTransform.position - _PlayerContext.PlayerTransform.position;
-                    Dir.y = 0;
-
-
-                    DamageScore DamageDT = new DamageScore
-                    {
-                        Attacker = _PlayerContext,
-                        DamageAmount = _BiteAttack,
-                        Victim = IHealth.Context, // Puede ser null si es un prop, lo manejamos abajo
-                        ElementalDamage = ElementType.Physical,
-                        FactionID = FactionID.LimboMonster1
-                    };
-                    DamageDT.AddTag(ScoreFlags.Skill1Kill);
-
-                    if (IHealth.Context == null)
-                    {
-                        IHealth.SimpleDamage(_BiteAttack);
-                    }
-                    else
-                    {
-                        IHealth.TakeDamageWithKnockback(Dir.normalized, _AttackKnockback, DamageDT);
-                    }
-                }
+        // llamamos al damage dispatcher
+        DamageDispatcher.ProcessSingleHit(
+            HitCollider: other,
+            DMScore: ref damageDT,
+            KnockbackDir: dir.normalized,
+            KnockbackForce: _AttackKnockback,
+            HitCache: TaggedHealth,
+            ProcOnHit: false
+        );
 
 
-
-            }
-
-
-        }
-        else if (other.TryGetComponent(out Health_Component HPComp))
-        {
-            if (HPComp.Context != _PlayerContext)
-            {
-                TaggedColliders.Add(other);
-                TaggedHealth.Add(HPComp);
-
-                Vector3 Dir = HPComp.Context.PlayerTransform.position - _PlayerContext.PlayerTransform.position;
-                Dir.y = 0;
-
-
-                DamageScore DamageDT = new DamageScore
-                {
-                    Attacker = _PlayerContext,
-                    DamageAmount = _BiteAttack,
-                    Victim = HPComp.Context, // Puede ser null si es un prop, lo manejamos abajo
-                    ElementalDamage = ElementType.Physical,
-                    FactionID = FactionID.LimboMonster1
-                };
-                DamageDT.AddTag(ScoreFlags.Skill1Kill);
-
-                if (HPComp.Context == null)
-                {
-                    HPComp.SimpleDamage(_BiteAttack);
-                }
-                else
-                {
-                    HPComp.TakeDamageWithKnockback(Dir.normalized, _AttackKnockback, DamageDT);
-                }
-            }
-
-
-
-        }
     }
 
     private void UpdateStats(StatIdentifier Stat, float Value)

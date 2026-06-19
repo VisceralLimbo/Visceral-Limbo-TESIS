@@ -1180,7 +1180,7 @@ MonoBehaviour:
   _StartDealingDamage: 0.1
   _StopDealingDamage: 0.6
   AttackStatID: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
-  KnockbackStatID: {fileID: 0}
+  KnockbackStatID: {fileID: 11400000, guid: 6d0c10123ee7983448d020fb89391831, type: 2}
 --- !u!1 &2339122454485781642
 GameObject:
   m_ObjectHideFlags: 0
@@ -3154,14 +3154,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 24577
   _RaycastWallCheckLenght: 1.5
-  _DamageStat: {fileID: 0}
-  _knockbackStat: {fileID: 0}
+  _DamageStat: {fileID: 11400000, guid: 044f55e8cf581754db8edab019ecc805, type: 2}
+  _knockbackStat: {fileID: 11400000, guid: 6d0c10123ee7983448d020fb89391831, type: 2}
   OnChargeAttackStart:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Charge_Collider, Assembly-CSharp
-        m_MethodName: ToggleAttack
+        m_MethodName: 
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3176,7 +3176,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Charge_Collider, Assembly-CSharp
-        m_MethodName: ToggleAttack
+        m_MethodName: 
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3901,9 +3901,7 @@ MonoBehaviour:
   _MinStateLifetime: 0
   _Timer: 1.5
   _Pulse: 0
-  _TransitionKeys:
-  - TransitionKey: 
-    TransitionValue: 0
+  _TransitionKeys: []
   _CanTransition: 0
 --- !u!1 &7032516549157426615
 GameObject:

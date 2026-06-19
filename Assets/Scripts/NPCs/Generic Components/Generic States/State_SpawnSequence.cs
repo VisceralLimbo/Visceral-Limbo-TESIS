@@ -23,12 +23,11 @@ public class State_SpawnSequence : BaseState
 
     public override bool EvaluateTransitions(Dictionary<string, bool> GlobalParams, out BaseState TO)
     {
-        if (_CanTransition)
+        if (!_CanTransition)
         {
             TO = null;
             return false;
         }
-
 
         return base.EvaluateTransitions(GlobalParams, out TO);
     }
