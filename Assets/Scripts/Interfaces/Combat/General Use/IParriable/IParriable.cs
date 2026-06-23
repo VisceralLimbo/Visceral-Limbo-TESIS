@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IParriable
 {
-    void parried(DamageScore DMScore = null,Vector3 Direction = default);
+    void parried(DamageScore? DMScore,Vector3 Direction = default);
 }

@@ -34,7 +34,7 @@ public class Fireball : MonoBehaviour, IParriable
 
 
 
-    public void parried(DamageScore DMScore = null, Vector3 Direction = default)
+    public void parried(DamageScore? DMScore, Vector3 Direction = default)
     {
         print("i got parried");
 
@@ -47,6 +47,12 @@ public class Fireball : MonoBehaviour, IParriable
             return;
         }
 
+        if (!DMScore.HasValue)
+        {
+            Debug.LogError("<Color=blue> Visceral Error: No DamageScore found for parry"+ this.name +  "</Color>");
+            return;
+        }
+
 
         print("rotate" + Direction);
         this.transform.forward = Direction;
@@ -55,7 +61,7 @@ public class Fireball : MonoBehaviour, IParriable
             Speed *= 1.2f;
             damage = damage * 2;
             _Parried = true;
-            SetOwner(DMScore.Attacker.gameObject, DMScore.Attacker);
+            SetOwner(DMScore.Value.Attacker.gameObject, DMScore.Value.Attacker);
         }
      
 

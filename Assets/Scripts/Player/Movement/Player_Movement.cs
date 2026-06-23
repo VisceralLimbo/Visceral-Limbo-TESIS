@@ -62,6 +62,12 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     [SerializeField] private float _CoyoteTime = 0.2f;
 
     [Space]
+    [Header("Knockback Variables")]
+    [SerializeField] private float _KnockbackResistance;
+    [SerializeField] private float _KnockbackDecay = 10f;
+    private Vector3 _ActiveKnockback;
+
+    [Space]
 
     [Header("Slide variables")]
     [SerializeField] private float _SlideStartSpeed = 25f; // velocidad inicial del slide
@@ -97,6 +103,8 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     [SerializeField] private StatIdentifier _MovementStatID; // la ID de la estadistica de movimiento
     [SerializeField] private StatIdentifier _AirSpeedStatID; // la ID de la estadistica de movimiento en el aire
     [SerializeField] private StatIdentifier _CrouchSpeedStatID; // la ID de la estadistica de movimiento agachado
+    [SerializeField] private StatIdentifier _KnockbackResistanceID;
+
 
     [SerializeField] private SoundData _jumpSound;
 
@@ -533,8 +541,13 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
                     //añadir el valor de fuerza a la velocidad planar actual para tener un objetivo de movimiento
                     var TargetAirMovementForce = currentPlanarVelocity + InAirMovementForce;
 
+                    // como queremos que el knockback puedo empujar con mucha fuerza, pero nuestro sistema clampea velocidad maxima.
+                    // vamos a elegir entre el knockback o el scaledAirSpeed para definir el clamp.
+                    float CurrentMaxAllowedSpeed = Mathf.Max(ScaledAirSpeed, _ActiveKnockback.magnitude);
+
+
                     //limitamos la velocidad maxima a la velocidad de movimiento del aire escalada
-                    TargetAirMovementForce = Vector3.ClampMagnitude(TargetAirMovementForce, ScaledAirSpeed);
+                    TargetAirMovementForce = Vector3.ClampMagnitude(TargetAirMovementForce, CurrentMaxAllowedSpeed);
 
                     InAirMovementForce = TargetAirMovementForce - currentPlanarVelocity;
                 }
@@ -565,6 +578,17 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
             currentVelocity += effectivegravity * (TimeDilationManager.GlobalTimeScale * deltaTime) * _KCCMotor.CharacterUp;
             #endregion
         }
+
+        //aplicar knockback
+        if(_ActiveKnockback.sqrMagnitude > 0.1f)
+        {
+            currentVelocity += _ActiveKnockback;
+
+
+            _ActiveKnockback = Vector3.Lerp(_ActiveKnockback, Vector3.zero, _KnockbackDecay * (Time.deltaTime * TimeDilationManager.GlobalTimeScale));
+        }
+
+
 
         // saltar del suelo
         if (_RequestedJump)
@@ -619,29 +643,6 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
     public void ApplyKnockBack(Vector3 KnockbackDir, float Force)
     {
         print("Player Knockback: " + KnockbackDir + " Force: " + Force);
-
-        #region Depreciated    
-        /*
-        // por las dudas normalizamos el vector
-        KnockbackDir.Normalize();
-
-        //queremos que el empuje horizontal depenga de la force.
-        // pero el empuje vertical es mucho más delicado.
-
-        // proyectamos el empuje al plano
-        Vector3 HorizontalPush = Vector3.ProjectOnPlane(KnockbackDir, Vector3.up).normalized;
-
-        // definimos un levantamiento fijo
-        float FixedLift = 2.5f;
-
-        Vector3 FinalKnockbackVel = (HorizontalPush * Force) + (Vector3.up * FixedLift);
-
-        print("Player Final Knockback: " + FinalKnockbackVel);
-
-        
-        AddExternalForce(FinalKnockbackVel, true);*/
-
-        #endregion
         KnockbackDir.Normalize();
 
 
@@ -653,7 +654,9 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
 
         Vector3 FinalDir = KnockbackDir * Force;
 
-        AddExternalVelocity(FinalDir,true);
+        _KCCMotor.ForceUnground();
+
+        _ActiveKnockback = FinalDir;
 
     }
 
@@ -791,6 +794,7 @@ public class Player_Movement : Visceral_Script, ICharacterController, IKnockback
         else if (statChanged == _MovementStatID) _WalkSpeed = value;
         // crouch speed
         else if (statChanged == _CrouchSpeedStatID) _CrouchSpeed = value;
+        else if (statChanged == _KnockbackResistanceID) _KnockbackResistance = value;
     }
 
 

@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public enum ElementType
 {
     Physical,
@@ -11,7 +7,7 @@ public enum ElementType
 
 
 [System.Serializable]
-public class DamageScore
+public struct DamageScore
 {
     public PlayerContext Attacker;
     public PlayerContext Victim;
@@ -24,7 +20,7 @@ public class DamageScore
     public ElementType ElementalDamage;
     public FactionID FactionID;
 
-    public ScoreFlags ScoreTags = ScoreFlags.None;
+    public ScoreFlags ScoreTags;
 
     public bool IsTagged(ScoreFlags flags) => (ScoreTags & flags) != 0;
 

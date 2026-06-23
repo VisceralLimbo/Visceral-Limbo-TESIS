@@ -12,6 +12,7 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
     [SerializeField] float _timeBetweenPillars = 0.5f;
     [SerializeField] int _numberOfPillars = 5;
     [SerializeField] float _indicatorDuration = 1.5f;
+    [SerializeField] private float maxPillarTargetDistance = 200f;
 
     [Header("Fase 2")]
     [SerializeField] private Vector2Int _minMaxSecondPhasePillarsCount;
@@ -127,7 +128,13 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
         yield return new WaitForSeconds(0.5f); // HACK! switchear a futuro para mejor comunicacion ataque
                                                // simula el startup de una animacion de ataque.
 
-        for(int i = 0; i < _numberOfPillars; i++)
+        if (!CanTargetPlayerWithPillars())
+        {
+            _isAttacking = false;
+            yield break;
+        }
+
+        for (int i = 0; i < _numberOfPillars; i++)
         {
             SpawnSinglePillar(playerTarget.position);
 
@@ -193,4 +200,11 @@ public class Corpus_FlamePillar_Attack : BaseState, IStateEnergyCost
     private void ToggleSecondPhase() => _secondPhase = true;
     #endregion
 
+    private bool CanTargetPlayerWithPillars()
+    {
+        if (playerTarget == null) return false;
+
+        float distance = Vector3.Distance(transform.position, playerTarget.position);
+        return distance <= maxPillarTargetDistance;
+    }
 }

@@ -132,7 +132,7 @@ public class Boss_HealthComp : Health_Component, IDamageable
 
     }
 
-    protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore Score = null)
+    protected override void InternalDamage(float damage, Vector3? KnockbarDir, float force, DamageScore? Score)
     {
 
         if (CurrentHealth - damage <= 0)

@@ -12,11 +12,17 @@ public class CS_settingsUI : MonoBehaviour
     public const string SHAKE_KEY = "CameraShakeIntensity";
     public const string HITSTOP_KEY = "HitStopDuration";
     public const string VOLUME_KEY = "Volume";
+    public const string MUSIC_VOLUME_KEY = "MusicVolume";
+    public const string SFX_VOLUME_KEY = "SFXVolume";
+    public const string UI_VOLUME_KEY = "UIVolume";
 
     public const float DEFAULT_SENS = 5f;
     public const float DEFAULT_SHAKE = 1.4f;
     public const float DEFAULT_HITSTOP = 1.6f;
     public const float DEFAULT_VOLUME = 0.5f;
+    public const float DEFAULT_MUSIC_VOLUME = 0.5f;
+    public const float DEFAULT_SFX_VOLUME = 0.5f;
+    public const float DEFAULT_UI_VOLUME = 0.5f;
 
     [Header("refes")]
     public Player_CameraController cameraController;    
@@ -31,6 +37,9 @@ public class CS_settingsUI : MonoBehaviour
     [Header("audio Mixer")]
     public AudioMixer masterMixer;
     private const string MASTER_VOLUME_PARAM = "VolumeMaster"; // nombre q expuse en el mixer
+    private const string MUSIC_VOLUME_PARAM = "VolumeMusic";
+    private const string SFX_VOLUME_PARAM = "VolumeSFX";
+    private const string UI_VOLUME_PARAM = "VolumeUI";
 
 
     private void Awake()
@@ -112,7 +121,10 @@ public class CS_settingsUI : MonoBehaviour
         CameraShakeIntensity.currentIntensity = shakeValue;
 
         // aplico volumen
-        ApplyVolumeToMixer(volumeValue);
+        ApplyVolumeToMixer(MASTER_VOLUME_PARAM, PlayerPrefs.GetFloat(VOLUME_KEY, DEFAULT_VOLUME));
+        ApplyVolumeToMixer(MUSIC_VOLUME_PARAM, PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, DEFAULT_MUSIC_VOLUME));
+        ApplyVolumeToMixer(SFX_VOLUME_PARAM, PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_SFX_VOLUME));
+        ApplyVolumeToMixer(UI_VOLUME_PARAM, PlayerPrefs.GetFloat(UI_VOLUME_KEY, DEFAULT_UI_VOLUME));
     }
 
     // ahora son publicas y hacen lo de antes, cambio y guardado
@@ -142,12 +154,33 @@ public class CS_settingsUI : MonoBehaviour
 
     public void OnVolumeChanged(float value)
     {
-        ApplyVolumeToMixer(value);
+        ApplyVolumeToMixer(MASTER_VOLUME_PARAM, value);
         PlayerPrefs.SetFloat(VOLUME_KEY, value);
         PlayerPrefs.Save();
     }
 
-    private void ApplyVolumeToMixer(float value)
+    public void OnMusicVolumeChanged(float value)
+    {
+        ApplyVolumeToMixer(MUSIC_VOLUME_PARAM, value);
+        PlayerPrefs.SetFloat(MUSIC_VOLUME_KEY, value);
+        PlayerPrefs.Save();
+    }
+
+    public void OnSFXVolumeChanged(float value)
+    {
+        ApplyVolumeToMixer(SFX_VOLUME_PARAM, value);
+        PlayerPrefs.SetFloat(SFX_VOLUME_KEY, value);
+        PlayerPrefs.Save();
+    }
+
+    public void OnUIVolumeChanged(float value)
+    {
+        ApplyVolumeToMixer(UI_VOLUME_PARAM, value);
+        PlayerPrefs.SetFloat(UI_VOLUME_KEY, value);
+        PlayerPrefs.Save();
+    }
+
+    private void ApplyVolumeToMixer(string mixerParam, float value)
     {
         float volume;
         if (value <= 0.0001f)
@@ -158,7 +191,7 @@ public class CS_settingsUI : MonoBehaviour
         {
             volume = Mathf.Log10(value) * 20; // q sea decibelios
         }
-        masterMixer.SetFloat(MASTER_VOLUME_PARAM, volume);
+        masterMixer.SetFloat(mixerParam, volume);
     }
 
     // textos

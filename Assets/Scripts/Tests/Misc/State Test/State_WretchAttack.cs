@@ -9,6 +9,8 @@ using UnityEditor;
 public class State_WretchAttack : BaseState
 {
     [Header("References")]
+    [SerializeField] StatsManager _Statman;
+    [SerializeField] PlayerContext _Context;
     [SerializeField] KinematicCharacterMotor _KCC;
     [SerializeField] AnimatorHandler _AnimatorHandler;
     [SerializeField] Animator _Anim; // cache de animador
@@ -18,7 +20,16 @@ public class State_WretchAttack : BaseState
 
     [Header("Variables")]
     [SerializeField] bool _FinishedAttack, _CancelAttack;
+    [SerializeField] float _Damage;
     [SerializeField] float _AttackMovementStrenght;
+    [SerializeField] float _knockbackForce;
+    [SerializeField] float _HitBoxHeight;
+    [SerializeField] float _HitBoxRadius;
+    [SerializeField] Vector3 _HitboxOffset;
+    [SerializeField] LayerMask _Mask;
+
+    Collider[] _HitResults = new Collider[50];
+    private HashSet<Health_Component> _hitcache = new HashSet<Health_Component>();
 
     [Range(0,100)]
     [SerializeField] int _ChanceForPredictiveAttack;
@@ -27,6 +38,10 @@ public class State_WretchAttack : BaseState
     [SerializeField] float _RaycastWallCheckLenght;
 
     [Space]
+
+    [Header("Stats")]
+    [SerializeField] StatIdentifier _DamageStat;
+    [SerializeField] StatIdentifier _knockbackStat;
 
     [Header("Events")]
     public UnityEvent OnChargeAttackStart,OnChargeAttackEnd;
@@ -61,8 +76,9 @@ public class State_WretchAttack : BaseState
     public override void OnEnter(VisceralStateMachine CTX)
     {
         _FinishedAttack = false;
+        _hitcache.Clear();
 
-        //_AnimatorHandler.SetParameter("Wretched", "IsCharging", AnimatorControllerParameterType.Trigger);
+       
         _AnimatorHandler.SetParameter("Wretched", "IsAttacking", AnimatorControllerParameterType.Bool, true);
 
 
@@ -77,6 +93,7 @@ public class State_WretchAttack : BaseState
         }
 
         _MovementStrategy.ToggleObstacleAvoidance(true);
+
     }
 
 
@@ -163,11 +180,41 @@ public class State_WretchAttack : BaseState
             }
         }
 
+        if(_Context == null)
+        {
+            if(CTX.gameObject.TryGetComponent(out PlayerContext Cont))
+            {
+                _Context = Cont;
+            }
+            else
+            {
+                _Context = CTX.gameObject.GetComponentInChildren<PlayerContext>();
+            }
+        }
+
+        if(_Statman == null)
+        {
+            if(_Context != null)
+            {
+                if (_Context.Stats)
+                {
+                    _Statman = _Context.Stats;
+                }
+            }
+
+            if(_Statman == null)
+            {
+                _Statman = CTX.GetComponentInChildren<StatsManager>();
+            }
+        }
+
  
         _AnimatorHandler.TryGetAnimator("Wretched", out Animator Anim);
         _Anim = Anim;
 
         _Target = FindObjectOfType<Player_Movement>().transform;
+
+        _Statman.OnStatChanged += UpdateStats;
     }
 
     public override void OnTick(VisceralStateMachine CTX, float TickRate)
@@ -206,12 +253,16 @@ public class State_WretchAttack : BaseState
             }
             else
             {
-                // Si el camino está libre, ataca normal
+                // Si el camino esta libre, ataca normal
                 _MovementStrategy.SetMovementSpeed(_AttackMovementStrenght);
                 _MovementStrategy.UpdateVelocity(_FinalChargeDirection.normalized);
             }
 
-            // Si estamos en la fase de vuelo, chequeamos el final de la animación
+            // procesar danio 
+            ProcessHitbox(CTX);
+
+
+            // Si estamos en la fase de vuelo, chequeamos el final de la animacion
             if (_Anim.GetCurrentAnimatorStateInfo(0).IsTag("IdleAttack") && _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
             {
                 _AnimatorHandler.SetParameter("Wretched", "IsAttacking", AnimatorControllerParameterType.Bool, false);
@@ -264,9 +315,10 @@ public class State_WretchAttack : BaseState
         Vector3 OriginPoint = _KCC.Capsule.bounds.center;
         Vector3 Direction = _FinalChargeDirection.normalized;
 
+        float radius = _KCC.Capsule.radius * 0.9f;
         float Distance = _KCC.Capsule.radius + _RaycastWallCheckLenght;
 
-        if (Physics.Raycast(OriginPoint, Direction, Distance,_RaycastMask))
+        if (Physics.SphereCast(OriginPoint,radius,Direction,out RaycastHit hit,_RaycastWallCheckLenght, _RaycastMask))
         {
             return true;
         }
@@ -275,12 +327,102 @@ public class State_WretchAttack : BaseState
 
     }
 
+    void ProcessHitbox(VisceralStateMachine CTX)
+    {
+        // calculate capsule center = capsuleposition + rotation * offset
+        Vector3 CapsuleCenter = _KCC.Capsule.transform.position + (_KCC.Capsule.transform.rotation * _HitboxOffset);
+
+
+        // calculate the distance from the center to the extremes 
+        float pointOffset = (_HitBoxHeight / 2f) - _HitBoxRadius;
+
+        pointOffset = Mathf.Max(0,pointOffset);
+
+        // we get the centers of each circle that makes the capsule.
+        // this is the center of the capsule +- the offset
+        Vector3 Point0 = CapsuleCenter - (_KCC.CharacterUp * pointOffset);
+        Vector3 Point1 = CapsuleCenter + (_KCC.CharacterUp * pointOffset);
+
+        int hits = Physics.OverlapCapsuleNonAlloc(Point0,Point1, _HitBoxRadius,_HitResults,_Mask);
+
+
+        for(int i = 0; i < hits ; i++)
+        {
+            Collider hitcol = _HitResults[i];
+
+            if (hitcol == null) continue;
+
+            DamageScore DMS = new DamageScore()
+            {
+                Attacker = _Context,
+                DamageAmount = _Damage,
+                ElementalDamage = ElementType.Physical,
+                FactionID = FactionID.LimboMonster1
+            };
+
+            Vector3 knockbackDir = (hitcol.transform.position - _KCC.Capsule.transform.position);
+            knockbackDir.y = 0;
+
+            
+
+            DamageDispatcher.ProcessSingleHit
+                (
+                hitcol,
+                ref DMS,
+                knockbackDir,
+                _knockbackForce,
+                _hitcache,
+                false               
+                );
+        }
+
+    }
+
+    private void UpdateStats(StatIdentifier ID, float value)
+    {
+        if(ID == _DamageStat)
+        {
+            _AttackMovementStrenght = value;
+        }
+        else if (ID == _knockbackStat) _knockbackForce = value;
+    }
+
+
+
     private void OnDrawGizmosSelected()
     {
+        // null check
+        if (_KCC == null || _KCC.Capsule == null) return;
 
-        Gizmos.DrawLine(_KCC.CharacterUp, _FinalChargeDirection);
+        // direction ray
+        Gizmos.color = Color.blue;
+        if (_FinalChargeDirection != Vector3.zero)
+        {
+            Gizmos.DrawRay(_KCC.Capsule.transform.position, _FinalChargeDirection);
+        }
 
+        // step 3) we calculate the center of the capsule
+        Vector3 CapsuleCenter = _KCC.Capsule.transform.position + (_KCC.Capsule.transform.rotation * _HitboxOffset);
 
+        // step 4) we calculate the offset
+        float pointOffset = (_HitBoxHeight / 2f) - _HitBoxRadius;
+        pointOffset = Mathf.Max(0, pointOffset);
+
+        // step 5) we get the sphere positions
+        Vector3 Point0 = CapsuleCenter - (_KCC.Capsule.transform.up * pointOffset);
+        Vector3 Point1 = CapsuleCenter + (_KCC.Capsule.transform.up * pointOffset);
+
+        // step 6) we draw the spheres
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(Point0, _HitBoxRadius);
+        Gizmos.DrawWireSphere(Point1, _HitBoxRadius);
+
+        // Step 7) we draw the lines
+        Gizmos.color = new Color(0, 0, 1, 0.5f); // transparent blue
+        Gizmos.DrawLine(Point0 + _KCC.Capsule.transform.right * _HitBoxRadius, Point1 + _KCC.Capsule.transform.right * _HitBoxRadius);
+        Gizmos.DrawLine(Point0 - _KCC.Capsule.transform.right * _HitBoxRadius, Point1 - _KCC.Capsule.transform.right * _HitBoxRadius);
+        Gizmos.DrawLine(Point0 + _KCC.Capsule.transform.forward * _HitBoxRadius, Point1 + _KCC.Capsule.transform.forward * _HitBoxRadius);
+        Gizmos.DrawLine(Point0 - _KCC.Capsule.transform.forward * _HitBoxRadius, Point1 - _KCC.Capsule.transform.forward * _HitBoxRadius);
     }
 
 }

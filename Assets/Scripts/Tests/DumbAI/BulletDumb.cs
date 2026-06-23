@@ -164,11 +164,16 @@ public class BulletDumb : MonoBehaviour, IParriable
         Destroy(this.gameObject);
     }
 
-    public void parried(DamageScore DMScore,Vector3 Direction = default)
+    public void parried(DamageScore? DMScore,Vector3 Direction = default)
     {
         if(Direction == Vector3.zero)
         {
             Debug.LogError("<Color=blue> Visceral Error: No direction for parry</Color>");
+        }
+        if (!DMScore.HasValue)
+        {
+            Debug.LogError("<Color=blue> Visceral Error: No DamageScore found for parry" + this.name + "</Color>");
+            return;
         }
 
         print("rotate" + Direction);
@@ -180,7 +185,7 @@ public class BulletDumb : MonoBehaviour, IParriable
             BulletSpeed = BulletSpeed * 2;
             damage = damage * 2;
 
-            SetOwner(DMScore.Attacker.PlayerGameObject, DMScore.Attacker);
+            SetOwner(DMScore.Value.Attacker.PlayerGameObject, DMScore.Value.Attacker);
             Parried = true;
         }
        
