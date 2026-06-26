@@ -67,6 +67,17 @@ public class EnvironmentalEffectManager : MonoBehaviour
                 _activeEffect.ApplyToSingleTarget(bManager);
             }
         }
+
+        if (_activeEffect != null && _roomManager.GetEffect() == RoomSpawnerManager.EnvironmentalEffect.Frozen)
+        {
+            FreezeEnemyVisual freezeVisual =
+                target.GetComponentInChildren<FreezeEnemyVisual>();
+
+            if (freezeVisual != null)
+            {
+                freezeVisual.SetFrozen(true);
+            }
+        }
     }
     // PAUSA Y REANUDO
     public void PauseEffect()
