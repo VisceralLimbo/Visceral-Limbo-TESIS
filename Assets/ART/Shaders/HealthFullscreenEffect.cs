@@ -35,6 +35,13 @@ public class HealthFullscreenEffect : MonoBehaviour
         {
             windEffectMat.SetFloat(SHADER_ALPHA_PROPERTY, alpha);
         }
+
+        Debug.Log($"Wind Alpha = {alpha}");
+
+        if (windEffectMat != null)
+        {
+            windEffectMat.SetFloat("_Alpha", alpha);
+        }
     }
 
     public void FadeDarkness(float targetAlpha, float fadeSpeed)
@@ -59,7 +66,7 @@ public class HealthFullscreenEffect : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-
+        windEffectMat.SetFloat("_Alpha", 0f);
         fullscreenMat.SetFloat("_VignetteIntensity", 0f);
         darknessMat.SetFloat("_Alpha", 0f);
         blackAndWhiteMat.SetFloat("_Intensity", 0f);
@@ -189,5 +196,6 @@ public class HealthFullscreenEffect : MonoBehaviour
 
         fullscreenMat.SetFloat("_VignetteIntensity", 0f);
     }
+
 }
 
