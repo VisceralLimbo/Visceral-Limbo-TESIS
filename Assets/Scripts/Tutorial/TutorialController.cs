@@ -119,7 +119,11 @@ public class TutorialController : MonoBehaviour
 
     public void OnInventoryOpened()
     {
-        if (currentTutorial != TutorialID.Inventory) return;
+        if (popupUI == null)
+            return;
+
+        if (currentTutorial != TutorialID.Inventory)
+            return;
 
         if (!inventoryOpened)
         {

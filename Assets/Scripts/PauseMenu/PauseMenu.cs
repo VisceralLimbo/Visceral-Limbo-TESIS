@@ -35,7 +35,11 @@ public class PauseMenu : MonoBehaviour
                 return;
             }
 
-            TutorialController.Instance?.OnInventoryOpened();
+            if (TutorialController.Instance != null)
+            {
+                TutorialController.Instance.OnInventoryOpened();
+            }
+
             // si estaba pausado o nop
             if (!isPaused)
             {
