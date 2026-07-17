@@ -102,8 +102,8 @@ public class Wretch_StateBite : BaseState
 
         stateMachine = CTX;
 
-        _BiteAttack =_StatsManager.GetFloatStatValue(AttackStatID);
-        _AttackKnockback = _StatsManager.GetFloatStatValue(KnockbackStatID);
+        _BiteAttack = 20f;
+        _AttackKnockback = Mathf.Clamp(_StatsManager.GetFloatStatValue(KnockbackStatID), 0f, 2f);
 
     }
 
@@ -231,9 +231,16 @@ public class Wretch_StateBite : BaseState
 
     private void UpdateStats(StatIdentifier Stat, float Value)
     {
-        if (Stat == AttackStatID) { _BiteAttack = Value; return; };
-        if (Stat == KnockbackStatID) { _AttackKnockback = Value; ; return; }
+        if (Stat == AttackStatID)
+        {
+            _BiteAttack = 20f;
+            return;
+        }
 
-
+        if (Stat == KnockbackStatID)
+        {
+            _AttackKnockback = Mathf.Clamp(Value, 0f, 2f);
+            return;
+        }
     }
 }
