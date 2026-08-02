@@ -72,7 +72,7 @@ public class SpeedItemLogic : ItemLogic
         currentAlpha = Mathf.MoveTowards(currentAlpha, targetAlpha, fadeSpeed * Time.deltaTime);
 
         // aplicar al efecto
-        HealthFullscreenEffect.Instance?.SetWindAlpha(currentAlpha);
+        HealthFullscreenEffect.Instance?.SetMovementAlpha(currentAlpha);
     }
 
 
@@ -162,7 +162,7 @@ public class SpeedItemLogic : ItemLogic
         // apago shader cuando elimino registro
         if (HealthFullscreenEffect.Instance != null)
         {
-            HealthFullscreenEffect.Instance.SetWindAlpha(0.0f); // apagado
+            HealthFullscreenEffect.Instance.SetMovementAlpha(0.0f); // apagado
         }
         base.Unregister();
     }
