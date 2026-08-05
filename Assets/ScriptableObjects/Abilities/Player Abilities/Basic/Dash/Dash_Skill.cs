@@ -39,6 +39,7 @@ public class Dash_Skill : Visceral_SkillLogic
 
         // termina la logica del dash y activo el doubledamage
         OnDashActivated?.Invoke();
+        HealthFullscreenEffect.Instance?.TriggerDashEffect();
         SoundManager.Instance.CreateSound().WithSoundData(_abiltySound).play();
     }
 

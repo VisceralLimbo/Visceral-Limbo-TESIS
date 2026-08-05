@@ -12,6 +12,8 @@ public class HealthFullscreenEffect : MonoBehaviour
     [Header("Velocity Effect")]
     [SerializeField] private Material windEffectMat;
     private const string SHADER_ALPHA_PROPERTY = "_Alpha"; //juego con el alpha apagano y prendiendo para movimiento
+    private float movementAlpha;
+    private float dashAlpha;
 
     [Header("Darkness Effect")]
     [SerializeField] private Material darknessMat;
@@ -35,6 +37,30 @@ public class HealthFullscreenEffect : MonoBehaviour
         {
             windEffectMat.SetFloat(SHADER_ALPHA_PROPERTY, alpha);
         }
+
+        Debug.Log($"Wind Alpha = {alpha}");
+
+        if (windEffectMat != null)
+        {
+            windEffectMat.SetFloat("_Alpha", alpha);
+        }
+    }
+
+    public void SetMovementAlpha(float value)
+    {
+        movementAlpha = value;
+        UpdateAlpha();
+    }
+
+    public void SetDashAlpha(float value)
+    {
+        dashAlpha = value;
+        UpdateAlpha();
+    }
+
+    private void UpdateAlpha()
+    {
+        windEffectMat.SetFloat("_Alpha", Mathf.Max(movementAlpha, dashAlpha));
     }
 
     public void FadeDarkness(float targetAlpha, float fadeSpeed)
@@ -59,7 +85,7 @@ public class HealthFullscreenEffect : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-
+        windEffectMat.SetFloat("_Alpha", 0f);
         fullscreenMat.SetFloat("_VignetteIntensity", 0f);
         darknessMat.SetFloat("_Alpha", 0f);
         blackAndWhiteMat.SetFloat("_Intensity", 0f);
@@ -188,6 +214,21 @@ public class HealthFullscreenEffect : MonoBehaviour
             StopCoroutine(currentRoutine);
 
         fullscreenMat.SetFloat("_VignetteIntensity", 0f);
+    }
+
+    public void TriggerDashEffect()
+    {
+        StopCoroutine(nameof(DashRoutine));
+        StartCoroutine(DashRoutine());
+    }
+
+    private IEnumerator DashRoutine()
+    {
+        SetDashAlpha(1f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        SetDashAlpha(0f);
     }
 }
 

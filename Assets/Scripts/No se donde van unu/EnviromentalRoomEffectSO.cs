@@ -101,6 +101,11 @@ public class EnviromentalRoomEffectSO : RoomEffectSO
                 {
                     manager.snowParticles.Play();
                 }
+
+                foreach (var enemy in manager.GetComponentsInChildren<FreezeEnemyVisual>())
+                {
+                    enemy.SetFrozen(true);
+                }
             }
         }
     }
@@ -168,6 +173,11 @@ public class EnviromentalRoomEffectSO : RoomEffectSO
                 if (manager.snowParticles != null)
                 {
                     manager.snowParticles.Stop();
+                }
+
+                foreach (var enemy in manager.GetComponentsInChildren<FreezeEnemyVisual>())
+                {
+                    enemy.SetFrozen(false);
                 }
             }
         }

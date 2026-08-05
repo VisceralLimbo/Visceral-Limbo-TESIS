@@ -8,12 +8,18 @@ public class TutorialPopupUI : MonoBehaviour
 
     public void Show(string message)
     {
+        if (canvas == null || text == null)
+            return;
+
         canvas.SetActive(true);
         text.text = message;
     }
 
     public void Hide()
     {
+        if (canvas == null)
+            return;
+
         canvas.SetActive(false);
     }
 }

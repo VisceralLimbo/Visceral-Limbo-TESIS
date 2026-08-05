@@ -1171,7 +1171,7 @@ MonoBehaviour:
   _StatsManager: {fileID: 1932132607407447805}
   _AttackRadius: 3
   _BiteAttack: 0
-  _AttackKnockback: 0
+  _AttackKnockback: 1
   _AttackMask:
     serializedVersion: 2
     m_Bits: 1216
@@ -2243,6 +2243,7 @@ GameObject:
   - component: {fileID: 8734160248357180579}
   - component: {fileID: 211252748068485804}
   - component: {fileID: 1932132607407447805}
+  - component: {fileID: 3325713639368488012}
   m_Layer: 7
   m_Name: 'Wretched '
   m_TagString: Untagged
@@ -2371,6 +2372,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockData: {fileID: 11400000, guid: 548aaac79fef77c4caaaa77728082b54, type: 2}
   FloatStatList: []
+--- !u!114 &3325713639368488012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4271440006843977573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3715822649f143b43946d209c550a370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 5324233168627536266}
 --- !u!1 &4300835190812701095
 GameObject:
   m_ObjectHideFlags: 0
@@ -3139,9 +3154,9 @@ MonoBehaviour:
   _Target: {fileID: 1031295680299478082}
   _FinishedAttack: 0
   _CancelAttack: 0
-  _Damage: 20
+  _Damage: 10
   _AttackMovementStrenght: 15
-  _knockbackForce: 6
+  _knockbackForce: 1
   _HitBoxHeight: 3.03
   _HitBoxRadius: 0.6
   _HitboxOffset: {x: 0, y: 0.5, z: 0}
