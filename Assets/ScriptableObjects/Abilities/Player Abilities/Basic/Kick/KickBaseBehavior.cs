@@ -7,84 +7,92 @@ public class KickBaseBehavior : Visceral_SkillLogic
     //USERCONTEXT
 
     [Header("References")]
+    [SerializeField] GameObject _kickGameObject;
     [SerializeField] Player_CameraController _camContext;
     [SerializeField] AnimatorOverrideController _ANCO; //not used currently
-    [SerializeField] Animator _Anim; //not used currently
+    [SerializeField] Animator _anim; //not used currently
 
     [Space]
     [Header("Variables")]
-    [SerializeField] float KickRange, KickRadius,KickStrenght,KickDamage;
-    [SerializeField] Vector3 PlayerDirector;
+    [SerializeField] float _KickRange, _KickRadius,_KickStrenght,_KickDamage;
+    [SerializeField] string _AnimatorKey;
+    [SerializeField] string _AnimationKey;
+    [SerializeField] Vector3 _PlayerDirector;
 
     [Space]
     [Header("Miscellaneous")]
     [SerializeField] bool DrawGizmos;
 
+    HashSet<Health_Component> _healthComponents = new HashSet<Health_Component>();
+    RaycastHit[] _raycastResults = new RaycastHit[20];
+
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
     {
         base.Initialize(data, Skmanager, UserContext);
-        _Anim = _UserContext.PlayerGameObject.transform.root.GetComponentInChildren<Animator>();
+        
         _camContext = _UserContext.PlayerGameObject.transform.root.GetComponentInChildren<Player_CameraController>();
 
+        var animHandler = UserContext.gameObject.GetComponent<AnimatorHandler>();
+
+        if(animHandler.TryGetAnimator(_AnimatorKey, out Animator anim))
+        {
+            _anim = anim;
+            _kickGameObject = anim.gameObject;
+        }
     }
 
 
     public override void ActivateSkill()
     {
+        print("Kicking");
         StartCoroutine(LockSkill());
     }
 
     IEnumerator LockSkill()
     {
-
-
-        //direccion de la camara
-        //Vector3 KickDirection = _camContext.transform.forward;
-        //Vector3 KickOrigin = _UserContext.PlayerTransform.position + KickDirection * KickRange;
-
-        //transform.position = KickOrigin;
-        //almacenamos la direccion global para proyectiles
-        //PlayerDirector = KickDirection.normalized;
-
-        print("Kicking ");
-
-        Ray rayct = new Ray(_camContext.transform.position, _camContext.transform.forward);
-
-        if (!Physics.Raycast(rayct, out RaycastHit HitInfo, KickRange))
-            yield break;
-
-        GameObject HitOBJ = HitInfo.collider.gameObject;
-
-        // evito pegarme a mi mismo
-        if (HitInfo.collider.GetComponentInParent<PlayerContext>() == _UserContext)
-            yield break;
-
-        print(HitOBJ.name);
-
-        Health_Component HPComp = HitOBJ.GetComponentInParent<Health_Component>();
-
-        if (HPComp == null)
+        if (_anim != null)
         {
-            HPComp = HitOBJ.GetComponentInChildren<Health_Component>();
+            _kickGameObject.SetActive(true);
+            _anim.SetTrigger(_AnimationKey);
         }
 
-        if (HPComp != null)
-        {
-            DamageScore DMG = new DamageScore()
-            {
-                DamageAmount = KickDamage,
+        _healthComponents.Clear();
+        Ray rayct = new Ray(_camContext.transform.position, _camContext.transform.forward);
+
+
+        int hits = Physics.SphereCastNonAlloc(rayct, _KickRadius, _raycastResults, _KickRange);
+
+         if(hits <= 0)
+         {
+            yield break;
+         }
+
+         DamageScore DMG = new DamageScore()
+         {
+                DamageAmount = _KickDamage,
                 Attacker = _UserContext,
                 ElementalDamage = ElementType.Physical,
                 FactionID = _UserContext.faction,
-            };
+         };
 
-            Vector3 Dir = HPComp.transform.position - _UserContext.PlayerTransform.position;
+        for(int i = 0; i < hits; i++)
+        {
+            var hit = _raycastResults[i];
+            Vector3 Dir = hit.collider.transform.position - _UserContext.PlayerTransform.position;
             Dir.y = 0f;
             Dir.Normalize();
 
-            print(HPComp.name + " " + HitOBJ.name);
-            HPComp.TakeDamageWithKnockback(Dir, KickStrenght, DMG);
+            if (DamageDispatcher.ProcessSingleHit(hit.collider, ref DMG, Dir, _KickStrenght, _healthComponents, false))
+            {
+                print(hit.collider.name + " " + hit.collider.gameObject.name);
+            }
+            else
+            {
+                print("Couldnt hit " + hit.collider.name + " " + hit.collider.gameObject.name);
+            }
+
         }
+
 
         yield break;
     }
@@ -97,7 +105,7 @@ public class KickBaseBehavior : Visceral_SkillLogic
         Gizmos.color = Color.blue;
 
 
-        Gizmos.DrawLine(_camContext.transform.position,_camContext.transform.position + _camContext.transform.forward * KickRange);
+        Gizmos.DrawLine(_camContext.transform.position,_camContext.transform.position + _camContext.transform.forward * _KickRange);
     }
 
 }

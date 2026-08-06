@@ -44372,20 +44372,65 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundData:
-    Clip: {fileID: 0}
+  - Clip: {fileID: 0}
     mixerGroup: {fileID: 0}
     Loop: 0
     PlayOnAwake: 0
     SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
     IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  - Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
+  HealingSoundData: []
   CurrentHealth: 0
   MaxHealth: 1
+  DamageReduction: 0
+  Defense: 0
+  DamageInvulnerability: 0
   _RB: {fileID: 3568182296298995347}
   DestroyOnDeath: 0
   DesactivateOnDeath: 0
   Died: 0
   _Context: {fileID: 2189849915831026756}
-  _RagdollPrefab: {fileID: 0}
 --- !u!114 &2189849915831026756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44400,9 +44445,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Stats: {fileID: 0}
   Inventory: {fileID: 0}
+  BuffManager: {fileID: 0}
   PlayerGameObject: {fileID: 6415037378930908518}
   PlayerTransform: {fileID: 5930425071783364572}
   KCCMotor: {fileID: 0}
+  _HPIdentifier: {fileID: 0}
+  _DamageIdentifier: {fileID: 0}
   faction: 4
   EnemyValueScore: 0
 --- !u!54 &3568182296298995347

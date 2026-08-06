@@ -356,8 +356,8 @@ public class Player_MeleeDirectional: Player_MeleeAttack
 
     public void FinishAttack()
     {
-        //_Anim.SetTrigger("AttackTrigger");
-        //_Anim.ResetTrigger("ChargeRelease");
+        //_anim.SetTrigger("AttackTrigger");
+        //_anim.ResetTrigger("ChargeRelease");
         //_AnimHandler.SetParameter("Weapon", "AttackTrigger", AnimatorControllerParameterType.Trigger);
 
         //foreach (var trail in _swordTrails)

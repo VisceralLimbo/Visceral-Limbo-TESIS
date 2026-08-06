@@ -116,7 +116,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
          //Catch! no terminamos la animacion del ataque
         while (_Anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
         {
-            //print("animation not finished: " +_Anim.GetCurrentAnimatorStateInfo(0).ToString() + _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
+            //print("animation not finished: " +_anim.GetCurrentAnimatorStateInfo(0).ToString() + _anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
             yield return null;
         }
 
