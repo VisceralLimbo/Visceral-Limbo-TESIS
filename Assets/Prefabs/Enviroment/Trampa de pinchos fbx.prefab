@@ -402,6 +402,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3302603426255803994}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f896b352d329ed044914a19610d13b56,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6336528432975978638}
     - targetCorrespondingSourceObject: {fileID: -7335493138646080741, guid: f896b352d329ed044914a19610d13b56,
         type: 3}
       insertIndex: -1
@@ -546,8 +550,7 @@ MonoBehaviour:
   damageInterval: 1
   moveHeight: 2.2
   moveSpeed: 5
-  freezeMovement: 0
-  playerContext: {fileID: 0}
+  playerContext: {fileID: -6336528432975978638}
   spikes:
   - {fileID: 1926734211504961012}
   - {fileID: 6939566098848155997}
@@ -580,6 +583,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-6336528432975978638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8469102489433295712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3289ddf945ef324ea0b2b94eaabb29d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Stats: {fileID: 0}
+  Inventory: {fileID: 0}
+  BuffManager: {fileID: 0}
+  PlayerGameObject: {fileID: 0}
+  PlayerTransform: {fileID: 0}
+  KCCMotor: {fileID: 0}
+  _HPIdentifier: {fileID: 0}
+  _DamageIdentifier: {fileID: 0}
+  faction: 4
+  EnemyValueScore: 0
 --- !u!1 &8876258542424679792 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 173366713645962049, guid: f896b352d329ed044914a19610d13b56,

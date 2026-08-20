@@ -5,57 +5,62 @@ using UnityEngine.VFX;
 
 public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 {
-    // _UserContext => PlayerContext
-
+    [Header("Animation & Visuals")]
     [SerializeField] AnimatorOverrideController _ANCO;
     [SerializeField] Animator _Anim;
+    [SerializeField] GameObject _effectHability;
+    [SerializeField] SoundEmitter _SoundEmit;
 
-
+    [Header("Skill Parameters")]
     [SerializeField] PlayerContext _Context;
-
     [SerializeField] float SkillAttackRadius;
     [SerializeField] float SkillDuration;
     [SerializeField] float Damage;
     [SerializeField] float SkillKnockback;
-    [SerializeField]  GameObject _effectHability;
-
-    [SerializeField] SoundEmitter _SoundEmit;
     [SerializeField] LayerMask _AttackMask;
+    [SerializeField] private float hitCooldownPerEnemy = 0.5f;
 
-    //private HashSet<Collider> TaggedColliders = new HashSet<Collider>(); VIEJO
-    //private HashSet<Health_Component> TaggedHealth = new HashSet<Health_Component>(); VIEJO
+    [Header("Stats Key")]
+    [SerializeField] StatIdentifier _Skill1DamageID;
+    [SerializeField] StatIdentifier _Skill1DurationID;
 
-    [SerializeField] private float hitCooldownPerEnemy = 0.5f; //NUEVO
+    // Buffer pre-asignado para OverlapSphereNonAlloc. 
+    // 32 es un buen número mágico, pero súbelo si esperas hordas más densas.
+    private Collider[] _hitResults = new Collider[50];
 
-    private Dictionary<Health_Component, float> lastHitTime = new Dictionary<Health_Component, float>(); // NUEVO
+    private Dictionary<Health_Component, float> lastHitTime = new Dictionary<Health_Component, float>();
 
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
     {
         base.Initialize(data, Skmanager, UserContext);
-
         _Anim = _UserContext.PlayerGameObject.transform.root.GetComponentInChildren<Animator>();
-
         _Context = _UserContext;
-    }
 
+        if(_Context != null)
+        {
+            if(_Context.Stats != null)
+            {
+                _Context.Stats.OnStatChanged += UpdateStats;
+            }
+        }
+    }
 
     public override void ActivateSkill()
     {
         _Anim.speed = SkillSpeedMod;
         _Anim.SetTrigger("Exe_Skill1");
 
-        Vector3 offsetPos = _UserContext.PlayerGameObject.transform.position + Vector3.up * 0.1f; // cambiá el 1.0f según lo alto que lo quieras
+        Vector3 offsetPos = _UserContext.PlayerGameObject.transform.position + Vector3.up * 0.1f;
         GameObject vfx = Instantiate(_effectHability, offsetPos, Quaternion.identity, _UserContext.PlayerGameObject.transform);
 
-        //activo bloqueo
         _PlayerBase.SetSkillActiveState(true);
 
-        //sonidos
         SoundManager.Instance.CreateSound()
         .WithSoundData(_SoundDataList[0])
         .WithRandomPitch(true)
         .WithPosition(_UserContext.PlayerTransform.position)
         .play(out SoundEmitter emitter);
+
         _SoundEmit = emitter;
 
         StartCoroutine(LockSkill());
@@ -63,30 +68,32 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
     IEnumerator LockSkill()
     {
-        //TaggedColliders.Clear(); //VIEJO
-        //TaggedHealth.Clear(); // VIEJO
-
-        lastHitTime.Clear(); //NUEVO
+     
+        lastHitTime.Clear();
 
         float timer = 0;
-     
-        while(timer < SkillDuration)
-        {
-            Collider[] hitcolliders = Physics.OverlapSphere(_Context.PlayerTransform.position, SkillAttackRadius, _AttackMask);
 
-            foreach(var HitCol in hitcolliders)
+        while (timer < SkillDuration)
+        {
+            // calculo de la cantidad de hits que tuvimos
+            int hits = Physics.OverlapSphereNonAlloc(_Context.PlayerTransform.position, SkillAttackRadius, _hitResults, _AttackMask);
+
+            for (int i = 0; i < hits; i++)
             {
-                ProcessHit(HitCol);
+                Collider hitCol = _hitResults[i];
+
+                if (hitCol == null || hitCol.gameObject == _UserContext.PlayerGameObject) continue;
+
+                ProcessHit(hitCol);
             }
 
             timer += (Time.deltaTime * TimeDilationManager.GlobalTimeScale);
-
             yield return null;
         }
 
         _Anim.speed = 1.0f;
 
-        if(_SoundEmit != null && _SoundEmit.isActiveAndEnabled)
+        if (_SoundEmit != null && _SoundEmit.isActiveAndEnabled)
         {
             SoundManager.Instance.ReturnToPool(_SoundEmit);
             _SoundEmit = null;
@@ -97,114 +104,51 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
 
     private void ProcessHit(Collider other)
     {
-        if (other.gameObject == _UserContext.PlayerGameObject) return;
-        //if (TaggedColliders.Contains(other)) return; //VIEJO
+        print("whirlwinding " + other.name + " root: "+ other.transform.root.name);
 
-
-        // priorizamos el Idamageable
-        if(other.TryGetComponent(out IDamageable Idamage))
+        DamageScore DMS = new DamageScore
         {
-            //if(Idamage.GetHealthComponent(out Health_Component IHealth) && !TaggedHealth.Contains(IHealth))//VIEJO
-            if (Idamage.GetHealthComponent(out Health_Component IHealth) && CanHitHealth(IHealth)) //NUEVO
-            {
-                // stopgap ! player ataco algo sin Context
-                if(IHealth.Context == null)
-                {
-                    IHealth.SimpleDamage(Damage);
-                    PlayerEvents.PlayerSucessfulHit();
-                    return;
-                }
+            Attacker = _UserContext,
+            DamageAmount = Damage,
+            ElementalDamage = ElementType.Physical,
+            FactionID = FactionID.LimboMonster1
+        };
+        DMS.AddTag(ScoreFlags.Skill1Kill);
 
-                if(IHealth.Context != null && IHealth.Context != _Context )
-                {
-                    //TaggedColliders.Add(other); //VIEJO
-                    //TaggedHealth.Add(IHealth); //VIEJO
+        Vector3 knockbackDir = (other.transform.position - _Context.PlayerTransform.position);
+        knockbackDir.y = 0;
 
-                    Vector3 Dir = IHealth.Context.PlayerTransform.position - _Context.PlayerTransform.position;
-                    Dir.y = 0;
+        // El Dispatcher se encarga de checkear el diccionario y aplicar el cooldown
+        bool damageDealt = DamageDispatcher.ProcessContinuousHit
+            (
+                other,
+                ref DMS,
+                knockbackDir.normalized,
+                SkillKnockback,
+                lastHitTime,
+                hitCooldownPerEnemy,
+                false
+            );
 
-
-                    DamageScore DamageDT = new DamageScore
-                    {
-                        Attacker = _UserContext,
-                        DamageAmount = Damage,
-                        Victim = IHealth.Context, // Puede ser null si es un prop, lo manejamos abajo
-                        ElementalDamage = ElementType.Physical,
-                        FactionID = FactionID.LimboMonster1
-                    };
-                    DamageDT.AddTag(ScoreFlags.Skill1Kill);
-
-                    PlayerEvents.PlayerSucessfulHit();
-                    IHealth.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
-                    SlowMotion.Stop(0.1f, 0.02f, false);
-                }
-      
-
-
-            }
-
-
-        }
-        else if(other.TryGetComponent( out Health_Component HPComp))
+        // Si el dispatcher confirma que se aplico danio, disparamos el hitstop visual
+        if (damageDealt)
         {
-            if(HPComp.Context == null)
-            {
-                HPComp.SimpleDamage(Damage);
-                PlayerEvents.PlayerSucessfulHit();
-                return;
-            }
-
-            if (HPComp.Context != _Context)
-            {
-                if (!CanHitHealth(HPComp)) return; //NUEVO
-
-                //TaggedColliders.Add(other); //VIEJO
-                //TaggedHealth.Add(HPComp); //VIEJO
-
-                Vector3 Dir = HPComp.Context.PlayerTransform.position - _Context.PlayerTransform.position;
-                Dir.y = 0;
-
-
-                DamageScore DamageDT = new DamageScore
-                {
-                    Attacker = _UserContext,
-                    DamageAmount = Damage,
-                    Victim = HPComp.Context, // Puede ser null si es un prop, lo manejamos abajo
-                    ElementalDamage = ElementType.Physical,
-                    FactionID = FactionID.LimboMonster1
-                };
-                DamageDT.AddTag(ScoreFlags.Skill1Kill);
-
-                if (HPComp.Context == null)
-                {
-                    HPComp.SimpleDamage(Damage);
-                }
-                else
-                {
-                    HPComp.TakeDamageWithKnockback(Dir.normalized, SkillKnockback, DamageDT);
-                }
-
-
-                SlowMotion.Stop(0.1f, 0.02f, false);
-            }
-
-
-
+            SlowMotion.Stop(0.1f, 0.02f, false);
         }
     }
 
-    //NUEVO METODO
-    private bool CanHitHealth(Health_Component health)
+
+    private void UpdateStats(StatIdentifier ID, float Value)
     {
-        if (health == null) return false;
-
-        if (lastHitTime.TryGetValue(health, out float lastTime))
+        if(ID == _Skill1DamageID)
         {
-            if (Time.time - lastTime < hitCooldownPerEnemy)
-                return false;
+            SkillDamageMod = Value;
+            Damage *= SkillDamageMod;
         }
-
-        lastHitTime[health] = Time.time;
-        return true;
+        else if(ID == _Skill1DurationID)
+        {
+            SkillDurationMod = Value;
+            SkillDurationMod *= SkillDurationMod;
+        }
     }
 }

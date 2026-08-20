@@ -54,7 +54,7 @@ public class BulletDumb : MonoBehaviour, IParriable
         //desactivamos el ignore de colisiones del viejo owner
         if(_OwnerContext != null)
         {
-            Physics.IgnoreCollision(this._Collider, _OwnerContext.PlayerTransform.GetComponent<Collider>(), false);
+            Physics.IgnoreCollision(this._Collider, _OwnerContext.PlayerTransform.GetComponent<Collider>(),false);
         }
 
         _OwnerGameObject = Owner;
@@ -69,99 +69,26 @@ public class BulletDumb : MonoBehaviour, IParriable
         damage = NewDamage;
     }
 
-
-    private HashSet<Collider> TaggedColliders = new HashSet<Collider>();
-    private HashSet<Health_Component> TaggedHealth = new HashSet<Health_Component>();
-
+    HashSet<Health_Component> hitcache = new HashSet<Health_Component>();
     private void OnTriggerEnter(Collider other)
     {
+        print("hit!" + other.name);
         if (other.gameObject == _OwnerContext.PlayerGameObject) return;
-        if (TaggedColliders.Contains(other)) return;
+         DamageScore DMS = new DamageScore()
+         {
+                Attacker = _OwnerContext,
+                DamageAmount = damage,
+                ElementalDamage = ElementType.Physical,
+                FactionID = _OwnerContext.faction,
+         };
 
+        if (Parried) DMS.AddTag(ScoreFlags.Parried);
 
-        // priorizamos el Idamageable
-        if (other.TryGetComponent(out IDamageable Idamage))
+        if(DamageDispatcher.ProcessSingleHit(other,ref DMS, null, 0, hitcache, false))
         {
-            if (Idamage.GetHealthComponent(out Health_Component IHealth) && !TaggedHealth.Contains(IHealth))
-            {
-                if (IHealth.Context != _OwnerContext)
-                {
-                    TaggedColliders.Add(other);
-                    TaggedHealth.Add(IHealth);
-
-                    Vector3 Dir = IHealth.Context.PlayerTransform.position - _OwnerContext.PlayerTransform.position;
-                    Dir.y = 0;
-
-
-                    DamageScore DamageDT = new DamageScore
-                    {
-                        Attacker = _OwnerContext,
-                        DamageAmount = Damage,
-                        Victim = IHealth.Context, // Puede ser null si es un prop, lo manejamos abajo
-                        ElementalDamage = ElementType.Physical,
-                        FactionID = FactionID.LimboMonster1
-                    };
-                    DamageDT.AddTag(ScoreFlags.Skill1Kill);
-
-                    if (IHealth.Context == null)
-                    {
-                        IHealth.SimpleDamage(Damage);
-                    }
-                    else
-                    {
-                        IHealth.TakeDamageWithKnockback(Dir.normalized, 0f, DamageDT);
-                    }
-                }
-                else
-                {
-                    return;
-                }
-
-
-
-            }
-
-
+            Destroy(this.gameObject);
         }
-
-        else if (other.TryGetComponent(out Health_Component HPComp))
-        {
-            if (HPComp.Context != _OwnerContext)
-            {
-                TaggedColliders.Add(other);
-                TaggedHealth.Add(HPComp);
-
-                Vector3 Dir = HPComp.Context.PlayerTransform.position - _OwnerContext.PlayerTransform.position;
-                Dir.y = 0;
-
-
-                DamageScore DamageDT = new DamageScore
-                {
-                    Attacker = _OwnerContext,
-                    DamageAmount = Damage,
-                    Victim = HPComp.Context, // Puede ser null si es un prop, lo manejamos abajo
-                    ElementalDamage = ElementType.Physical,
-                    FactionID = FactionID.LimboMonster1
-                };
-                DamageDT.AddTag(ScoreFlags.Skill1Kill);
-
-                if (HPComp.Context == null)
-                {
-                    HPComp.SimpleDamage(Damage);
-                }
-                else
-                {
-                    HPComp.TakeDamageWithKnockback(Dir.normalized, 0f, DamageDT);
-                }
-            }
-            else
-            {
-                return;
-            }
-
-
-        }
-        Destroy(this.gameObject);
+     
     }
 
     public void parried(DamageScore? DMScore,Vector3 Direction = default)
@@ -187,6 +114,7 @@ public class BulletDumb : MonoBehaviour, IParriable
 
             SetOwner(DMScore.Value.Attacker.PlayerGameObject, DMScore.Value.Attacker);
             Parried = true;
+            hitcache.Clear();
         }
        
        
