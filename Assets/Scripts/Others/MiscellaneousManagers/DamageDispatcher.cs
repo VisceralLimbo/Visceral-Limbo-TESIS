@@ -144,7 +144,7 @@ public static class DamageDispatcher
         // caso a) golpeamos algo que no tiene context, ejemplo: props
         if(HP_Comp.Context == null)
         {
-            HP_Comp.SimpleDamage(DMScore.DamageAmount);
+            HP_Comp.SimpleDamage(DMScore.DamageAmount,KnockbackDir,KnockbackForce);
             PlayerEvents.PlayerSucessfulHit();
             return true;
         }

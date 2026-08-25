@@ -142,7 +142,6 @@ public class Wretch_StateBite : BaseState
                     for(int i = 0; i < hits; i++)
                     {
                         ProcessHit(TaggedCol[i]);
-
                     }
                 }
                

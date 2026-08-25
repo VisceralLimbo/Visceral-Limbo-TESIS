@@ -19,6 +19,8 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
     [SerializeField] float SkillKnockback;
     [SerializeField] LayerMask _AttackMask;
     [SerializeField] private float hitCooldownPerEnemy = 0.5f;
+    [SerializeField] string _skillAnimationKey;
+    [SerializeField] string _animatorKey;
 
     [Header("Stats Key")]
     [SerializeField] StatIdentifier _Skill1DamageID;
@@ -33,7 +35,16 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
     {
         base.Initialize(data, Skmanager, UserContext);
-        _Anim = _UserContext.PlayerGameObject.transform.root.GetComponentInChildren<Animator>();
+        var animHandler = _UserContext.gameObject.GetComponent<AnimatorHandler>();
+        if (animHandler != null)
+        {
+            if(animHandler.TryGetAnimator(_animatorKey,out Animator anim))
+            {
+                _Anim = anim;
+            }
+        }
+
+
         _Context = _UserContext;
 
         if(_Context != null)

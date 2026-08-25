@@ -203,12 +203,12 @@ public class Decayed_Attack : BaseState
         _AnimHandler?.SetParameter("Decayed", "Attack", AnimatorControllerParameterType.Trigger);
 
         //esperamos a que estemos oficialment en el estado de ataque
-        yield return new WaitUntil(() => _Anim !=  null || _Anim.GetCurrentAnimatorStateInfo(0).IsName("Decayed AttackAnim"));
+        yield return new WaitUntil(() => _anim !=  null || _anim.GetCurrentAnimatorStateInfo(0).IsName("Decayed AttackAnim"));
 
         // esperamos a estar en el frame de ataque
-        yield return new WaitUntil(() =>_Anim != null || _Anim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1.0f >= 0.7f);
+        yield return new WaitUntil(() =>_anim != null || _anim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1.0f >= 0.7f);
 
-        if (_Anim == null || _AnimHandler == null)
+        if (_anim == null || _AnimHandler == null)
         {
             yield break;
         }

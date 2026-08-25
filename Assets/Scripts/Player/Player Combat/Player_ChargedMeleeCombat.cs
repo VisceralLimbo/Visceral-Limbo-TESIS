@@ -131,7 +131,7 @@ public class Player_ChargedMeleeCombat : Visceral_Script
 
 
 
-        //_Anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
+        //_anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
         _Anim.speed = AttackSpeedMod;
         _Anim.SetTrigger("ChargeRelease");
         _Anim.ResetTrigger("ChargeUp");
@@ -198,7 +198,7 @@ public class Player_ChargedMeleeCombat : Visceral_Script
     private void ResetAnimation()
     {
         _ComboCounter= 0;
-        //_Anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
+        //_anim.runtimeAnimatorController = SwordAttacks[_ComboCounter]._AnimatorOV;
         _Anim.ResetTrigger("AttackTrigger"); _Anim.ResetTrigger("ChargeRelease"); _Anim.ResetTrigger("ChargeUp");
         _Anim.Play("Idle", 0, 0);
     }

@@ -65,7 +65,7 @@ public class Visceral_SkillManager : Visceral_Script
         //funcionamiento => donde el valor de kvp sea mayor que 0, seleccionamos su llave y la guardamos en una lista intermedia
         foreach(var key in CooldownDicc.Where(KVP => KVP.Value > 0f).Select(KVP => KVP.Key).ToList())
         {
-                CooldownDicc[key] -= Time.deltaTime;
+                CooldownDicc[key] -= Time.deltaTime * TimeDilationManager.GlobalTimeScale;
                 Combat_UI_Manager._Instance.UpdateCooldownImages(CooldownDicc[key]
                                                             , AbilityDicc[key].cooldown
                                                             , key);

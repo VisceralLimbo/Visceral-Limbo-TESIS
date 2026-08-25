@@ -77,6 +77,12 @@ public class Health_Component : Visceral_Component, IDamageable
 
     }
 
+    public virtual void SimpleDamage(float Damage, Vector3? knockbackDir, float knockbackForce)
+    {
+        InternalDamage(Damage, knockbackDir, knockbackForce, null);
+
+    }
+
     //use of tuples - patricio malvasio
     /// <summary>
     /// vector3 : la direccion del ataque
