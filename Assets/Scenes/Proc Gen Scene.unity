@@ -824,7 +824,7 @@ PrefabInstance:
         type: 3}
       propertyPath: meleeAttack
       value: 
-      objectReference: {fileID: 552598496}
+      objectReference: {fileID: 0}
     - target: {fileID: 378639278510519404, guid: f93b46a29e4a6334e8602e0b483004f2,
         type: 3}
       propertyPath: uiItems.Array.data[1].rect
@@ -3714,18 +3714,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 552598486}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &552598496 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4522773646099621157, guid: c9b37eb471cfbfe4b8e7d2c83992eee4,
-    type: 3}
-  m_PrefabInstance: {fileID: 552598486}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 586047435}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eda4e6aa45496b4996efb6257c439a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &561880404
 GameObject:
   m_ObjectHideFlags: 0
@@ -4125,7 +4113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6139,9 +6127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: d5b6c009f95fd6b46bcaae748894fd96, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -7086,7 +7074,7 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65536
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
@@ -7120,7 +7108,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0.18431373}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
