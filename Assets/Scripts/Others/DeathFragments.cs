@@ -7,6 +7,9 @@ public class DeathFragments : MonoBehaviour
     public float destroyFragmentsAfter = 5f;
     public float explosionForce = 4f;
 
+    [Header("Breaking Particles")]
+    public GameObject breakingParticlesPrefab;
+
     private Health_Component healthComponent;
 
     [SerializeField] private SoundData breakingSound;
@@ -29,7 +32,6 @@ public class DeathFragments : MonoBehaviour
         if (healthComponent != null)
         {
             healthComponent.OnDeath -= SpawnFragments;
-           
         }
     }
 
@@ -37,6 +39,7 @@ public class DeathFragments : MonoBehaviour
     {
         if (fracturedBoxPrefab == null) return;
 
+        
         if (breakingSound != null && SoundManager.Instance != null)
         {
             SoundManager.Instance.CreateSound()
@@ -47,16 +50,49 @@ public class DeathFragments : MonoBehaviour
                 .play();
         }
 
-        GameObject fragments = Instantiate(fracturedBoxPrefab, transform.position, transform.rotation);
+        
+        if (breakingParticlesPrefab != null)
+        {
+            GameObject particles = Instantiate(
+                breakingParticlesPrefab,
+                transform.position,
+                Quaternion.identity
+            );
 
-        SoundManager.Instance.CreateSound().WithSoundData(breakingSound).WithRandomPitch(true).WithPosition(this.transform.position).WithSpatialBlend(1f, 1f, 50f).play();
+            ParticleSystem particleSystem = particles.GetComponent<ParticleSystem>();
+
+            if (particleSystem != null)
+            {
+                particleSystem.Play();
+
+                // Destruir las partículas cuando termine su reproducción
+                Destroy(particles, particleSystem.main.duration + particleSystem.main.startLifetime.constantMax);
+            }
+            else
+            {
+                Destroy(particles, 2f);
+            }
+        }
+
+        // Spawn de los fragmentos
+        GameObject fragments = Instantiate(
+            fracturedBoxPrefab,
+            transform.position,
+            transform.rotation
+        );
+
         foreach (Rigidbody rb in fragments.GetComponentsInChildren<Rigidbody>())
         {
-            Vector3 randomDir = (rb.transform.position - transform.position).normalized + Vector3.up * 0.3f;
-            rb.AddForce(randomDir * Random.Range(explosionForce * 0.8f, explosionForce * 1.2f), ForceMode.Impulse);
+            Vector3 randomDir =
+                (rb.transform.position - transform.position).normalized
+                + Vector3.up * 0.3f;
+
+            rb.AddForce(
+                randomDir * Random.Range(explosionForce * 0.8f, explosionForce * 1.2f),
+                ForceMode.Impulse
+            );
         }
 
         Destroy(fragments, destroyFragmentsAfter);
     }
 }
-
