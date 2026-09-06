@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1050277073712195420}
   - component: {fileID: -8483138317346510048}
   - component: {fileID: 2298518617788079994}
+  - component: {fileID: 6517043546676666965}
   m_Layer: 0
   m_Name: Hueso Normal
   m_TagString: Untagged
@@ -206,3 +207,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.036538877, y: 0.14694521, z: 0.03131558}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6517043546676666965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3665808910122172183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f86b2657d05ec1f478ff1c56335e444d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fracturedBoxPrefab: {fileID: 4821145082393745366, guid: 4f71a657ccf0b4447b583b084bce2e26,
+    type: 3}
+  destroyFragmentsAfter: 5
+  explosionForce: 4
+  breakingParticlesPrefab: {fileID: 2548338850161963721, guid: c01833799a870a74baece5a3c212a5a9,
+    type: 3}
+  breakingSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0

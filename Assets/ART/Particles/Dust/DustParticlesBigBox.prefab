@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4858641362144367437}
   - component: {fileID: 1295557556612115735}
   m_Layer: 0
-  m_Name: DustParticlesSilla
+  m_Name: DustParticlesBigBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 2548338850161963721}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1138.305, y: 663.165, z: -1528.8558}
-  m_LocalScale: {x: 0.30212653, y: 0.30212653, z: 0.30212653}
+  m_LocalPosition: {x: 1138.305, y: 662.3564, z: -1528.8558}
+  m_LocalScale: {x: 0.61687034, y: 0.26483497, z: 0.35103875}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1375504322905037316}
@@ -117,7 +117,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 2
       minScalar: 1.5
       maxCurve:
         serializedVersion: 2
@@ -170,7 +170,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 8
+      scalar: 1.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -288,8 +288,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 3
-      minScalar: 2
+      scalar: 6
+      minScalar: 9
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -612,7 +612,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -0.06
+      scalar: 0
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -665,7 +665,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 0
+    type: 16
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -981,7 +981,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 200
+        scalar: 30
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -2748,7 +2748,7 @@ ParticleSystem:
     strength:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.31
+      scalar: 0.13
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4942,7 +4942,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1375504322905037316
 Transform:
   m_ObjectHideFlags: 0
@@ -4952,7 +4952,7 @@ Transform:
   m_GameObject: {fileID: 7120324321680930514}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.21}
+  m_LocalPosition: {x: 0, y: 0, z: 0.74}
   m_LocalScale: {x: 0.14847964, y: 0.14847964, z: 0.14847964}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5905,7 +5905,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 10
+        scalar: 20
         minScalar: 30
         maxCurve:
           serializedVersion: 2
