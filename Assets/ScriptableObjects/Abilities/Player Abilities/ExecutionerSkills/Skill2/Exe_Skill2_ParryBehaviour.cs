@@ -24,6 +24,9 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
     [SerializeField] bool DrawGizmos;
     [SerializeField] MonoBehaviour currentparry;
 
+    [SerializeField] private float AimDistance = 100f;
+    [SerializeField] private LayerMask AimLayerMask;
+
 
     public override void Initialize(Visceral_AbilitySO data, Visceral_SkillManager Skmanager, PlayerContext UserContext = null)
     {
@@ -31,6 +34,37 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
         _AnimHandler = _UserContext.gameObject.GetComponent<AnimatorHandler>();
         _AnimHandler.TryGetAnimator("PlayerWeapon",out Animator value);
         _Anim = value;
+    }
+
+    private Vector3 GetParryDirection(Vector3 projectilePosition)
+    {
+        Vector2 screenCenter = new Vector2(
+            Screen.width * 0.5f,
+            Screen.height * 0.5f
+        );
+
+        Camera cam = _camContext.GetComponentInChildren<Camera>();
+
+        if (cam == null)
+        {
+            Debug.LogError("No se encontró una Camera en Player_CameraController.");
+            return _camContext.transform.forward;
+        }
+
+        Ray ray = cam.ScreenPointToRay(screenCenter);
+
+        Vector3 targetPoint;
+
+        if (Physics.Raycast(ray, out RaycastHit hit, AimDistance, AimLayerMask))
+        {
+            targetPoint = hit.point;
+        }
+        else
+        {
+            targetPoint = ray.origin + ray.direction * AimDistance;
+        }
+
+        return (targetPoint - projectilePosition).normalized;
     }
 
     public override void ActivateSkill()
@@ -143,10 +177,13 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
         while (Time.deltaTime != 1 && watchdog > 0)
         {
             Vector3 ParryDirection = _camContext.transform.forward;
-            Vector3 ParryOrigin = _UserContext.PlayerTransform.position + ParryDirection * ParryRange + new Vector3(0, 1, 0);
 
-            //almacenamos la direccion global para proyectiles
-            PlayerDirector = ParryDirection.normalized;
+            Vector3 ParryOrigin =
+                _UserContext.PlayerTransform.position +
+                ParryDirection * ParryRange +
+                new Vector3(0, 1, 0);
+
+            PlayerDirector = GetParryDirection(MBRef.transform.position);
 
             if (parriable == null)
             {
