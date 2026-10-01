@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3778609131505578585
+--- !u!114 &-6912123702550556856
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DisolveDecayedMat
-  m_Shader: {fileID: -6465566751694194690, guid: bb0ae85643924a846b9446818a53edf9,
+  m_Name: MeatMat
+  m_Shader: {fileID: -6465566751694194690, guid: ab020b6643e5f244cacc331a2c15ab77,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -37,12 +37,28 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _AlphaTex:
+    - _Base:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 1257649bcbb42024389756f4aa63265c, type: 3}
+    - _Carne:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _tex1:
+        m_Texture: {fileID: 2800000, guid: 023f1d1c57735b84b954be8178a1fff7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _tex2:
+        m_Texture: {fileID: 2800000, guid: 812a3594451f6494e8a9f289ca6f71b4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _tex2_1:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -59,12 +75,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 1.5
-    - _DisolveAmount: 1
-    - _NoiseScale: 40
+    - _Amplitude: 0.13
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Thickness: 0.02
+    - _Velocity: -0.54
+    - _tilling: 0.1
     m_Colors:
-    - _EdgeColor: {r: 1.8422523, g: 0.70003116, b: 0.04344934, a: 1}
+    - _minMax: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
