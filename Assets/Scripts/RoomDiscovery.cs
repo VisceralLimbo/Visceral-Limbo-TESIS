@@ -2,30 +2,34 @@ using UnityEngine;
 
 public class RoomDiscovery : MonoBehaviour
 {
-    [Header("FOW")]
-    [SerializeField] private GameObject[] fogObjects;
+    [Header("Visual exclusiva del Minimapa")]
+    [Tooltip("Arrastra aqui la copia visual de la sala que tiene la layer MinimapOnly")]
+    [SerializeField] private GameObject minimapVisual;
 
     private bool isDiscovered = false;
 
+    private void Awake()
+    {
+        // Al generarse el mapa, arranca invisible para el minimapa
+        if (minimapVisual != null)
+        {
+            minimapVisual.SetActive(false);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        // si ya se descubrio o no es el player vuelvo
         if (isDiscovered || !other.CompareTag("Player")) return;
 
-        if (fogObjects != null && fogObjects.Length > 0)
+        isDiscovered = true;
+
+        // Se enciende y queda visible para siempre
+        if (minimapVisual != null)
         {
-            // explorado
-            isDiscovered = true;
-
-
-            foreach (GameObject fog in fogObjects)
-            {
-                if (fog != null)
-                {
-                    fog.SetActive(false);
-                }
-            }
-            Destroy(this);
+            minimapVisual.SetActive(true);
         }
+
+        // Destruye el script para no gastar recursos
+        Destroy(this);
     }
 }
