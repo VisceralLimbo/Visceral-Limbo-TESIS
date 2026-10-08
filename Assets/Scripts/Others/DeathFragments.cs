@@ -10,6 +10,9 @@ public class DeathFragments : MonoBehaviour
     [Header("Breaking Particles")]
     public GameObject breakingParticlesPrefab;
 
+    [Tooltip("Todos los puntos donde aparecerán las partículas al mismo tiempo.")]
+    public Transform[] particleSpawnPoints;
+
     private Health_Component healthComponent;
 
     [SerializeField] private SoundData breakingSound;
@@ -39,7 +42,7 @@ public class DeathFragments : MonoBehaviour
     {
         if (fracturedBoxPrefab == null) return;
 
-        
+        // Sonido
         if (breakingSound != null && SoundManager.Instance != null)
         {
             SoundManager.Instance.CreateSound()
@@ -50,27 +53,24 @@ public class DeathFragments : MonoBehaviour
                 .play();
         }
 
-        
+        // PARTÍCULAS
         if (breakingParticlesPrefab != null)
         {
-            GameObject particles = Instantiate(
-                breakingParticlesPrefab,
-                transform.position,
-                Quaternion.identity
-            );
-
-            ParticleSystem particleSystem = particles.GetComponent<ParticleSystem>();
-
-            if (particleSystem != null)
+            // Si hay puntos configurados, crear partículas en TODOS
+            if (particleSpawnPoints != null && particleSpawnPoints.Length > 0)
             {
-                particleSystem.Play();
+                foreach (Transform spawnPoint in particleSpawnPoints)
+                {
+                    if (spawnPoint == null)
+                        continue;
 
-                // Destruir las partículas cuando termine su reproducción
-                Destroy(particles, particleSystem.main.duration + particleSystem.main.startLifetime.constantMax);
+                    SpawnParticles(spawnPoint.position, spawnPoint.rotation);
+                }
             }
             else
             {
-                Destroy(particles, 2f);
+                // Si no hay puntos configurados, usar el centro del objeto
+                SpawnParticles(transform.position, Quaternion.identity);
             }
         }
 
@@ -88,11 +88,40 @@ public class DeathFragments : MonoBehaviour
                 + Vector3.up * 0.3f;
 
             rb.AddForce(
-                randomDir * Random.Range(explosionForce * 0.8f, explosionForce * 1.2f),
+                randomDir * Random.Range(
+                    explosionForce * 0.8f,
+                    explosionForce * 1.2f
+                ),
                 ForceMode.Impulse
             );
         }
 
         Destroy(fragments, destroyFragmentsAfter);
+    }
+
+    private void SpawnParticles(Vector3 position, Quaternion rotation)
+    {
+        GameObject particles = Instantiate(
+            breakingParticlesPrefab,
+            position,
+            rotation
+        );
+
+        ParticleSystem particleSystem = particles.GetComponent<ParticleSystem>();
+
+        if (particleSystem != null)
+        {
+            particleSystem.Play();
+
+            Destroy(
+                particles,
+                particleSystem.main.duration +
+                particleSystem.main.startLifetime.constantMax
+            );
+        }
+        else
+        {
+            Destroy(particles, 2f);
+        }
     }
 }

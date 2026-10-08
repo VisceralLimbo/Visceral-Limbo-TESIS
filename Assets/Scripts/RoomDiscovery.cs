@@ -2,30 +2,32 @@ using UnityEngine;
 
 public class RoomDiscovery : MonoBehaviour
 {
-    [Header("FOW")]
-    [SerializeField] private GameObject[] fogObjects;
+    [Header("solo visual del minimapa (padre)")]
+    [SerializeField] private GameObject minimapVisual;
 
     private bool isDiscovered = false;
 
+    private void Awake()
+    {
+        // empieza todo apagado
+        if (minimapVisual != null)
+        {
+            minimapVisual.SetActive(false);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        // si ya se descubrio o no es el player vuelvo
         if (isDiscovered || !other.CompareTag("Player")) return;
 
-        if (fogObjects != null && fogObjects.Length > 0)
+        isDiscovered = true;
+
+        // se prende y queda visible
+        if (minimapVisual != null)
         {
-            // explorado
-            isDiscovered = true;
-
-
-            foreach (GameObject fog in fogObjects)
-            {
-                if (fog != null)
-                {
-                    fog.SetActive(false);
-                }
-            }
-            Destroy(this);
+            minimapVisual.SetActive(true);
         }
+
+        Destroy(this);
     }
 }

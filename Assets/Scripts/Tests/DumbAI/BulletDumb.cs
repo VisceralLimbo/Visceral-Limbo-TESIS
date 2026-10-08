@@ -14,6 +14,8 @@ public class BulletDumb : MonoBehaviour, IParriable
 
     [SerializeField] bool Parried;
 
+    [SerializeField] private LayerMask WallLayerMask;
+
 
     private void Start()
     {
@@ -35,15 +37,36 @@ public class BulletDumb : MonoBehaviour, IParriable
 
     private void Update()
     {
-        _Health -= (TimeDilationManager.GlobalTimeScale*Time.deltaTime); 
-        this.transform.position += this.transform.forward * BulletSpeed * (TimeDilationManager.GlobalTimeScale*Time.deltaTime);
+        float deltaMovement =
+            BulletSpeed *
+            TimeDilationManager.GlobalTimeScale *
+            Time.deltaTime;
 
-        if(_Health < 0)
+        Vector3 direction = transform.forward;
+        Vector3 currentPosition = transform.position;
+
+        // Comprobamos si hay una pared delante antes de mover la bala
+        if (Physics.Raycast(
+            currentPosition,
+            direction,
+            out RaycastHit wallHit,
+            deltaMovement,
+            WallLayerMask))
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
 
+        _Health -= TimeDilationManager.GlobalTimeScale * Time.deltaTime;
+
+        transform.position += direction * deltaMovement;
+
+        if (_Health < 0)
+        {
+            Destroy(gameObject);
+        }
     }
+
     public void SetOwner(GameObject Owner,PlayerContext Context)
     {
         if(Owner == null)
