@@ -1,28 +1,41 @@
-using System;
+
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SpikeTrap : MonoBehaviour
 {
     [Header("dmg")]
-    [SerializeField] private float damage = 10f;         // dmg de la trampa
-    [SerializeField] private float damageInterval = 1f;  // cd del dmg
+    [SerializeField] private float damage = 10f;
+    [SerializeField] private float damageInterval = 1f;
 
     [Header("up and down")]
-    [SerializeField] private float moveHeight = 1f;   // cuanto suben y bajan
-    [SerializeField] private float moveSpeed = 1f;      // velocidad del movimiento
+    [SerializeField] private float moveHeight = 1f;
+    [SerializeField] private float moveSpeed = 1f;
 
     [Header("player")]
-    [SerializeField] private PlayerContext playerContext; // el contexto del player
+    [SerializeField] private PlayerContext playerContext;
 
     [SerializeField] private List<Transform> spikes = new List<Transform>();
 
     private Vector3[] startPositions;
 
-    // lista de colliders dentro del pincho
-    private HashSet<Collider> occupants = new HashSet<Collider>();
-    //diccionario que respeta cada nextdamage de cada collider que entra, ahora se conectan entre si para que cuando juntemos las trampas no se haga daño haciendo adadad
-    private static Dictionary<Health_Component, float> lastDamageTime = new Dictionary<Health_Component, float>();
+    // colliders de la trampa
+    private readonly HashSet<Collider> occupants = new HashSet<Collider>();
+
+    // cooldwon compartido
+    private static readonly Dictionary<Health_Component, float>
+        lastDamageTime = new Dictionary<Health_Component, float>();
+
+    // control para la limpieza
+    private const float ClearInterval = 5f;
+    private static float nextClearTime;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ClearCache()
+    {
+        lastDamageTime.Clear();
+        nextClearTime = 0f;
+    }
 
     private void Start()
     {
@@ -33,81 +46,76 @@ public class SpikeTrap : MonoBehaviour
     {
         HandleMovement();
 
-        // Si están bajo tierra o no hay nadie, no procesamos daño
-        if (spikes[0].localPosition.y <= startPositions[0].y || occupants.Count == 0) return;
-
+        // limpio referencias
         occupants.RemoveWhere(x => x == null);
 
-        foreach (Collider Col in occupants)
-        {
-            if(Col.TryGetComponent(out IDamageable Dmg))
-            {
-                DamageScore DMS = new DamageScore()
-                {
-                    Attacker = this.playerContext,
-                    DamageAmount = damage,
-                    FactionID = FactionID.LimboTrap,
-                };
-
-                // Delegamos al dispatcher. el se encarga de checkear el diccionario y el cooldown.
-                DamageDispatcher.ProcessContinuousHit(Col, ref DMS, null, 0, lastDamageTime, damageInterval, false);
-            }
-            else if (Col.TryGetComponent(out Health_Component HPComp))
-            {
-                DamageScore DMS = new DamageScore()
-                {
-                    Attacker = this.playerContext,
-                    DamageAmount = damage,
-                    FactionID = FactionID.LimboTrap,
-                };
-
-                // Delegamos al dispatcher. el se encarga de checkear el diccionario y el cooldown.
-                DamageDispatcher.ProcessContinuousHit(Col, ref DMS, null, 0, lastDamageTime, damageInterval, false);
-            }
-        }
-
+        // global no por cada trampa
         ClearStaticDictionary();
-    }
 
-    float clearTime = 5f, ClearPulse;
-
-    /// <summary>
-    /// Prevencion de memory leak por uso de diccionario static.
-    /// </summary>
-    private void ClearStaticDictionary()
-    {
-        if(clearTime > ClearPulse)
+        // seteo
+        if (spikes.Count == 0 ||
+            startPositions == null ||
+            startPositions.Length != spikes.Count ||
+            spikes[0] == null ||
+            occupants.Count == 0)
         {
-            ClearPulse += Time.deltaTime * TimeDilationManager.GlobalTimeScale;
             return;
         }
 
-        List<Health_Component> DeadComps = new List<Health_Component>(lastDamageTime.Keys.Count);
+        // solo hace daño cuando esta arriba
+        if (spikes[0].localPosition.y <= startPositions[0].y)
+            return;
 
-        foreach(var HPComp in lastDamageTime.Keys)
+        DamageScore damageScore = new DamageScore()
         {
-            if(HPComp == null)
-            {
-                DeadComps.Add(HPComp);
-            }
-        }
+            Attacker = playerContext,
+            DamageAmount = damage,
+            FactionID = FactionID.LimboTrap
+        };
 
-        foreach(var HPComp in DeadComps)
+        foreach (Collider col in occupants)
         {
-            lastDamageTime.Remove(HPComp);
-        }
+            // chequeo
+            bool canTakeDamage =
+                col.TryGetComponent(out IDamageable _) ||
+                col.TryGetComponent(out Health_Component _);
 
+            if (!canTakeDamage)
+                continue;
+
+            // dispatcher controla el cd y la aplicacion de dmg
+            DamageDispatcher.ProcessContinuousHit(
+                col,
+                ref damageScore,
+                null,
+                0,
+                lastDamageTime,
+                damageInterval,
+                false
+            );
+        }
     }
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private void ClearCache()
+    private void ClearStaticDictionary()
     {
-        if(lastDamageTime != null)
+        if (Time.unscaledTime < nextClearTime)
+            return;
+
+        nextClearTime = Time.unscaledTime + ClearInterval;
+
+        List<Health_Component> deadComps = new List<Health_Component>();
+
+        foreach (Health_Component hpComp in lastDamageTime.Keys)
         {
-            lastDamageTime.Clear();
+            if (hpComp == null)
+                deadComps.Add(hpComp);
+        }
+
+        foreach (Health_Component hpComp in deadComps)
+        {
+            lastDamageTime.Remove(hpComp);
         }
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -116,38 +124,41 @@ public class SpikeTrap : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (occupants.Contains(other))
-        {
-            occupants.Remove(other);
-        }
+        occupants.Remove(other);
     }
+
     private void InitializeSpikes()
     {
-        if (spikes.Count == 0) return;
-
-        // array del tamaño de los pinches
         startPositions = new Vector3[spikes.Count];
 
         for (int i = 0; i < spikes.Count; i++)
         {
             if (spikes[i] != null)
-            {
                 startPositions[i] = spikes[i].localPosition;
-            }
         }
     }
 
-
     private void HandleMovement()
     {
-        if (spikes.Count == 0 || startPositions == null || startPositions.Length != spikes.Count) return;
+        if (spikes.Count == 0 ||
+            startPositions == null ||
+            startPositions.Length != spikes.Count)
+        {
+            return;
+        }
 
         float offsetY = Mathf.Sin(Time.time * moveSpeed) * moveHeight;
 
         for (int i = 0; i < spikes.Count; i++)
         {
-            if (spikes[i] == null) continue;
-            spikes[i].localPosition = new Vector3(startPositions[i].x, startPositions[i].y + offsetY, startPositions[i].z);
+            if (spikes[i] == null)
+                continue;
+
+            spikes[i].localPosition = new Vector3(
+                startPositions[i].x,
+                startPositions[i].y + offsetY,
+                startPositions[i].z
+            );
         }
     }
 }
