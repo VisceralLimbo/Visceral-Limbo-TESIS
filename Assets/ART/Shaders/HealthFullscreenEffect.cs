@@ -185,35 +185,52 @@ public class HealthFullscreenEffect : MonoBehaviour
 
     public void ResetAllEffects()
     {
-        // darkness
+        // Darkness
         if (darknessRoutine != null)
-            StopCoroutine(darknessRoutine);
-
-        darknessMat.SetFloat("_Alpha", 0f);
-
-        // black and white
-        if (blackAndWhiteRoutine != null)
-            StopCoroutine(blackAndWhiteRoutine);
-
-        blackAndWhiteMat.SetFloat("_Intensity", 0f);
-
-        // freeze
-        if (freezeRoutine != null)
-            StopCoroutine(freezeRoutine);
-
-        congelationMat.SetFloat("_FreezeAmount", 0f);
-
-        // wind
-        if (windEffectMat != null)
         {
-            windEffectMat.SetFloat("_Alpha", 0f);
+            StopCoroutine(darknessRoutine);
+            darknessRoutine = null;
         }
 
-        // damage vignette
-        if (currentRoutine != null)
-            StopCoroutine(currentRoutine);
+        if (darknessMat != null)
+            darknessMat.SetFloat("_Alpha", 0f);
 
-        fullscreenMat.SetFloat("_VignetteIntensity", 0f);
+        // Black and White
+        if (blackAndWhiteRoutine != null)
+        {
+            StopCoroutine(blackAndWhiteRoutine);
+            blackAndWhiteRoutine = null;
+        }
+
+        if (blackAndWhiteMat != null)
+            blackAndWhiteMat.SetFloat("_Intensity", 0f);
+
+        // Freeze
+        if (freezeRoutine != null)
+        {
+            StopCoroutine(freezeRoutine);
+            freezeRoutine = null;
+        }
+
+        if (congelationMat != null)
+            congelationMat.SetFloat("_FreezeAmount", 0f);
+
+        // Wind / Movement / Dash
+        movementAlpha = 0f;
+        dashAlpha = 0f;
+
+        if (windEffectMat != null)
+            windEffectMat.SetFloat("_Alpha", 0f);
+
+        // Damage vignette
+        if (currentRoutine != null)
+        {
+            StopCoroutine(currentRoutine);
+            currentRoutine = null;
+        }
+
+        if (fullscreenMat != null)
+            fullscreenMat.SetFloat("_VignetteIntensity", 0f);
     }
 
     public void TriggerDashEffect()
