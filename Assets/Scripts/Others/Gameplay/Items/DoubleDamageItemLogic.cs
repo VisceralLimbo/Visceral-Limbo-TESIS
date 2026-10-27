@@ -199,7 +199,7 @@ public class DoubleDamageItemLogic : ItemLogic
         // chequeo q se elimine el dorado al elminar registro
         if (_isBoostActive)
         {
-            _PlayerVisuals?.AddBoostVisualSource();
+            PlayerMeleeVisualsComponent?.RemoveBoostVisualSource();
         }
 
         // chequeo que se removio del statmanager

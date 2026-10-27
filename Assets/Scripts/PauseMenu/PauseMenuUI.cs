@@ -80,6 +80,16 @@ public class PauseMenuUI : MonoBehaviour
     public void Abandonn()
     {
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
+
+        // reset efectos
+        if (HealthFullscreenEffect.Instance != null)
+        {
+            HealthFullscreenEffect.Instance.ResetAllEffects();
+        }
+
+        // saco la pausa al vovler al menu
+        Time.timeScale = 1f;
+
         SceneManager.LoadScene("MainMenu");
     }
 
