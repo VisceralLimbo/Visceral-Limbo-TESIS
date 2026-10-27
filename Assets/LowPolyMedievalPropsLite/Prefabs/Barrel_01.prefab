@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 4122276373789597662}
   - component: {fileID: 3106456634001428597}
   - component: {fileID: 7488262252333980449}
+  - component: {fileID: 7059186222552276494}
+  - component: {fileID: 6243777227077889313}
   m_Layer: 0
   m_Name: Barrel_01
   m_TagString: Untagged
@@ -28,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2465079734990110219}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -133,3 +135,54 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7059186222552276494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2465079734990110219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 472673f96eb08914996d06c926556dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundData: []
+  HealingSoundData: []
+  CurrentHealth: 2
+  MaxHealth: 2
+  DamageReduction: 0
+  Defense: 0
+  DamageInvulnerability: 0
+  _RB: {fileID: 7488262252333980449}
+  DestroyOnDeath: 1
+  DesactivateOnDeath: 0
+  Died: 0
+  _Context: {fileID: 0}
+--- !u!114 &6243777227077889313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2465079734990110219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f86b2657d05ec1f478ff1c56335e444d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fracturedBoxPrefab: {fileID: 293160825536294856, guid: b9fc863e9bca16b4e95d5b2352e11dd4,
+    type: 3}
+  destroyFragmentsAfter: 5
+  explosionForce: 4
+  breakingParticlesPrefab: {fileID: 0}
+  particleSpawnPoints: []
+  breakingSound:
+    Clip: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    Loop: 0
+    PlayOnAwake: 0
+    SpatialBlend: 1
+    MinimunSoundDistance: 0
+    MaximunSoundDistance: 0
+    IsFrequent: 0
