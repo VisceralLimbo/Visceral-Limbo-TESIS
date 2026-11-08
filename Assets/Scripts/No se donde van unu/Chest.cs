@@ -104,7 +104,8 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
     private void PlayNearbySound()
     {
-      
+        if (nearByEmitter != null) return;
+
         SoundManager.Instance.CreateSound().WithSoundData(_SoundNearByChest).WithRandomPitch(true).WithPosition(this.transform.position).WithSpatialBlend(1f, 1f, 50f).play(out nearByEmitter);
 
     }
@@ -117,7 +118,6 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         // chequeo si se puede comprar
         if (BloodEchoesManager.CanPurchase(cost))
         {
-            isOpened = true;
             OpenChest();
         }
         else
@@ -125,7 +125,6 @@ public class Chest : MonoBehaviour, IRaycastInteractable
             SoundManager.Instance.CreateSound().WithSoundData(_SoundCannotOpenChest).WithRandomPitch(true).WithPosition(this.transform.position).play();
         }
 
-        // oculto dsp de intentar interactuar
         if (interactTextObject != null)
         {
             interactTextObject.SetActive(false);
@@ -134,13 +133,14 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
     private void OpenChest()
     {
-        isOpened = true;
-
-        soundTimer = float.MaxValue;
+        // paro el nearby sound
+        if (nearByEmitter != null)
+        {
+            nearByEmitter.Stop();
+            nearByEmitter = null;
+        }
 
         SoundManager.Instance.CreateSound().WithSoundData(_SoundOpenChest).WithRandomPitch(true).WithPosition(this.transform.position).play();
-
-        SoundManager.Instance.ReturnToPool(nearByEmitter);
 
         if (chestAnimator != null)
             chestAnimator.SetBool("isOpen", true);
