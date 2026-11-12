@@ -36,7 +36,6 @@ public class Player_MeleeComboComponent : Player_MeleeAttack
         _AnimHandler.TryGetAnimator("PlayerWeapon", out Animator _Anima);
         _Anim = _Anima;
 
-        print("Animator gotten");
     }
 
     public override void VS_Runlogic(params object[] a)
@@ -77,7 +76,7 @@ public class Player_MeleeComboComponent : Player_MeleeAttack
 
 
         _AnimHandler.SetParameter("PlayerWeapon", "AttackID", AnimatorControllerParameterType.Int, currentAttack.HashedID);
-        _AnimHandler.SetParameter("PlayerWeapon", "Attack", AnimatorControllerParameterType.Trigger);
+        _AnimHandler.SetParameter("PlayerWeapon", "OnAttack", AnimatorControllerParameterType.Trigger);
 
         float startTime = (float)currentAttack.StartDealingDamageFrame / currentAttack.AnimFrameRate;
         float damageDuration = ((float)currentAttack.EndDealingDamageFrame - currentAttack.StartDealingDamageFrame) / currentAttack.AnimFrameRate;
