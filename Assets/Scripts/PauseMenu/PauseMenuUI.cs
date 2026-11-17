@@ -96,6 +96,17 @@ public class PauseMenuUI : MonoBehaviour
     public void RestartProcGen()
     {
         SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.currentLevel = 1;
+            GameManager.Instance.savedInventory.Clear();
+            GameManager.Instance.AlreadyUseGulag = false;
+            GameManager.Instance.posAntesDeMorir = Vector3.zero;
+        }
+
+        Time.timeScale = 1f;
+
         SceneManager.LoadScene("Proc Gen Scene");
     }
 
