@@ -105,6 +105,7 @@ public class PauseMenuUI : MonoBehaviour
             GameManager.Instance.posAntesDeMorir = Vector3.zero;
         }
 
+        BloodEchoesManager.ResetBloodEchoes();
         Time.timeScale = 1f;
 
         SceneManager.LoadScene("Proc Gen Scene");

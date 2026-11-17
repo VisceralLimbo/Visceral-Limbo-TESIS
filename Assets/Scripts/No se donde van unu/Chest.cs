@@ -15,19 +15,16 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     [SerializeField] private Animator chestAnimator;
 
     [Header("Feedback de UI")]
-    // para no tener el quilmobo de arratras las cosas matcheo con el nombre exacto y fue
+    // matcheo con el nombre exacto
     private const string COMBAT_UI_CANVAS_NAME = "CombatUI";
     private const string CHEST_TEXT_NAME = "ChestText";
-
-    // lo mismo de arriba pero ahora para las imagenes
     private const string BG_CAN_AFFORD_NAME = "ChestTextBG_CanAfford";
-    private const string BG_CANT_AFFORD_NAME = "ChestTextBG_CantAfford"; 
+    private const string BG_CANT_AFFORD_NAME = "ChestTextBG_CantAfford";
 
-    private TextMeshProUGUI interactText; //el texto
-    private GameObject interactTextObject; // donde esta
-
-    private Image bgCanAfford; // podes
-    private Image bgCantAfford; // no podes
+    private TextMeshProUGUI interactText;
+    private GameObject interactTextObject;
+    private Image bgCanAfford;
+    private Image bgCantAfford;
 
     [Header("Material visual feedback")]
     [SerializeField] private List<Renderer> visualObjects = new List<Renderer>();
@@ -45,15 +42,24 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
     private Transform player;
     private float soundTimer = 0f;
-
     private SoundEmitter nearByEmitter;
 
     private void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
-        // busco canvas
+        GameObject playerObject = GameObject.FindWithTag("Player");
+
+        if (playerObject != null)
+            player = playerObject.transform;
+
         GameObject combatUICanvas = GameObject.Find(COMBAT_UI_CANVAS_NAME);
         // busco el texto dentro del canvas
+
+        if (combatUICanvas == null)
+        {
+            Debug.LogWarning("Chest: no se encontró CombatUI.");
+            return;
+        }
+
         Transform textTransform = combatUICanvas.transform.Find(CHEST_TEXT_NAME);
 
         if (textTransform != null)
@@ -68,6 +74,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         // busco y apago los fondos
         // primero el verde dsp el rojo
         Transform bgCanTransform = combatUICanvas.transform.Find(BG_CAN_AFFORD_NAME);
+
         if (bgCanTransform != null)
         {
             bgCanAfford = bgCanTransform.GetComponent<Image>();
@@ -75,6 +82,7 @@ public class Chest : MonoBehaviour, IRaycastInteractable
         }
 
         Transform bgCantTransform = combatUICanvas.transform.Find(BG_CANT_AFFORD_NAME);
+
         if (bgCantTransform != null)
         {
             bgCantAfford = bgCantTransform.GetComponent<Image>();
@@ -84,12 +92,11 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
     private void Update()
     {
-        if (isOpened) return;
-        if (player == null) return;
+        if (isOpened || player == null) return;
 
         float dist = Vector3.Distance(transform.position, player.position);
 
-        // si está dentro del rango
+        // si esta dentro del rango
         if (dist <= nearbyRange)
         {
             soundTimer -= Time.deltaTime;
@@ -104,65 +111,119 @@ public class Chest : MonoBehaviour, IRaycastInteractable
 
     private void PlayNearbySound()
     {
-        if (nearByEmitter != null) return;
+        if (nearByEmitter != null || _SoundNearByChest == null) return;
 
-        SoundManager.Instance.CreateSound().WithSoundData(_SoundNearByChest).WithRandomPitch(true).WithPosition(this.transform.position).WithSpatialBlend(1f, 1f, 50f).play(out nearByEmitter);
-
+        SoundManager.Instance.CreateSound()
+            .WithSoundData(_SoundNearByChest)
+            .WithRandomPitch(true)
+            .WithPosition(transform.position)
+            .WithSpatialBlend(1f, 1f, 50f)
+            .play(out nearByEmitter);
     }
-
 
     public void TryOpen()
     {
+        // Evita abrir o cobrar varias veces.
         if (isOpened) return;
 
-        // chequeo si se puede comprar
-        if (BloodEchoesManager.CanPurchase(cost))
+        // valido el costo
+        if (cost < 0)
         {
-            OpenChest();
-        }
-        else
-        {
-            SoundManager.Instance.CreateSound().WithSoundData(_SoundCannotOpenChest).WithRandomPitch(true).WithPosition(this.transform.position).play();
+            Debug.LogError("Chest: no puede ser negativo");
+            return;
         }
 
-        if (interactTextObject != null)
+        // valido la loot table
+        if (lootChest == null)
         {
-            interactTextObject.SetActive(false);
+            Debug.LogError("Chest: no hay lootchest");
+            return;
         }
+
+        // elijo ANTES de cobrar
+        LootItem loot = lootChest.GetRandomLoot();
+
+        if (loot == null || loot.prefab == null)
+        {
+            Debug.LogWarning("Chest: no hay item, no se cobra");
+            return;
+        }
+
+        // compruebo q tengo la plata sin cobrar todaiva
+        if (!BloodEchoesManager.CanAfford(cost))
+        {
+            if (_SoundCannotOpenChest != null)
+            {
+                SoundManager.Instance.CreateSound()
+                    .WithSoundData(_SoundCannotOpenChest)
+                    .WithRandomPitch(true)
+                    .WithPosition(transform.position)
+                    .play();
+            }
+
+            HideInteractUI();
+            return;
+        }
+
+        // bloqueo nuevas interacciones para no spamear g y salgan varios
+        isOpened = true;
+
+        // descuento
+        BloodEchoesManager.PurchaseBloodEchoes(cost);
+
+        HideInteractUI();
+        OpenChest(loot);
     }
 
-    private void OpenChest()
+    private void OpenChest(LootItem loot)
     {
-        // paro el nearby sound
         if (nearByEmitter != null)
         {
             nearByEmitter.Stop();
             nearByEmitter = null;
         }
 
-        SoundManager.Instance.CreateSound().WithSoundData(_SoundOpenChest).WithRandomPitch(true).WithPosition(this.transform.position).play();
+        if (_SoundOpenChest != null)
+        {
+            SoundManager.Instance.CreateSound()
+                .WithSoundData(_SoundOpenChest)
+                .WithRandomPitch(true)
+                .WithPosition(transform.position)
+                .play();
+        }
 
         if (chestAnimator != null)
             chestAnimator.SetBool("isOpen", true);
 
         DisableVisuals();
 
-        StartCoroutine(SpawnLootDelayed(0.5f)); 
+        StartCoroutine(SpawnLootDelayed(0.5f, loot));
     }
 
-    private IEnumerator SpawnLootDelayed(float delay)
+    private IEnumerator SpawnLootDelayed(float delay, LootItem loot)
     {
         yield return new WaitForSeconds(delay);
 
-        LootItem loot = lootChest.GetRandomLoot();
-        if (loot != null && loot.prefab != null)
+        if (loot == null || loot.prefab == null)
         {
-            Vector3 spawnOffset = transform.up * 0.5f;
-            GameObject spawned = Instantiate(loot.prefab, transform.position + spawnOffset, Quaternion.identity);
-            spawned.transform.forward = transform.forward;
-            spawned.AddComponent<LootFlyOut>();
-            PlayOpenParticle();
+            Debug.LogError("Chest: loot dejo de ser valido antes de aparecer");
+            yield break;
         }
+
+        Vector3 spawnOffset = transform.up * 0.5f;
+
+        GameObject spawned = Instantiate(
+            loot.prefab,
+            transform.position + spawnOffset,
+            Quaternion.identity
+        );
+
+        spawned.transform.forward = transform.forward;
+
+        if (spawned.GetComponent<LootFlyOut>() == null)
+            spawned.AddComponent<LootFlyOut>();
+
+        PlayOpenParticle();
     }
 
     public void OnInteract(RayCastWrapper Detector)
@@ -174,114 +235,84 @@ public class Chest : MonoBehaviour, IRaycastInteractable
     public void OnRayCastEnter(RayCastWrapper Detector = null)
     {
         if (isOpened || interactTextObject == null || interactText == null) return;
+
         UpdateInteractText(true);
         PlayerEvents.InteractSeeing();
     }
 
-    public void OnRayCastStay(RayCastWrapper Detector = null)
-    {
-    }
+    public void OnRayCastStay(RayCastWrapper Detector = null) { }
 
     public void OnRayCastExit(RayCastWrapper Detector = null)
     {
-        if (interactTextObject != null)
-        {
-            interactTextObject.SetActive(false);
-        }
-
-        if (bgCanAfford != null)
-        {
-            bgCanAfford.gameObject.SetActive(false);
-        }
-
-        if (bgCantAfford != null)
-        {
-            bgCantAfford.gameObject.SetActive(false);
-        }
-
+        HideInteractUI();
         PlayerEvents.InteractStopSeeing();
     }
 
     private void UpdateInteractText(bool activate)
     {
-        // controlo el msg q aparece, si tenes "toca g" si no tenes "no tenes"
-
         if (isOpened || interactTextObject == null || interactText == null) return;
 
         if (activate)
         {
-            // chequea y no consume
             bool canAfford = BloodEchoesManager.CanAfford(cost);
 
             if (canAfford)
             {
                 interactText.text = "PRESIONA G PARA ABRIR";
-                // activo podes y apago no podes
+
                 if (bgCanAfford != null)
-                {
                     bgCanAfford.gameObject.SetActive(true);
-                }
 
                 if (bgCantAfford != null)
-                {
                     bgCantAfford.gameObject.SetActive(false);
-                }
             }
             else
             {
                 interactText.text = $"NO TENES LOS BLOOD ECHOES SUFICIENTES ({cost})";
-                // biceversa
+
                 if (bgCanAfford != null)
-                {
                     bgCanAfford.gameObject.SetActive(false);
-                }
 
                 if (bgCantAfford != null)
-                {
                     bgCantAfford.gameObject.SetActive(true);
-                }
             }
 
             interactTextObject.SetActive(true);
         }
         else
         {
-            interactTextObject.SetActive(false);
-            // y apago cuando se apaga el texto
-            if (bgCanAfford != null)
-            {
-                bgCanAfford.gameObject.SetActive(false);
-            }
-
-            if (bgCantAfford != null)
-            {
-                bgCantAfford.gameObject.SetActive(false);
-            }
+            HideInteractUI();
         }
+    }
+
+    private void HideInteractUI()
+    {
+        if (interactTextObject != null)
+            interactTextObject.SetActive(false);
+
+        if (bgCanAfford != null)
+            bgCanAfford.gameObject.SetActive(false);
+
+        if (bgCantAfford != null)
+            bgCantAfford.gameObject.SetActive(false);
     }
 
     private void DisableVisuals()
     {
         // Apaga renderers
         foreach (Renderer rend in visualObjects)
-        {
             if (rend != null)
                 rend.gameObject.SetActive(false);
-        }
 
-        // Apaga partículas
+        // Apaga particulas
         foreach (ParticleSystem ps in particleEffects)
-        {
             if (ps != null)
                 ps.gameObject.SetActive(false);
-        }
 
         // Apaga luces
         foreach (Light l in chestLights)
-        {
             if (l != null)
                 l.enabled = false;
-        }
     }
 
     private void PlayOpenParticle()

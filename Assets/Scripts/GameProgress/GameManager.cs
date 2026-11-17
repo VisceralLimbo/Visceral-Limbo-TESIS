@@ -69,4 +69,37 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    public bool AddItemToSavedInventory(ItemDefinitionSO definition, int stacks = 1)
+    {
+        if (definition == null || stacks <= 0)
+        {
+            Debug.LogWarning("no se guardo lo comprado");
+            return false;
+        }
+
+        // chequeo si lo tengo guardado
+        SavedItem existingItem = savedInventory.Find(
+            x => x.definition == definition
+        );
+
+        if (existingItem != null)
+        {
+            // si existe le sumo el stack
+            existingItem.stacks += stacks;
+        }
+        else
+        {
+            // si no creo nueva entry
+            savedInventory.Add(new SavedItem
+            {
+                definition = definition,
+                stacks = stacks
+            });
+        }
+
+        Debug.Log($"COMPRE: {definition.ItemName} | STACKS: {stacks}");
+
+        return true;
+    }
 }
