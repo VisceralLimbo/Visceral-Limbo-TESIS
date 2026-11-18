@@ -4,72 +4,90 @@ using TMPro;
 
 public class ShopNexus : MonoBehaviour
 {
-    public string UpgradeKey; // escribir bien la key ej "Upgrade_TestItemLogic"
-    public int Cost;          // el valor
+    [Header("Item")]
+    public ItemDefinitionSO ItemToSell;
+    public int Cost;
+
+    [Header("UI")]
     public TMP_Text StatusText;
     public Button BuyButton;
 
     [SerializeField] SoundData _ClickSound;
-    void Start()
+
+    private void Start()
     {
         BuyButton.onClick.AddListener(OnBuyClicked);
         UpdateUI();
     }
 
-    void OnEnable()
+    private void OnDestroy()
     {
-        // suscribo el boton al evento de currencychange
-        MetaProgressionManager.Instance.OnCurrencyChanged += OnGlobalCurrencyChanged;
-    }
-
-    void OnDisable()
-    {
-        // desuscribo para no cagarla si el objeto se destruye o se desactiva
-        if (MetaProgressionManager.Instance != null)
+        if (BuyButton != null)
         {
-            MetaProgressionManager.Instance.OnCurrencyChanged -= OnGlobalCurrencyChanged;
+            BuyButton.onClick.RemoveListener(OnBuyClicked);
         }
     }
 
-    // se llama cada que la currency cambia
-    private void OnGlobalCurrencyChanged(float newTotal, float changeAmount)
+    private void OnEnable()
     {
-        // actualizo ui (texto)
+        BloodEchoesManager.OnBloodEchoesChanged += OnCurrencyChanged;
+    }
+
+    private void OnDisable()
+    {
+        BloodEchoesManager.OnBloodEchoesChanged -= OnCurrencyChanged;
+    }
+
+    private void OnCurrencyChanged(float newTotal, float changeAmount)
+    {
         UpdateUI();
     }
 
     public void OnBuyClicked()
     {
-        if (MetaProgressionManager.Instance.TryBuyUpgrade(UpgradeKey, Cost))
+        if (ItemToSell == null)
         {
-            // compre bien
+            Debug.LogError("ShopNexus: no hay ningún ItemDefinitionSO asignado");
+            return;
+        }
+
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("ShopNexus: no hay gamemanager");
+            return;
+        }
+
+        // chequeo si puedo pagar
+        if (!BloodEchoesManager.CanPurchase(Cost))
+        {
+            Debug.Log("No tenes Blood Echoes suficientes");
             UpdateUI();
-            SoundManager.Instance.CreateSound().WithSoundData(_ClickSound).WithPosition(this.transform.position).play();
+            return;
         }
-        else
-        {
-            // no tengo plata
-            Debug.Log("No tenes suficientes ecos cristalizados.");
-        }
+
+        // guardo el item para cargarlo cuando empieza proc gen
+        GameManager.Instance.AddItemToSavedInventory(ItemToSell);
+
+        SoundManager.Instance.CreateSound()
+            .WithSoundData(_ClickSound)
+            .WithPosition(transform.position)
+            .play();
+
+        UpdateUI();
+
+        Debug.Log($"Compraste {ItemToSell.ItemName} por {Cost} Blood Echoes.");
     }
 
     public void UpdateUI()
     {
-        float currentCurrency = MetaProgressionManager.Instance.GetCurrency();
+        if (ItemToSell == null || StatusText == null || BuyButton == null)
+            return;
 
-        if (MetaProgressionManager.Instance.IsUpgradeBought(UpgradeKey))
-        {
-            // q diga comprado cuando lo compre
-            StatusText.text = "¡COMPRADO!";
-            BuyButton.interactable = false;
-        }
-        else
-        {
-            // q diga el costo y las monedas que tengo
-            StatusText.text = $"Costo: {Cost:F0} Monedas. Tienes: {currentCurrency}";
+        float currentCurrency = BloodEchoesManager.BloodEchoes;
 
-            // chequeo si puedo pagar para deshabilitar si no
-            BuyButton.interactable = currentCurrency >= Cost;
-        }
+        StatusText.text =
+            $"Costo: {Cost} Blood Echoes. Tenés: {currentCurrency:F0}";
+
+        BuyButton.interactable = currentCurrency >= Cost;
     }
 }

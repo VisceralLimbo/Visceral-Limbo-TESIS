@@ -31,22 +31,12 @@ public class PlayerContext : Visceral_Script
 
     public IKnockback knockback;
 
-    [SerializeField] StatIdentifier _HPIdentifier;
-    [SerializeField] StatIdentifier _DamageIdentifier;
-
     public override void VS_Initialize()
     {
         //PlayerGameObject = gameObject;
         //PlayerTransform= GetComponent<Transform>();
 
         knockback = this.transform.root.GetComponentInChildren<IKnockback>();
-
-        // por las dudas de q sea null
-        if (Stats != null && faction == FactionID.Player)
-        {
-            ApplyMetaUpgrades();
-        }
-
     }
 
     /// <summary>
@@ -55,51 +45,6 @@ public class PlayerContext : Visceral_Script
     public FactionID faction;
 
     public float EnemyValueScore;
-
-    // aplico los upgrades q compre
-    public void ApplyMetaUpgrades()
-    {
-        if (MetaProgressionManager.Instance == null)
-        {
-            Debug.LogError("no puse MetaProgressionManager xd no anda");
-            return;
-        }
-
-        // metassource seria el source this
-        object metaSource = this;
-
-        // mejora de vida maxima
-        if (MetaProgressionManager.Instance.IsUpgradeBought(MetaProgressionManager.KEY_HEALTH_UP_BOUGHT))
-        {
-            StatModifierFloat healthMod = new StatModifierFloat
-            {
-                ModifierValueFloat = MetaProgressionManager.PERM_MAX_HEALTH_BOOST, // la mejora es de +10 vida
-                ModType = ModifierType.flat,
-                EffectName = "MetaHealthUpgrade_Permanent",
-                Source = metaSource
-            };
-            Stats.UpdateFloatStatValue(_HPIdentifier, healthMod);
-        }
-
-        // mejora daño base
-        if (MetaProgressionManager.Instance.IsUpgradeBought(MetaProgressionManager.KEY_DAMAGE_UP_BOUGHT))
-        {
-            StatModifierFloat damageMod = new StatModifierFloat
-            {
-                ModifierValueFloat = MetaProgressionManager.PERM_BASE_DAMAGE_BOOST, // la mejora es de +2 dmg
-                ModType = ModifierType.flat,
-                EffectName = "MetaFlatDamageUpgrade_Permanent",
-                Source = metaSource
-            };
-            Stats.UpdateFloatStatValue(_DamageIdentifier, damageMod);
-        }
-
-        // chequeo
-        float finalHealth = Stats.GetFloatStatValue(_HPIdentifier);
-        Debug.Log($"[META CHECK] Vida Máxima Final: {finalHealth}");
-        float finalDamage = Stats.GetFloatStatValue(_DamageIdentifier);
-        Debug.Log($"[META CHECK] Daño Base Final: {finalDamage}");
-    }
 }
 
 public enum FactionID
