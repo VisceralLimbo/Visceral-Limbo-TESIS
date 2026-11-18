@@ -24,6 +24,15 @@ public class GameManager : MonoBehaviour
         public int stacks;
     }
 
+    private void Update()
+    {
+        //BORRAR CUANDO QUERAMOS DEJAR DE TENER TPS
+
+        if (Input.GetKeyDown(KeyCode.F8))
+        {
+            AdvanceLevelForTesting();
+        }
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -101,5 +110,35 @@ public class GameManager : MonoBehaviour
         Debug.Log($"COMPRE: {definition.ItemName} | STACKS: {stacks}");
 
         return true;
+    }
+
+    private void AdvanceLevelForTesting()
+    {
+        // solo funciona cuando estoy en el nivel (no en el nexus o menu)
+        if (SceneManager.GetActiveScene().name != "Proc Gen Scene")
+            return;
+
+        // guardo el inv
+        InventoryManager inventory = FindObjectOfType<InventoryManager>();
+
+        if (inventory != null)
+        {
+            SavePlayerInventory(inventory.GetInventoryItems());
+        }
+
+        // paso lvl
+        currentLevel++;
+
+        // reinicio gulag
+        AlreadyUseGulag = false;
+        posAntesDeMorir = Vector3.zero;
+
+        // no haya pausa
+        Time.timeScale = 1f;
+
+        Debug.Log($"ESTAS EN EL NIVEL {currentLevel}");
+
+        // regenero proc gen en el siguiente lvl
+        SceneManager.LoadScene("Proc Gen Scene");
     }
 }
