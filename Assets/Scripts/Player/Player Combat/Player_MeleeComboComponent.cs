@@ -19,7 +19,7 @@ public class Player_MeleeComboComponent : Player_MeleeAttack
     [Header("Variables")]
     public float ComboResetTime = 1.2f;
     private float _lastAttackTime;
-    private int _ComboCounter;
+    [SerializeField] private int _ComboCounter;
     private bool _HasFinishedAttack = true;
 
     [Header("Stats")]

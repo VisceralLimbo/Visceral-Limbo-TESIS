@@ -70,7 +70,7 @@ public class SwordTestSO : ScriptableObject
             hash *= fnvPrime;
         }
 
-        return unchecked ((int)hash);
+        return unchecked ((int)hash) & 0xffff;
     }
 
 }
