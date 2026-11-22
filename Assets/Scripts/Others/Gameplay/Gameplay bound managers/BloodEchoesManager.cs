@@ -75,4 +75,13 @@ public static class BloodEchoesManager
     {
         return _BloodEchoes >= Cost;
     }
+    public static void ResetBloodEchoes()
+    {
+        _PreviousBloodEchoes = _BloodEchoes;
+        _BloodEchoes = 0;
+
+        OnBloodEchoesChanged?.Invoke(_BloodEchoes, -_PreviousBloodEchoes);
+
+        Debug.Log("Blood Echoes reiniciados a 0");
+    }
 }

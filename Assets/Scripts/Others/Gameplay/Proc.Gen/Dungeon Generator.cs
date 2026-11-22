@@ -49,6 +49,14 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField]
     private List<GameObject> HallwayPrefabs;
 
+    [Header("Level 2 Prefabs")]
+    [SerializeField] private GameObject Level2Entrance;
+    [SerializeField] private List<GameObject> Level2RoomPrefabs;
+    [SerializeField] private List<GameObject> Level2SpecialRoomPrefabs;
+    [SerializeField] private List<GameObject> Level2BossRoomPrefabs;
+    [SerializeField] private List<GameObject> Level2HallwayPrefabs;
+    [SerializeField] private GameObject Level2DoorOBJ;
+
     /// <summary>
     /// El prefab de la puerta
     /// </summary>
@@ -151,6 +159,8 @@ public class DungeonGenerator : MonoBehaviour
 
     private void Start()
     {
+        ConfigureLevelPrefabs();
+
         // leo el nivel del gamemanager
         if (GameManager.Instance != null)
         {
@@ -1021,4 +1031,48 @@ public class DungeonGenerator : MonoBehaviour
             playerMovement.transform.LookAt(BossDoorObject.transform.position);
         }
     }
+
+
+    private void ConfigureLevelPrefabs()
+    {
+        if (GameManager.Instance == null)
+        {
+            Debug.LogWarning("no game mangager se usan originales");
+            return;
+        }
+
+        int level = GameManager.Instance.currentLevel;
+
+        // Nivel 1 prefabs base
+        if (level == 1)
+        {
+            Debug.Log("generator usa los prefabs base");
+            return;
+        }
+
+        // chequeo q el set del 2 este completo
+        if (Level2Entrance == null ||
+            Level2RoomPrefabs == null || Level2RoomPrefabs.Count == 0 || Level2RoomPrefabs.Any(x => x == null) ||
+            Level2SpecialRoomPrefabs == null || Level2SpecialRoomPrefabs.Count == 0 || Level2SpecialRoomPrefabs.Any(x => x == null) ||
+            Level2BossRoomPrefabs == null || Level2BossRoomPrefabs.Count == 0 || Level2BossRoomPrefabs.Any(x => x == null) ||
+            Level2HallwayPrefabs == null || Level2HallwayPrefabs.Count == 0 || Level2HallwayPrefabs.Any(x => x == null) ||
+            Level2DoorOBJ == null)
+        {
+            Debug.LogError("faltan prefabs del 2 se usa lo original");
+            return;
+        }
+
+        // nivel 2 para adelante se usa el set2 (meat)
+        Entrance = Level2Entrance;
+        RoomPrefabs = Level2RoomPrefabs;
+        SpecialRoomPrefabs = Level2SpecialRoomPrefabs;
+        BossRoomPrefabs = Level2BossRoomPrefabs;
+        HallwayPrefabs = Level2HallwayPrefabs;
+
+        // la puerta tmb cambia
+        DoorOBJ = Level2DoorOBJ;
+
+        Debug.Log($"usando prefabs del nivel {level}.");
+    }
+
 }

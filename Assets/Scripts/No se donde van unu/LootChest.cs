@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewLootTable", menuName = "Loot/Table")]
 public class LootChest : ScriptableObject
 {
-
     //array con los items que quieren que esten en el cofre
     public LootItem[] lootItems;
 
@@ -13,20 +13,37 @@ public class LootChest : ScriptableObject
         if (lootItems == null || lootItems.Length == 0)
             return null;
 
-        float total = 0;
-        foreach (var item in lootItems)
+        List<LootItem> validItems = new List<LootItem>();
+        float total = 0f;
+
+        foreach (LootItem item in lootItems)
+        {
+            if (item == null || item.prefab == null)
+                continue;
+
+            if (item.dropChance <= 0f ||
+                float.IsNaN(item.dropChance) ||
+                float.IsInfinity(item.dropChance))
+                continue;
+
+            validItems.Add(item);
             total += item.dropChance;
+        }
 
-        float roll = Random.value * total;
-        float cumulative = 0;
+        if (validItems.Count == 0 || total <= 0f)
+            return null;
 
-        foreach (var item in lootItems)
+        float roll = Random.Range(0f, total);
+        float cumulative = 0f;
+
+        foreach (LootItem item in validItems)
         {
             cumulative += item.dropChance;
-            if (roll <= cumulative)
+
+            if (roll < cumulative)
                 return item;
         }
 
-        return null;
+        return validItems[validItems.Count - 1];
     }
 }
