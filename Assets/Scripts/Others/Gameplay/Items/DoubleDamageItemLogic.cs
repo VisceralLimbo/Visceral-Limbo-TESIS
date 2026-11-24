@@ -12,6 +12,8 @@ public class DoubleDamageItemLogic : ItemLogic
 
     // guardo el acumulado del item
     private float _totalBoostValue = 0f;
+    // guardamos el valor exacto que está actualmente aplicado en el StatManager
+    private float _appliedBoostValue = 0f;
     private bool _isBoostActive = false;
 
 
@@ -21,7 +23,8 @@ public class DoubleDamageItemLogic : ItemLogic
         {
             if (_PlayerVisuals == null && _Context != null)
             {
-                _PlayerVisuals = _Context.GetComponent<Player_MeleeVisualsComponent>();
+                // encuentro el componente
+                _PlayerVisuals = _Context.GetComponentInChildren<Player_MeleeVisualsComponent>();
             }
             return _PlayerVisuals;
         }
@@ -86,8 +89,11 @@ public class DoubleDamageItemLogic : ItemLogic
 
     private void ApplyDamageModifier(float value)
     {
-        // evito recalcular si esta activo y no cambio el acumulado
-        if (_isBoostActive && _totalBoostValue == value) return;
+        // comparamos contra _appliedBoostValue (lo aplicado antes) no contra _totalBoostValue
+        if (_isBoostActive && Mathf.Approximately(_appliedBoostValue, value)) return;
+
+        // guardamos si ya estaba activo antes de aplicar el cambio
+        bool wasAlreadyActive = _isBoostActive;
 
         var statManager = _Context.Stats;
         StatModifierFloat damageMod = new StatModifierFloat
@@ -101,8 +107,14 @@ public class DoubleDamageItemLogic : ItemLogic
         statManager.UpdateFloatStatValue(DAMAGE_STAT_NAME, damageMod);
         _isBoostActive = true;
 
-        // registro boost activo
-        _PlayerVisuals?.AddBoostVisualSource();
+        _appliedBoostValue = value; // actualizamo el valor aplicado
+
+        // solo sumamos la fuente visual si no estaba activo antes (evita duplicar al subir de stack)
+        // uso la propiedad PlayerMeleeVisualsComponent en vez de _PlayerVisuals directo
+        if (!wasAlreadyActive)
+        {
+            PlayerMeleeVisualsComponent?.AddBoostVisualSource();
+        }
     }
 
     //remuevo
@@ -115,9 +127,10 @@ public class DoubleDamageItemLogic : ItemLogic
             // uso el nuevo removefloat
             _Context.Stats.RemoveFloatStatModifier(DAMAGE_STAT_NAME, EFFECT_NAME);
             _isBoostActive = false;
+            _appliedBoostValue = 0f; // reseteo el valor aplicado
 
             // elimino registro
-            _PlayerVisuals.RemoveBoostVisualSource();
+            PlayerMeleeVisualsComponent?.RemoveBoostVisualSource();
         }
     }
 
@@ -126,18 +139,10 @@ public class DoubleDamageItemLogic : ItemLogic
     {
         ItemStacks++;
 
-        // para que escale linealmente la potencia del boost,
-        // hago esta cuenta matematica. donde el valor inicial es multiplicado por el escalado del stack
-        // PARA CONTROLAR LA TASA DE ESCALADO, HAY QUE CAMBIAR EL 0.05F DONDE 1.05F REPRESENTA UN CRECIMIENTO DEL 105% DE POTENCIA
-        if(ItemStacks > 1)
-        {
-            //this
-            _totalBoostValue = damageMultiplierBoost * (1 * 0.05f * (ItemStacks - 1));
-        }
-        else
-        {
-            _totalBoostValue = damageMultiplierBoost;
-        }
+        ItemStacks++;
+
+        // escalado lineal osea: 1 stack = x2, 2 stacks = x3, 3 stacks = x4...
+        _totalBoostValue = 1f + ItemStacks;
 
         if (_Context != null)
         {
@@ -196,11 +201,8 @@ public class DoubleDamageItemLogic : ItemLogic
             PlayerHealthComponent.OnHealed -= CheckHealthForDamageBoost;
         }
 
-        // chequeo q se elimine el dorado al elminar registro
-        if (_isBoostActive)
-        {
-            PlayerMeleeVisualsComponent?.RemoveBoostVisualSource();
-        }
+        // qutio el RemoveBoostVisualSource() duplicado aca
+        // RemoveDamageModifier() ya lo llama y resetea _isBoostActive.
 
         // chequeo que se removio del statmanager
         RemoveDamageModifier();
