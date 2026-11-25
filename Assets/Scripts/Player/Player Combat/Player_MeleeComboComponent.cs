@@ -49,6 +49,7 @@ public class Player_MeleeComboComponent : Player_MeleeAttack
         if (_HasFinishedAttack && Time.time - _lastAttackTime > ComboResetTime)
         {
             _ComboCounter = 0;
+            _Anim.SetTrigger("OnReleaseCombo");
         }
 
         if (PlayerInputs.SustainedLeftMouseClick && _HasFinishedAttack)

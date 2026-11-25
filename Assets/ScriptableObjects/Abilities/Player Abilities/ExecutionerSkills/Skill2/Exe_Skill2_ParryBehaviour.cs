@@ -78,8 +78,7 @@ public class Exe_Skill2_ParryBehaviour : Visceral_SkillLogic
         }
 
         _Anim.speed = SkillSpeedMod;
-        _Anim.runtimeAnimatorController = _ANCO;
-        _AnimHandler.SetParameter("PlayerWeapon", "Exe_Skill2", AnimatorControllerParameterType.Trigger);   
+        _AnimHandler.SetParameter("PlayerWeapon", "OnSkill2", AnimatorControllerParameterType.Trigger);   
         StartCoroutine(LockSkill());
 
         //activo bloqueo

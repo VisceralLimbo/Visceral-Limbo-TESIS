@@ -59,7 +59,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
     public override void ActivateSkill()
     {
         _Anim.speed = SkillSpeedMod;
-        _Anim.SetTrigger("Exe_Skill1");
+        _Anim.SetBool("IsUsingSkill1",true);
 
         Vector3 offsetPos = _UserContext.PlayerGameObject.transform.position + Vector3.up * 0.1f;
         GameObject vfx = Instantiate(_effectHability, offsetPos, Quaternion.identity, _UserContext.PlayerGameObject.transform);
@@ -110,6 +110,7 @@ public class Exec_Skill_Whirlwind : Visceral_SkillLogic
             _SoundEmit = null;
         }
 
+        _Anim.SetBool("IsUsingSkill1", false);
         _PlayerBase.SetSkillActiveState(false);
     }
 
