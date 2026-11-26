@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class CinematicBossFight : MonoBehaviour
 {
@@ -11,6 +13,9 @@ public class CinematicBossFight : MonoBehaviour
 
     [Header("Camera")]
     [SerializeField] private Transform cameraRig;
+
+    [Header("Render Feature")]
+    [SerializeField] private ScriptableRendererFeature renderObjectsFeature;
 
     private Transform rootCamera;
     private Transform originalParent;
@@ -91,6 +96,8 @@ public class CinematicBossFight : MonoBehaviour
         {
             playableDirector.stopped -= OnTimelineFinished;
         }
+
+        SetRenderObjectsActive(true);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -112,6 +119,8 @@ public class CinematicBossFight : MonoBehaviour
 
     private void PlayCinematic()
     {
+        SetRenderObjectsActive(false);
+
         AttachCameraToRig();
 
         if (gameplayUI != null)
@@ -130,6 +139,8 @@ public class CinematicBossFight : MonoBehaviour
 
     private void OnTimelineFinished(PlayableDirector director)
     {
+        SetRenderObjectsActive(true);
+
         DetachCameraFromRig();
 
         if (gameplayUI != null)
@@ -200,5 +211,13 @@ public class CinematicBossFight : MonoBehaviour
         }
 
         player_Base.enabled = !locked;
+    }
+
+    private void SetRenderObjectsActive(bool active)
+    {
+        if (renderObjectsFeature != null)
+        {
+            renderObjectsFeature.SetActive(active);
+        }
     }
 }
