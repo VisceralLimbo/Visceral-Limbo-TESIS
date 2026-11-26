@@ -79,7 +79,6 @@ public class Boss_HealthComp : Health_Component, IDamageable
                 }
 
                 GameManager.Instance.AdvanceLevel();
-                GameManager.Instance.GoToNexus();
             }
         }
     }

@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitAndLoad(string sceneName)
     {
-        yield return new WaitForSeconds(3f);
+        yield return null;
         SceneManager.LoadScene(sceneName);
     }
 

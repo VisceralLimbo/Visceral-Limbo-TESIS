@@ -26,6 +26,11 @@ public class Combat_UI_Manager : MonoBehaviour
     [SerializeField] GameObject _LoseWindow;
     [SerializeField] Button _Restart;
     [SerializeField] Button _Menu;
+
+    [Header("Scene Transition")]
+    [SerializeField] private CanvasGroup _FadePanel;
+    [SerializeField] private float _FadeDuration = 2f;
+
     [Space]
 
     [Header("ScoreSystem")]
@@ -126,7 +131,10 @@ public class Combat_UI_Manager : MonoBehaviour
 
     public void DisplayWin(bool visible)
     {
-        _WinWindow.SetActive(visible);
+        if (visible)
+        {
+            StartCoroutine(VictorySequence());
+        }
     }
 
     public void DisplayLose(bool visible)
@@ -181,5 +189,48 @@ public class Combat_UI_Manager : MonoBehaviour
             }
 
         }
+    }
+
+    public void ReturnToNexus()
+    {
+        StartCoroutine(FadeToNexus());
+    }
+
+    IEnumerator FadeToNexus()
+    {
+        _FadePanel.gameObject.SetActive(true);
+        _FadePanel.alpha = 0f;
+
+        float elapsed = 0f;
+
+        while (elapsed < _FadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+
+            _FadePanel.alpha = Mathf.Clamp01(elapsed / _FadeDuration);
+
+            yield return null;
+        }
+
+        _FadePanel.alpha = 1f;
+
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GoToNexus();
+        }
+    }
+
+    IEnumerator VictorySequence()
+    {
+        // muestro text de victoria
+        _WinWindow.SetActive(true);
+
+        // dejo un tiempo para q se lea
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        // fade
+        yield return StartCoroutine(FadeToNexus());
     }
 }
